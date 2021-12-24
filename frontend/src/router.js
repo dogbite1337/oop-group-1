@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 // import views
 import HomePage from './views/HomePage.vue';
+import LoginPage from './views/LoginPage.vue';
 
 export default createRouter({
   history: createWebHistory(),
@@ -10,5 +11,9 @@ export default createRouter({
       path: '/',
       component: HomePage,
     },
+    {
+      path: '/Login',
+      component: LoginPage
+    }
   ],
 });
