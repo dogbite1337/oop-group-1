@@ -1,0 +1,98 @@
+<template>
+
+  <div class="CardBox">
+    <img class="ImageBox" src="../projectImages/vacationCat.png" />
+    <div class="titleDiv">
+      <p class="titleText">Russian Kitty on Vacation</p>
+    </div>
+    <div class="upBoxAndUsernameDiv">
+      <div class="upDiv">
+        UP
+      </div>
+      <div class="userNameDiv">
+        xX_Russian_Box_Xx
+      </div>
+    </div>
+  </div>
+
+</template>
+<script>
+
+export default {
+  name: 'VideoCard',
+  data() {
+    return {
+    };
+  },
+  methods: {
+
+  }
+};
+</script>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap');
+
+.upBoxAndUsernameDiv{
+  display: grid;
+  grid-template-columns: auto auto auto;
+  margin-top: 7.16px;
+  background-color: #131313;
+  width: 150px;
+  margin-left: auto;
+  margin-right: auto;
+  
+}
+.CardBox{
+  width: 46vw;
+  max-width: 300px;
+  min-height: 140px;
+  height: 16vh;
+  max-height: 160px;
+  background-color: #000000;
+  border: 0.7px solid #000000;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin-left: 6px;
+  margin-right: 6px;
+}
+.ImageBox{
+  height: 80px;
+  width: 100%;
+}
+.titleText{
+  color: white;
+  text-align: center;
+  font-weight: 500;
+  font-family: 'Roboto', sans-serif;
+  line-height: 14.06px;
+  font-size: 12px;
+  margin-top: 8.15px;
+}
+
+.upDiv{
+  color: white;
+  text-align: center;
+  font-weight: 500;
+  font-family: 'Roboto', sans-serif;
+  line-height: 14.06px;
+  font-size: 12px;
+  border: solid 1px white;
+  width: max-content;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 1.7px;
+  padding-bottom: 1px;
+}
+
+.userNameDiv {
+  color: white;
+  text-align: center;
+  font-weight: 500;
+  font-family: 'Roboto', sans-serif;
+  font-size: 10px;
+  line-height: 12px;
+  margin-top: 2px;
+  padding-top: 1.5px;
+}
+</style>

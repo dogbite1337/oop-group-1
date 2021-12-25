@@ -102,7 +102,7 @@ export default {
   height: 60px;
   background-color: red;
   text-align: center;
-  background-image:url('../projectImages/80746.gif');
+  background-image:url('../projectImages/ghosts.gif');
   background-size: 100% 60px;
   background-repeat: no-repeat;
 }
@@ -111,6 +111,8 @@ export default {
   grid-template-columns: 16px 43px 10px 10px 1px auto 16px 40px 16px; 
   background-color: #131313;
   padding-top: 16px;
+  width: 99.9vw;
+  padding-right: 0.1vw;
 }
 .LoginButton{
   border-radius: 30px;

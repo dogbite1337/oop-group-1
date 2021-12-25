@@ -9,7 +9,7 @@
         <div class="SpaceDiv" />
         <img
           class="catIcon"
-          src="../projectImages/white_cat_trans-removebg-preview.png"
+          src="../projectImages/whiteCatBlackBaground.png"
         />
         <div class="SpaceDiv" />
       </div>
@@ -56,13 +56,17 @@
     </div>
     <div class="forgotPasswordDiv">Forgot your password?</div>
   </div>
+  <Footer />
 </template>
 <script>
 import User from '../jsClasses/general/User'
+import Footer from '../components/Footer.vue'
 
 export default {
   name: 'LoginPage',
-  components: {},
+  components: {
+    Footer
+  },
   data() {
     return {
       canLogIn: false,
@@ -221,7 +225,7 @@ export default {
 }
 .emailInput {
   display: inline;
-  position: fixed;
+  position: absolute;
   width: 214.5px;
   margin-left: -115.5px;
   padding-left: 129px;
@@ -232,7 +236,7 @@ export default {
 } /* 170.425 */
 .passwordInput {
   display: inline;
-  position: fixed;
+  position: absolute;
   width: 170px;
   margin-left: -145px;
   padding-left: 129px;
