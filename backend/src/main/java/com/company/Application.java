@@ -1,7 +1,9 @@
 package com.company;
 
 import com.company.Handlers.UserHandler;
+import com.company.Handlers.VideoHandler;
 import com.company.Repositories.userRepository;
+import com.company.Repositories.videoRepository;
 import express.Express;
 
 public class Application {
@@ -12,5 +14,6 @@ public class Application {
         //userRepository myUserRepository = new userRepository();
         //var foundUser = myUserRepository.getUser(1);
         new UserHandler(app, new userRepository());
+        new VideoHandler(app, new videoRepository());
     }
 }

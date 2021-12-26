@@ -12,7 +12,7 @@
     <div class="SpaceDiv" />
     <img class="iconInSearchField" src="../projectImages/magnifying_glass.png" />
     <div class="SpaceDiv" />
-    <input class="SearchField" type="text" placeholder="Search.."/>
+    <input @change="searchForVideos" v-model="searchParam" class="SearchField" type="text" placeholder="Search.."/>
     <div class="SpaceDiv" />
     <router-link v-if="!$store.getters.getCurrentUser" :to="{ path: '/Login'}">
       <input class="LoginButton" type="button" value="Login">
@@ -24,16 +24,26 @@
   </div>
 </template>
 <script>
-
+import store from '../store'
 export default {
   name: 'Header',
   data() {
     return {
-      isLoggedIn: false
+      isLoggedIn: false,
+      searchParam : ''
     };
   },
   methods: {
+    async searchForVideos() {
+      let res = await fetch('/rest/getAllVideosByTitle?' + new URLSearchParams({
+        providedTitle: this.searchParam
+      }));
 
+      let response = await res.json();
+      console.log(response);
+      this.$store.dispatch('updateSearchResult', response);
+    
+    }
   }
 };
 </script>

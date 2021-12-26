@@ -3,14 +3,14 @@
   <div class="CardBox">
     <img class="ImageBox" src="../projectImages/vacationCat.png" />
     <div class="titleDiv">
-      <p class="titleText">Russian Kitty on Vacation</p>
+      <p class="titleText">{{video.title}}</p>
     </div>
     <div class="upBoxAndUsernameDiv">
       <div class="upDiv">
         UP
       </div>
       <div class="userNameDiv">
-        xX_Russian_Box_Xx
+        {{video.userId}}
       </div>
     </div>
   </div>
@@ -19,6 +19,7 @@
 <script>
 
 export default {
+  props: ['video'],
   name: 'VideoCard',
   data() {
     return {

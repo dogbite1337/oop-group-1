@@ -2,8 +2,8 @@ export default class User {
   constructor(username, userDescription, userVideos) {
     this.userId = 0;
     this.username = username;
-    this.description = this.description;
-    this.userVideos = this.userVideos;
+    this.description = userDescription;
+    this.userVideos = userVideos;
   }
   getuserId() {
     return this.userId;

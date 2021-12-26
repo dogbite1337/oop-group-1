@@ -21,19 +21,12 @@
       <div v-if="currentSliderImageIndex != 2" @click="setSliderIndexToTwo" class="WhiteCircle" />
     </div>
     <div class="CardsContainer">
-
-      
-
-      <VideoCard class="Box1"/>
-      <VideoCard class="Box1"/>
-      <VideoCard class="Box1"/>
-      <VideoCard class="Box1"/>
-      <VideoCard class="Box1"/>
-      <VideoCard class="Box1"/>
-      
-      
-      
-
+      <VideoCard
+        v-for="(videoItem, index) of relevantVideos"
+        :key="index"
+        :video="videoItem"
+        class="videoBox"
+      />
     </div>
     <Footer />
   </div>
@@ -42,6 +35,8 @@
 import Header from '../components/Header.vue'
 import VideoCard from '../components/VideoCard.vue'
 import Footer from '../components/Footer.vue'
+import Video from '../jsClasses/general/Video'
+import store from '../store'
 
 
 export default {
@@ -51,14 +46,35 @@ export default {
     VideoCard,
     Footer
   },
+  created() {
+    this.$store.subscribe((mutation, state) => {
+      if(mutation.type == "setSearchResults"){
+        this.relevantVideos = []
+        for(let i = mutation.payload.length; i > 0; i--){
+          let video = new Video(0, 0, '', '', '')
+          let newVideo = Object.assign(video, mutation.payload[i-1])
+          this.relevantVideos.push(newVideo);
+        }
+      }
+    })
+  },
   data() {
     return {
       currentSliderImageIndex: 0,
       sliderImageURls: ['happyCats', 'smile', 'samuelCatJackson'],
       sliderTitles: ['Kitty Kissaten in Kyoto', 'Top 10 feel Good Animes', 'What did you call me? Meowdafaka'],
       gifs: ['ghosts', 'sorryKitty', 'sumo-run', 'shalsha-aizawa-falfa-aizawa', 'sleepyCat',
-      'WinterCold', 'samuelCatJackson', 'WinterWarm', 'smiling-cat-creepy-cat', 'cat-shooting']
+      'WinterCold', 'samuelCatJackson', 'WinterWarm', 'smiling-cat-creepy-cat', 'cat-shooting'],
+      relevantVideos: this.$store.getters.getSearchResults,
+      relevantUsers: [
+
+      ]
     };
+  },
+  watch: {
+    relevantVideos() {
+      console.log("I searched for some videos");
+    }
   },
   methods: {
     htmlDecode(input) {
@@ -70,6 +86,7 @@ export default {
     },
     setSliderIndexToZero(){
       this.currentSliderImageIndex = 0;
+      console.log(this.$store.getters.getSearchResults);
     },
     setSliderIndexToOne(){
       this.currentSliderImageIndex = 1;
