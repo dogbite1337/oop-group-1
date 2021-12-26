@@ -38,25 +38,35 @@
         <p class="Xsymbol">X</p>
       </div>
     </div>
-
-    <div class="ButtonsDiv">
-      <div class="SpaceDiv" />
-      <router-link class="HomeLink" to="/Register">
-        <button class="registerButton" value="Register">Register</button>
-      </router-link>
-      <div class="SpaceDiv" />
-      <button class="loginButton" @click="tryToLogIn" value="Login" v-if="canLogIn">Login</button>
-      <button
-        class="disabledLoginButton"
-        disabled
-        value="Login"
-        v-if="!canLogIn"
-      >
-        Login
-      </button>
-      <div class="SpaceDiv" />
+    <div v-if="wantedPassword == ''" class="sevenPixelsLineDiv" />
+    <div v-if="wantedPassword != ''" class="fivePixelsLineDiv" />
+    <div class="DescriptionDiv">
+      <p class="UsernameText">Description</p>
+      <input
+        v-model="wantedDescription"
+        class="descriptionInput"
+        type="textarea"
+        placeholder="Tell us about yourself (Optional)"
+      />
     </div>
-    <div class="forgotPasswordDiv">Forgot your password?</div>
+    <div class="RegisterContent">
+      <div class="RegisterDiv">
+        <div />
+        <div class="PreviewImageDiv">
+          <p class="previewText">Preview</p>
+          <img class="PreviewImage" :src="`${currentImageURL == '' ? baseImage : currentImageURL}`"/>
+        </div>
+        <div />
+        <div class="ImageURLInputDiv">
+          <input v-model="wantedImageURL" class="imageURLInput" type="text" placeholder="Image url goes here.." />
+          <input @click="uploadPreviewPicture" v-if="canUpload" class="uploadImageButton" type="button" value="Upload Profile Image">
+          <input v-if="!canUpload" class="disasbledUploadImageButton" type="button" value="Upload Profile Image">
+          <input v-if="!canRegister" class="DisabledRegisterButton" type="button" value="Register">
+          <input @click="registerUser" v-if="canRegister" class="RegisterButton" type="button" value="Register">
+        </div>
+        <div />
+      </div>
+    </div>
   </div>
   <Footer />
 </template>
@@ -65,25 +75,43 @@ import User from '../jsClasses/general/User'
 import Footer from '../components/Footer.vue'
 
 export default {
-  name: 'LoginPage',
+  name: 'RegisterPage',
   components: {
     Footer
   },
   data() {
     return {
-      canLogIn: false,
+      canRegister: false,
       hideEyes: '',
       wantedUserName: '',
       wantedPassword: '',
+      wantedImageURL: '',
+      currentImageURL: '',
+      wantedDescription: '',
+      baseImage: 'src\\projectImages\\Dark_User.png',
+      canUpload: false
     };
   },
   watch: {
-    wantedUserName() {
+    currentImageURL() {
       if(this.wantedUserName.length > 0 && this.wantedPassword.length > 0){
-        this.canLogIn = true;
+          this.canRegister = true;
+        }
+    },
+    wantedImageURL() {
+      if(this.wantedImageURL.length > 0){
+        this.canUpload = true;  
       }
       else{
-        this.canLogIn = false;
+        this.canUpload = false;
+      }
+    },
+    wantedUserName() {
+      if(this.wantedUserName.length > 0 && this.wantedPassword.length > 0 && this.currentImageURL.length > 0){
+        this.canRegister = true;
+      }
+      else{
+        this.canRegister = false;
       }
     },
     wantedPassword() {
@@ -96,20 +124,25 @@ export default {
     },
   },
   methods: {
-    async tryToLogIn() {
+    uploadPreviewPicture() {
+      this.currentImageURL = this.wantedImageURL;
+    },
+    async registerUser() {
       let user = {
         providedUserName: this.wantedUserName,
-        providedPassword: this.wantedPassword
+        providedPassword: this.wantedPassword,
+        providedDescription: this.wantedDescription,
+        providedProfileURL: this.currentImageURL
       }
-      let res = await fetch('/api/login', {
+      let res = await fetch('/api/register', {
         method: 'POST',
         body: JSON.stringify(user),
       });
 
       let response = await res.json();
       if (response == null) {
-        //Failed to log in
-        alert('Error - Failed to login, bad credentials!');
+        //Failed to Register
+        alert('Error - Failed to Register, Username already taken!');
       } else {
         let currentUser = new User();
         user = Object.assign(currentUser, response);
@@ -142,6 +175,77 @@ export default {
 .HomeLink{
   text-decoration: none;
 }
+.imageURLInput, .uploadImageButton, .registerButton{
+  display: block;
+}
+.RegisterContent{
+  width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+.uploadImageButton, .registerButton{
+  margin-top: 9px;
+}
+.imageURLInput{
+  width: 243px;
+  padding-left: 5px;
+  border: 0.7px solid #FFFFFF;
+  padding-top: 1px;
+  height: 21px;
+  margin-top: 3px;
+  margin-right: 19px;
+}
+.uploadImageButton{
+  width: 192px;
+  color: white;
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+  background-color: #2D2C2C;
+  border: 0.7px solid #FFFFFF;
+}
+.disasbledUploadImageButton{
+  display: block;
+  margin-top: 9px;
+  width: 192px;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+  background: rgba(45, 44, 44, 0.5);
+  border: 0.7px solid rgba(255, 255, 255, 0.45);
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+.RegisterButton{
+  width: 142px;
+  color: white;
+  font-size: 18px;
+  line-height: 21px;
+  font-family: 'Roboto', sans-serif;
+  margin-top: 10px;
+  height: 40px;
+  background: #2D2C2C;
+  border: 0.7px solid #FFFFFF;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+.DisabledRegisterButton{
+  width: 142px;
+  font-size: 18px;
+  line-height: 21px;
+  font-family: 'Roboto', sans-serif;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 10px;
+  height: 40px;
+  background: rgba(45, 44, 44, 0.5);
+  border: 0.7px solid rgba(255, 255, 255, 0.45);
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+.previewText{
+  color: white;
+  margin-bottom: 3px;
+  text-align: center;
+}
 .xDiv {
   color: white;
   width: 25px;
@@ -155,16 +259,36 @@ export default {
   border-radius: 50px;
   background-color: #c4c4c4;
 }
-.ButtonsDiv {
-  display: grid;
-  grid-template-columns: 29px 154px 37px 154px 18px;
-  width: 399px;
-  margin-left: auto;
-  margin-right: auto;
+
+.sevenPixelsLineDiv{
+  height: 7px;
+}
+.fivePixelsLineDiv{
+  height: 5px;
+}
+.PreviewImage{
+  width: 80px;
+  height: 80px;
+  border-radius: 60px;
+}
+.PreviewImageDiv{
+  width: max-content;
+  padding-right: 10px;
+}
+.RegisterDiv{
+  display: grid; /* space, preview, space, input, space */
+  grid-template-columns: 33px auto 0px auto 8px;
+
 }
 .UsernameText,
 .PasswordText {
   display: inline;
+  color: white;
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 21px;
 }
 .forgotPasswordDiv {
   text-align: center;
@@ -180,38 +304,7 @@ export default {
   color: #eb6a6a;
   margin-top: 23px;
 }
-.registerButton {
-  width: 154px;
-  height: 40px;
-  outline: solid 0.7px white;
-  background: #2d2c2c;
-  color: white;
-  font-family: 'Roboto', sans-serif;
-  font-size: 18px;
-  line-height: 21px;
-}
-.loginButton {
-  width: 154px;
-  height: 40px;
-  outline: solid 0.7px white;
-  background: #2d2c2c;
-  color: white;
-  font-family: 'Roboto', sans-serif;
-  font-size: 18px;
-  line-height: 21px;
-}
-.disabledLoginButton {
-  width: 154px;
-  height: 40px;
-  background: rgba(45, 44, 44, 0.5);
-  border: 0.7px solid rgba(255, 255, 255, 0.45);
-  box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  color: rgba(255, 255, 255, 0.45);
-  font-family: 'Roboto', sans-serif;
-  font-size: 18px;
-  line-height: 21px;
-}
+
 .backgroundDiv {
   background-color: black;
   height: 100vh;
@@ -225,25 +318,40 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
+.descriptionInput {
+  display: inline;
+  position: absolute;
+  width: 214.5px;
+  margin-left: -115.5px;
+  padding-left: 129px;
+  background-color: #2D2C2C;
+  height: 46px;
+  padding-bottom: 64px;
+  margin-top: -14px;
+  padding-top: 3px;
+  color: white;
+} /* 170.425 */
 .emailInput {
   display: inline;
   position: absolute;
   width: 214.5px;
   margin-left: -115.5px;
   padding-left: 129px;
-  background-color: white;
+  background-color: #2D2C2C;
   height: 46px;
   margin-top: -16px;
   padding-top: 5px;
+  color: white;
 } /* 170.425 */
 .passwordInput {
   display: inline;
   position: absolute;
+  color: white;
   width: 170px;
   margin-left: -145px;
   padding-left: 129px;
   padding-right: 44px;
-  background-color: white;
+  background-color: #2D2C2C;
   height: 50px;
   margin-top: -16px;
   padding-top: 3px;
@@ -273,6 +381,13 @@ export default {
 .passwordDiv {
   margin-bottom: 12px;
 }
+.DescriptionDiv{
+  display: block;
+  width: 292px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 100px;
+}
 .emailDiv,
 .passwordDiv {
   width: 232px;
@@ -286,6 +401,7 @@ export default {
 
 .passwordDiv {
   padding-right: 47px;
+  margin-top: 3px;
 }
 .emailDiv {
   padding-right: 47px;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class User {
     private Integer userId = 0;
-    private String username, password, description;
+    private String username, password, description, profileURL;
     private ArrayList<Video> userVideos = new ArrayList<Video>();
 
     public Integer getUserId() {
@@ -47,10 +47,31 @@ public class User {
         this.description = description;
     }
 
-    public User(Integer userId, String username, String password, String description){
+    public String getProfileURL() {
+        return profileURL;
+    }
+
+    public void setProfileURL(String profileURL) {
+        this.profileURL = profileURL;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", description='" + description + '\'' +
+                ", profileURL='" + profileURL + '\'' +
+                ", userVideos=" + userVideos +
+                '}';
+    }
+
+    public User(Integer userId, String username, String password, String description, String profileURL){
         this.userId = userId;
         this.username = username;
         this.password = password;
         this.description = description;
+        this.profileURL = profileURL;
     }
 }

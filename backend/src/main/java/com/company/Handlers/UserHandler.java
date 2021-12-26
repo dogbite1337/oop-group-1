@@ -28,6 +28,11 @@ public class UserHandler {
             res.json(loginValidator.loginValidation((String) req.body().get("providedUserName"), (String) req.body().get("providedPassword"), userRepository));
         });
 
+        // register user
+        app.post("/api/register", (req, res) -> {
+            res.json(userRepository.registerNewUser((String) req.body().get("providedUserName"), (String) req.body().get("providedPassword"), (String) req.body().get("providedDescription"), (String) req.body().get("providedProfileURL")));
+        });
+
         app.get("/api/logout", (req, res) -> {
             // remove user from session
             req.session("current-user", null);

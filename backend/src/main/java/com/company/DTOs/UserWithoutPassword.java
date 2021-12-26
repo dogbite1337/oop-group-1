@@ -6,18 +6,8 @@ import java.util.ArrayList;
 
 public class UserWithoutPassword {
     private Integer userId;
-    private String username, description;
+    private String username, description, profileURL;
     private ArrayList<Video> userVideos = new ArrayList<Video>();
-    public UserWithoutPassword(Integer userId, String username, String description, ArrayList<Video> userVideos){
-        this.userId = userId;
-        this.username = username;
-        this.description = description;
-        this.userVideos = userVideos;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
 
     @Override
     public String toString() {
@@ -25,9 +15,24 @@ public class UserWithoutPassword {
                 "userId=" + userId +
                 ", username='" + username + '\'' +
                 ", description='" + description + '\'' +
+                ", profileURL='" + profileURL + '\'' +
                 ", userVideos=" + userVideos +
                 '}';
     }
+
+    public UserWithoutPassword(Integer userId, String username, String description, ArrayList<Video> userVideos, String profileURL){
+        this.userId = userId;
+        this.username = username;
+        this.description = description;
+        this.userVideos = userVideos;
+        this.profileURL = profileURL;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+
 
     public ArrayList<Video> getUserVideos() {
         return userVideos;
@@ -56,4 +61,8 @@ public class UserWithoutPassword {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getProfileURL() { return profileURL; }
+
+    public void setProfileURL(String profileURL){ this.profileURL = profileURL; }
 }
