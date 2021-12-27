@@ -9,10 +9,12 @@
   <div class="SearchAndLoginDiv">
     <div class="SpaceDiv" />
     <img class="CatInHeader" src="../projectImages/Cat no background.png" />
-    <div class="SpaceDiv" />
-    <img class="iconInSearchField" src="../projectImages/magnifying_glass.png" />
-    <div class="SpaceDiv" />
-    <input @change="searchForVideos" v-model="searchParam" class="SearchField" type="text" placeholder="Search.."/>
+    <div class="SpaceDiv2" />
+    <div class="searchDiv">
+      <img class="iconInSearchField" src="../projectImages/magnifying_glass.png" />
+      <input @click="showSearchMenu" @change="searchForVideos" v-model="searchParam" class="SearchField" type="text" placeholder="Search.."/>
+      <div class="SpaceDiv" />
+    </div>
     <div class="SpaceDiv" />
     <router-link v-if="!$store.getters.getCurrentUser" :to="{ path: '/Login'}">
       <input class="LoginButton" type="button" value="Login">
@@ -34,7 +36,11 @@ export default {
     };
   },
   methods: {
+    showSearchMenu() {
+      this.$store.dispatch('updateShowSearchPage', true);
+    },
     async searchForVideos() {
+      this.$store.dispatch('updateLastSearchQuery', this.searchParam);
       let res = await fetch('/rest/getAllVideosByTitle?' + new URLSearchParams({
         providedTitle: this.searchParam
       }));
@@ -51,6 +57,13 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap');
 
+.searchDiv{
+  align-content: center;
+  align-items: center;
+  text-align: center;
+  margin-left: -30px;
+  width: 302px;
+}
 .searchIcon{
   height: 20px;
   width: 20px;
@@ -60,6 +73,10 @@ export default {
   display:inline;
 }
 .iconInSearchField{
+  position: relative;
+  top: 9px;
+  left: 35px;
+  display: inline;
   height: 25px;
   width:25px;
   z-index: 3;
@@ -80,7 +97,7 @@ export default {
 .CatInHeader{
   width: 43px;
   height: 50px;
-  margin-top: -8px;
+  margin-top: -4px;
 }
 .KittyText{
   -webkit-text-stroke-width: .007px;
@@ -110,7 +127,6 @@ export default {
   display: grid;
   grid-template-columns: 16px 100px auto minmax(100px, 30vw);
   height: 60px;
-  background-color: red;
   text-align: center;
   background-image:url('../projectImages/ghosts.gif');
   background-size: 100% 60px;
@@ -118,11 +134,10 @@ export default {
 }
 .SearchAndLoginDiv{
   display: grid;    /* Margin, Cat, Margin, search icon, margin, Search Field, margin, Login Button, Margin */
-  grid-template-columns: 16px 43px 10px 10px 1px auto 16px 40px 16px; 
+  grid-template-columns: 16px 43px auto max-content auto 50px; 
   background-color: #131313;
   padding-top: 16px;
-  width: 99.9vw;
-  padding-right: 0.1vw;
+  width: 98vw;
 }
 .LoginButton{
   border-radius: 30px;
@@ -135,6 +150,7 @@ export default {
   margin-right: 17px;
   text-align: center;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin-top: 4px;
 }
 
 .LoginText{

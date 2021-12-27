@@ -7,6 +7,7 @@ import com.company.utilities.Encrypter;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class userRepository {
     Connection con;
@@ -52,6 +53,46 @@ public class userRepository {
         }
 
         return registeredUser;
+    }
+
+    public HashMap<Integer, String> getAllUsernamesById(ArrayList<Integer> userIDs){
+        HashMap<Integer, String> foundUsers = new HashMap<Integer, String>();
+        try {
+            try {
+                con = DriverManager.getConnection(
+                        "jdbc:mysql://localhost:3306/kittykitty","root","root");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            StringBuilder baseQuery = new StringBuilder("SELECT * FROM users WHERE ");
+            for(int i = 1; i < userIDs.size()+1; i++) {
+                if(i == 1){
+                    baseQuery.append("users.userId = ?");
+                }
+                else{
+                    baseQuery.append(" OR users.userId = ?");
+                }
+            }
+
+            PreparedStatement pStatement = con.prepareStatement(baseQuery.toString());
+            for(int i = 1; i < userIDs.size()+1; i++) {
+                pStatement.setInt(i, userIDs.get(i-1));
+            }
+            System.out.println("Statement was: " + pStatement);
+            ResultSet rs = pStatement.executeQuery();
+
+            while(rs.next()) {
+                // We must manually specify at which index and which datatypes each column in the result is.
+                foundUsers.put(rs.getInt(1), rs.getString(2));
+            }
+            con.close();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
+
+        return foundUsers;
     }
     public User getUserEntityByUsername(String userName) {
         User foundUser = new User(0, "Not found", "Not found", "Not found", "Not Found");

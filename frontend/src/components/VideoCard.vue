@@ -10,7 +10,7 @@
         UP
       </div>
       <div class="userNameDiv">
-        {{video.userId}}
+        {{video.username}}
       </div>
     </div>
   </div>
