@@ -6,7 +6,7 @@
       + 
       (gifs.includes(decodeURI(sliderImageURls[currentSliderImageIndex])) ? '.gif' : '.png')}`">
     <img class="SorryKitty" v-if="searchedYet && relevantVideos.length == 0 && !showSearchPage" src="src\\projectImages\\sorryKitty.gif" />
-    <div v-if="showSearchPage" class="searchPage">
+    <div v-if="showSearchPage && !showResultsPage" class="searchPage">
       <div class="topTrendingDiv">
         <div/>
         <p class="topTrendingSearches">Top 10 Trending Searches</p>
@@ -27,8 +27,11 @@
       :values="mySearchHistory" />
       
     </div>
-    <div v-if="showSearchPage" class="clearHistoryDiv">
+    <div v-if="showSearchPage && !showResultsPage" class="clearHistoryDiv">
       <button class="clearHistoryButton">Clear history</button>
+    </div>
+    <div v-if="showSearchPage && !showResultsPage" class="clearHistoryDiv">
+      <button click="showResultsOfSearch" class="Search">Search</button>
     </div>
     <div v-if="!searchedYet && !showSearchPage" class="SlideShowDiv">
       <div class="SpaceBlock" />
@@ -45,15 +48,21 @@
       <img v-if="currentSliderImageIndex == 2" class="lastPacManIcon" src="../projectImages/cleaned_pacman.png" />
       <div v-if="currentSliderImageIndex != 2" @click="setSliderIndexToTwo" class="WhiteCircle" />
     </div>
-    <div v-if="searchedYet && relevantVideos.length > 0 && !showSearchPage" class="CardsContainer">
-      <VideoCard
-        v-for="(videoItem, index) of relevantVideos"
-        :key="index"
-        :video="videoItem"
-        class="videoBox"
-      />
+    <div v-if="showResultsPage && relevantVideos.length > 0" class="CardsContainer">
+      <div class="resultsContainer">
+        <img class="profileInResultsPage" src="../projectImages/lovesMoney.png">
+        <div/>
+        <div class="SubsDiv">
+          <p class="usernameP">xQC</p>
+          <p class="subscribersP">Subscribers: 532 000</p>
+        </div>
+        <div/>
+        <p class="videosP">Videos: 10</p>
+        <div/>
+        <button class="SubscribeButton" value="Subscribe">+ Subscribe</button>
+      </div>
     </div>
-    <div v-if="!searchedYet && !showSearchPage" class="CardsContainer">
+    <div v-if="!searchedYet && !showSearchPage && !showResultsPage" class="CardsContainer">
       <VideoCard
         v-for="(videoItem, index) of relevantVideos"
         :key="index"
@@ -137,7 +146,8 @@ export default {
       showSearchPage: false,
       expandedSearchHistory: false,
       mySearchHistory: ['John..', 'Why', 'Is the', 'Entire website', 'About', 'Cats..'],
-      topTenTrend: ['Cats', 'More Cats', 'All cats', 'Cats?!', 'Cats.', 'Cats!', 'Why are there so many cats', 'John', 'Stop This', 'Madness']
+      topTenTrend: ['Cats', 'More Cats', 'All cats', 'Cats?!', 'Cats.', 'Cats!', 'Why are there so many cats', 'John', 'Stop This', 'Madness'],
+      showTheResultsPage: false
     };
   },
   watch: {
@@ -146,6 +156,9 @@ export default {
     }
   },
   methods: {
+    showResultsPage() {
+      this.showTheResultsPage = true;
+    },
     expandSearchHistory() {
       this.expandedSearchHistory = true;
     },
@@ -192,11 +205,44 @@ export default {
 .searchPage{
   color: white;
 }
+.resultsContainer{
+  display: grid;
+  grid-template-columns: 14px 40px auto 19px auto 50px auto;
+}
+.usernameP{
+  color: #E75858;
+}
+.subscribersP{
+  color: #939393;
+}
+.profileInResultsPage{
+  width: 40px;
+  height: 40px;
+  border-radius: 30px;
+}
+.videosP{
+  color: #939393;
+  margin-top: 18.5px;
+}
 .clearHistoryDiv{
   width: max-content;
   margin-left: auto;
   margin-right: auto;
   margin-top: 10px;
+}
+.SubscribeButton{
+  height: 16px;
+  width: 63px;
+  font-size: 9px;
+  line-height: 11px;
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  color: white;
+  background-color: #E75858;
+  margin-top: 20px;
+  outline:none;
+  border:none;
 }
 .footerDiv{
   display: grid;
