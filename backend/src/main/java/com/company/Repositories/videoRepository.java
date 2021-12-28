@@ -14,8 +14,8 @@ import java.util.HashMap;
 public class videoRepository {
     Connection con;
 
-    public ArrayList<VideoWithUsername> getVideosByUsername(String username) {
-        ArrayList<VideoWithUsername> allVideosByUser = new ArrayList<VideoWithUsername>();
+    public ArrayList<Video> getVideosByUsername(String username) {
+        ArrayList<Video> allVideosByUser = new ArrayList<Video>();
 
         try {
             try {
@@ -25,19 +25,20 @@ public class videoRepository {
                 e.printStackTrace();
             }
 
-            PreparedStatement pStatement = con.prepareStatement("SELECT users.userId, users.username,  videos.videoId, videos.link, videos.title, videos.description FROM users, videos WHERE users.username = ? AND videos.userId = users.userId");
-            pStatement.setString(1, username);
+            String baseQuery = ("SELECT * FROM videos WHERE postedByUsername LIKE '%$replaceThis%'").replace("$replaceThis", username);
+            PreparedStatement pStatement = con.prepareStatement(baseQuery);
             ResultSet rs = pStatement.executeQuery();
 
             while(rs.next()) {
                 // We must manually specify at which index and which datatypes each column in the result is.
-                VideoWithUsername newVideo = new VideoWithUsername(0,0,"Not found", "Not found", "Not found", "Not found");
-                newVideo.setUserId(rs.getInt(1));
-                newVideo.setUsername(rs.getString(2));
-                newVideo.setVideoId(rs.getInt(3));
-                newVideo.setLink(rs.getString(4));
-                newVideo.setTitle(rs.getString(5));
-                newVideo.setDescription(rs.getString(6));
+                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "");
+                newVideo.setVideoId(rs.getInt(1));
+                newVideo.setUserId(rs.getInt(2));
+                newVideo.setLink(rs.getString(3));
+                newVideo.setTitle(rs.getString(4));
+                newVideo.setDescription(rs.getString(5));
+                newVideo.setViews(rs.getInt(6));
+                newVideo.setPostedByUsername(rs.getString(7));
                 allVideosByUser.add(newVideo);
             }
             con.close();
@@ -48,10 +49,8 @@ public class videoRepository {
         return allVideosByUser;
     }
 
-    public ArrayList<VideoWithUsername> getVideosByTitle(String title) {
-        ArrayList<VideoWithUsername> allVideos = new ArrayList<VideoWithUsername>();
-        ArrayList<Video> videosToConvert = new ArrayList<Video>();
-        ArrayList<Integer> userIDs = new ArrayList<Integer>();
+    public ArrayList<Video> getVideosByTitle(String title) {
+        ArrayList<Video> videosToReturn = new ArrayList<Video>();
 
         try {
             try {
@@ -60,42 +59,34 @@ public class videoRepository {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            String baseQuery = ("SELECT videoId, userId, link, title, description FROM videos WHERE title LIKE '%$replaceThis%'").replace("$replaceThis", title);
+            String baseQuery = ("SELECT * FROM videos WHERE title LIKE '%$replaceThis%'").replace("$replaceThis", title);
             PreparedStatement pStatement = con.prepareStatement(baseQuery);
             //pStatement.setString(1, title);
             ResultSet rs = pStatement.executeQuery();
 
             while(rs.next()) {
                 // We must manually specify at which index and which datatypes each column in the result is.
-                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found");
+                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "");
                 newVideo.setVideoId(rs.getInt(1));
                 newVideo.setUserId(rs.getInt(2));
-                if(!userIDs.contains(rs.getInt(2))){
-                    userIDs.add(rs.getInt(2));
-                }
                 newVideo.setLink(rs.getString(3));
                 newVideo.setTitle(rs.getString(4));
                 newVideo.setDescription(rs.getString(5));
-                videosToConvert.add(newVideo);
+                newVideo.setViews(rs.getInt(6));
+                newVideo.setPostedByUsername(rs.getString(7));
+                videosToReturn.add(newVideo);
             }
             con.close();
         }catch(Exception e){
             System.out.println(e);
         }
 
-        HashMap<Integer, String> mappedUsers = new userRepository().getAllUsernamesById(userIDs);
-        System.out.println(mappedUsers.toString());
-        DTOConverter dtoConverter = new DTOConverter();
-        for(int i = 0; i < videosToConvert.size(); i++){
-            allVideos.add(dtoConverter.turnVideoIntoDto(videosToConvert.get(i), mappedUsers));
-        }
-        return allVideos;
+        return videosToReturn;
     }
 
-    public ArrayList<VideoWithUsername> getAllVideos(){
-        ArrayList<VideoWithUsername> allVideos = new ArrayList<VideoWithUsername>();
-        ArrayList<Video> videosToConvert = new ArrayList<Video>();
-        ArrayList<Integer> userIDs = new ArrayList<Integer>();
+    public ArrayList<Video> getAllVideos(){
+        ArrayList<Video> videosToReturn= new ArrayList<Video>();
+
         try {
             try {
                 con = DriverManager.getConnection(
@@ -109,29 +100,22 @@ public class videoRepository {
 
             while(rs.next()) {
                 // We must manually specify at which index and which datatypes each column in the result is.
-                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found");
+                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "");
                 newVideo.setVideoId(rs.getInt(1));
                 newVideo.setUserId(rs.getInt(2));
-                if(!userIDs.contains(rs.getInt(2))){
-                    userIDs.add(rs.getInt(2));
-                }
                 newVideo.setLink(rs.getString(3));
                 newVideo.setTitle(rs.getString(4));
                 newVideo.setDescription(rs.getString(5));
-                videosToConvert.add(newVideo);
+                newVideo.setViews(rs.getInt(6));
+                newVideo.setPostedByUsername(rs.getString(7));
+                videosToReturn.add(newVideo);
             }
             con.close();
         }catch(Exception e){
             System.out.println(e);
         }
 
-        HashMap<Integer, String> mappedUsers = new userRepository().getAllUsernamesById(userIDs);
-        System.out.println(mappedUsers.toString());
-        DTOConverter dtoConverter = new DTOConverter();
-        for(int i = 0; i < videosToConvert.size(); i++){
-            allVideos.add(dtoConverter.turnVideoIntoDto(videosToConvert.get(i), mappedUsers));
-        }
-        return allVideos;
+        return videosToReturn;
     }
 
 }

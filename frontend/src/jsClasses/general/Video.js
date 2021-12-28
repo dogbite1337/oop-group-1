@@ -1,10 +1,12 @@
 export default class Video {
-  constructor(videoId, userId, link, title, description) {
+  constructor(videoId, userId, link, title, description, views, postedByUsername) {
     this.videoId = videoId;
     this.userId = userId;
     this.link = link;
     this.title = title;
     this.description = description;
+    this.views = views;
+    this.postedByUsername = postedByUsername;
   }
 
   getVideoId() {
@@ -44,5 +46,13 @@ export default class Video {
 
   setDescription(description) {
     this.description = description;
+  }
+
+  getViews() {
+    return this.views;
+  }
+
+  setViews(views) {
+    this.views = views;
   }
 }

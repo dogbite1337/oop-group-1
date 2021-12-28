@@ -57,6 +57,9 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap');
 
+*{
+  overflow-x: hidden;
+}
 .searchDiv{
   align-content: center;
   align-items: center;
@@ -137,7 +140,8 @@ export default {
   grid-template-columns: 16px 43px auto max-content auto 50px; 
   background-color: #131313;
   padding-top: 16px;
-  width: 98vw;
+
+  border-bottom: solid 1px #BFBFBF;
 }
 .LoginButton{
   border-radius: 30px;

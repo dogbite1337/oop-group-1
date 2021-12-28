@@ -1,7 +1,7 @@
 <template>
   <div class="MainDiv">
     <Header />
-    <img v-if="!searchedYet && !showSearchPage" class="sliderBackground" :src="`src\\projectImages\\${
+    <img v-if="!searchedYet && !showSearchPage && !showResultsPage" class="sliderBackground" :src="`src\\projectImages\\${
       decodeURI(sliderImageURls[currentSliderImageIndex]) 
       + 
       (gifs.includes(decodeURI(sliderImageURls[currentSliderImageIndex])) ? '.gif' : '.png')}`">
@@ -33,7 +33,7 @@
     <div v-if="showSearchPage && !showResultsPage" class="clearHistoryDiv">
       <button click="showResultsOfSearch" class="Search">Search</button>
     </div>
-    <div v-if="!searchedYet && !showSearchPage" class="SlideShowDiv">
+    <div v-if="!searchedYet && !showSearchPage && !showResultsPage" class="SlideShowDiv">
       <div class="SpaceBlock" />
       <div class="titleDiv">
         <p class="titleText">{{sliderTitles[currentSliderImageIndex]}}</p>
@@ -48,20 +48,57 @@
       <img v-if="currentSliderImageIndex == 2" class="lastPacManIcon" src="../projectImages/cleaned_pacman.png" />
       <div v-if="currentSliderImageIndex != 2" @click="setSliderIndexToTwo" class="WhiteCircle" />
     </div>
-    <div v-if="showResultsPage && relevantVideos.length > 0" class="CardsContainer">
-      <div class="resultsContainer">
-        <img class="profileInResultsPage" src="../projectImages/lovesMoney.png">
+    
+    <div v-if="showResultsPage && relevantVideos.length > 0" class="userResultsTopDiv">
+      <div class="userResultsDiv">
+        <div />
+        <div class="profileImageDiv">
+          <div class="profileDivResultPage"><img class="profileInResultsPage" src="../projectImages/xqcBanned.png"></div>
+          <div class="coveringDiv" />
+          <div class="roundingDiv" />
+        </div>
         <div/>
         <div class="SubsDiv">
-          <p class="usernameP">xQC</p>
+          <p class="usernameP">xQc</p>
           <p class="subscribersP">Subscribers: 532 000</p>
         </div>
         <div/>
         <p class="videosP">Videos: 10</p>
         <div/>
-        <button class="SubscribeButton" value="Subscribe">+ Subscribe</button>
       </div>
     </div>
+    <div class="SubscribeDiv">
+      <button class="SubscribeButton" value="Subscribe">+ Subscribe</button>
+    </div>
+    <div class="topVideosGrid">
+      <div class="SpaceBlock" />
+      <div class="firstVideo">
+        <img class="linkVideoPic" src="../projectImages/birthdayPepe.png" />
+        <div class="VideoTitleDiv">
+          <p class="videoTitleP">Birthday presents</p>
+          <p class="uploadedP">6 hours ago</p>
+        </div>
+      </div>
+      <div class="SpaceBlock" />
+      <div class="secondVideo">
+        <img class="linkVideoPic" src="../projectImages/reallyXQC.png" />
+        <div class="VideoTitleDiv">
+          <p class="videoTitleP">I made the day for this kid</p>
+          <p class="uploadedP">12:17</p>
+        </div>
+      </div>
+      <div class="SpaceBlock" />
+      <div class="thirdVideo">
+        <img class="linkVideoPic" src="../projectImages/pepeBike.png" />
+        <div class="VideoTitleDiv">
+          <p class="videoTitleP">xQcOW</p>
+          <p class="uploadedP">11:15</p>
+        </div>
+      </div>
+      <div class="SpaceBlock" />
+    </div>
+    <p class="checkAllVideosLink">check all 10 videos ></p>
+    <VideoResultCard :video="tempVideo" />
     <div v-if="!searchedYet && !showSearchPage && !showResultsPage" class="CardsContainer">
       <VideoCard
         v-for="(videoItem, index) of relevantVideos"
@@ -90,6 +127,7 @@ import Footer from '../components/Footer.vue'
 import ExpandableSearchHistory from '../components/ExpandableSearchHistory.vue'
 import Video from '../jsClasses/general/Video'
 import TrendLink from '../components/TrendLink.vue'
+import VideoResultCard from '../components/VideoResultCard.vue'
 import store from '../store'
 
 
@@ -99,6 +137,7 @@ export default {
     Header,
     VideoCard,
     ExpandableSearchHistory,
+    VideoResultCard,
     TrendLink,
     Footer
   },
@@ -140,14 +179,16 @@ export default {
       sliderTitles: ['Kitty Kissaten in Kyoto', 'Top 10 feel Good Animes', 'What did you call me? Meowdafaka'],
       gifs: ['ghosts', 'sorryKitty', 'sumo-run', 'shalsha-aizawa-falfa-aizawa', 'sleepyCat',
       'WinterCold', 'samuelCatJackson', 'WinterWarm', 'smiling-cat-creepy-cat', 'cat-shooting'],
-      relevantVideos: this.$store.getters.getSearchResults ? this.$store.getters.getSearchResults : [],
+      relevantVideos: this.$store.getters.getSearchResults ? this.$store.getters.getSearchResults : [
+      ],
       relevantUsers: [],
       searchedYet: this.$store.getters.getSearchResults === null ? false : true,
       showSearchPage: false,
       expandedSearchHistory: false,
       mySearchHistory: ['John..', 'Why', 'Is the', 'Entire website', 'About', 'Cats..'],
       topTenTrend: ['Cats', 'More Cats', 'All cats', 'Cats?!', 'Cats.', 'Cats!', 'Why are there so many cats', 'John', 'Stop This', 'Madness'],
-      showTheResultsPage: false
+      showTheResultsPage: true,
+      tempVideo: new Video(7, 8, "test", 'xQc talks about the meaning of "juice"', "ha", 5655123, "xQc")
     };
   },
   watch: {
@@ -202,12 +243,35 @@ export default {
 .MainDiv{
   background-color: #131313;
 }
+.coveringDiv{
+  background-color: #131313;
+  width: 45px;
+  height: 50px;
+  z-index: 3;
+  margin-left: -45px;
+  margin-top: -40px;
+  position: relative;
+}
 .searchPage{
   color: white;
 }
-.resultsContainer{
+.linkVideoPic{
+  width: 115px;
+  height: 59px;
+}
+.roundingDiv{
+  background-color: transparent;
+  outline: 10px solid #131313;
+  border-radius: 30px;
+  width: 50px;
+  height: 50px;
+  z-index: 3;
+  margin-top: -50px;
+  position: relative;
+}
+.userResultsDiv{
   display: grid;
-  grid-template-columns: 14px 40px auto 19px auto 50px auto;
+  grid-template-columns: 17px 39px 19px 165px 1px auto;
 }
 .usernameP{
   color: #E75858;
@@ -216,19 +280,71 @@ export default {
   color: #939393;
 }
 .profileInResultsPage{
-  width: 40px;
-  height: 40px;
+  width: 80px;
+  height: 50px;
+  object-fit:cover;
   border-radius: 30px;
+  transform: scaleX(0.5);
+  transform: scaleY(1);
+  margin-left: -28px;
+  z-index: -1;
+}
+.checkAllVideosLink{
+  color: #E75858;
+  text-align: center;
+  padding-bottom: 9.5px;
+  border-bottom: 1px solid #BFBFBF;
+  font-size: 12px;
+  font-family: 'Roboto', sans-serif;
 }
 .videosP{
   color: #939393;
   margin-top: 18.5px;
+}
+.SubscribeDiv{
+  background-color: none;
+  text-align: right;
+  margin-right: 16px;
+  margin-top: -57.5px;
 }
 .clearHistoryDiv{
   width: max-content;
   margin-left: auto;
   margin-right: auto;
   margin-top: 10px;
+}
+.topVideosGrid{
+  display: grid;
+  grid-template-columns: auto 115px 16px 115px 16px 115px auto;
+  background-color: #131313;
+  margin-top: 15px;
+  padding-bottom: 20px;
+}
+.firstVideo, .secondVideo, .thirdVideo{
+  width: 115px;
+  height: 93px;
+  background-color: red;
+}
+.videoTitleP{
+  background-color: black;
+  font-size: 9.5px;
+  font-family: 'Roboto', sans-serif;
+  text-align:center;
+  color: white;
+  padding-top: 3px;
+}
+.VideoTitleDiv{
+  margin-top: -4px;
+  height: 36px;
+  background-color: black;
+}
+.uploadedP{
+  font-size: 11px;
+  line-height: 8.2px;
+  text-align: center;
+  color: #939393;
+  margin-top: 5px;
+  font-family: 'Roboto', sans-serif;
 }
 .SubscribeButton{
   height: 16px;
@@ -240,9 +356,9 @@ export default {
   font-weight: normal;
   color: white;
   background-color: #E75858;
-  margin-top: 20px;
-  outline:none;
-  border:none;
+  margin-bottom: 21px;
+  position: relative;
+  top: -1.5px;
 }
 .footerDiv{
   display: grid;
@@ -301,6 +417,11 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
+.profileDivResultPage{
+  height: 40px;
+  width: 40px;
+  z-index: -1;
+}
 .expandButton, .closeButton{
   width: 72.57px;
   height: 20px;
@@ -313,6 +434,16 @@ export default {
   width: 100px;
   height: 100px;
   background-color: white;
+}
+.userResultsTopDiv{
+  background-color: #131313;
+  grid-template-rows: max-content;
+  padding-bottom: 15px;
+  padding-left: 8px;
+  padding-right: 7px;
+  width:max-content;
+  padding-top: 16px;
+  margin-bottom: 10px;
 }
 .CardsContainer{
   background-color: #131313;

@@ -1,23 +1,45 @@
 package com.company.Entities;
 
 public class Video {
+
+
+    public Integer getViews() {
+        return views;
+    }
+
+    public void setViews(Integer views) {
+        this.views = views;
+    }
+
     @Override
     public String toString() {
         return "Video{" +
                 "videoId=" + videoId +
                 ", userId=" + userId +
+                ", views=" + views +
                 ", link='" + link + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
+                ", postedByUsername='" + postedByUsername + '\'' +
                 '}';
     }
 
-    public Video(Integer videoId, Integer userId, String link, String title, String description) {
+    public String getPostedByUsername() {
+        return postedByUsername;
+    }
+
+    public void setPostedByUsername(String postedByUsername) {
+        this.postedByUsername = postedByUsername;
+    }
+
+    public Video(Integer videoId, Integer userId, String link, String title, String description, Integer views, String postedByUsername) {
         this.videoId = videoId;
         this.userId = userId;
         this.link = link;
         this.title = title;
         this.description = description;
+        this.views = views;
+        this.postedByUsername = postedByUsername;
     }
 
     public Integer getVideoId() {
@@ -60,6 +82,6 @@ public class Video {
         this.description = description;
     }
 
-    private Integer videoId, userId;
-    private String link, title, description;
+    private Integer videoId, userId, views;
+    private String link, title, description, postedByUsername;
 }
