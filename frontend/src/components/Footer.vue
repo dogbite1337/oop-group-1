@@ -48,6 +48,7 @@ export default {
   background-image:url('../projectImages/panther.png');
   background-size: 100% 65px;
   background-repeat: no-repeat;
+  background-color: black;
   padding-top: 7px;
 }
 .HomeIcon{

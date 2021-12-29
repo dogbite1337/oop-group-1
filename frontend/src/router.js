@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from './views/HomePage.vue';
 import LoginPage from './views/LoginPage.vue';
 import RegisterPage from './views/RegisterPage.vue'
+import UploadVideoPage from './views/UploadVideoPage.vue'
 
 export default createRouter({
   history: createWebHistory(),
@@ -19,6 +20,10 @@ export default createRouter({
     {
       path: '/Register',
       component: RegisterPage
+    },
+    {
+      path: '/Upload',
+      component: UploadVideoPage
     }
   ],
 });
