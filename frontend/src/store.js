@@ -5,11 +5,16 @@ export default createStore({
     loggedInUser: null,
     searchResults: null,
     lastSearchQuery: null,
-    showSearchPage: null
+    showSearchPage: null,
+    shouldResetToStartPage: null,
+    sixFirstVideos: null
   },
   mutations: {
     setUser(state, user) {
       state.currentUser = user;
+    },
+    setShouldResetToStartPage(state, shouldReset) {
+      state.shouldResetToStartPage = shouldReset
     },
     setSearchResults(state, searchResults) {
       state.searchResults = searchResults;
@@ -19,6 +24,9 @@ export default createStore({
     },
     setShowSearchPage(state, showSearchPage) {
       state.showSearchPage = showSearchPage;
+    },
+    setSixFirstVideos(state, sixFirstVideos) {
+      state.sixFirstVideos = sixFirstVideos;
     }
   },
   getters: {
@@ -33,6 +41,9 @@ export default createStore({
     },
     getShowSearchPage: (state) => {
       return state.showSearchPage;
+    },
+    getSixFirstVideos: (state) => {
+      return state.sixFirstVideos;
     }
   },
   actions: {
@@ -47,5 +58,11 @@ export default createStore({
     },
     async updateShowSearchPage(store, showSearchPage) {
       store.commit('setShowSearchPage', showSearchPage);
+    },
+    async resetToStartPage(store, shouldReset) {
+      store.commit('setShouldResetToStartPage', shouldReset);
+    },
+    async cacheFirstSixVideos(store, sixFirstVideos) {
+      store.commit('setSixFirstVideos', sixFirstVideos);
     }
   }});

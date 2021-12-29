@@ -3,14 +3,14 @@
   <div class="CardBox">
     <img class="ImageBox" src="../projectImages/vacationCat.png" />
     <div class="titleDiv">
-      <p class="titleText">{{video.title}}</p>
+      <p class="titleText">{{video.title.length > 24 ? video.title.substring(0,24) + '...' : video.title}}</p>
     </div>
     <div class="upBoxAndUsernameDiv">
       <div class="upDiv">
         UP
       </div>
       <div class="userNameDiv">
-        {{video.username}}
+        {{video.postedByUsername}}
       </div>
     </div>
   </div>
@@ -45,10 +45,8 @@ export default {
   
 }
 .CardBox{
-  width: 46vw;
-  max-width: 300px;
-  min-height: 140px;
-  height: 16vh;
+  height: max-content;
+  max-width: 192px;
   max-height: 160px;
   background-color: #000000;
   border: 0.7px solid #000000;
@@ -56,6 +54,7 @@ export default {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   margin-left: 6px;
   margin-right: 6px;
+  padding-bottom: 12px;
 }
 .ImageBox{
   height: 80px;

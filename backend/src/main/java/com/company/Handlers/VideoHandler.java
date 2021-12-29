@@ -11,13 +11,16 @@ public class VideoHandler {
         this.app = app;
         this.videoRepository = videoRepository;
         initVideoHandler();
-        System.out.println("Initialized video handler");
     }
 
     private void initVideoHandler() {
         // get All videos
         app.get("/rest/getAllVideos", (req, res) -> {
             res.json(videoRepository.getAllVideos());
+        });
+
+        app.get("/rest/getVideosForCurrentPage", (req, res) -> {
+            res.json(videoRepository.getVideosForCurrentPage(Integer.parseInt(req.query("currentPage"))));
         });
 
         app.get("/rest/getAllVideosByTitle", (req, res) -> {

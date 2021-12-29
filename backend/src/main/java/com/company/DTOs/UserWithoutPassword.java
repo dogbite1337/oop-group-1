@@ -5,14 +5,33 @@ import com.company.Entities.Video;
 import java.util.ArrayList;
 
 public class UserWithoutPassword {
-    private Integer userId;
+    private Integer userId, videosPosted, subscribers;
     private String username, description, profileURL;
     private ArrayList<Video> userVideos = new ArrayList<Video>();
+
+
+    public Integer getVideosPosted() {
+        return videosPosted;
+    }
+
+    public void setVideosPosted(Integer videosPosted) {
+        this.videosPosted = videosPosted;
+    }
+
+    public Integer getSubscribers() {
+        return subscribers;
+    }
+
+    public void setSubscribers(Integer subscribers) {
+        this.subscribers = subscribers;
+    }
 
     @Override
     public String toString() {
         return "UserWithoutPassword{" +
                 "userId=" + userId +
+                ", videosPosted=" + videosPosted +
+                ", subscribers=" + subscribers +
                 ", username='" + username + '\'' +
                 ", description='" + description + '\'' +
                 ", profileURL='" + profileURL + '\'' +
@@ -20,12 +39,14 @@ public class UserWithoutPassword {
                 '}';
     }
 
-    public UserWithoutPassword(Integer userId, String username, String description, ArrayList<Video> userVideos, String profileURL){
+    public UserWithoutPassword(Integer userId, String username, String description, ArrayList<Video> userVideos, String profileURL, Integer videosPosted, Integer subscribers){
         this.userId = userId;
         this.username = username;
         this.description = description;
         this.userVideos = userVideos;
         this.profileURL = profileURL;
+        this.videosPosted = videosPosted;
+        this.subscribers = subscribers;
     }
 
     public Integer getUserId() {

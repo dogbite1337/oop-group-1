@@ -3,7 +3,7 @@ package com.company.Entities;
 import java.util.ArrayList;
 
 public class User {
-    private Integer userId = 0;
+    private Integer userId = 0, videosPosted = 0, subscribers = 0;
     private String username, password, description, profileURL;
     private ArrayList<Video> userVideos = new ArrayList<Video>();
 
@@ -55,10 +55,29 @@ public class User {
         this.profileURL = profileURL;
     }
 
+
+    public Integer getVideosPosted() {
+        return videosPosted;
+    }
+
+    public void setVideosPosted(Integer videosPosted) {
+        this.videosPosted = videosPosted;
+    }
+
+    public Integer getSubscribers() {
+        return subscribers;
+    }
+
+    public void setSubscribers(Integer subscribers) {
+        this.subscribers = subscribers;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "userId=" + userId +
+                ", videosPosted=" + videosPosted +
+                ", subscribers=" + subscribers +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", description='" + description + '\'' +
@@ -67,11 +86,13 @@ public class User {
                 '}';
     }
 
-    public User(Integer userId, String username, String password, String description, String profileURL){
+    public User(Integer userId, String username, String password, String description, String profileURL, Integer subscribers, Integer videosPosted){
         this.userId = userId;
         this.username = username;
         this.password = password;
         this.description = description;
         this.profileURL = profileURL;
+        this.subscribers = subscribers;
+        this.videosPosted = videosPosted;
     }
 }

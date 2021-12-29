@@ -38,6 +38,9 @@ public class UserHandler {
             req.session("current-user", null);
         });
 
+        app.get("/rest/getUserByUsername", (req, res) -> {
+           res.json(userRepository.getUserByUsername(req.query("providedUsername")));
+        });
     }
 }
 

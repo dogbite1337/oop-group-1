@@ -13,7 +13,7 @@ public class userRepository {
     Connection con;
 
     public UserWithoutPassword registerNewUser(String userName, String password, String description, String profileURL){
-        UserWithoutPassword registeredUser = new UserWithoutPassword(0,userName, description, new ArrayList<Video>(), profileURL);
+        UserWithoutPassword registeredUser = new UserWithoutPassword(0,userName, description, new ArrayList<Video>(), profileURL, 0, 0);
         try {
             try {
                 con = DriverManager.getConnection(
@@ -46,6 +46,8 @@ public class userRepository {
                 registeredUser.setUsername(userName);
                 registeredUser.setDescription(description);
                 registeredUser.setProfileURL(profileURL);
+                registeredUser.setSubscribers(0);
+                registeredUser.setVideosPosted(0);
             }
             con.close();
         }catch(Exception e){
@@ -79,7 +81,7 @@ public class userRepository {
             for(int i = 1; i < userIDs.size()+1; i++) {
                 pStatement.setInt(i, userIDs.get(i-1));
             }
-            System.out.println("Statement was: " + pStatement);
+
             ResultSet rs = pStatement.executeQuery();
 
             while(rs.next()) {
@@ -95,7 +97,7 @@ public class userRepository {
         return foundUsers;
     }
     public User getUserEntityByUsername(String userName) {
-        User foundUser = new User(0, "Not found", "Not found", "Not found", "Not Found");
+        User foundUser = new User(0, "Not found", "Not found", "Not found", "Not Found", 0, 0);
         try {
             try {
                 con = DriverManager.getConnection(
@@ -116,6 +118,9 @@ public class userRepository {
                 foundUser.setUsername(rs.getString(2));
                 foundUser.setPassword(rs.getString(3));
                 foundUser.setDescription(rs.getString(4));
+                foundUser.setProfileURL(rs.getString(5));
+                foundUser.setSubscribers(rs.getInt(6));
+                foundUser.setVideosPosted(rs.getInt(7));
             }
             con.close();
         }catch(Exception e){
@@ -127,7 +132,7 @@ public class userRepository {
     }
 
     public UserWithoutPassword getUserByUsername(String userName) {
-        UserWithoutPassword foundUser = new UserWithoutPassword(0, "Not found", "Not found", new ArrayList<Video>(), "Not found");
+        UserWithoutPassword foundUser = new UserWithoutPassword(0, "Not found", "Not found", new ArrayList<Video>(), "Not found", 0, 0);
 
 
         try {
@@ -148,6 +153,9 @@ public class userRepository {
                 foundUser.setUserId(rs.getInt(1));
                 foundUser.setUsername(rs.getString(2));
                 foundUser.setDescription(rs.getString(4));
+                foundUser.setProfileURL(rs.getString(5));
+                foundUser.setSubscribers(rs.getInt(6));
+                foundUser.setVideosPosted(rs.getInt(7));
             }
             con.close();
         }catch(Exception e){
@@ -158,9 +166,7 @@ public class userRepository {
         return foundUser;
     }
     public UserWithoutPassword getUserById(Integer userId){
-        // TO DO
-        UserWithoutPassword foundUser = new UserWithoutPassword(0, "Not found", "Not found", new ArrayList<Video>(), "Not Found");
-
+        UserWithoutPassword foundUser = new UserWithoutPassword(0, "Not found", "Not found", new ArrayList<Video>(), "Not Found", 0, 0);
 
             try {
                 try {
@@ -180,6 +186,9 @@ public class userRepository {
                     foundUser.setUserId(rs.getInt(1));
                     foundUser.setUsername(rs.getString(2));
                     foundUser.setDescription(rs.getString(4));
+                    foundUser.setProfileURL(rs.getString(5));
+                    foundUser.setSubscribers(rs.getInt(6));
+                    foundUser.setVideosPosted(rs.getInt(7));
                 }
                 con.close();
             }catch(Exception e){

@@ -7,7 +7,7 @@
     <div class="titleDiv">
       <div class="matchGrid">
         <p class="matchedWord">{{matchedString}}</p>
-        <pre class="titleText">{{nonMatchedString}}</pre>
+        <pre v-if="nonMatchedString" class="titleText">{{nonMatchedString}}</pre>
         <div/>
       </div>
       <div class="uploaderSubDiv">
@@ -17,7 +17,7 @@
           </div>
           <div />
           <div class="userNameDiv">
-            {{video.postedByUsername}}
+            {{(video ? video.postedByUsername : '')}}
           </div>
           <div />
         </div>
@@ -31,72 +31,93 @@
     </div>
     <div class="SpaceBlock" />
   </div>
-
 </template>
 <script>
 
 export default {
-  props: ['video'],
+  props: ['video', 'searchQuery'],
   name: 'VideoResultCard',
-  mounted() {
-    console.log(this.video);
-    let viewsString = this.video.views.toString();
-    let base = ''
-    let startFrom = this.video.views % 1000;
-    startFrom = startFrom.toString();
-
-    for(let i = 0; i < viewsString.length; i++){
-      if(i != 0 && (i + startFrom - 1) % 3 == 0){
-        base += ' ' + viewsString[i]
-      }
-      else{
-        base += viewsString[i]
-      }
-    this.spacedViews = base;
-    
-
-    let originalString = this.video.title;
-    if(!this.checkedWords){
-      for(let i = 0; i < this.video.title.length; i++){
-        if(originalString.substring(i, this.matchedWord.length) === this.matchedWord){
-          this.matchedString += this.matchedWord;
-        }
-        else{
-          this.matchedString += ' '
-        }
-      }
-    }
-
-    let empty = '';
-    for(let i = 0; i < this.matchedWord.length; i++){
-      empty += " "
-    }
-    this.empty = empty;
-    this.nonMatchedString = this.video.title.replaceAll(this.matchedWord, empty)
-    this.checkedWords = true;
-    }
-  },
   data() {
     return {
-      videoAbove10: this.video.views >= 10,
-      videoAbove100: this.video.views >= 100,
-      videoAbove1k: this.video.views >= 1000,
-      videoAbove10k: this.video.views >= 10000,
-      videoAbove100k: this.video.views >= 100000,
-      videoAbove1Mil: this.video.views >= 1000000,
-      videoAbove10Mil: this.video.views >= 10000000,
-      videoAbove100Mil: this.video.views >= 100000000,
-      spacedViews: '',
-      matchedWord: 'xQc',
-      matchedString: '',
-      nonMatchedString: '',
+      videoAbove10: (this.video ? this.video.views >= 10 : false),
+      videoAbove100: (this.video ? this.video.views >= 100 : false),
+      videoAbove1k: (this.video ? this.video.views >= 1000 : false),
+      videoAbove10k: (this.video ? this.video.views >= 10000 : false),
+      videoAbove100k: (this.video ? this.video.views >= 100000 : false),
+      videoAbove1Mil: (this.video ? this.video.views >= 1000000 : false),
+      videoAbove10Mil: (this.video ? this.video.views >= 10000000 : false),
+      videoAbove100Mil: (this.video ? this.video.views >= 100000000 : false),
+      spacedViews: (this.video ? this.renderSpacedViews() : 0),
+      matchedWord: (this.searchQuery ? this.searchQuery : ''),
+      matchedString: (this.video ? this.renderMatchedString() : ''),
+      nonMatchedString: (this.video ? this.renderTitle() : ''),
       checkedWords: false,
       empty: '',
-      fullstring: ''
+      fullstring: '',
+      providedSearchQuery: (this.searchQuery ? this.getSearchQuery() : ''),
+      resultIsIdentical: false
     };
   },
   methods: {
+    renderMatchedString() {
+      let originalString = this.video.title;
+      let matchedString = ''
 
+      if(!this.checkedWords){
+        for(let i = 0; i < this.video.title.length; i++){
+
+          if(originalString.substring(i, this.searchQuery.length).toLowerCase() === this.searchQuery.toLowerCase()){
+            matchedString += originalString.substring(i, this.searchQuery.length);
+          }
+          else{
+            matchedString += ' '
+          }
+        }
+      }
+
+      return matchedString;
+    },
+    renderTitle() {
+      let empty = '';
+      for(let i = 0; i < this.searchQuery.length; i++){
+        empty += " "
+      }
+      this.empty = empty;
+
+      let nonMatchedString = this.video.title.replaceAll(this.searchQuery, empty)
+
+      this.nonMatchedString = nonMatchedString;
+
+      if(this.searchQuery.toLowerCase() === nonMatchedString.toLowerCase()){
+        this.resultIsIdentical = true;
+        nonMatchedString = '';
+      }
+
+      this.checkedWords = true;
+      return nonMatchedString;
+     
+    },
+    getSearchQuery() {
+
+    },
+    renderSpacedViews() {
+      let viewsString = this.video.views.toString();
+      let base = ''
+      let startFrom = this.video.views % 1000;
+      let spacedViews = '';
+      startFrom = startFrom.toString();
+
+      for(let i = 0; i < viewsString.length; i++){
+        if(i != 0 && (i + startFrom - 1) % 3 == 0){
+          base += ' ' + viewsString[i]
+        }
+        else{
+          base += viewsString[i]
+        }
+        spacedViews = base;
+      }
+      return spacedViews;  
+    }
   }
 };
 </script>

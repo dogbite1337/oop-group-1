@@ -1,11 +1,12 @@
 <template>
   <div class="MainDiv">
     <Header />
+    <div class="NoLineDiv" />
     <img v-if="!searchedYet && !showSearchPage && !showResultsPage" class="sliderBackground" :src="`src\\projectImages\\${
       decodeURI(sliderImageURls[currentSliderImageIndex]) 
       + 
       (gifs.includes(decodeURI(sliderImageURls[currentSliderImageIndex])) ? '.gif' : '.png')}`">
-    <img class="SorryKitty" v-if="searchedYet && relevantVideos.length == 0 && !showSearchPage" src="src\\projectImages\\sorryKitty.gif" />
+    <img class="SorryKitty" v-if="searchedYet && searchResults.length == 0 && showResultsPage" src="src\\projectImages\\sorryKitty.gif" />
     <div v-if="showSearchPage && !showResultsPage" class="searchPage">
       <div class="topTrendingDiv">
         <div/>
@@ -31,7 +32,7 @@
       <button class="clearHistoryButton">Clear history</button>
     </div>
     <div v-if="showSearchPage && !showResultsPage" class="clearHistoryDiv">
-      <button click="showResultsOfSearch" class="Search">Search</button>
+      <button @click="showResultsOfSearch" class="Search">Search</button>
     </div>
     <div v-if="!searchedYet && !showSearchPage && !showResultsPage" class="SlideShowDiv">
       <div class="SpaceBlock" />
@@ -49,7 +50,7 @@
       <div v-if="currentSliderImageIndex != 2" @click="setSliderIndexToTwo" class="WhiteCircle" />
     </div>
     
-    <div v-if="showResultsPage && relevantVideos.length > 0" class="userResultsTopDiv">
+    <div v-if="relevantUsers.length > 0 && searchedYet && showResultsPage" class="userResultsTopDiv">
       <div class="userResultsDiv">
         <div />
         <div class="profileImageDiv">
@@ -59,18 +60,18 @@
         </div>
         <div/>
         <div class="SubsDiv">
-          <p class="usernameP">xQc</p>
-          <p class="subscribersP">Subscribers: 532 000</p>
+          <p class="usernameP">{{relevantUsers[0].getUsername()}}</p>
+          <p class="subscribersP">Subscribers: {{relevantUsers[0].getSubscribers()}}</p>
         </div>
         <div/>
-        <p class="videosP">Videos: 10</p>
+        <p class="videosP">Videos: {{relevantUsers[0].getVideosPosted()}}</p>
         <div/>
       </div>
     </div>
-    <div class="SubscribeDiv">
+    <div v-if="searchedYet && relevantUsers.length > 0 && showResultsPage" class="SubscribeDiv">
       <button class="SubscribeButton" value="Subscribe">+ Subscribe</button>
     </div>
-    <div class="topVideosGrid">
+    <div v-if="searchedYet && relevantUsers.length > 0 && showResultsPage" class="topVideosGrid">
       <div class="SpaceBlock" />
       <div class="firstVideo">
         <img class="linkVideoPic" src="../projectImages/birthdayPepe.png" />
@@ -97,8 +98,10 @@
       </div>
       <div class="SpaceBlock" />
     </div>
-    <p class="checkAllVideosLink">check all 10 videos ></p>
-    <VideoResultCard :video="tempVideo" />
+    <p v-if="searchedYet && relevantUsers.length > 0 && showResultsPage" class="checkAllVideosLink">check all 10 videos ></p>
+    <div v-if="searchResults.length > 0 && showResultsPage">
+      <VideoResultCard :video="searchResults[0]" :searchQuery="lastSearchQuery" v-if="searchResults[0]" />
+    </div>
     <div v-if="!searchedYet && !showSearchPage && !showResultsPage" class="CardsContainer">
       <VideoCard
         v-for="(videoItem, index) of relevantVideos"
@@ -107,7 +110,7 @@
         class="videoBox"
       />
     </div>
-    <div v-if="relevantVideos.length == 0 && searchedYet && !showSearchPage" class="SorryDiv">
+    <div v-if="searchResults.length == 0 && searchedYet && showResultsPage" class="SorryDiv">
       <div />
       <div class="SorryText">
         No result was found
@@ -128,6 +131,7 @@ import ExpandableSearchHistory from '../components/ExpandableSearchHistory.vue'
 import Video from '../jsClasses/general/Video'
 import TrendLink from '../components/TrendLink.vue'
 import VideoResultCard from '../components/VideoResultCard.vue'
+import User from '../jsClasses/general/User'
 import store from '../store'
 
 
@@ -142,26 +146,53 @@ export default {
     Footer
   },
   async created() {
-    let allVideos = await this.getAllVideos();
+    let allVideos = await this.getVideosForCurrentPage();
+    this.$store.dispatch('cacheFirstSixVideos', allVideos);
     this.relevantVideos = []
     for(let i = allVideos.length; i > 0; i--){
       let video = new Video(0, 0, '', '', '')
       let newVideo = Object.assign(video, allVideos[i-1])
       this.relevantVideos.push(newVideo);
     }
-    this.$store.subscribe((mutation, state) => {
-      
+    this.$store.subscribe(async (mutation, state) => {
       if(mutation.type == "setShowSearchPage"){
         this.showSearchPage = true;
       }
+      if(mutation.type == "setShouldResetToStartPage"){
+        this.searchedYet = false;
+        this.showResultsPage = false;
+        this.showResultsOfSearch = false;
+        this.showSearchPage = false;
+        this.relevantUsers = []
+        this.relevantVideos = []
+        let cachedVideos = this.$store.getters.getSixFirstVideos;
+        for(let i = 0; i < cachedVideos.length; i++){
+          let oldVideo = new Video(0,0,'','','',0,'');
+          oldVideo = Object.assign(oldVideo, cachedVideos[i])
+          this.relevantVideos.push(oldVideo)
+        }
+      }
       if(mutation.type == "setSearchResults"){
         this.relevantVideos = []
+        this.lastSearchQuery = this.$store.getters.getLastSearchQuery;
         for(let i = mutation.payload.length; i > 0; i--){
-          let video = new Video(0, 0, '', '', '')
+          let video = new Video(0, 0, '', '', '', 0, '')
           let newVideo = Object.assign(video, mutation.payload[i-1])
-          this.relevantVideos.push(newVideo);
+          if(newVideo.getVideoId() !== 0){
+            this.searchResults.push(newVideo);
+          }
         }
         this.searchedYet = true;
+        let res = await fetch('/rest/getUserByUsername?' + new URLSearchParams({
+          providedUsername: this.lastSearchQuery
+        }));
+
+        let response = await res.json();
+        let foundUser = new User(0, "", "", "", 0, 0)
+        foundUser = Object.assign(foundUser, response);
+        if(foundUser.getUserId() !== 0){
+          this.relevantUsers.push(foundUser);
+        }   
       }
       let lastSearch = {
         lastSearchQuery: ''
@@ -171,6 +202,20 @@ export default {
         this.searchedYet = false;
       }
     })
+  },
+  beforeMount() {
+    this.relevantVideos = [];
+    this.searchedYet = false;
+    this.showSearchPage = false;
+    this.showResultsPage = false;
+    let cachedVideos = this.$store.getters.getSixFirstVideos;
+    if(cachedVideos){
+      for(let i = 0; i < cachedVideos.length; i++){
+        let oldVideo = new Video(0,0,'','','',0,'');
+        oldVideo = Object.assign(oldVideo, cachedVideos[i])
+        this.relevantVideos.push(oldVideo)
+      }
+    }
   },
   data() {
     return {
@@ -187,18 +232,17 @@ export default {
       expandedSearchHistory: false,
       mySearchHistory: ['John..', 'Why', 'Is the', 'Entire website', 'About', 'Cats..'],
       topTenTrend: ['Cats', 'More Cats', 'All cats', 'Cats?!', 'Cats.', 'Cats!', 'Why are there so many cats', 'John', 'Stop This', 'Madness'],
-      showTheResultsPage: true,
-      tempVideo: new Video(7, 8, "test", 'xQc talks about the meaning of "juice"', "ha", 5655123, "xQc")
+      showResultsPage: false,
+      tempVideo: new Video(7, 8, "test", 'xQc talks about the meaning of "juice"', "ha", 5655123, "xQc"),
+      searchResults: [],
+      lastSearchQuery: (this.$store.getters.getLastSearchQuery ? this.$store.getters.getLastSearchQuery : ''),
+      currentPage: 1
     };
   },
-  watch: {
-    relevantVideos() {
-      console.log("I searched for some videos");
-    }
-  },
   methods: {
-    showResultsPage() {
-      this.showTheResultsPage = true;
+    showResultsOfSearch() {
+      this.showResultsPage = true;
+      this.showSearchPage = false;
     },
     expandSearchHistory() {
       this.expandedSearchHistory = true;
@@ -206,13 +250,24 @@ export default {
     closeSearchHistory() {
       this.expandedSearchHistory = false;
     },
-    async getAllVideos() {
-      let res = await fetch('/rest/getAllVideos', {
-        method: 'GET'
-      });
+    async getVideosForCurrentPage() {
+      if(this.currentPage == 1 && this.$store.getters.getSixFirstVideos){
+        return this.$store.getters.getSixFirstVideos;
+      }
+      if(!this.currentPage){
+        this.currentPage = 1;
+      }
+      let res = await fetch('/rest/getVideosForCurrentPage?' + new URLSearchParams({
+        currentPage: this.currentPage
+      }));
 
       let response = await res.json();
-      console.log(response);
+      return response;
+    },
+    async getAllVideos() {
+      let res = await fetch('/rest/getAllVideos');
+
+      let response = await res.json();
       return response;
     },
     htmlDecode(input) {
@@ -224,7 +279,6 @@ export default {
     },
     setSliderIndexToZero(){
       this.currentSliderImageIndex = 0;
-      console.log(this.$store.getters.getSearchResults);
     },
     setSliderIndexToOne(){
       this.currentSliderImageIndex = 1;
@@ -278,6 +332,11 @@ export default {
 }
 .subscribersP{
   color: #939393;
+}
+.NoLineDiv{
+  height: 2px;
+  background-color: black;
+  margin-top: -1px;
 }
 .profileInResultsPage{
   width: 80px;
@@ -452,7 +511,6 @@ export default {
   grid-template-rows: 159px 159px 159px;
   padding-left: 8px;
   padding-right: 7px;
-  width:max-content;
   padding-top: 16px;
 }
 

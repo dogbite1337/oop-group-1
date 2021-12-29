@@ -84,6 +84,40 @@ public class videoRepository {
         return videosToReturn;
     }
 
+    public ArrayList<Video> getVideosForCurrentPage(Integer currentPage){
+        ArrayList<Video> videosToReturn = new ArrayList<Video>();
+        try {
+            try {
+                con = DriverManager.getConnection(
+                        "jdbc:mysql://localhost:3306/kittykitty","root","root");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            PreparedStatement pStatement = con.prepareStatement("SELECT * FROM videos LIMIT 8 OFFSET ?");
+            pStatement.setInt(1, (currentPage == 1 ? 0 : currentPage * 8));
+            ResultSet rs = pStatement.executeQuery();
+
+            while(rs.next()) {
+                // We must manually specify at which index and which datatypes each column in the result is.
+                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "");
+                newVideo.setVideoId(rs.getInt(1));
+                newVideo.setUserId(rs.getInt(2));
+                newVideo.setLink(rs.getString(3));
+                newVideo.setTitle(rs.getString(4));
+                newVideo.setDescription(rs.getString(5));
+                newVideo.setViews(rs.getInt(6));
+                newVideo.setPostedByUsername(rs.getString(7));
+                videosToReturn.add(newVideo);
+            }
+            con.close();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
+        return videosToReturn;
+    }
+
     public ArrayList<Video> getAllVideos(){
         ArrayList<Video> videosToReturn= new ArrayList<Video>();
 

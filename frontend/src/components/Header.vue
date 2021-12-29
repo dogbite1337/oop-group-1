@@ -1,7 +1,7 @@
 <template>
   <div class="HeaderDiv">
     <div class="SpaceDiv" />
-    <p class="KittyText">KittyKitty</p>
+    <p @click="resetToStartPage" class="KittyText">KittyKitty</p>
     <div class="SpaceDiv" />
     <p class="SeasonText">Winter</p>
     <div class="SpaceDiv" />
@@ -36,6 +36,10 @@ export default {
     };
   },
   methods: {
+    resetToStartPage(){
+      this.$store.dispatch('resetToStartPage', true)
+      this.searchParam = ''
+    },
     showSearchMenu() {
       this.$store.dispatch('updateShowSearchPage', true);
     },
@@ -46,7 +50,6 @@ export default {
       }));
 
       let response = await res.json();
-      console.log(response);
       this.$store.dispatch('updateSearchResult', response);
     
     }

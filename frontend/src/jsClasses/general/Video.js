@@ -9,6 +9,14 @@ export default class Video {
     this.postedByUsername = postedByUsername;
   }
 
+  getPostedByUsername() {
+    return this.postedByUsername
+  }
+
+  setPostedByUsername(username) {
+    this.postedByUsername = username;
+  }
+  
   getVideoId() {
     return this.videoId;
   }
