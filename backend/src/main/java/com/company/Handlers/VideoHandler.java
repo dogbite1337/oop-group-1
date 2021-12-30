@@ -39,7 +39,11 @@ public class VideoHandler {
                     req.body().get("title").toString(),
                     req.body().get("description").toString(),
                     req.body().get("views").toString(),
-                    req.body().get("postedByUsername").toString()));
+                    req.body().get("postedByUsername").toString(),
+                    req.body().get("likes").toString(),
+                    req.body().get("dislikes").toString(),
+                    req.body().get("stars").toString())
+            );
         });
 
     }

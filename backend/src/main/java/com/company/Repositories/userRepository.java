@@ -2,7 +2,6 @@ package com.company.Repositories;
 
 import com.company.DTOs.UserWithoutPassword;
 import com.company.Entities.User;
-import com.company.Entities.Video;
 import com.company.utilities.Encrypter;
 
 import java.sql.*;

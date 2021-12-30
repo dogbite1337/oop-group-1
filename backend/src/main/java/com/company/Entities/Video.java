@@ -11,6 +11,40 @@ public class Video {
         this.views = views;
     }
 
+
+
+    public String getPostedByUsername() {
+        return postedByUsername;
+    }
+
+    public void setPostedByUsername(String postedByUsername) {
+        this.postedByUsername = postedByUsername;
+    }
+
+    public String getLikes() {
+        return likes;
+    }
+
+    public void setLikes(String likes) {
+        this.likes = likes;
+    }
+
+    public String getDislikes() {
+        return dislikes;
+    }
+
+    public void setDislikes(String dislikes) {
+        this.dislikes = dislikes;
+    }
+
+    public String getStars() {
+        return stars;
+    }
+
+    public void setStars(String stars) {
+        this.stars = stars;
+    }
+
     @Override
     public String toString() {
         return "Video{" +
@@ -21,18 +55,13 @@ public class Video {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", postedByUsername='" + postedByUsername + '\'' +
+                ", likes='" + likes + '\'' +
+                ", dislikes='" + dislikes + '\'' +
+                ", stars='" + stars + '\'' +
                 '}';
     }
 
-    public String getPostedByUsername() {
-        return postedByUsername;
-    }
-
-    public void setPostedByUsername(String postedByUsername) {
-        this.postedByUsername = postedByUsername;
-    }
-
-    public Video(Integer videoId, Integer userId, String link, String title, String description, Integer views, String postedByUsername) {
+    public Video(Integer videoId, Integer userId, String link, String title, String description, Integer views, String postedByUsername, String likes, String dislikes, String stars) {
         this.videoId = videoId;
         this.userId = userId;
         this.link = link;
@@ -40,6 +69,9 @@ public class Video {
         this.description = description;
         this.views = views;
         this.postedByUsername = postedByUsername;
+        this.likes = likes;
+        this.dislikes = dislikes;
+        this.stars = stars;
     }
 
     public Integer getVideoId() {
@@ -83,5 +115,5 @@ public class Video {
     }
 
     private Integer videoId, userId, views;
-    private String link, title, description, postedByUsername;
+    private String link, title, description, postedByUsername, likes, dislikes, stars;
 }

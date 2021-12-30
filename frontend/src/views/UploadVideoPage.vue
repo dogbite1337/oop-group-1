@@ -87,7 +87,10 @@ export default {
         title: this.titleOfVideo,
         description: this.descriptionOfVideo,
         views: 0,
-        postedByUsername: this.currentUser.getUsername()
+        postedByUsername: this.currentUser.getUsername(),
+        likes: 0,
+        dislikes: 0,
+        stars: 0
       }
       let res = await fetch('/api/uploadVideo', {
         method: 'POST',

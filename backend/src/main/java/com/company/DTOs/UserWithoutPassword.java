@@ -1,9 +1,5 @@
 package com.company.DTOs;
 
-import com.company.Entities.Video;
-
-import java.util.ArrayList;
-
 public class UserWithoutPassword {
     private Integer userId, videosPosted, subscribers;
     private String username, description, profileURL;

@@ -4,9 +4,6 @@ import com.company.Repositories.userRepository;
 import com.company.utilities.Validator;
 import express.Express;
 
-
-import java.util.Map;
-
 public class UserHandler {
 
     private final Express app;

@@ -1,15 +1,8 @@
 package com.company.Repositories;
 
-import com.company.DTOs.UserWithoutPassword;
-import com.company.DTOs.VideoWithUsername;
-import com.company.Entities.User;
 import com.company.Entities.Video;
-import com.company.Services.DTOConverter;
-import com.company.utilities.Encrypter;
-
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class videoRepository {
     Connection con;
@@ -31,7 +24,7 @@ public class videoRepository {
 
             while(rs.next()) {
                 // We must manually specify at which index and which datatypes each column in the result is.
-                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "");
+                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "", "0", "0", "0");
                 newVideo.setVideoId(rs.getInt(1));
                 newVideo.setUserId(rs.getInt(2));
                 newVideo.setLink(rs.getString(3));
@@ -39,6 +32,9 @@ public class videoRepository {
                 newVideo.setDescription(rs.getString(5));
                 newVideo.setViews(rs.getInt(6));
                 newVideo.setPostedByUsername(rs.getString(7));
+                newVideo.setLikes(String.valueOf(rs.getInt(8)));
+                newVideo.setDislikes(String.valueOf(rs.getInt(9)));
+                newVideo.setStars(String.valueOf(rs.getInt(10)));
                 allVideosByUser.add(newVideo);
             }
             con.close();
@@ -66,7 +62,7 @@ public class videoRepository {
 
             while(rs.next()) {
                 // We must manually specify at which index and which datatypes each column in the result is.
-                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "");
+                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "", "0", "0", "0");
                 newVideo.setVideoId(rs.getInt(1));
                 newVideo.setUserId(rs.getInt(2));
                 newVideo.setLink(rs.getString(3));
@@ -74,6 +70,9 @@ public class videoRepository {
                 newVideo.setDescription(rs.getString(5));
                 newVideo.setViews(rs.getInt(6));
                 newVideo.setPostedByUsername(rs.getString(7));
+                newVideo.setLikes(String.valueOf(rs.getInt(8)));
+                newVideo.setDislikes(String.valueOf(rs.getInt(9)));
+                newVideo.setStars(String.valueOf(rs.getInt(10)));
                 videosToReturn.add(newVideo);
             }
             con.close();
@@ -100,7 +99,7 @@ public class videoRepository {
 
             while(rs.next()) {
                 // We must manually specify at which index and which datatypes each column in the result is.
-                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "");
+                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "", "0", "0", "0");
                 newVideo.setVideoId(rs.getInt(1));
                 newVideo.setUserId(rs.getInt(2));
                 newVideo.setLink(rs.getString(3));
@@ -108,6 +107,9 @@ public class videoRepository {
                 newVideo.setDescription(rs.getString(5));
                 newVideo.setViews(rs.getInt(6));
                 newVideo.setPostedByUsername(rs.getString(7));
+                newVideo.setLikes(String.valueOf(rs.getInt(8)));
+                newVideo.setDislikes(String.valueOf(rs.getInt(9)));
+                newVideo.setStars(String.valueOf(rs.getInt(10)));
                 videosToReturn.add(newVideo);
             }
             con.close();
@@ -134,7 +136,7 @@ public class videoRepository {
 
             while(rs.next()) {
                 // We must manually specify at which index and which datatypes each column in the result is.
-                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "");
+                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "", "0","0", "0");
                 newVideo.setVideoId(rs.getInt(1));
                 newVideo.setUserId(rs.getInt(2));
                 newVideo.setLink(rs.getString(3));
@@ -142,6 +144,9 @@ public class videoRepository {
                 newVideo.setDescription(rs.getString(5));
                 newVideo.setViews(rs.getInt(6));
                 newVideo.setPostedByUsername(rs.getString(7));
+                newVideo.setLikes(String.valueOf(rs.getInt(8)));
+                newVideo.setDislikes(String.valueOf(rs.getInt(9)));
+                newVideo.setStars(String.valueOf(rs.getInt(10)));
                 videosToReturn.add(newVideo);
             }
             con.close();
@@ -152,9 +157,9 @@ public class videoRepository {
         return videosToReturn;
     }
 
-    public Video uploadNewVideo(String userIdOfUpload, String videoURL, String title, String description, String views, String postedByUsername)
+    public Video uploadNewVideo(String userIdOfUpload, String videoURL, String title, String description, String views, String postedByUsername, String likes, String dislikes, String stars)
     {
-        Video uploadedVideo = new Video(0, 0, "", "", "", 0, "");
+        Video uploadedVideo = new Video(0, 0, "", "", "", 0, "", "0", "0", "0");
 
         uploadedVideo.setUserId(Integer.parseInt(userIdOfUpload));
         uploadedVideo.setLink(videoURL);
@@ -162,6 +167,9 @@ public class videoRepository {
         uploadedVideo.setDescription(description);
         uploadedVideo.setViews(Integer.parseInt(views));
         uploadedVideo.setPostedByUsername(postedByUsername);
+        uploadedVideo.setLikes(likes);
+        uploadedVideo.setDislikes(dislikes);
+        uploadedVideo.setStars(stars);
 
         try {
             try {
@@ -171,13 +179,16 @@ public class videoRepository {
                 e.printStackTrace();
             }
 
-            PreparedStatement pStatement = con.prepareStatement("INSERT INTO videos (userId, link, title, description, views, postedByUsername) VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement pStatement = con.prepareStatement("INSERT INTO videos (userId, link, title, description, views, postedByUsername, likes, dislikes, stars) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             pStatement.setInt(1, uploadedVideo.getUserId());
             pStatement.setString(2, uploadedVideo.getLink());
             pStatement.setString(3, uploadedVideo.getTitle());
             pStatement.setString(4, uploadedVideo.getDescription());
             pStatement.setInt(5, uploadedVideo.getViews());
             pStatement.setString(6, uploadedVideo.getPostedByUsername());
+            pStatement.setString(7, uploadedVideo.getLikes());
+            pStatement.setString(8, uploadedVideo.getDislikes());
+            pStatement.setString(9, uploadedVideo.getStars());
             int newVideoUpload = pStatement.executeUpdate();
 
             try (ResultSet generatedKeys = pStatement.getGeneratedKeys()){
