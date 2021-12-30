@@ -7,7 +7,7 @@ export default createStore({
     lastSearchQuery: null,
     showSearchPage: null,
     shouldResetToStartPage: null,
-    sixFirstVideos: null
+    eightFirstVideos: null
   },
   mutations: {
     setUser(state, user) {
@@ -25,8 +25,8 @@ export default createStore({
     setShowSearchPage(state, showSearchPage) {
       state.showSearchPage = showSearchPage;
     },
-    setSixFirstVideos(state, sixFirstVideos) {
-      state.sixFirstVideos = sixFirstVideos;
+    setEightFirstVideos(state, eightFirstVideos) {
+      state.eightFirstVideos = eightFirstVideos;
     }
   },
   getters: {
@@ -42,8 +42,8 @@ export default createStore({
     getShowSearchPage: (state) => {
       return state.showSearchPage;
     },
-    getSixFirstVideos: (state) => {
-      return state.sixFirstVideos;
+    getEightFirstVideos: (state) => {
+      return state.eightFirstVideos;
     }
   },
   actions: {
@@ -62,7 +62,7 @@ export default createStore({
     async resetToStartPage(store, shouldReset) {
       store.commit('setShouldResetToStartPage', shouldReset);
     },
-    async cacheFirstSixVideos(store, sixFirstVideos) {
-      store.commit('setSixFirstVideos', sixFirstVideos);
+    async cacheFirstEightVideos(store, eightFirstVideos) {
+      store.commit('setEightFirstVideos', eightFirstVideos);
     }
   }});

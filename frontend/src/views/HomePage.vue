@@ -147,7 +147,7 @@ export default {
   },
   async created() {
     let allVideos = await this.getVideosForCurrentPage();
-    this.$store.dispatch('cacheFirstSixVideos', allVideos);
+    this.$store.dispatch('cacheFirstEightVideos', allVideos);
     this.relevantVideos = []
     for(let i = allVideos.length; i > 0; i--){
       let video = new Video(0, 0, '', '', '')
@@ -165,7 +165,7 @@ export default {
         this.showSearchPage = false;
         this.relevantUsers = []
         this.relevantVideos = []
-        let cachedVideos = this.$store.getters.getSixFirstVideos;
+        let cachedVideos = this.$store.getters.getEightFirstVideos;
         for(let i = 0; i < cachedVideos.length; i++){
           let oldVideo = new Video(0,0,'','','',0,'');
           oldVideo = Object.assign(oldVideo, cachedVideos[i])
@@ -208,7 +208,7 @@ export default {
     this.searchedYet = false;
     this.showSearchPage = false;
     this.showResultsPage = false;
-    let cachedVideos = this.$store.getters.getSixFirstVideos;
+    let cachedVideos = this.$store.getters.getEightFirstVideos;
     if(cachedVideos){
       for(let i = 0; i < cachedVideos.length; i++){
         let oldVideo = new Video(0,0,'','','',0,'');
@@ -251,8 +251,8 @@ export default {
       this.expandedSearchHistory = false;
     },
     async getVideosForCurrentPage() {
-      if(this.currentPage == 1 && this.$store.getters.getSixFirstVideos){
-        return this.$store.getters.getSixFirstVideos;
+      if(this.currentPage == 1 && this.$store.getters.getEightFirstVideos){
+        return this.$store.getters.getEightFirstVideos;
       }
       if(!this.currentPage){
         this.currentPage = 1;
@@ -421,7 +421,7 @@ export default {
 }
 .footerDiv{
   display: grid;
-  grid-template-rows: 40vh auto;
+  grid-template-rows: 5vh auto;
   background-color: #131313;
 }
 .clearHistoryButton{

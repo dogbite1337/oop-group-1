@@ -12,8 +12,8 @@ import java.util.HashMap;
 public class userRepository {
     Connection con;
 
-    public UserWithoutPassword registerNewUser(String userName, String password, String description, String profileURL){
-        UserWithoutPassword registeredUser = new UserWithoutPassword(0,userName, description, new ArrayList<Video>(), profileURL, 0, 0);
+    public UserWithoutPassword registerNewUser(String userName, String password, String description, String profileURL, Integer subscribers, Integer videosPosted){
+        UserWithoutPassword registeredUser = new UserWithoutPassword(0,"","","",0,0);
         try {
             try {
                 con = DriverManager.getConnection(
@@ -32,11 +32,13 @@ public class userRepository {
                 return null; //User already exists
             }
             else{
-                PreparedStatement registerUser = con.prepareStatement("INSERT INTO users (username, password, description, profileURL) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement registerUser = con.prepareStatement("INSERT INTO users (username, password, description, profileURL, subscribers, videosPosted) VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 registerUser.setString(1, userName);
                 registerUser.setString(2, Encrypter.hash(password));
                 registerUser.setString(3, description);
                 registerUser.setString(4, profileURL);
+                registerUser.setInt(5, subscribers);
+                registerUser.setInt(6, videosPosted);
                 int resultSetFromRegisteringUser = registerUser.executeUpdate();
                 try (ResultSet generatedKeys = registerUser.getGeneratedKeys()){
                     if (generatedKeys.next()){
@@ -132,7 +134,7 @@ public class userRepository {
     }
 
     public UserWithoutPassword getUserByUsername(String userName) {
-        UserWithoutPassword foundUser = new UserWithoutPassword(0, "Not found", "Not found", new ArrayList<Video>(), "Not found", 0, 0);
+        UserWithoutPassword foundUser = new UserWithoutPassword(0, "", "", "", 0, 0);
 
 
         try {
@@ -166,7 +168,7 @@ public class userRepository {
         return foundUser;
     }
     public UserWithoutPassword getUserById(Integer userId){
-        UserWithoutPassword foundUser = new UserWithoutPassword(0, "Not found", "Not found", new ArrayList<Video>(), "Not Found", 0, 0);
+        UserWithoutPassword foundUser = new UserWithoutPassword(0, "", "", "", 0, 0);
 
             try {
                 try {

@@ -19,8 +19,8 @@
     <router-link v-if="!$store.getters.getCurrentUser" :to="{ path: '/Login'}">
       <input class="LoginButton" type="button" value="Login">
     </router-link>
-    <router-link v-if="$store.getters.getCurrentUser" :to="{ path: '/MyProfile'}">
-      <img src="../projectImages/dislike.png" />
+    <router-link v-if="$store.getters.getCurrentUser" :to="{ path: '/Upload'}">
+      <img class="profilePic" :src="profilePic" />
     </router-link>
     <div class="SpaceDiv" />
   </div>
@@ -32,7 +32,8 @@ export default {
   data() {
     return {
       isLoggedIn: false,
-      searchParam : ''
+      searchParam : '',
+      profilePic: (this.$store.getters.getCurrentUser ? this.$store.getters.getCurrentUser.getProfileURL() : '')
     };
   },
   methods: {
@@ -69,6 +70,8 @@ export default {
   text-align: center;
   margin-left: -30px;
   width: 302px;
+  margin-top: -7px;
+  margin-bottom: 15px;
 }
 .searchIcon{
   height: 20px;
@@ -103,7 +106,7 @@ export default {
 .CatInHeader{
   width: 43px;
   height: 50px;
-  margin-top: -4px;
+  margin-top: -7px;
 }
 .KittyText{
   -webkit-text-stroke-width: .007px;
@@ -140,7 +143,7 @@ export default {
 }
 .SearchAndLoginDiv{
   display: grid;    /* Margin, Cat, Margin, search icon, margin, Search Field, margin, Login Button, Margin */
-  grid-template-columns: 16px 43px auto max-content auto 50px; 
+  grid-template-columns: 16px 43px auto max-content auto 70px; 
   background-color: #131313;
   padding-top: 16px;
 
@@ -166,5 +169,12 @@ export default {
   font-weight: 500;
   font-family: 'Roboto', sans-serif;
   line-height: 14.06px;
+}
+
+.profilePic{
+  height: 40px;
+  width: 40px;
+  border-radius: 30px;
+  
 }
 </style>

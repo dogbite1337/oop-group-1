@@ -28,21 +28,22 @@
           </div>
           <div class="SpaceDiv"/>
           <div class="usernameDiv">
-            John McCrisp
+            {{(currentUser != '' ? currentUser.getUsername() : 'None')}}
           </div>
           <div class="SpaceDiv"/>
         </div>
       </div>
       <div class="inputsDiv">
         <p class="VideoUrlP">Video Url</p>
-        <input class="urlInput" type="text" placeholder="Video url goes here..">
+        <input v-model="videoURL" class="urlInput" type="text" placeholder="Video url goes here..">
         <p class="VideoTitleP">Video Title</p>
         <input v-model="titleOfVideo" class="titleInput" type="text" placeholder="What is the title of the video?">
         <p class="DescriptionP">Description</p>
         <textarea v-model="descriptionOfVideo" class="DescriptionInput" placeholder="What is the video about? (Optional)">
         </textarea>
       </div>
-      <button class="uploadButton" value="Upload Video">Upload Video</button>
+      <button @click="uploadVideo" v-if="canUpload" class="uploadButton" value="Upload Video">Upload Video</button>
+      <button v-if="!canUpload" class="DisabledUploadButton" value="Upload Video">Upload Video</button>
     </div>
   </div>
   <Footer />
@@ -50,6 +51,7 @@
 <script>
 import User from '../jsClasses/general/User'
 import Footer from '../components/Footer.vue'
+import store from '../store'
 
 export default {
   name: 'UploadVideoPage',
@@ -58,62 +60,41 @@ export default {
   },
   data() {
     return {
-      canLogIn: false,
-      hideEyes: '',
+      videoURL: '',
       titleOfVideo: '',
-      descriptionOfVideo: ''
+      descriptionOfVideo: '',
+      currentUser: (this.$store.getters.getCurrentUser ? this.$store.getters.getCurrentUser : ''),
+      canUpload: false
     };
   },
   watch: {
-    wantedUserName() {
-      if(this.wantedUserName.length > 0 && this.wantedPassword.length > 0){
-        this.canLogIn = true;
-      }
-      else{
-        this.canLogIn = false;
+    videoURL() {
+      if(this.videoURL.length > 0 && this.titleOfVideo.length > 0 && this.$store.getters.getCurrentUser){
+        this.canUpload = true;
       }
     },
-    wantedPassword() {
-      if(this.wantedUserName.length > 0 && this.wantedPassword.length > 0){
-        this.canLogIn = true;
+    titleOfVideo() {
+      if(this.videoURL.length > 0 && this.titleOfVideo.length > 0 && this.$store.getters.getCurrentUser){
+        this.canUpload = true;
       }
-      else{
-        this.canLogIn = false;
-      }
-    },
+    }
   },
   methods: {
-    async tryToLogIn() {
-      let user = {
-        providedUserName: this.wantedUserName,
-        providedPassword: this.wantedPassword
+    async uploadVideo() {
+      let video = {
+        uploaderId: this.currentUser.getUserId(),
+        videoURL: this.videoURL,
+        title: this.titleOfVideo,
+        description: this.descriptionOfVideo,
+        views: 0,
+        postedByUsername: this.currentUser.getUsername()
       }
-      let res = await fetch('/api/login', {
+      let res = await fetch('/api/uploadVideo', {
         method: 'POST',
-        body: JSON.stringify(user),
+        body: JSON.stringify(video),
       });
-
-      let response = await res.json();
-      if (response == null) {
-        //Failed to log in
-        alert('Error - Failed to login, bad credentials!');
-      } else {
-        let currentUser = new User();
-        user = Object.assign(currentUser, response);
-        this.$store.dispatch('login', user);
-        document.getElementsByClassName('HomeLink')[0].click();
-      }
-    },
-    clickedMe(e) {
-      if (e.target.className == 'passwordInput') {
-        this.hideEyes = true;
-      } else {
-        this.hideEyes = false;
-        if (e.target.className == 'Xsymbol') {
-          this.wantedPassword = '';
-        }
-      }
-    },
+      document.getElementsByClassName('HomeLink')[0].click();
+    }
   },
 };
 </script>
@@ -147,6 +128,24 @@ p, div {
   color: white;
   padding-top: 2px;
   padding-bottom: 2px;
+}
+.DisabledUploadButton{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: max-content;
+  padding-left: 5px;
+  padding-right: 5px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  border: solid 0.7px white;
+  border-radius: 5px;
+  background-color: rgba(45, 44, 44, 0.5);
+  color: white;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.45);
+  background-color: rgba(45, 44, 44, 0.5);
+  border: 0.7px solid rgba(255, 255, 255, 0.45);
 }
 .upDiv{
   width: 12px;

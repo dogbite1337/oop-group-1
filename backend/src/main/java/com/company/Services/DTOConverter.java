@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class DTOConverter {
     public UserWithoutPassword turnUserIntoDto(User UserToTransform) {
-        return new UserWithoutPassword(UserToTransform.getUserId(), UserToTransform.getUsername(), UserToTransform.getDescription(), UserToTransform.getUserVideos(), UserToTransform.getProfileURL(), UserToTransform.getSubscribers(), UserToTransform.getVideosPosted());
+        return new UserWithoutPassword(UserToTransform.getUserId(), UserToTransform.getUsername(), UserToTransform.getDescription(),UserToTransform.getProfileURL(),UserToTransform.getVideosPosted(),UserToTransform.getSubscribers());
     }
 
     public VideoWithUsername turnVideoIntoDto(Video VideoToTransform, HashMap<Integer, String> mappedUsers) {

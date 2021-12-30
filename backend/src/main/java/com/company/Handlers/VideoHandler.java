@@ -32,6 +32,16 @@ public class VideoHandler {
             res.json(videoRepository.getVideosByUsername((String) req.query("providedUsername")));
         });
 
+        app.post("/api/uploadVideo", (req, res) -> {
+            res.json(videoRepository.uploadNewVideo(
+                    req.body().get("uploaderId").toString(),
+                    req.body().get("videoURL").toString(),
+                    req.body().get("title").toString(),
+                    req.body().get("description").toString(),
+                    req.body().get("views").toString(),
+                    req.body().get("postedByUsername").toString()));
+        });
+
     }
 }
 

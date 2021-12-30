@@ -119,7 +119,7 @@ public class videoRepository {
     }
 
     public ArrayList<Video> getAllVideos(){
-        ArrayList<Video> videosToReturn= new ArrayList<Video>();
+        ArrayList<Video> videosToReturn = new ArrayList<Video>();
 
         try {
             try {
@@ -150,6 +150,47 @@ public class videoRepository {
         }
 
         return videosToReturn;
+    }
+
+    public Video uploadNewVideo(String userIdOfUpload, String videoURL, String title, String description, String views, String postedByUsername)
+    {
+        Video uploadedVideo = new Video(0, 0, "", "", "", 0, "");
+
+        uploadedVideo.setUserId(Integer.parseInt(userIdOfUpload));
+        uploadedVideo.setLink(videoURL);
+        uploadedVideo.setTitle(title);
+        uploadedVideo.setDescription(description);
+        uploadedVideo.setViews(Integer.parseInt(views));
+        uploadedVideo.setPostedByUsername(postedByUsername);
+
+        try {
+            try {
+                con = DriverManager.getConnection(
+                        "jdbc:mysql://localhost:3306/kittykitty","root","root");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            PreparedStatement pStatement = con.prepareStatement("INSERT INTO videos (userId, link, title, description, views, postedByUsername) VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            pStatement.setInt(1, uploadedVideo.getUserId());
+            pStatement.setString(2, uploadedVideo.getLink());
+            pStatement.setString(3, uploadedVideo.getTitle());
+            pStatement.setString(4, uploadedVideo.getDescription());
+            pStatement.setInt(5, uploadedVideo.getViews());
+            pStatement.setString(6, uploadedVideo.getPostedByUsername());
+            int newVideoUpload = pStatement.executeUpdate();
+
+            try (ResultSet generatedKeys = pStatement.getGeneratedKeys()){
+                if (generatedKeys.next()){
+                    uploadedVideo.setVideoId(generatedKeys.getInt(1));
+                }
+            }
+            con.close();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
+        return uploadedVideo;
     }
 
 }
