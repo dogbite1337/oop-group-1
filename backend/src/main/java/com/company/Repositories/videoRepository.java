@@ -157,6 +157,43 @@ public class videoRepository {
         return videosToReturn;
     }
 
+    public Video getVideoById(String videoId)
+    {
+        Video relevantVideo = new Video(0, 0, "", "", "", 0, "", "0", "0", "0");
+
+        try {
+            try {
+                con = DriverManager.getConnection(
+                        "jdbc:mysql://localhost:3306/kittykitty","root","root");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            PreparedStatement pStatement = con.prepareStatement("SELECT * FROM videos WHERE videos.videoId = ?");
+            pStatement.setInt(1, Integer.parseInt(videoId));
+            ResultSet rs = pStatement.executeQuery();
+
+            while(rs.next()){
+                relevantVideo.setVideoId(rs.getInt(1));
+                relevantVideo.setUserId(rs.getInt(2));
+                relevantVideo.setLink(rs.getString(3));
+                relevantVideo.setTitle(rs.getString(4));
+                relevantVideo.setDescription(rs.getString(5));
+                relevantVideo.setViews(rs.getInt(6));
+                relevantVideo.setPostedByUsername(rs.getString(7));
+                relevantVideo.setLikes(String.valueOf(rs.getInt(8)));
+                relevantVideo.setDislikes(String.valueOf(rs.getInt(9)));
+                relevantVideo.setStars(String.valueOf(rs.getInt(10)));
+            }
+
+            con.close();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
+        return relevantVideo;
+    }
+
     public Video uploadNewVideo(String userIdOfUpload, String videoURL, String title, String description, String views, String postedByUsername, String likes, String dislikes, String stars)
     {
         Video uploadedVideo = new Video(0, 0, "", "", "", 0, "", "0", "0", "0");

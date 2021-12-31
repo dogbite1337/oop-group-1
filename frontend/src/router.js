@@ -27,7 +27,7 @@ export default createRouter({
       component: UploadVideoPage
     },
     {
-      path: '/VideoPage',
+      path: '/VideoPage/:id',
       component: VideoPage
     }
   ],

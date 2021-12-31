@@ -5,6 +5,7 @@
 </template>
 <script>
 import Header from './components/Header.vue';
+import store from './store'
 
 export default {
   name: 'App',
@@ -15,7 +16,8 @@ export default {
     return {
     };
   },
-  methods: {
+  created() {
+    
   },
 };
 </script>

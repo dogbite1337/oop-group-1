@@ -1,20 +1,20 @@
 <template>
-
-  <div class="CardBox">
-    <img class="ImageBox" src="../projectImages/vacationCat.png" />
-    <div class="titleDiv">
-      <p class="titleText">{{video.title.length > 24 ? video.title.substring(0,24) + '...' : video.title}}</p>
-    </div>
-    <div class="upBoxAndUsernameDiv">
-      <div class="upDiv">
-        UP
+  <router-link v-if="!$store.getters.getCurrentUser" :to="{ path: '/VideoPage/' + video.videoId, query: video.videoId}">
+    <div class="CardBox">
+      <img class="ImageBox" src="../projectImages/vacationCat.png" />
+      <div class="titleDiv">
+        <p class="titleText">{{video.title.length > 24 ? video.title.substring(0,24) + '...' : video.title}}</p>
       </div>
-      <div class="userNameDiv">
-        {{video.postedByUsername}}
+      <div class="upBoxAndUsernameDiv">
+        <div class="upDiv">
+          UP
+        </div>
+        <div class="userNameDiv">
+          {{video.postedByUsername}}
+        </div>
       </div>
     </div>
-  </div>
-
+  </router-link>
 </template>
 <script>
 

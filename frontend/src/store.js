@@ -7,14 +7,15 @@ export default createStore({
     lastSearchQuery: null,
     showSearchPage: null,
     shouldResetToStartPage: null,
-    eightFirstVideos: null
+    eightFirstVideos: null,
+    relatedVideoId: null,
   },
   mutations: {
     setUser(state, user) {
       state.currentUser = user;
     },
     setShouldResetToStartPage(state, shouldReset) {
-      state.shouldResetToStartPage = shouldReset
+      state.shouldResetToStartPage = shouldReset;
     },
     setSearchResults(state, searchResults) {
       state.searchResults = searchResults;
@@ -27,6 +28,9 @@ export default createStore({
     },
     setEightFirstVideos(state, eightFirstVideos) {
       state.eightFirstVideos = eightFirstVideos;
+    },
+    setRelatedVideoId(state, relatedVideoId) {
+      state.relatedVideoId = relatedVideoId;
     }
   },
   getters: {
@@ -44,6 +48,9 @@ export default createStore({
     },
     getEightFirstVideos: (state) => {
       return state.eightFirstVideos;
+    },
+    getRelatedVideoId: (state) => {
+      return state.relevantVideoId;
     }
   },
   actions: {
@@ -64,5 +71,9 @@ export default createStore({
     },
     async cacheFirstEightVideos(store, eightFirstVideos) {
       store.commit('setEightFirstVideos', eightFirstVideos);
+    },
+    async updateRelatedVideoId(store, relatedVideoId) {
+      store.commit('setRelatedVideoId', relatedVideoId);
     }
-  }});
+  },
+});

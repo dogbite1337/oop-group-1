@@ -31,16 +31,16 @@
       <div class="SpaceDiv"/>
       <div class="square2 square">
         <div class="usernameDiv">
-          xQc
+          {{User.username}}
         </div>
         <div class="subsDiv">
-          Subscribers: 532 000
+          Subscribers: {{spacedSubs}}
         </div>
       </div>
       <div class="SpaceDiv"/>
       <div class="square3 square">
         <div class="videosDiv">
-          Videos: 10
+          Videos: {{spacedVideos}}
         </div>
       </div>
       <div class="SpaceDiv"/>
@@ -52,7 +52,7 @@
       <div class="SpaceDiv"/>
     </div>
     <div class="videoTitleDiv">
-      xQc talks about the meaning of "juice"
+      {{video.title}}
     </div> 
     <div class="viewsAndDateDiv">
       <div class="SpaceDiv" />
@@ -61,7 +61,7 @@
       </div>
       <div class="SpaceDiv"/>
       <div class="viewsDiv square">
-        5 655 123 views
+        {{spacedViews}} views
       </div>
       <div class="SpaceDiv" />
       <div class="uploadDateDiv square">
@@ -87,42 +87,124 @@
     <div class="likesAndDislikesNumberDiv">
       <div class="SpaceDiv"/>
       <div class="likesNumberDiv">
-        19 635
+        {{spacedLikes}}
       </div>
       <div class="SpaceDiv"/>
       <div class="dislikesNumberDiv">
-        1 845
+        {{spacedDislikes}}
       </div>
       <div class="SpaceDiv"/>
       <div class="starNumberDiv">
-        635
+        {{spacedStars}}
       </div>
       <div class="SpaceDiv"/>
     </div>
   </div>
   <div class="videosBody">
-    Videos goes here
+    <div v-if="showWatchNowInstead" class="test">
+      Show Now Instead
+    </div>
+    <RelatedVideo
+        v-for="(videoItem, index) of relatedVideos"
+        :key="index"
+        :video="videoItem"
+        class="videoBox"
+      />
   </div>
 </template>
 <script>
 import User from '../jsClasses/general/User'
+import Video from '../jsClasses/general/Video'
 import Footer from '../components/Footer.vue'
+import RelatedVideo from '../components/RelatedVideo.vue'
+import store from '../store'
 
 export default {
   name: 'VideoPage',
   components: {
+    RelatedVideo,
     Footer
   },
   data() {
     return {
       showCommentsSection: false,
       showDescriptionTab: true,
-      amountOfComments: 52
+      amountOfComments: 52,
+      relatedVideos: (this.$store.getters.getEightFirstVideos ? this.$store.getters.getEightFirstVideos : undefined),
+      video: '',
+      spacedViews: 0,
+      spacedLikes: 0,
+      spacedDislikes: 0,
+      spacedStars: 0,
+      spacedSubs: 0,
+      spacedVideos: 0,
+      User: '',
+      isOnVideosPage: false,
+      showWatchNowInstead: false
     };
+  },
+  async created() {
+    this.$store.subscribe(async (mutation, state) => {
+      console.log(mutation);
+      if(mutation.type == 'setRelatedVideoId'){
+        this.loadRelevantInformation(mutation.payload)
+      }
+    });
+  },
+  async mounted() {
+    this.loadRelevantInformation();
+    this.isOnVideosPage = true;
+    document.addEventListener('scroll', () => {
+      if(window.scrollY >= 268){
+        this.showWatchNowInstead = true;
+      }
+      else{
+        this.showWatchNowInstead = false;
+      }
+    })
   },
   watch: {
   },
   methods: {
+    async loadRelevantInformation(wantedUserId) {
+      let videoRes = await fetch('/rest/getVideoById?' + new URLSearchParams({
+            videoId: (wantedUserId === undefined ? this.$route.params.id : wantedUserId)
+          }));
+      let videoResponse = await videoRes.json();
+
+      let emptyVideo = new Video(0, 0, '', '', '', 0, '', 0, 0, 0)
+      this.video = Object.assign(emptyVideo, videoResponse);
+      this.spacedViews = this.renderSpacedNumbers(this.video.views.toString())
+      this.spacedLikes = this.renderSpacedNumbers(this.video.likes.toString())
+      this.spacedDislikes = this.renderSpacedNumbers(this.video.dislikes.toString())
+      this.spacedStars = this.renderSpacedNumbers(this.video.stars.toString())
+
+      let uploaderRes = await fetch('/rest/getUserByUsername?' + new URLSearchParams({
+            providedUsername: videoResponse.postedByUsername
+          }));
+      let uploaderResponse = await uploaderRes.json();
+      let emptyUser = new User(0,'','','',0,0);
+      this.User = Object.assign(emptyUser, uploaderResponse);
+      this.spacedSubs = this.renderSpacedNumbers(this.User.subscribers.toString())
+      this.spacedVideos = this.renderSpacedNumbers(this.User.videosPosted.toString())
+    },
+    renderSpacedNumbers(stringToPad) {
+      let base = ''
+      let startFrom = stringToPad % 1000;
+      let spacedString = '';
+      startFrom = startFrom.toString();
+
+      for(let i = 0; i < stringToPad.length; i++){
+        if(i != 0 && (i - stringToPad.length % 3) % 3 == 0){
+          base += ' ' + stringToPad[i]
+        }
+        else{
+          base += stringToPad[i]
+        }
+        spacedString = base;
+      }
+      return spacedString;  
+    },
     clickedMe(e) {
       if (e.target.className == "commentsTab") {
         this.showCommentsSection = true;
@@ -147,6 +229,20 @@ export default {
   font-family: 'Roboto', sans-serif;
 }
 
+.watchNowGrid {
+  height: max-content;
+  background-color: red;
+  grid-template-columns: 100px 100px 100px 100px;
+}
+.test{
+  width: 100vw;
+  height: 10px;
+  background-color: red;
+  position: sticky;
+  top: 0px;
+  display: inline-block;
+  z-index: 10;
+}
 .videosBody{
   height: 423px;
   background-color: black;
