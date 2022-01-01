@@ -7,7 +7,11 @@
         <div class="SpaceDiv" />
       </div>
     </router-link>
-    <img class="videoArea" src="../projectImages/theJuice.png" />
+    <div class="test" />
+    <iframe id="existing-iframe-example" class="PlayerDiv" type="text/html" width="412" height="268"
+  :src="video.videoURL"
+  frameborder="0"></iframe>
+    <div class="someOther" />
     <div v-if="!showWatchNowInstead" class="descriptionAndCommentsDiv">
       <div class="SpaceDiv"/>
       <div class="middleDiv">
@@ -70,19 +74,17 @@
       <div class="SpaceDiv"/>
     </div>
     <div v-if="!showWatchNowInstead" class="likeAndDislikeIconDiv">
-      <div class="SpaceDiv"/>
       <div class="likeDiv">
         <img src="../projectImages/like_black_background.png" />
       </div>
-      <div class="SpaceDiv"/>
+
       <div class="dislikeDiv">
         <img src="../projectImages/dislike_black_background.png" />
       </div>
-      <div class="SpaceDiv"/>
+
       <div class="starDiv">
         <img src="../projectImages/grey_star_trans.png" />
       </div>
-      <div class="SpaceDiv"/>
     </div>
     <div v-if="!showWatchNowInstead" class="likesAndDislikesNumberDiv">
       <div class="SpaceDiv"/>
@@ -135,6 +137,7 @@
         class="videoBox"
       />
   </div>
+  <div id="player"></div>
 </template>
 <script>
 import User from '../jsClasses/general/User'
@@ -142,6 +145,7 @@ import Video from '../jsClasses/general/Video'
 import Footer from '../components/Footer.vue'
 import RelatedVideo from '../components/RelatedVideo.vue'
 import store from '../store'
+
 
 export default {
   name: 'VideoPage',
@@ -169,7 +173,6 @@ export default {
   },
   async created() {
     this.$store.subscribe(async (mutation, state) => {
-      console.log(mutation);
       if(mutation.type == 'setRelatedVideoId'){
         this.loadRelevantInformation(mutation.payload)
       }
@@ -178,6 +181,7 @@ export default {
   async mounted() {
     this.loadRelevantInformation();
     this.isOnVideosPage = true;
+    window.scrollTo(0,0);
     document.addEventListener('scroll', () => {
       if(window.scrollY >= 268){
         this.showWatchNowInstead = true;
@@ -198,6 +202,9 @@ export default {
 
       let emptyVideo = new Video(0, 0, '', '', '', 0, '', 0, 0, 0)
       this.video = Object.assign(emptyVideo, videoResponse);
+
+      this.video.videoURL = this.video.videoURL.replace("watch?v=", "embed/").concat("?enablejsapi=1&origin=http://example.com")
+
       this.spacedViews = this.renderSpacedNumbers(this.video.views.toString())
       this.spacedLikes = this.renderSpacedNumbers(this.video.likes.toString())
       this.spacedDislikes = this.renderSpacedNumbers(this.video.dislikes.toString())
@@ -252,6 +259,10 @@ export default {
   border: none;
   font-family: 'Roboto', sans-serif;
 }
+.backHomeDiv{
+  position: absolute;
+  margin-top: 40px;
+}
 .watchNowPlay {
   height: 45px;
   width: 45px;
@@ -276,6 +287,15 @@ export default {
   grid-template-columns: 5px max-content auto max-content 8px max-content auto;
 }
 
+.starDiv{
+  width: 97px;
+  padding-left: 40px;
+  background-color: black;
+  display:inline-block;
+  position: relative;
+  top: -20px;
+  left: 270px;
+}
 .videosBody{
   height: 423px;
   background-color: black;
@@ -289,10 +309,7 @@ export default {
   height: 20px;
   width: 100vw;
 }
-.likeDiv, .dislikeDiv, .starDiv{
-  display: grid;
-  grid-template-rows: auto 100px;
-}
+
 .uploaderProfileDiv{
   height: 40px;
   width: 40px;
@@ -312,12 +329,26 @@ export default {
   color: #939393;
 }
 .likeAndDislikeIconDiv{
-  display: grid;
-  grid-template-columns: 57px max-content auto max-content auto max-content 57px;
   background-color: black;
   padding-top: 24px;
   height: 15px;
   padding-bottom: 7px;
+}
+.likeDiv{
+  width: 42px;
+  padding-left: 95px;
+  background-color: black;
+  display:inline-block;
+}
+.dislikeDiv{
+  width: 69px;
+  padding-left: 74px;
+  background-color: black;
+
+  display: inline-block;
+  position: relative;
+  top: 2px;
+  left: -3px;
 }
 .square{
   margin-top: 1px;
@@ -370,7 +401,7 @@ export default {
 }
 .likesAndDislikesNumberDiv{
   display: grid;
-  grid-template-columns: 0px 130px 12px 130px 12.5px 130px 1px;
+  grid-template-columns: auto max-content auto max-content auto max-content auto;
   background-color: black;
   border-bottom: #BFBFBF solid 0.5px;
 }

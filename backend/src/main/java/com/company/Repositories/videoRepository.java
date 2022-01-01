@@ -27,7 +27,7 @@ public class videoRepository {
                 Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "", "0", "0", "0");
                 newVideo.setVideoId(rs.getInt(1));
                 newVideo.setUserId(rs.getInt(2));
-                newVideo.setLink(rs.getString(3));
+                newVideo.setVideoURL(rs.getString(3));
                 newVideo.setTitle(rs.getString(4));
                 newVideo.setDescription(rs.getString(5));
                 newVideo.setViews(rs.getInt(6));
@@ -65,7 +65,7 @@ public class videoRepository {
                 Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "", "0", "0", "0");
                 newVideo.setVideoId(rs.getInt(1));
                 newVideo.setUserId(rs.getInt(2));
-                newVideo.setLink(rs.getString(3));
+                newVideo.setVideoURL(rs.getString(3));
                 newVideo.setTitle(rs.getString(4));
                 newVideo.setDescription(rs.getString(5));
                 newVideo.setViews(rs.getInt(6));
@@ -102,7 +102,7 @@ public class videoRepository {
                 Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "", "0", "0", "0");
                 newVideo.setVideoId(rs.getInt(1));
                 newVideo.setUserId(rs.getInt(2));
-                newVideo.setLink(rs.getString(3));
+                newVideo.setVideoURL(rs.getString(3));
                 newVideo.setTitle(rs.getString(4));
                 newVideo.setDescription(rs.getString(5));
                 newVideo.setViews(rs.getInt(6));
@@ -139,7 +139,7 @@ public class videoRepository {
                 Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "", "0","0", "0");
                 newVideo.setVideoId(rs.getInt(1));
                 newVideo.setUserId(rs.getInt(2));
-                newVideo.setLink(rs.getString(3));
+                newVideo.setVideoURL(rs.getString(3));
                 newVideo.setTitle(rs.getString(4));
                 newVideo.setDescription(rs.getString(5));
                 newVideo.setViews(rs.getInt(6));
@@ -176,7 +176,7 @@ public class videoRepository {
             while(rs.next()){
                 relevantVideo.setVideoId(rs.getInt(1));
                 relevantVideo.setUserId(rs.getInt(2));
-                relevantVideo.setLink(rs.getString(3));
+                relevantVideo.setVideoURL(rs.getString(3));
                 relevantVideo.setTitle(rs.getString(4));
                 relevantVideo.setDescription(rs.getString(5));
                 relevantVideo.setViews(rs.getInt(6));
@@ -199,7 +199,7 @@ public class videoRepository {
         Video uploadedVideo = new Video(0, 0, "", "", "", 0, "", "0", "0", "0");
 
         uploadedVideo.setUserId(Integer.parseInt(userIdOfUpload));
-        uploadedVideo.setLink(videoURL);
+        uploadedVideo.setVideoURL(videoURL);
         uploadedVideo.setTitle(title);
         uploadedVideo.setDescription(description);
         uploadedVideo.setViews(Integer.parseInt(views));
@@ -218,7 +218,7 @@ public class videoRepository {
 
             PreparedStatement pStatement = con.prepareStatement("INSERT INTO videos (userId, link, title, description, views, postedByUsername, likes, dislikes, stars) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             pStatement.setInt(1, uploadedVideo.getUserId());
-            pStatement.setString(2, uploadedVideo.getLink());
+            pStatement.setString(2, uploadedVideo.getVideoURL());
             pStatement.setString(3, uploadedVideo.getTitle());
             pStatement.setString(4, uploadedVideo.getDescription());
             pStatement.setInt(5, uploadedVideo.getViews());

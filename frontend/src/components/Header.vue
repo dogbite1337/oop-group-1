@@ -64,6 +64,7 @@ export default {
 *{
   overflow-x: hidden;
 }
+
 .searchDiv{
   align-content: center;
   align-items: center;
@@ -73,6 +74,7 @@ export default {
   margin-top: -7px;
   margin-bottom: 15px;
 }
+
 .searchIcon{
   height: 20px;
   width: 20px;
@@ -81,6 +83,7 @@ export default {
   background-color:green;
   display:inline;
 }
+
 .iconInSearchField{
   position: relative;
   top: 9px;
@@ -93,6 +96,7 @@ export default {
   margin-top: 5px;
   opacity: 60%;
 }
+
 .SearchField{
   height: 30px;
   border-radius: 30px;
@@ -108,6 +112,7 @@ export default {
   height: 50px;
   margin-top: -7px;
 }
+
 .KittyText{
   -webkit-text-stroke-width: .007px;
   -webkit-text-stroke-color: #c9c9c9;
@@ -120,6 +125,7 @@ export default {
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25);
   margin-top: 16px;
 }
+
 .SeasonText{
   -webkit-text-stroke-width: .007px;
   -webkit-text-stroke-color: #c9c9c9;
@@ -132,6 +138,7 @@ export default {
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25);
   margin-top: 33px;
 }
+
 .HeaderDiv{
   display: grid;
   grid-template-columns: 16px 100px auto minmax(100px, 30vw);
@@ -141,14 +148,15 @@ export default {
   background-size: 100% 60px;
   background-repeat: no-repeat;
 }
+
 .SearchAndLoginDiv{
   display: grid;    /* Margin, Cat, Margin, search icon, margin, Search Field, margin, Login Button, Margin */
   grid-template-columns: 16px 43px auto max-content auto 70px; 
   background-color: #131313;
   padding-top: 16px;
-
   border-bottom: solid 1px #BFBFBF;
 }
+
 .LoginButton{
   border-radius: 30px;
   width: 40px;
@@ -174,7 +182,6 @@ export default {
 .profilePic{
   height: 40px;
   width: 40px;
-  border-radius: 30px;
-  
+  border-radius: 30px; 
 }
 </style>

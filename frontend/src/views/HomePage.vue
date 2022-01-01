@@ -270,10 +270,6 @@ export default {
       let response = await res.json();
       return response;
     },
-    htmlDecode(input) {
-      var doc = new DOMParser().parseFromString(input, "text/html");
-      return doc.documentElement.textContent;
-    },
     getImageUrl(){
       return this.imgPreUrl
     },
@@ -286,7 +282,7 @@ export default {
     setSliderIndexToTwo(){
       this.currentSliderImageIndex = 2;      
     }
-  },
+  }
 };
 </script>
 
@@ -296,6 +292,10 @@ export default {
 
 .MainDiv{
   background-color: #131313;
+}
+.test {
+  width: 200px;
+  height: 200px;
 }
 .coveringDiv{
   background-color: #131313;

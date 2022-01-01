@@ -54,10 +54,10 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
+
 .NosearchHistoryItemYet{
   color: black;
   background-color: white;
-
   height: 20.5px;
   text-align: center;
   padding-top: 6.5px;
@@ -65,10 +65,10 @@ export default {
   margin-top: 12px;
   font-size: 13px;
 }
+
 .searchHistoryItem{
   color: white;
   background-color: rgba(0, 0, 0, 0.7);
-
   height: 20.5px;
   text-align: center;
   padding-top: 6.5px;
@@ -76,6 +76,7 @@ export default {
   margin-top: 12px;
   font-size: 13px;
 }
+
 .EmptysearchHistoryItem{
   color: white;
   background-color: white;

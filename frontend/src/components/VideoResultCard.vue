@@ -131,6 +131,7 @@ export default {
   position: absolute;
   margin-top: 8px;
 }
+
 .playArrow{
   height: 6px;
   width: 10px;
@@ -139,13 +140,16 @@ export default {
   margin-left: 0.5px;
   padding-top: 1.5px;
 }
+
 .userNameDiv{
   padding-left: 2px;
 }
+
 .viewsP{
   color: white;
   width: 30px;
 }
+
 .arrowDiv{
   background-color: white;
   height: 8px;
@@ -155,6 +159,7 @@ export default {
   grid-template-columns: 21px 9px auto;
   margin-left: 1px;
 }
+
 .matchGrid{
   display: grid;
 }
@@ -169,17 +174,20 @@ export default {
   padding-top: 1.5px;
   font-family: 'Roboto', sans-serif;
 }
+
 .CardBox{
   border-bottom: solid 1px grey;
   display: grid;
   grid-template-columns: 13px 191px 22px 160px auto;
 }
+
 .ImageBox{
   width: 191px;
   height: 95px;
   margin-top: 7px;
   margin-bottom: 7px;
 }
+
 .titleText{
   color: white;
   font-size: 12px;
@@ -190,26 +198,32 @@ export default {
   white-space: -pre-wrap;
   white-space: -o-pre-wrap;
 }
+
 .uploaderDiv, .viewsDiv{
   color: #939393;
   font-size : 10px;
 }
+
 .viewsDiv{
   padding-left: 1px;
 }
+
 .uploaderDiv{
   display: grid;
   grid-template-columns: max-content 8px auto;
   padding-left: 1px;
 }
+
 .innerViewsDiv{
   width: max-content;
   margin-top: -1.6px;
 }
+
 .uploaderSubDiv{
   position: relative;
   top: 41px;
 }
+
 .arrowDiv{
   padding-left: 1px;
 }

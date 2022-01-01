@@ -51,10 +51,12 @@ export default {
   background-color: black;
   padding-top: 7px;
 }
+
 .HomeIcon{
   height: 36px;
   width: 35px;
 }
+
 .TextDiv{
   display: grid;
   color: white;
@@ -62,6 +64,7 @@ export default {
   background-color: none;
   margin-top: -20px;
 }
+
 .HomeText, .ProfileText{
   width: max-content;
   background-color: none;

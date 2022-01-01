@@ -45,13 +45,22 @@ public class Video {
         this.stars = stars;
     }
 
+
+    public String getVideoURL() {
+        return videoURL;
+    }
+
+    public void setVideoURL(String videoURL) {
+        this.videoURL = videoURL;
+    }
+
     @Override
     public String toString() {
         return "Video{" +
                 "videoId=" + videoId +
                 ", userId=" + userId +
                 ", views=" + views +
-                ", link='" + link + '\'' +
+                ", videoURL='" + videoURL + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", postedByUsername='" + postedByUsername + '\'' +
@@ -61,10 +70,10 @@ public class Video {
                 '}';
     }
 
-    public Video(Integer videoId, Integer userId, String link, String title, String description, Integer views, String postedByUsername, String likes, String dislikes, String stars) {
+    public Video(Integer videoId, Integer userId, String videoURL, String title, String description, Integer views, String postedByUsername, String likes, String dislikes, String stars) {
         this.videoId = videoId;
         this.userId = userId;
-        this.link = link;
+        this.videoURL = videoURL;
         this.title = title;
         this.description = description;
         this.views = views;
@@ -90,13 +99,7 @@ public class Video {
         this.userId = userId;
     }
 
-    public String getLink() {
-        return link;
-    }
 
-    public void setLink(String link) {
-        this.link = link;
-    }
 
     public String getTitle() {
         return title;
@@ -115,5 +118,5 @@ public class Video {
     }
 
     private Integer videoId, userId, views;
-    private String link, title, description, postedByUsername, likes, dislikes, stars;
+    private String videoURL, title, description, postedByUsername, likes, dislikes, stars;
 }

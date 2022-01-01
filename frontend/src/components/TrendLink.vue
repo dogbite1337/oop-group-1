@@ -62,6 +62,7 @@ export default {
   display: grid;
   grid-template-columns: 173px 10px 173px;
 }
+
 .trendDiv{
   background-color: white;
   margin-left: 17px;
@@ -74,6 +75,7 @@ export default {
   padding-bottom: 1px;
   padding-right: 5px;
 }
+
 .LasttrendDiv{
   background-color: white;
   margin-left: 17px;
@@ -86,6 +88,7 @@ export default {
   padding-bottom: 1px;
   padding-right: 5px;
 }
+
 .numberP{
   display:inline;
   padding-left: 8px;

@@ -77,6 +77,7 @@ export default {
 * {
   text-decoration: none;
 }
+
 .UpDiv{
   height: 7px;
   width: 8px;
@@ -87,6 +88,7 @@ export default {
   padding-right: 1px;
   font-size: 7px;
 }
+
 .relatedVideoBox{
   background-color: black;
   height: max-content;
@@ -97,43 +99,52 @@ export default {
   border-bottom: solid 0.5px #BFBFBF;
 
 }
+
 .PlayerDiv{
   background-color: grey;
   width: 13px;
   height: 12.2px;
 }
+
 .PlayerImage{
   width: 11px;
   height: 13px;
   margin-left: 1px;
   margin-top: -0.5px;
 }
+
 .linkBox, .videoImage{
   width: 191px;
   height: 95px;
 }
+
 .titleDiv{
   color: #FFFFFF;
   margin-top: 5px;
   font-size: 12px;
   width: 160px;
 }
+
 .UploaderDiv, .ViewsDiv{
   font-size: 10px;
   color: #939393;
 }
+
 .UploaderDiv {
   margin-bottom: 5px;
   display: grid;
   grid-template-columns: max-content 8px auto;
 }
+
 .ViewsDiv{
   display: grid;
   grid-template-columns: max-content 8px auto;
 }
+
 .ViewsNumberDiv{
   margin-top: 0.5px;
 }
+
 .textDiv{
   display: grid;
   grid-template-rows: 1px max-content auto max-content 1px max-content 3px;

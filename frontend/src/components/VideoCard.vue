@@ -42,8 +42,8 @@ export default {
   width: 150px;
   margin-left: auto;
   margin-right: auto;
-  
 }
+
 .CardBox{
   height: max-content;
   max-width: 192px;
@@ -56,10 +56,12 @@ export default {
   margin-right: 6px;
   padding-bottom: 12px;
 }
+
 .ImageBox{
   height: 80px;
   width: 100%;
 }
+
 .titleText{
   color: white;
   text-align: center;
