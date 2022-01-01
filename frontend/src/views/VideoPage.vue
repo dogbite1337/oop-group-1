@@ -8,7 +8,7 @@
       </div>
     </router-link>
     <img class="videoArea" src="../projectImages/theJuice.png" />
-    <div class="descriptionAndCommentsDiv">
+    <div v-if="!showWatchNowInstead" class="descriptionAndCommentsDiv">
       <div class="SpaceDiv"/>
       <div class="middleDiv">
         <div v-if="!showDescriptionTab" class="notChosenDescriptionDiv">
@@ -23,7 +23,7 @@
       </div>     
       <div class="SpaceDiv"/>
     </div>
-    <div class="UploaderDiv">
+    <div v-if="!showWatchNowInstead" class="UploaderDiv">
       <div class="SpaceDiv"/>
       <div class="square1 square">
         <img class="uploaderProfileDiv" src="../projectImages/xQcBanned.png"/>
@@ -51,10 +51,10 @@
       </div>
       <div class="SpaceDiv"/>
     </div>
-    <div class="videoTitleDiv">
+    <div v-if="!showWatchNowInstead" class="videoTitleDiv">
       {{video.title}}
     </div> 
-    <div class="viewsAndDateDiv">
+    <div v-if="!showWatchNowInstead" class="viewsAndDateDiv">
       <div class="SpaceDiv" />
       <div class="square playButtonDiv">
         <img class="playButton" src="../projectImages/small_grey_trans.png" />
@@ -69,7 +69,7 @@
       </div>
       <div class="SpaceDiv"/>
     </div>
-    <div class="likeAndDislikeIconDiv">
+    <div v-if="!showWatchNowInstead" class="likeAndDislikeIconDiv">
       <div class="SpaceDiv"/>
       <div class="likeDiv">
         <img src="../projectImages/like_black_background.png" />
@@ -84,7 +84,7 @@
       </div>
       <div class="SpaceDiv"/>
     </div>
-    <div class="likesAndDislikesNumberDiv">
+    <div v-if="!showWatchNowInstead" class="likesAndDislikesNumberDiv">
       <div class="SpaceDiv"/>
       <div class="likesNumberDiv">
         {{spacedLikes}}
@@ -101,9 +101,33 @@
     </div>
   </div>
   <div class="videosBody">
-    <div v-if="showWatchNowInstead" class="test">
-      Show Now Instead
+    <div v-if="showWatchNowInstead" class="watchNowScrollGrid">
+      <div class="watchNowTextDiv">
+        <div class="SpaceBlock" />
+        <img class="ArrowIcon" src="../projectImages/big_arrow.png" />
+        <div class="SpaceBlock"/>
+        <img class="watchNowPlay" src="../projectImages/whitePlay.png" />
+        <div class="SpaceBlock" />
+        <div class="watchNowText">Watch Now</div>
+        <div class="SpaceBlock" />
+      </div>
+    <div v-if="showWatchNowInstead" class="descriptionAndCommentsDivInScroll">
+      <div class="SpaceDiv"/>
+      <div class="middleDiv">
+        <div v-if="!showDescriptionTab" class="notChosenDescriptionDiv">
+          Description
+        </div>
+        <div v-if="showDescriptionTab" class="ChosenDescriptionDiv">
+          Description
+          <div class="LineDiv" />
+        </div>
+        <div class="SpaceDiv"/>
+        <div class="commentsDiv">Comments({{amountOfComments}})</div>
+      </div>     
+      <div class="SpaceDiv"/>
+      </div>
     </div>
+    <div class="FillerDiv" />
     <RelatedVideo
         v-for="(videoItem, index) of relatedVideos"
         :key="index"
@@ -228,21 +252,30 @@ export default {
   border: none;
   font-family: 'Roboto', sans-serif;
 }
-
-.watchNowGrid {
-  height: max-content;
-  background-color: red;
-  grid-template-columns: 100px 100px 100px 100px;
+.watchNowPlay {
+  height: 45px;
+  width: 45px;
+  margin-top: 4px;
 }
-.test{
+.watchNowScrollGrid{
   width: 100vw;
   height: 10px;
-  background-color: red;
+  padding-bottom: 46px;
+  background-color: #434343;
   position: sticky;
   top: 0px;
   display: inline-block;
   z-index: 10;
 }
+.watchNowText{
+  font-size: 18px;
+  margin-top: 16px;
+}
+.watchNowTextDiv{
+  display: grid;
+  grid-template-columns: 5px max-content auto max-content 8px max-content auto;
+}
+
 .videosBody{
   height: 423px;
   background-color: black;
@@ -252,7 +285,10 @@ export default {
   color: #939393;
   font-size: 10px;
 }
-
+.FillerDiv{
+  height: 20px;
+  width: 100vw;
+}
 .likeDiv, .dislikeDiv, .starDiv{
   display: grid;
   grid-template-rows: auto 100px;
@@ -309,6 +345,17 @@ export default {
   outline: solid black 1px;
   color: #939393;
   font-size: 10px;
+}
+.descriptionAndCommentsDivInScroll{
+  display: grid;
+  grid-template-columns: auto max-content auto;
+  font-family: 'Roboto', sans-serif;
+  background-color: black;
+  color: white;
+  padding-top: 14px;
+  margin-top: 0px;
+  padding-bottom: 3px;
+  border-bottom: 0.5px solid #BFBFBF;
 }
 .descriptionAndCommentsDiv{
   display: grid;
