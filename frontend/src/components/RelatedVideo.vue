@@ -3,7 +3,7 @@
     <div @click="clickedRelatedVideo" class="relatedVideoBox">
       <div class="SpaceBlock" />
       <div class="linkBox">
-        <img class="videoImage" src="../projectImages/titan.png" />
+        <img class="videoImage" :src="'https://img.youtube.com/vi/' + video.videoURL.substring(32,43) + '/default.jpg'" />
       </div>
       <div class="SpaceBlock" />
       <div class="textDiv">
