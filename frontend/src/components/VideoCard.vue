@@ -1,7 +1,7 @@
 <template>
   <router-link v-if="!$store.getters.getCurrentUser" :to="{ path: '/VideoPage/' + video.videoId, query: video.videoId}">
     <div class="CardBox">
-      <img class="ImageBox" src="../projectImages/vacationCat.png" />
+      <img class="ImageBox" :src="'https://img.youtube.com/vi/' + video.videoURL.substring(32,43) + '/default.jpg'" />
       <div class="titleDiv">
         <p class="titleText">{{video.title.length > 24 ? video.title.substring(0,24) + '...' : video.title}}</p>
       </div>
@@ -23,8 +23,10 @@ export default {
   name: 'VideoCard',
   data() {
     return {
+      thumbNail: "",
     };
   },
+
   methods: {
 
   }

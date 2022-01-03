@@ -216,7 +216,7 @@ public class videoRepository {
                 e.printStackTrace();
             }
 
-            PreparedStatement pStatement = con.prepareStatement("INSERT INTO videos (userId, link, title, description, views, postedByUsername, likes, dislikes, stars) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement pStatement = con.prepareStatement("INSERT INTO videos (userId, videoURL, title, description, views, postedByUsername, likes, dislikes, stars) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             pStatement.setInt(1, uploadedVideo.getUserId());
             pStatement.setString(2, uploadedVideo.getVideoURL());
             pStatement.setString(3, uploadedVideo.getTitle());
