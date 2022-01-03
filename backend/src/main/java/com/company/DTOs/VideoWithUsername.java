@@ -17,12 +17,12 @@ public class VideoWithUsername {
         this.userId = userId;
     }
 
-    public String getLink() {
-        return link;
+    public String getVideoUrl() {
+        return videoUrl;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setLink(String videoUrl) {
+        this.videoUrl = videoUrl;
     }
 
     public String getTitle() {
@@ -54,24 +54,24 @@ public class VideoWithUsername {
         return "VideoWithUsername{" +
                 "videoId=" + videoId +
                 ", userId=" + userId +
-                ", link='" + link + '\'' +
+                ", videoUrl='" + videoUrl + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", username='" + username + '\'' +
                 '}';
     }
 
-    public VideoWithUsername(Integer videoId, Integer userId, String link, String title, String description, String username) {
+    public VideoWithUsername(Integer videoId, Integer userId, String videoUrl, String title, String description, String username) {
         this.videoId = videoId;
         this.userId = userId;
-        this.link = link;
+        this.videoUrl = videoUrl;
         this.title = title;
         this.description = description;
         this.username = username;
     }
 
     private Integer videoId, userId;
-    private String link, title, description, username;
+    private String videoUrl, title, description, username;
 
 
 }

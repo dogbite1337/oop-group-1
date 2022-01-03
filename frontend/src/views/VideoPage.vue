@@ -203,6 +203,8 @@ export default {
       let emptyVideo = new Video(0, 0, '', '', '', 0, '', 0, 0, 0)
       this.video = Object.assign(emptyVideo, videoResponse);
 
+      console.log(videoResponse)
+
       this.video.videoURL = this.video.videoURL.replace("watch?v=", "embed/").concat("?enablejsapi=1&origin=http://example.com")
 
       this.spacedViews = this.renderSpacedNumbers(this.video.views.toString())
