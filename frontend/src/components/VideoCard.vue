@@ -26,9 +26,6 @@ export default {
       thumbNail: "",
     };
   },
-  created(){
-    console.log(this.$props.video.videoURL.substring(32,43))
-  },
 
   methods: {
 
