@@ -4,17 +4,30 @@
   </main>
 </template>
 <script>
+import Header from './components/Header.vue';
+import store from './store'
 
 export default {
   name: 'App',
+  components: {
+    Header
+  },
   data() {
     return {
     };
   },
-  methods: {
+  created() {
+    
   },
 };
 </script>
 
 <style scoped>
+</style>
+<style>
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
 </style>
