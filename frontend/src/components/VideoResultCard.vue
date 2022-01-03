@@ -2,7 +2,7 @@
 
   <div class="CardBox">
     <div class="SpaceBlock" />
-    <img class="ImageBox" src="../projectImages/theJuice.png" />
+    <img class="ImageBox" :src="'https://img.youtube.com/vi/' + video.videoURL.substring(32,43) + '/default.jpg'" />
     <div class="SpaceeBlock" />
     <div class="titleDiv">
       <div class="matchGrid">
