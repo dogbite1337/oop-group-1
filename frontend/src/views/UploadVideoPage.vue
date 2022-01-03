@@ -83,7 +83,7 @@ export default {
     async uploadVideo() {
       let video = {
         uploaderId: this.currentUser.getUserId(),
-        videoURL: this.videoURL,
+        videoURL: this.videoURL.substring(0,42),
         title: this.titleOfVideo,
         description: this.descriptionOfVideo,
         views: 0,
