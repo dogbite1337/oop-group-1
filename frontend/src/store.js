@@ -1,8 +1,9 @@
 import { createStore } from 'vuex';
+import User from './jsClasses/general/User';
 
 export default createStore({
   state: {
-    loggedInUser: null,
+    currentUser: null,
     searchResults: null,
     lastSearchQuery: null,
     showSearchPage: null,
@@ -12,6 +13,9 @@ export default createStore({
   },
   mutations: {
     setUser(state, user) {
+      if (user !== null) {
+        user = new User(user.userId, user.username, user.description, user.profileURL, user.subscribers, user.videosPosted)
+      }
       state.currentUser = user;
     },
     setShouldResetToStartPage(state, shouldReset) {
@@ -54,8 +58,8 @@ export default createStore({
     }
   },
   actions: {
-    async login(store, loggedInUser) {
-      store.commit('setUser', loggedInUser);
+    async login(store, currentUser) {
+      store.commit('setUser', currentUser);
     },
     async updateSearchResult(store, searchResults) {
       store.commit('setSearchResults', searchResults);
@@ -74,6 +78,15 @@ export default createStore({
     },
     async updateRelatedVideoId(store, relatedVideoId) {
       store.commit('setRelatedVideoId', relatedVideoId);
-    }
+    },
+    async whoAmI(store) {
+      let res = await fetch('/api/whoami')
+      let currentUser = await res.json();
+      store.commit('setUser', currentUser);
+    },
+    async logout(store) {
+      await fetch('/api/logout')
+      store.commit('setUser', null);
+    },
   },
 });

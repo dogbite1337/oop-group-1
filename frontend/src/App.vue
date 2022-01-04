@@ -32,7 +32,7 @@ export default {
   padding: 0px;
 }
 .app-main{
-  background-color: red;
+  background-color: #131313;
 }
 .BackDrop{
   height: 100vh;
