@@ -1,26 +1,30 @@
 <template>
   <div class="IconDiv">
-    <div />
+    <div class="SpaceDiv" />
     <router-link :to="{ path: '/'}">
-      <img class="HomeIcon" src="../projectImages/Dark_House.png" />
+      <div class="HomeDiv">
+        <img class="HomeIcon" src="../projectImages/Dark_House.png" />
+        <router-link :to="{ path: '/'}">
+          <div class="HomeText">Home</div>
+        </router-link>
+      </div>
     </router-link>
-    <div />
+    <div class="SpaceDiv"/>
+    <div class="PantherDiv">
+      <img class="PantherImage" src="../projectImages/panther.png">
+    </div>
+    <div class="SpaceDiv"/>
     <router-link :to="{ path: '/MyProfile'}">
-      <img class="HomeIcon" src="../projectImages/Dark_User.png" />
+      <div class="HomeDiv">
+        <img class="ProfileIcon" src="../projectImages/Dark_User.png" />
+        <router-link :to="{ path: '/'}">
+          <div class="ProfileText">Profile</div>
+        </router-link>
+      </div>
     </router-link>
-    <div />
+    <div class="SpaceDiv"/>
   </div>
-  <div class="TextDiv">
-    <div />
-    <router-link :to="{ path: '/'}">
-      <div class="HomeText">Home</div>
-    </router-link>
-    <div />
-    <router-link :to="{ path: '/MyProfile'}">
-      <div class="ProfileText">Profile</div>
-    </router-link>
-    <div />
-  </div>
+
 </template>
 <script>
 
@@ -42,17 +46,24 @@ export default {
 
 .IconDiv{
   display: grid;
-  grid-template-columns: 30px 30px auto 36px 30px;
+  grid-template-columns: auto max-content 50px auto 60px max-content auto;
   height: 58px;
   text-align: center;
-  background-image:url('../projectImages/panther.png');
-  background-size: 100% 65px;
-  background-repeat: no-repeat;
   background-color: black;
   padding-top: 7px;
 }
 
-.HomeIcon{
+.PantherDiv{
+  height: 50px;
+}
+.PantherImage{
+  height: 50px;
+  transform: scaleX(2);
+  position: relative; 
+  left: 10px;
+}
+
+.HomeIcon, .ProfileIcon{
   height: 36px;
   width: 35px;
 }
@@ -60,7 +71,7 @@ export default {
 .TextDiv{
   display: grid;
   color: white;
-  grid-template-columns: 31px 30px auto 35.5px 30px;
+  grid-template-columns: auto auto auto auto auto;
   background-color: none;
   margin-top: -20px;
 }
@@ -74,5 +85,11 @@ export default {
   font-family: 'Roboto', sans-serif;
   line-height: 14.06px;
   font-size: 12px;
+  position: relative;
+  left: -35px;
+  top: 13px;
+}
+.HomeDiv{
+  margin-left: 35px;
 }
 </style>
