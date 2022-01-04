@@ -9,6 +9,7 @@ export default createStore({
     shouldResetToStartPage: null,
     eightFirstVideos: null,
     relatedVideoId: null,
+    mySearchHistoryList: [],
   },
   mutations: {
     setUser(state, user) {
@@ -51,6 +52,9 @@ export default createStore({
     },
     getRelatedVideoId: (state) => {
       return state.relevantVideoId;
+    },
+    getMySearchHistoryList: (state) => {
+      return state.mySearchHistoryList
     }
   },
   actions: {

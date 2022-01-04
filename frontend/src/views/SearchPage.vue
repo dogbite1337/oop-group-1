@@ -3,22 +3,11 @@
     <Header/>
     <div class="searchPage">
         <TrendLink :trends="topTenTrend"/>
-      <div class="SearchHistoryDiv">
-        <div/>
-        <p class="searchHistoryText">Search History</p>
-        <div/>
-        <button v-if="!expandedSearchHistory" @click="expandSearchHistory" class="expandButton">expand</button>
-        <button v-if="expandedSearchHistory" @click="closeSearchHistory" class="closeButton">close</button>
-        <div/>
-      </div>
-      <ExpandableSearchHistory :expandedSearchHistory="expandedSearchHistory" 
-      :values="mySearchHistory" />
+        <ExpandableSearchHistory/>
+        <div class="searchPageButtonsContainer">
+            <button >Search</button>
+            <button >Clear History</button>
     </div>
-    <div v-if="showSearchPage && !showResultsPage" class="clearHistoryDiv">
-      <button class="clearHistoryButton">Clear history</button>
-    </div>
-    <div v-if="showSearchPage && !showResultsPage" class="clearHistoryDiv">
-      <button @click="showResultsOfSearch" class="Search">Search</button>
     </div>
     </div>
 
@@ -26,6 +15,7 @@
 <script>
 import Header from '../components/Header.vue'
 import TrendLink from '../components/TrendLink.vue'
+import ExpandableSearchHistory from '../components/ExpandableSearchHistory.vue'
 
 export default {
   data() {
@@ -37,6 +27,7 @@ export default {
   components:{
     Header,
     TrendLink,
+    ExpandableSearchHistory,
   },
 
   created(){
@@ -60,69 +51,17 @@ export default {
   height: 100vh;
 }
 
-.clearHistoryButton{
-  width: 97px;
-  height: 20px;
-  background-color: white;
-  color: black;
-  border-radius: 3px;
-}
-.trendsDiv{
-  height: 193px;
-  outline: 1px solid white;
-  margin-left: 19px;
-  margin-right: 19px;
-  background-color: black;
-  width: 372px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-bottom: 9px;
-}
-.searchHistoryText{
-  font-family: 'Roboto', sans-serif;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 18px;
-  line-height: 21px;
-}
-.SorryKitty{
-  display:block;
-  width: 200px;
-  height: 224px;
-  margin-left:auto;
-  margin-right: auto;
-}
-.SearchHistoryDiv{
-  background-color: #131313;
-  display: grid;
-  grid-template-columns: 1px auto auto 72px 1px;
-  margin-right: 19px;
-  margin-left: 19px;
-  margin-top: 39px;
-  margin-bottom: 10px;
-  width: 376px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.topTrendingDiv{
-  margin-bottom: 4px;
-  width: 372px;
-  margin-left: auto;
-  margin-right: auto;
+.searchPageButtonsContainer{
+  text-align: center;
 }
 
-.expandButton, .closeButton{
-  width: 72.57px;
-  height: 20px;
-  width: 72.57px;
-  height: 20px;
+.searchPageButtonsContainer button{
+  color: black;
   background-color: white;
-  border-radius: 3px;
-}
-.trendBox{
-  width: 100px;
-  height: 100px;
-  background-color: white;
+  width: 25vw;
+  border-radius: 10px;
+  margin: 20px;
+  height: 5vh;
 }
 
 </style>
