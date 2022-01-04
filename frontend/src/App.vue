@@ -1,6 +1,8 @@
 <template>
   <main class="app-main">
-    <router-view />
+    <div class="BackDrop">
+      <router-view />
+    </div>
   </main>
 </template>
 <script>
@@ -29,5 +31,11 @@ export default {
   margin: 0px;
   padding: 0px;
 }
-
+.app-main{
+  background-color: #131313;
+}
+.BackDrop{
+  height: 100vh;
+  background-color: #131313;
+}
 </style>

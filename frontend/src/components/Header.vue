@@ -51,9 +51,11 @@
 import store from "../store";
 export default {
   name: "Header",
-  async beforeCreate() {
+  async mounted() {
     await this.$store.dispatch("whoAmI");
-    this.profilePic = this.$store.getters.getCurrentUser.getProfileURL();
+    if(this.$store.getters.getCurrentUser){
+      this.profilePic = this.$store.getters.getCurrentUser.getProfileURL();
+    }
   },
   data() {
     return {
@@ -110,17 +112,20 @@ export default {
   overflow-x: hidden;
 }
 
-.searchDiv {
-  align-content: center;
-  align-items: center;
-  text-align: center;
-  margin-left: -30px;
-  width: 302px;
-  margin-top: -7px;
-  margin-bottom: 15px;
+.searchDiv{
+  display: grid;
+  grid-template-columns: max-content max-content 10px;
+  margin-left: 16px;
+  margin-right: 30px;
 }
 
-.searchIcon {
+@media screen and (max-width: 380px){
+  .searchDiv{
+    margin-left: 5px;
+    margin-right: 10px;
+  }
+}
+.searchIcon{
   height: 20px;
   width: 20px;
   z-index: 3;
@@ -131,8 +136,8 @@ export default {
 
 .iconInSearchField {
   position: relative;
-  top: 9px;
-  left: 35px;
+  top: 1px;
+  left: 15px;
   display: inline;
   height: 25px;
   width: 25px;
@@ -145,11 +150,13 @@ export default {
 .SearchField {
   height: 30px;
   border-radius: 30px;
-  max-width: 400px;
+  width: 40vw;
+  max-width: 290px;
   min-width: 100px;
   padding-left: 37px;
   display: inline;
-  outline: none;
+  outline:none;
+  margin-left: -20px;
 }
 
 .CatInHeader {
@@ -186,20 +193,27 @@ export default {
 
 .HeaderDiv {
   display: grid;
-  grid-template-columns: 16px 100px auto minmax(100px, 30vw);
+  grid-template-columns: 16px 100px auto 80px;
   height: 60px;
   text-align: center;
-  background-image: url("../projectImages/ghosts.gif");
-  background-size: 100% 60px;
+  background-image:url('../projectImages/ghosts.gif');
+  background-size: 100% 120px;
   background-repeat: no-repeat;
+  max-width: 725px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.SearchAndLoginDiv {
-  display: grid; /* Margin, Cat, Margin, search icon, margin, Search Field, margin, Login Button, Margin */
-  grid-template-columns: 16px 43px auto max-content auto 70px;
+.SearchAndLoginDiv{
+  display: grid;    /* Margin, Cat, Margin, search icon, margin, Search Field, margin, Login Button, Margin */
+  grid-template-columns: auto 43px auto max-content auto auto; 
   background-color: #131313;
   padding-top: 16px;
-  border-bottom: solid 1px #bfbfbf;
+  border-bottom: solid 1px #BFBFBF;
+  max-width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 20px;
 }
 
 .LoginButton {
