@@ -11,65 +11,105 @@
     <img class="CatInHeader" src="../projectImages/Cat no background.png" />
     <div class="SpaceDiv2" />
     <div class="searchDiv">
-      <img class="iconInSearchField" src="../projectImages/magnifying_glass.png" />
-      <input @click="showSearchMenu" @change="searchForVideos" v-model="searchParam" class="SearchField" type="text" placeholder="Search.."/>
+      <img
+        class="iconInSearchField"
+        src="../projectImages/magnifying_glass.png"
+      />
+      <input
+        @click="showSearchMenu"
+        @change="searchForVideos"
+        v-model="searchParam"
+        class="SearchField"
+        type="text"
+        placeholder="Search.."
+      />
       <div class="SpaceDiv" />
     </div>
     <div class="SpaceDiv" />
-    <router-link v-if="!$store.getters.getCurrentUser" :to="{ path: '/Login'}">
-      <input class="LoginButton" type="button" value="Login">
+    <router-link v-if="!$store.getters.getCurrentUser" :to="{ path: '/Login' }">
+      <input class="LoginButton" type="button" value="Login" />
     </router-link>
-    <router-link v-if="$store.getters.getCurrentUser" :to="{ path: '/Upload'}">
-      <img class="profilePic" :src="profilePic" />
-    </router-link>
+    <img
+      v-else
+      class="profilePic"
+      @click="toggleProfileDropdown"
+      :src="profilePic"
+    />
+    <div></div>
+    <div></div>
+    <div></div>
+    <div v-if="profileDropdown" class="profile-dropdown">
+      <ul>
+        <li>
+          <router-link :to="{ path: '/Upload' }">Upload</router-link>
+        </li>
+        <li @click="logout">Logout</li>
+      </ul>
+    </div>
     <div class="SpaceDiv" />
   </div>
 </template>
 <script>
-import store from '../store'
+import store from "../store";
 export default {
-  name: 'Header',
+  name: "Header",
   async beforeCreate() {
-    await this.$store.dispatch("whoAmI")
-    this.profilePic = this.$store.getters.getCurrentUser.getProfileURL()
+    await this.$store.dispatch("whoAmI");
+    this.profilePic = this.$store.getters.getCurrentUser.getProfileURL();
   },
   data() {
     return {
       isLoggedIn: false,
-      searchParam : '',
-      profilePic: (this.$store.getters.getCurrentUser ? this.$store.getters.getCurrentUser.getProfileURL() : '')
+      searchParam: "",
+      profilePic: this.$store.getters.getCurrentUser
+        ? this.$store.getters.getCurrentUser.getProfileURL()
+        : "",
+      profileDropdown: false,
     };
   },
   methods: {
-    resetToStartPage(){
-      this.$store.dispatch('resetToStartPage', true)
-      this.searchParam = ''
+    resetToStartPage() {
+      this.$store.dispatch("resetToStartPage", true);
+      this.searchParam = "";
     },
     showSearchMenu() {
-      this.$store.dispatch('updateShowSearchPage', true);
+      this.$store.dispatch("updateShowSearchPage", true);
     },
     async searchForVideos() {
-      this.$store.dispatch('updateLastSearchQuery', this.searchParam);
-      let res = await fetch('/rest/getAllVideosByTitle?' + new URLSearchParams({
-        providedTitle: this.searchParam
-      }));
+      this.$store.dispatch("updateLastSearchQuery", this.searchParam);
+      let res = await fetch(
+        "/rest/getAllVideosByTitle?" +
+          new URLSearchParams({
+            providedTitle: this.searchParam,
+          })
+      );
 
       let response = await res.json();
-      this.$store.dispatch('updateSearchResult', response);
-    
-    }
-  }
+      this.$store.dispatch("updateSearchResult", response);
+    },
+    toggleProfileDropdown() {
+      if (!this.profileDropdown) {
+        this.profileDropdown = true;
+      } else {
+        this.profileDropdown = false;
+      }
+    },
+    async logout() {
+      await this.$store.dispatch("logout");
+      this.toggleProfileDropdown();
+    },
+  },
 };
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap");
 
-*{
+* {
   overflow-x: hidden;
 }
 
-.searchDiv{
+.searchDiv {
   align-content: center;
   align-items: center;
   text-align: center;
@@ -79,93 +119,93 @@ export default {
   margin-bottom: 15px;
 }
 
-.searchIcon{
+.searchIcon {
   height: 20px;
   width: 20px;
   z-index: 3;
-  color:white;
-  background-color:green;
-  display:inline;
+  color: white;
+  background-color: green;
+  display: inline;
 }
 
-.iconInSearchField{
+.iconInSearchField {
   position: relative;
   top: 9px;
   left: 35px;
   display: inline;
   height: 25px;
-  width:25px;
+  width: 25px;
   z-index: 3;
   margin-left: 20px;
   margin-top: 5px;
   opacity: 60%;
 }
 
-.SearchField{
+.SearchField {
   height: 30px;
   border-radius: 30px;
   max-width: 400px;
   min-width: 100px;
   padding-left: 37px;
   display: inline;
-  outline:none;
+  outline: none;
 }
 
-.CatInHeader{
+.CatInHeader {
   width: 43px;
   height: 50px;
   margin-top: -7px;
 }
 
-.KittyText{
-  -webkit-text-stroke-width: .007px;
+.KittyText {
+  -webkit-text-stroke-width: 0.007px;
   -webkit-text-stroke-color: #c9c9c9;
-  font-family: 'Revalia', cursive;
+  font-family: "Revalia", cursive;
   font-style: normal;
   font-weight: 700;
   font-size: 15px;
   line-height: 19px;
-  color: #FFFFFF;
+  color: #ffffff;
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25);
   margin-top: 16px;
 }
 
-.SeasonText{
-  -webkit-text-stroke-width: .007px;
+.SeasonText {
+  -webkit-text-stroke-width: 0.007px;
   -webkit-text-stroke-color: #c9c9c9;
-  font-family: 'Revalia', cursive;
+  font-family: "Revalia", cursive;
   font-style: normal;
   font-weight: 700;
   font-size: 15px;
   line-height: 19px;
-  color: #FFFFFF;
+  color: #ffffff;
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25);
   margin-top: 33px;
 }
 
-.HeaderDiv{
+.HeaderDiv {
   display: grid;
   grid-template-columns: 16px 100px auto minmax(100px, 30vw);
   height: 60px;
   text-align: center;
-  background-image:url('../projectImages/ghosts.gif');
+  background-image: url("../projectImages/ghosts.gif");
   background-size: 100% 60px;
   background-repeat: no-repeat;
 }
 
-.SearchAndLoginDiv{
-  display: grid;    /* Margin, Cat, Margin, search icon, margin, Search Field, margin, Login Button, Margin */
-  grid-template-columns: 16px 43px auto max-content auto 70px; 
+.SearchAndLoginDiv {
+  display: grid; /* Margin, Cat, Margin, search icon, margin, Search Field, margin, Login Button, Margin */
+  grid-template-columns: 16px 43px auto max-content auto 70px;
   background-color: #131313;
   padding-top: 16px;
-  border-bottom: solid 1px #BFBFBF;
+  border-bottom: solid 1px #bfbfbf;
 }
 
-.LoginButton{
+.LoginButton {
   border-radius: 30px;
   width: 40px;
   height: 40px;
-  background-color:#F0F0F0;
+  background-color: #f0f0f0;
   border: 0.7px solid #000000;
   color: black;
   margin-bottom: 15px;
@@ -175,17 +215,20 @@ export default {
   margin-top: 4px;
 }
 
-.LoginText{
+.LoginText {
   margin-top: 12.5px;
   font-size: 12px;
   font-weight: 500;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   line-height: 14.06px;
 }
 
-.profilePic{
+.profilePic {
   height: 40px;
   width: 40px;
-  border-radius: 30px; 
+  border-radius: 30px;
+}
+
+.profileDropdown ul {
 }
 </style>

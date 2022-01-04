@@ -84,5 +84,9 @@ export default createStore({
       let currentUser = await res.json();
       store.commit('setUser', currentUser);
     },
+    async logout(store) {
+      await fetch('/api/logout')
+      store.commit('setUser', null);
+    },
   },
 });
