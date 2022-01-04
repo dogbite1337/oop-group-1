@@ -2,11 +2,32 @@
   <div class="MainDiv">
     <Header />
     <div class="NoLineDiv" />
-    <img v-if="!searchedYet && !showSearchPage && !showResultsPage" class="sliderBackground" :src="`src\\projectImages\\${
+    <!-- banners here -->
+    <BannerSlider v-if="showPage=='home'"/>
+    <!-- <img v-if="showPage=='home'" class="sliderBackground" :src="`src\\projectImages\\${
       decodeURI(sliderImageURls[currentSliderImageIndex]) 
       + 
       (gifs.includes(decodeURI(sliderImageURls[currentSliderImageIndex])) ? '.gif' : '.png')}`">
     <img class="SorryKitty" v-if="searchedYet && searchResults.length == 0 && showResultsPage" src="src\\projectImages\\sorryKitty.gif" />
+
+        <div v-if="!searchedYet && !showSearchPage && !showResultsPage" class="SlideShowDiv">
+      <div class="SpaceBlock" />
+      <div class="titleDiv">
+        <p class="titleText">{{sliderTitles[currentSliderImageIndex]}}</p>
+      </div>
+      <div class="SpaceBlock" />
+      <img v-if="currentSliderImageIndex == 0" class="pacManIcon" src="../projectImages/cleaned_pacman.png" />
+      <div v-if="currentSliderImageIndex > 0" @click="setSliderIndexToZero" class="FirstWhiteCircle" />
+      <div class="SpaceBlock" />
+      <img v-if="currentSliderImageIndex == 1" class="pacManIcon" src="../projectImages/cleaned_pacman.png" />
+      <div v-if="currentSliderImageIndex != 1" @click="setSliderIndexToOne" class="WhiteCircle" />
+      <div class="SpaceBlock" />
+      <img v-if="currentSliderImageIndex == 2" class="lastPacManIcon" src="../projectImages/cleaned_pacman.png" />
+      <div v-if="currentSliderImageIndex != 2" @click="setSliderIndexToTwo" class="WhiteCircle" />
+    </div> -->
+
+
+    <!-- search page here -->
     <div v-if="showSearchPage && !showResultsPage" class="searchPage">
       <div class="topTrendingDiv">
         <div/>
@@ -26,7 +47,6 @@
       </div>
       <ExpandableSearchHistory :expandedSearchHistory="expandedSearchHistory" 
       :values="mySearchHistory" />
-      
     </div>
     <div v-if="showSearchPage && !showResultsPage" class="clearHistoryDiv">
       <button class="clearHistoryButton">Clear history</button>
@@ -34,22 +54,11 @@
     <div v-if="showSearchPage && !showResultsPage" class="clearHistoryDiv">
       <button @click="showResultsOfSearch" class="Search">Search</button>
     </div>
-    <div v-if="!searchedYet && !showSearchPage && !showResultsPage" class="SlideShowDiv">
-      <div class="SpaceBlock" />
-      <div class="titleDiv">
-        <p class="titleText">{{sliderTitles[currentSliderImageIndex]}}</p>
-      </div>
-      <div class="SpaceBlock" />
-      <img v-if="currentSliderImageIndex == 0" class="pacManIcon" src="../projectImages/cleaned_pacman.png" />
-      <div v-if="currentSliderImageIndex > 0" @click="setSliderIndexToZero" class="FirstWhiteCircle" />
-      <div class="SpaceBlock" />
-      <img v-if="currentSliderImageIndex == 1" class="pacManIcon" src="../projectImages/cleaned_pacman.png" />
-      <div v-if="currentSliderImageIndex != 1" @click="setSliderIndexToOne" class="WhiteCircle" />
-      <div class="SpaceBlock" />
-      <img v-if="currentSliderImageIndex == 2" class="lastPacManIcon" src="../projectImages/cleaned_pacman.png" />
-      <div v-if="currentSliderImageIndex != 2" @click="setSliderIndexToTwo" class="WhiteCircle" />
-    </div>
-    
+
+
+
+
+    <!-- search result page user -->
     <div v-if="relevantUsers.length > 0 && searchedYet && showResultsPage" class="userResultsTopDiv">
       <div class="userResultsDiv">
         <div />
@@ -98,7 +107,9 @@
       </div>
       <div class="SpaceBlock" />
     </div>
-    <p v-if="searchedYet && relevantUsers.length > 0 && showResultsPage" class="checkAllVideosLink">check all 10 videos ></p>
+
+
+    <!-- <p v-if="searchedYet && relevantUsers.length > 0 && showResultsPage" class="checkAllVideosLink">check all 10 videos ></p> -->
     <div v-if="searchResults.length > 0 && showResultsPage">
       <VideoResultCard :video="searchResults[0]" :searchQuery="lastSearchQuery" v-if="searchResults[0]" />
     </div>
@@ -132,6 +143,7 @@ import Video from '../jsClasses/general/Video'
 import TrendLink from '../components/TrendLink.vue'
 import VideoResultCard from '../components/VideoResultCard.vue'
 import User from '../jsClasses/general/User'
+import BannerSlider from '../components/FrontPageComponents/bannerSlider.vue'
 import store from '../store'
 
 
@@ -143,7 +155,8 @@ export default {
     ExpandableSearchHistory,
     VideoResultCard,
     TrendLink,
-    Footer
+    Footer,
+    BannerSlider
   },
   async created() {
     let allVideos = await this.getVideosForCurrentPage();
@@ -161,7 +174,6 @@ export default {
       if(mutation.type == "setShouldResetToStartPage"){
         this.searchedYet = false;
         this.showResultsPage = false;
-        this.showResultsOfSearch = false;
         this.showSearchPage = false;
         this.relevantUsers = []
         this.relevantVideos = []
@@ -219,11 +231,12 @@ export default {
   },
   data() {
     return {
-      currentSliderImageIndex: 0,
-      sliderImageURls: ['happyCats', 'smile', 'samuelCatJackson'],
-      sliderTitles: ['Kitty Kissaten in Kyoto', 'Top 10 feel Good Animes', 'What did you call me? Meowdafaka'],
-      gifs: ['ghosts', 'sorryKitty', 'sumo-run', 'shalsha-aizawa-falfa-aizawa', 'sleepyCat',
-      'WinterCold', 'samuelCatJackson', 'WinterWarm', 'smiling-cat-creepy-cat', 'cat-shooting'],
+      showPage: 'home',
+      // currentSliderImageIndex: 0,
+      // sliderImageURls: ['happyCats', 'smile', 'samuelCatJackson'],
+      // sliderTitles: ['Kitty Kissaten in Kyoto', 'Top 10 feel Good Animes', 'What did you call me? Meowdafaka'],
+      // gifs: ['ghosts', 'sorryKitty', 'sumo-run', 'shalsha-aizawa-falfa-aizawa', 'sleepyCat',
+      // 'WinterCold', 'samuelCatJackson', 'WinterWarm', 'smiling-cat-creepy-cat', 'cat-shooting'],
       relevantVideos: this.$store.getters.getSearchResults ? this.$store.getters.getSearchResults : [
       ],
       relevantUsers: [],
@@ -529,71 +542,4 @@ export default {
   height: calc(100vh - 200px); /* 100vh - */
 }
 
-.FirstWhiteCircle{
-  width: 8px;
-  height: 8px;
-  border-radius: 30px;
-  background-color: white;
-  border: 0.7px solid black;
-  margin-top: 28px;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  margin-left: 12px;
-}
-
-.WhiteCircle{
-  width: 8px;
-  height: 8px;
-  border-radius: 30px;
-  background-color: white;
-  border: 0.7px solid black;
-  margin-top: 28px;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  margin-left: 8px;
-  margin-right: 8px;
-}
-.pacManIcon{
-  width: 20px;
-  display:inline;
-  margin-top: 22px;
-  margin-left: 4px;
-}
-.lastPacManIcon{
-  width: 20px;
-  display:inline;
-  margin-top: 22px;
-
-}
-.sliderBackground{
-  display: inline;
-  width: calc(100% - 16px);
-  margin-left: 8px;
-  margin-right: 8px;
-  height: 164px;
-}
-.titleText{
-  -webkit-text-stroke-width: .007px;
-  -webkit-text-stroke-color: #c9c9c9;
-  font-family: 'Revalia', cursive;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 18.6px;
-  color: #FFFFFF;
-  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25);
-}
-.SlideShowDiv{
-  padding-top: 113px;
-  height: 30px;
-  background-color: black;
-  display: grid;          /* Margin, Text, Margin, Pacman, margin, dot, margin, dot, margin */
-  grid-template-columns: 23px auto auto 20px 6px 20px 3px 20px 18px;
-  padding-bottom: 21px;
-  background-repeat: no-repeat;
-  width: calc(100% - 16px);
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: -164px;
-}
 </style>
