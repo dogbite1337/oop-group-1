@@ -1,5 +1,5 @@
 <template>
-  <router-link v-if="!$store.getters.getCurrentUser" :to="{ path: '/VideoPage/' + video.videoId, query: video.videoId}">
+  <router-link :to="{ path: '/VideoPage/' + video.videoId, query: video.videoId}">
     <div class="CardBox">
       <img class="ImageBox" :src="'https://img.youtube.com/vi/' + video.videoURL.substring(32,43) + '/default.jpg'" />
       <div class="titleDiv">
