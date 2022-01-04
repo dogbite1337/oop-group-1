@@ -250,6 +250,10 @@ export default {
       let base = ""
       for(let i = 0; i < Math.floor(window.screen.width / 200); i++) {
         base += "auto "
+        if(i >= 8){
+          base = "auto auto auto auto auto auto auto auto"; 
+          break;
+        }
       }
       if(window.screen.width <= 340){
         base = "auto auto"
