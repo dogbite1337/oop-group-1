@@ -29,6 +29,10 @@
 import store from '../store'
 export default {
   name: 'Header',
+  async beforeCreate() {
+    await this.$store.dispatch("whoAmI")
+    this.profilePic = this.$store.getters.getCurrentUser.getProfileURL()
+  },
   data() {
     return {
       isLoggedIn: false,

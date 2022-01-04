@@ -29,7 +29,7 @@ public class UserHandler {
             if (user != null) {
                 req.session("current-user", user);
             }
-            
+
             res.json(user);
         });
 
