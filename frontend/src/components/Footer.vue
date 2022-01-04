@@ -46,7 +46,7 @@ export default {
 
 .IconDiv{
   display: grid;
-  grid-template-columns: auto max-content 50px auto 60px max-content auto;
+  grid-template-columns: auto max-content auto auto auto max-content auto;
   height: 58px;
   text-align: center;
   background-color: black;
