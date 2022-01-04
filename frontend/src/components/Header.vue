@@ -11,8 +11,10 @@
     <img class="CatInHeader" src="../projectImages/Cat no background.png" />
     <div class="SpaceDiv2" />
     <div class="searchDiv">
-      <img class="iconInSearchField" src="../projectImages/magnifying_glass.png" />
-      <input @click="showSearchMenu" @change="searchForVideos" v-model="searchParam" class="SearchField" type="text" placeholder="Search.."/>
+          <router-link :to="{ path: '/Search'}">
+          <img class="iconInSearchField" src="../projectImages/magnifying_glass.png" />
+      <input v-model="searchParam" class="SearchField" type="text" placeholder="Search.."/>
+    </router-link>
       <div class="SpaceDiv" />
     </div>
     <div class="SpaceDiv" />
@@ -41,19 +43,18 @@ export default {
       this.$store.dispatch('resetToStartPage', true)
       this.searchParam = ''
     },
-    showSearchMenu() {
-      this.$store.dispatch('updateShowSearchPage', true);
-    },
-    async searchForVideos() {
-      this.$store.dispatch('updateLastSearchQuery', this.searchParam);
-      let res = await fetch('/rest/getAllVideosByTitle?' + new URLSearchParams({
-        providedTitle: this.searchParam
-      }));
+  //   showSearchMenu() {
+  //     this.$store.dispatch('updateShowSearchPage', true);
+  //   },
+  //   async searchForVideos() {
+  //     this.$store.dispatch('updateLastSearchQuery', this.searchParam);
+  //     let res = await fetch('/rest/getAllVideosByTitle?' + new URLSearchParams({
+  //       providedTitle: this.searchParam
+  //     }));
 
-      let response = await res.json();
-      this.$store.dispatch('updateSearchResult', response);
-    
-    }
+  //     let response = await res.json();
+  //     this.$store.dispatch('updateSearchResult', response);
+  //   }
   }
 };
 </script>
@@ -154,7 +155,7 @@ export default {
   grid-template-columns: 16px 43px auto max-content auto 70px; 
   background-color: #131313;
   padding-top: 16px;
-  border-bottom: solid 1px #BFBFBF;
+  /* border-bottom: solid 1px #BFBFBF; */
 }
 
 .LoginButton{

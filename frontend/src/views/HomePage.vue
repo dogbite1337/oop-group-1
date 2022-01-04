@@ -2,33 +2,10 @@
   <div class="MainDiv">
     <Header />
     <div class="NoLineDiv" />
-    <!-- banners here -->
     <BannerSlider v-if="showPage=='home'"/>
-    <!-- <img v-if="showPage=='home'" class="sliderBackground" :src="`src\\projectImages\\${
-      decodeURI(sliderImageURls[currentSliderImageIndex]) 
-      + 
-      (gifs.includes(decodeURI(sliderImageURls[currentSliderImageIndex])) ? '.gif' : '.png')}`">
-    <img class="SorryKitty" v-if="searchedYet && searchResults.length == 0 && showResultsPage" src="src\\projectImages\\sorryKitty.gif" />
-
-        <div v-if="!searchedYet && !showSearchPage && !showResultsPage" class="SlideShowDiv">
-      <div class="SpaceBlock" />
-      <div class="titleDiv">
-        <p class="titleText">{{sliderTitles[currentSliderImageIndex]}}</p>
-      </div>
-      <div class="SpaceBlock" />
-      <img v-if="currentSliderImageIndex == 0" class="pacManIcon" src="../projectImages/cleaned_pacman.png" />
-      <div v-if="currentSliderImageIndex > 0" @click="setSliderIndexToZero" class="FirstWhiteCircle" />
-      <div class="SpaceBlock" />
-      <img v-if="currentSliderImageIndex == 1" class="pacManIcon" src="../projectImages/cleaned_pacman.png" />
-      <div v-if="currentSliderImageIndex != 1" @click="setSliderIndexToOne" class="WhiteCircle" />
-      <div class="SpaceBlock" />
-      <img v-if="currentSliderImageIndex == 2" class="lastPacManIcon" src="../projectImages/cleaned_pacman.png" />
-      <div v-if="currentSliderImageIndex != 2" @click="setSliderIndexToTwo" class="WhiteCircle" />
-    </div> -->
-
 
     <!-- search page here -->
-    <div v-if="showSearchPage && !showResultsPage" class="searchPage">
+    <!-- <div v-if="showSearchPage && !showResultsPage" class="searchPage">
       <div class="topTrendingDiv">
         <div/>
         <p class="topTrendingSearches">Top 10 Trending Searches</p>
@@ -53,7 +30,7 @@
     </div>
     <div v-if="showSearchPage && !showResultsPage" class="clearHistoryDiv">
       <button @click="showResultsOfSearch" class="Search">Search</button>
-    </div>
+    </div> -->
 
 
 
@@ -437,7 +414,8 @@ export default {
   grid-template-rows: 5vh auto;
   background-color: #131313;
 }
-.clearHistoryButton{
+
+/* .clearHistoryButton{
   width: 97px;
   height: 20px;
   background-color: white;
@@ -488,12 +466,8 @@ export default {
   width: 372px;
   margin-left: auto;
   margin-right: auto;
-}
-.profileDivResultPage{
-  height: 40px;
-  width: 40px;
-  z-index: -1;
-}
+} */
+
 .expandButton, .closeButton{
   width: 72.57px;
   height: 20px;
@@ -507,6 +481,13 @@ export default {
   height: 100px;
   background-color: white;
 }
+
+.profileDivResultPage{
+  height: 40px;
+  width: 40px;
+  z-index: -1;
+}
+
 .userResultsTopDiv{
   background-color: #131313;
   grid-template-rows: max-content;
