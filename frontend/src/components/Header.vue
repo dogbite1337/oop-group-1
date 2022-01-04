@@ -40,9 +40,7 @@
     <div></div>
     <div v-if="profileDropdown" class="profile-dropdown">
       <ul>
-        <li>
-          <router-link :to="{ path: '/Upload' }">Upload</router-link>
-        </li>
+        <li @click="uploadNavigation">Upload Video</li>
         <li @click="logout">Logout</li>
       </ul>
     </div>
@@ -98,6 +96,9 @@ export default {
       await this.$store.dispatch("logout");
       this.toggleProfileDropdown();
     },
+    uploadNavigation() {
+      this.$router.push('Upload')
+    }
   },
 };
 </script>
@@ -229,6 +230,10 @@ export default {
   border-radius: 30px;
 }
 
-.profileDropdown ul {
+li {
+  text-align: center;
+  color: white;
+  font-family: 'Roboto', sans-serif;
+  margin-bottom: 10px;
 }
 </style>
