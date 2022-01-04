@@ -5,7 +5,7 @@
         <TrendLink :trends="topTenTrend"/>
         <ExpandableSearchHistory/>
         <div class="searchPageButtonsContainer">
-            <button >Search</button>
+            <button @click="register">Search</button>
             <button >Clear History</button>
     </div>
     </div>
@@ -37,6 +37,17 @@ export default {
   },
 
   methods: {
+    async register(){
+        let obj = {
+            userId: 1,
+            keyword: "haha"
+        }
+    
+       let res = await fetch('/api/registerHistory', {
+        method: 'POST',
+        body: JSON.stringify(obj),
+      });
+    }
   }
   }
 </script>
