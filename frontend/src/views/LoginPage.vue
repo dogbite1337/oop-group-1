@@ -25,7 +25,7 @@
         <div class="SpaceDiv" />
         <div class="usernameText">Username</div>
         <div class="SpaceDiv"/>
-        <input type="email" placeholder="Please enter your email" class="emailInput">
+        <input v-model="wantedUserName" type="email" placeholder="Please enter your email" class="emailInput">
         <div class="SpaceDiv" />
       </div>
       <div class="LineDiv" />
@@ -33,7 +33,7 @@
         <div class="SpaceDiv" />
         <div class="passwordText">Password</div>
         <div class="SpaceDiv" />
-        <input type="password" class="passwordInput" placeholder="Please enter your password">
+        <input v-model="wantedPassword" type="password" class="passwordInput" placeholder="Please enter your password">
         <div class="SpaceDiv" />
       </div>
       
