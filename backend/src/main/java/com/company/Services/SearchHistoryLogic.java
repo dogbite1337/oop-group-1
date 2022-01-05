@@ -15,7 +15,7 @@ public class SearchHistoryLogic {
         this.searchHistoryRepository = searchHistoryRepository;
     }
 
-    public void registerSearchHistory(Integer userId, String keyword) throws SQLException {
-        searchHistoryRepository.registerSearchHistory(userId, keyword);
+    public void registerSearchHistory(SearchHistory newSearchHistory) throws SQLException {
+        searchHistoryRepository.registerSearchHistory(newSearchHistory);
     }
 }

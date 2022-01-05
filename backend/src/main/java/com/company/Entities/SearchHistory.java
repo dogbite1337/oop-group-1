@@ -1,10 +1,19 @@
 package com.company.Entities;
 
+import java.sql.Timestamp;
+
 public class SearchHistory {
     private Integer historyId, userId;
-    private String keyword;
+    private String keyWord;
+    private String time;
 
     public SearchHistory() {
+    }
+
+    public SearchHistory(Integer userId, String keyWord, String time) {
+        this.userId = userId;
+        this.keyWord = keyWord;
+        this.time = time;
     }
 
     public Integer getHistoryId() {
@@ -23,12 +32,20 @@ public class SearchHistory {
         this.userId = userId;
     }
 
-    public String getKeyword() {
-        return keyword;
+    public String getKeyWord() {
+        return keyWord;
     }
 
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     @Override
@@ -36,7 +53,8 @@ public class SearchHistory {
         return "SearchHistory{" +
                 "historyId=" + historyId +
                 ", userId=" + userId +
-                ", keyword='" + keyword + '\'' +
+                ", keyWord='" + keyWord + '\'' +
+                ", time='" + time + '\'' +
                 '}';
     }
 }

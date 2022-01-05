@@ -40,7 +40,7 @@ export default {
     async register(){
         let obj = {
             userId: 1,
-            keyword: "haha"
+            keyWord: "hoho",
         }
     
        let res = await fetch('/api/registerHistory', {

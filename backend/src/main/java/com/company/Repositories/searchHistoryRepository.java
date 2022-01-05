@@ -1,6 +1,7 @@
 package com.company.Repositories;
 
 import com.company.DTOs.UserWithoutPassword;
+import com.company.Entities.SearchHistory;
 import com.company.utilities.Encrypter;
 
 import java.sql.*;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 public class searchHistoryRepository {
     Connection con;
 
-    public void registerSearchHistory(Integer userId, String keyword) throws SQLException {
+    public void registerSearchHistory(SearchHistory newSearchHistory) throws SQLException {
         try {
             try {
                 con = DriverManager.getConnection(
@@ -17,9 +18,10 @@ public class searchHistoryRepository {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-                PreparedStatement registerSearchHistory = con.prepareStatement("INSERT INTO searchHistories (userId, keyword) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
-                registerSearchHistory.setInt(1, userId);
-                registerSearchHistory.setString(2, keyword);
+                PreparedStatement registerSearchHistory = con.prepareStatement("INSERT INTO searchHistories (userId, keyWord, time) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                registerSearchHistory.setInt(1, newSearchHistory.getUserId());
+                registerSearchHistory.setString(2, newSearchHistory.getKeyWord());
+                registerSearchHistory.setString(3, newSearchHistory.getTime());
                 registerSearchHistory.executeUpdate();
 
             }
