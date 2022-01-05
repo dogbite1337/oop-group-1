@@ -24,7 +24,7 @@ public class videoRepository {
 
             while(rs.next()) {
                 // We must manually specify at which index and which datatypes each column in the result is.
-                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "", "0", "0", "0");
+                Video newVideo = new Video(0,0, 0,"Not found", "Not found", "Not found", 0, "", "0", "0", "0");
                 newVideo.setVideoId(rs.getInt(1));
                 newVideo.setUserId(rs.getInt(2));
                 newVideo.setVideoURL(rs.getString(3));
@@ -62,7 +62,7 @@ public class videoRepository {
 
             while(rs.next()) {
                 // We must manually specify at which index and which datatypes each column in the result is.
-                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "", "0", "0", "0");
+                Video newVideo = new Video(0,0, 0,"Not found", "Not found", "Not found", 0, "", "0", "0", "0");
                 newVideo.setVideoId(rs.getInt(1));
                 newVideo.setUserId(rs.getInt(2));
                 newVideo.setVideoURL(rs.getString(3));
@@ -99,7 +99,7 @@ public class videoRepository {
 
             while(rs.next()) {
                 // We must manually specify at which index and which datatypes each column in the result is.
-                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "", "0", "0", "0");
+                Video newVideo = new Video(0,0, 0,"Not found", "Not found", "Not found", 0, "", "0", "0", "0");
                 newVideo.setVideoId(rs.getInt(1));
                 newVideo.setUserId(rs.getInt(2));
                 newVideo.setVideoURL(rs.getString(3));
@@ -136,7 +136,7 @@ public class videoRepository {
 
             while(rs.next()) {
                 // We must manually specify at which index and which datatypes each column in the result is.
-                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "", "0","0", "0");
+                Video newVideo = new Video(0,0, 0,"Not found", "Not found", "Not found", 0, "", "0","0", "0");
                 newVideo.setVideoId(rs.getInt(1));
                 newVideo.setUserId(rs.getInt(2));
                 newVideo.setVideoURL(rs.getString(3));
@@ -159,7 +159,7 @@ public class videoRepository {
 
     public Video getVideoById(String videoId)
     {
-        Video relevantVideo = new Video(0, 0, "", "", "", 0, "", "0", "0", "0");
+        Video relevantVideo = new Video(0, 0, 0, "", "", "", 0, "", "0", "0", "0");
 
         try {
             try {
@@ -194,12 +194,13 @@ public class videoRepository {
         return relevantVideo;
     }
 
-    public Video uploadNewVideo(String userIdOfUpload, String videoURL, String title, String description, String views, String postedByUsername, String likes, String dislikes, String stars)
+    public Video uploadNewVideo(String userIdOfUpload, String uploadDate, String videoURL, String title, String description, String views, String postedByUsername, String likes, String dislikes, String stars)
     {
-        Video uploadedVideo = new Video(0, 0, "", "", "", 0, "", "0", "0", "0");
+        Video uploadedVideo = new Video(0, 0, 0, "", "", "", 0, "", "0", "0", "0");
 
         uploadedVideo.setUserId(Integer.parseInt(userIdOfUpload));
         uploadedVideo.setVideoURL(videoURL);
+        uploadedVideo.setUploadDate(Long.parseLong(uploadDate));
         uploadedVideo.setTitle(title);
         uploadedVideo.setDescription(description);
         uploadedVideo.setViews(Integer.parseInt(views));
@@ -215,7 +216,7 @@ public class videoRepository {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
+            //START HERE
             PreparedStatement pStatement = con.prepareStatement("INSERT INTO videos (userId, videoURL, title, description, views, postedByUsername, likes, dislikes, stars) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             pStatement.setInt(1, uploadedVideo.getUserId());
             pStatement.setString(2, uploadedVideo.getVideoURL());

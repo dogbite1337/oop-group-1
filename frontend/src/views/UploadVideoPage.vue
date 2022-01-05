@@ -84,6 +84,7 @@ export default {
       let video = {
         uploaderId: this.currentUser.getUserId(),
         videoURL: this.videoURL.substring(0,43),
+        uploadDate: Date.getTime(),
         title: this.titleOfVideo,
         description: this.descriptionOfVideo,
         views: 0,
