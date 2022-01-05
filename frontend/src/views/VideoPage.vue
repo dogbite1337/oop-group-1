@@ -8,10 +8,17 @@
       </div>
     </router-link>
     <div class="test" />
-    <iframe id="existing-iframe-example" class="PlayerDiv" type="text/html" width="412" height="268"
-  :src="video.videoURL"
-  frameborder="0"></iframe>
+    <div class="FrameGrid">
+      <div/>
+      <div class="iFrameDiv">
+        <iframe id="existing-iframe-example" class="PlayerDiv" type="text/html" :width="width" :height="height"
+      :src="video.videoURL"
+      frameborder="0"></iframe>
+      </div>
+      <div/>
+    </div>
     <div class="someOther" />
+    <div class="UpperSection">
     <div v-if="!showWatchNowInstead" class="descriptionAndCommentsDiv">
       <div class="SpaceDiv"/>
       <div class="middleDiv">
@@ -73,34 +80,25 @@
       </div>
       <div class="SpaceDiv"/>
     </div>
-    <div v-if="!showWatchNowInstead" class="likeAndDislikeIconDiv">
-      <div class="likeDiv">
-        <img src="../projectImages/like_black_background.png" />
-      </div>
-
-      <div class="dislikeDiv">
-        <img src="../projectImages/dislike_black_background.png" />
-      </div>
-
-      <div class="starDiv">
-        <img src="../projectImages/grey_star_trans.png" />
-      </div>
-    </div>
     <div v-if="!showWatchNowInstead" class="likesAndDislikesNumberDiv">
       <div class="SpaceDiv"/>
       <div class="likesNumberDiv">
-        {{spacedLikes}}
+        <img src="../projectImages/like_black_background.png" />
+        <div class="likesDiv">{{spacedLikes}}</div>
       </div>
       <div class="SpaceDiv"/>
       <div class="dislikesNumberDiv">
-        {{spacedDislikes}}
+        <img src="../projectImages/dislike_black_background.png" />
+        <div class="thumbsDownDiv">{{spacedDislikes}}</div>
       </div>
       <div class="SpaceDiv"/>
       <div class="starNumberDiv">
-        {{spacedStars}}
+        <img src="../projectImages/grey_star_trans.png" />
+        <div class="starsDiv">{{spacedStars}}</div>
       </div>
       <div class="SpaceDiv"/>
     </div>
+  </div>
   </div>
   <div class="videosBody">
     <div v-if="showWatchNowInstead" class="watchNowScrollGrid">
@@ -129,15 +127,14 @@
       <div class="SpaceDiv"/>
       </div>
     </div>
-    <div class="FillerDiv" />
     <RelatedVideo
-        v-for="(videoItem, index) of relatedVideos"
-        :key="index"
-        :video="videoItem"
-        class="videoBox"
-      />
+          v-for="(videoItem, index) of relatedVideos"
+          :key="index"
+          :video="videoItem"
+          class="videoBox"
+        />
   </div>
-  <div id="player"></div>
+
 </template>
 <script>
 import User from '../jsClasses/general/User'
@@ -146,7 +143,7 @@ import Footer from '../components/Footer.vue'
 import RelatedVideo from '../components/RelatedVideo.vue'
 import store from '../store'
 
-
+// 770/430 width - 1:1
 export default {
   name: 'VideoPage',
   components: {
@@ -168,7 +165,9 @@ export default {
       spacedVideos: 0,
       User: '',
       isOnVideosPage: false,
-      showWatchNowInstead: false
+      showWatchNowInstead: false,
+      width: window.screen.width/2,
+      height: window.screen.height/2
     };
   },
   async created() {
@@ -183,17 +182,28 @@ export default {
     this.isOnVideosPage = true;
     window.scrollTo(0,0);
     document.addEventListener('scroll', () => {
-      if(window.scrollY >= 268){
+      if(window.scrollY >= 368){
         this.showWatchNowInstead = true;
       }
       else{
         this.showWatchNowInstead = false;
       }
     })
+    window.addEventListener('resize', this.actOnResize)
   },
   watch: {
   },
   methods: {
+    async actOnResize() {
+      this.width = window.screen.width / 2;
+      this.height = window.screen.height / 2;
+      if(this.height <= 360) {
+        this.height = 360;
+      }
+      if(this.width <= 280) {
+        this.width = 280;
+      }
+    },
     async loadRelevantInformation(wantedUserId) {
       let videoRes = await fetch('/rest/getVideoById?' + new URLSearchParams({
             videoId: (wantedUserId === undefined ? this.$route.params.id : wantedUserId)
@@ -202,8 +212,6 @@ export default {
 
       let emptyVideo = new Video(0, 0, '', '', '', 0, '', 0, 0, 0)
       this.video = Object.assign(emptyVideo, videoResponse);
-
-      console.log(videoResponse)
 
       this.video.videoURL = this.video.videoURL.replace("watch?v=", "embed/").concat("?enablejsapi=1&origin=http://example.com")
 
@@ -260,15 +268,21 @@ export default {
   outline: none;
   border: none;
   font-family: 'Roboto', sans-serif;
+  overflow-x: hidden;
 }
 .backHomeDiv{
   position: absolute;
   margin-top: 40px;
+  overflow-y: hidden;
 }
 .watchNowPlay {
   height: 45px;
   width: 45px;
   margin-top: 4px;
+}
+
+.videosBody{
+  background-color: #131313;
 }
 .watchNowScrollGrid{
   width: 100vw;
@@ -279,6 +293,13 @@ export default {
   top: 0px;
   display: inline-block;
   z-index: 10;
+}
+.UpperSection{
+  max-width: 1000px;
+  width: 100vw;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 3px;
 }
 .watchNowText{
   font-size: 18px;
@@ -298,11 +319,7 @@ export default {
   top: -20px;
   left: 270px;
 }
-.videosBody{
-  height: 423px;
-  background-color: black;
-  color: white;
-}
+
 .likeTextDiv, .dislikeTextDiv, .starTextDiv{
   color: #939393;
   font-size: 10px;
@@ -318,6 +335,7 @@ export default {
   border-radius: 30px;
   margin-top: 9.5px;
 }
+
 .UploaderDiv{
   display: grid;
   grid-template-columns: 17px 40px 19px 82px 19px 20px auto max-content 19px;
@@ -406,6 +424,7 @@ export default {
   grid-template-columns: auto max-content auto max-content auto max-content auto;
   background-color: black;
   border-bottom: #BFBFBF solid 0.5px;
+  padding-top: 10px;
 }
 .likesNumberDiv, .dislikesNumberDiv, .starNumberDiv {
   text-align: center;
@@ -414,7 +433,14 @@ export default {
   font-size: 10px;
   padding-bottom: 10px;
 }
-
+.FrameGrid{
+  display: grid;
+  grid-template-columns: auto max-content auto;
+}
+.iFrameDiv{
+  display: block;
+  min-width: 280px;
+}
 .playButtonDiv{
   width: 13px;
   height: 9px;
@@ -487,5 +513,36 @@ export default {
   margin-top: 6px;
   height: 2px;
   background-color: #E75858;
+}
+
+@media screen and (max-width: 305px){
+  .UploaderDiv{
+    display: grid;
+    grid-template-columns: auto 40px auto max-content auto auto 3px auto auto;
+    background-color: black;
+    height: max-content;
+    padding-bottom: 16px;
+  }
+
+  .middleDiv{
+    display: grid;
+    grid-template-columns: max-content 45px max-content;
+  }
+
+  .notChosenDescriptionDiv, .ChosenDescriptionDiv{
+    margin-left: 13px;
+  }
+  
+  .descriptionAndCommentsDiv{
+    display: grid;
+    grid-template-columns: 10px max-content auto max-content 10px;
+    font-family: 'Roboto', sans-serif;
+    background-color: black;
+    color: white;
+    padding-top: 14px;
+    margin-top: -5px;
+    padding-bottom: 3px;
+    border-bottom: 0.5px solid #BFBFBF;
+  }
 }
 </style>

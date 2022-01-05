@@ -14,31 +14,30 @@
         <div class="SpaceDiv" />
       </div>
     </router-link>
-    <div v-if="!hideEyes" class="girlsOpenEyesDiv" />
+    <div class="girlsGrid">
+      <div class="SpaceDiv" />
+      <div v-if="!hideEyes" class="girlsOpenEyesDiv" />
+      <div class="SpaceDiv" />
+    </div>
     <div v-if="hideEyes" class="girlsClosedEyesDiv" />
-    <div class="emailDiv">
-      <p class="UsernameText">Username</p>
-      <input
-        v-model="wantedUserName"
-        class="emailInput"
-        type="text"
-        placeholder="Please enter your email"
-      />
-    </div>
-    <div class="lineDiv" />
-    <div class="passwordDiv">
-      <p class="PasswordText">Password</p>
-      <input
-        v-model="wantedPassword"
-        class="passwordInput"
-        type="password"
-        placeholder="Please enter your password"
-      />
-      <div v-if="wantedPassword != ''" class="xDiv">
-        <p class="Xsymbol">X</p>
+    <div class="inputGrid">
+      <div class="emailGrid">
+        <div class="SpaceDiv" />
+        <div class="usernameText">Username</div>
+        <div class="SpaceDiv"/>
+        <input v-model="wantedUserName" type="email" placeholder="Please enter your email" class="emailInput">
+        <div class="SpaceDiv" />
       </div>
+      <div class="LineDiv" />
+      <div class="passwordGrid">
+        <div class="SpaceDiv" />
+        <div class="passwordText">Password</div>
+        <div class="SpaceDiv" />
+        <input v-model="wantedPassword" type="password" class="passwordInput" placeholder="Please enter your password">
+        <div class="SpaceDiv" />
+      </div>
+      
     </div>
-
     <div class="ButtonsDiv">
       <div class="SpaceDiv" />
       <router-link class="HomeLink" to="/Register">
@@ -142,29 +141,19 @@ export default {
 .HomeLink{
   text-decoration: none;
 }
-.xDiv {
-  color: white;
-  width: 25px;
-  height: 22px;
-  z-index: 500;
-  text-align: center;
-  padding-top: 3px;
-  position: relative;
-  margin-left: 117%;
-  margin-top: -23px;
-  border-radius: 50px;
-  background-color: #c4c4c4;
-}
+
 .ButtonsDiv {
   display: grid;
-  grid-template-columns: 29px 154px 37px 154px 18px;
+  grid-template-columns: auto max-content auto max-content auto;
   width: 399px;
   margin-left: auto;
   margin-right: auto;
 }
-.UsernameText,
-.PasswordText {
-  display: inline;
+
+.LineDiv{
+  height: 1px;
+  background-color: black;
+  margin-left: -30px;
 }
 .forgotPasswordDiv {
   text-align: center;
@@ -173,10 +162,7 @@ export default {
   font-weight: normal;
   font-size: 18px;
   line-height: 21px;
-  /* identical to box height */
-
   text-align: center;
-
   color: #eb6a6a;
   margin-top: 23px;
 }
@@ -216,100 +202,67 @@ export default {
   background-color: black;
   height: 100vh;
 }
-.lineDiv {
-  height: 1px;
-  background-color: black;
-  width: 350px;
-  position: relative;
-  z-index: 10;
-  margin-left: auto;
-  margin-right: auto;
-}
-.emailInput {
-  display: inline;
-  position: absolute;
-  width: 214.5px;
-  margin-left: -115.5px;
-  padding-left: 129px;
-  background-color: white;
-  height: 46px;
-  margin-top: -16px;
-  padding-top: 5px;
-} /* 170.425 */
-.passwordInput {
-  display: inline;
-  position: absolute;
-  width: 170px;
-  margin-left: -145px;
-  padding-left: 129px;
-  padding-right: 44px;
-  background-color: white;
-  height: 50px;
-  margin-top: -16px;
-  padding-top: 3px;
-  outline: none;
-}
-.UsernameText {
-  z-index: 3;
-  position: relative;
-  margin-top: 12.5px;
-  font-size: 18px;
-  font-weight: 400;
-  font-family: 'Roboto', sans-serif;
-  line-height: 21.06px;
-}
-.PasswordText {
-  padding-right: 32px;
-  z-index: 3;
-  position: relative;
-  font-size: 18px;
-  font-weight: 400;
-  font-family: 'Roboto', sans-serif;
-  line-height: 21.06px;
-}
-.emailDiv {
-  margin-top: 10px;
-}
-.passwordDiv {
-  margin-bottom: 12px;
-}
-.emailDiv,
-.passwordDiv {
-  width: 232px;
-  margin-left: auto;
-  margin-right: auto;
-  outline: 1px solid black;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  padding-left: 6px;
+
+
+
+.girlsGrid{
+  display: grid;
+  grid-template-columns: auto max-content auto;
 }
 
-.passwordDiv {
-  padding-right: 47px;
+.emailGrid{
+  display: grid;
+  grid-template-columns: 24px max-content 20px max-content auto;
+  margin-top: 10px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
-.emailDiv {
-  padding-right: 47px;
+
+.passwordGrid{
+  display: grid;
+  grid-template-columns: 28px max-content 20px max-content auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 12px;
 }
+
 .girlsOpenEyesDiv {
+  margin-top: 20vh;
   height: 140px;
   text-align: center;
+  width: 420px;
   background-image: url('../projectImages/open eyes.PNG');
-  background-size: 97% 140px;
+  background-size: 100% 140px;
   background-repeat: no-repeat;
-  margin-left: 15px;
+}
+
+.backgroundDiv {
+  background-color: #131313;
 }
 .girlsClosedEyesDiv {
+  margin-top: 20vh;
   height: 140px;
   text-align: center;
+  width: 420px;
+  margin-left: auto;
+  margin-right: auto;
   background-image: url('../projectImages/cover eyes.PNG');
-  background-size: 97% 140px;
+  background-size: 100% 140px;
   background-repeat: no-repeat;
-  margin-left: 15px;
 }
 .backHomeDiv {
   display: grid; /* space, Arrow, space, Home, space, Cat */
   grid-template-columns: 17px 32px 5px 60px 12px 20px auto;
   background-color: black;
+}
+
+.inputGrid {
+  grid-template-rows: 60px 1px 60px;
+  background-color: white;
+  padding-left: 24px;
+  width: 300px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .ArrowIcon {
   transform: rotate(180deg);
@@ -332,5 +285,136 @@ export default {
   height: 31px;
   margin-top: 15px;
   margin-bottom: 12px;
+}
+
+@media screen and (min-width: 1000px){
+  .girlsOpenEyesDiv, .girlsClosedEyesDiv {
+    transform: scale(1.5);
+    position: relative;
+    top: -50px;
+  }
+  
+  .registerButton, .loginButton, .disabledLoginButton {
+    transform: scale(1.1);
+  }
+
+  .inputGrid {
+    width: 260px;
+  }
+
+  .inputGrid{
+    width: 500px;
+  }
+  .usernameText, .passwordText {
+    padding-left: 0px;
+    margin-left: 0px;
+  }
+  .ButtonsDiv{
+    width: 500px;
+  }
+}
+
+@media screen and (max-width: 500px){
+  .girlsOpenEyesDiv{
+    width: 400px;
+  }
+}
+
+@media screen and (max-width: 450px){
+  .girlsOpenEyesDiv, .girlsClosedEyesDiv{
+    width: 350px;
+  }
+
+  .ButtonsDiv{
+    width: max-content;
+  }
+  .registerButton, .loginButton, .disabledLoginButton {
+    transform: scale(0.9);
+  }
+}
+
+@media screen and (max-width: 400px){
+  .girlsOpenEyesDiv, .girlsClosedEyesDiv{
+    width: 300px;
+  }
+
+  .ButtonsDiv{
+    width: max-content;
+  }
+  .registerButton, .loginButton, .disabledLoginButton {
+    transform: scale(0.8);
+  }
+  .inputGrid {
+    width: 260px;
+  }
+
+  .usernameText, .passwordText {
+    padding-left: 0px;
+    margin-left: -40px;
+  }
+}
+
+@media screen and (max-width: 325px){
+  .girlsOpenEyesDiv, .girlsClosedEyesDiv{
+    width: 250px;
+  }
+
+  .ButtonsDiv{
+    width: max-content;
+  }
+  .registerButton, .loginButton, .disabledLoginButton {
+    transform: scale(0.7);
+  }
+  .inputGrid {
+    width: 220px;
+  }
+
+  .usernameText, .passwordText {
+    padding-left: 0px;
+    margin-left: -40px;
+  }
+
+  input {
+    width: 140px;
+  }
+
+  .ButtonsDiv{
+    width: 250px;
+    padding: 0px;
+    margin: 0px;
+  }
+}
+
+@media screen and (max-width: 325px){
+  
+  .girlsOpenEyesDiv, .girlsClosedEyesDiv{
+    width: 250px;
+  }
+
+  .ButtonsDiv{
+    width: max-content;
+  }
+  .registerButton, .loginButton, .disabledLoginButton {
+    transform: scale(0.6);
+  }
+  .inputGrid {
+    width: 220px;
+  }
+
+  .usernameText, .passwordText {
+    padding-left: 0px;
+    margin-left: -40px;
+  }
+
+  input {
+    width: 140px;
+  }
+
+  .ButtonsDiv{
+    grid-template-columns: auto 50px 70px 50px auto;
+    width: 180px;
+    padding: 0px;
+    margin: 0px;
+  }
 }
 </style>

@@ -106,10 +106,7 @@
       <div />
     </div>
   </div>
-  <div class="footerDiv">
-    <div/>
-    <Footer />
-  </div>
+  <Footer class="footerDiv"/>
 </template>
 <script>
 import Header from '../components/Header.vue'
@@ -226,10 +223,36 @@ export default {
       tempVideo: new Video(7, 8, "test", 'xQc talks about the meaning of "juice"', "ha", 5655123, "xQc"),
       searchResults: [],
       lastSearchQuery: (this.$store.getters.getLastSearchQuery ? this.$store.getters.getLastSearchQuery : ''),
-      currentPage: 1
+      currentPage: 1,
+      currentWindowSize: window.screen.width
     };
   },
+  mounted() {
+    document.getElementsByClassName("CardsContainer")[0].style = "grid-template-columns: " + this.getGridDimensions() + ";";
+    
+    window.addEventListener('resize', this.recalculateGrid);
+  },
+  unmounted() {
+    window.removeEventListener("resize", this.recalculateGrid);
+  },
   methods: {
+    getGridDimensions() {
+      let base = ""
+      for(let i = 0; i < Math.floor(window.screen.width / 200); i++) {
+        base += "auto "
+        if(i >= 8){
+          base = "auto auto auto auto auto auto auto auto"; 
+          break;
+        }
+      }
+      if(window.screen.width <= 340){
+        base = "auto auto"
+      }
+      return base;
+    },
+    recalculateGrid() {
+      document.getElementsByClassName("CardsContainer")[0].style = "grid-template-columns: " + this.getGridDimensions() + ";"
+    },
     showResultsOfSearch() {
       this.showResultsPage = true;
       this.showSearchPage = false;
@@ -287,6 +310,9 @@ export default {
   width: 200px;
   height: 200px;
 }
+.videoBox{
+  margin-bottom: 10px;
+}
 .coveringDiv{
   background-color: #131313;
   width: 45px;
@@ -299,6 +325,7 @@ export default {
 .searchPage{
   color: white;
 }
+
 .linkVideoPic{
   width: 115px;
   height: 59px;
@@ -325,7 +352,7 @@ export default {
 }
 .NoLineDiv{
   height: 2px;
-  background-color: black;
+  background-color: #131313;
   margin-top: -1px;
 }
 .profileInResultsPage{
@@ -355,6 +382,10 @@ export default {
   text-align: right;
   margin-right: 16px;
   margin-top: -57.5px;
+}
+.EmptyDiv{
+  background-color: red;
+  width: 100vw;
 }
 .clearHistoryDiv{
   width: max-content;
@@ -412,7 +443,10 @@ export default {
 .footerDiv{
   display: grid;
   grid-template-rows: 5vh auto;
-  background-color: #131313;
+  background-color: black;
+  position: sticky;
+  top: 100vh;
+  width: 100vw;
 }
 
 /* .clearHistoryButton{
@@ -498,14 +532,17 @@ export default {
   padding-top: 16px;
   margin-bottom: 10px;
 }
+
 .CardsContainer{
   background-color: #131313;
   display: grid;
-  grid-template-columns: auto auto;
-  grid-template-rows: 159px 159px 159px;
-  padding-left: 8px;
-  padding-right: 7px;
+  height: auto;
+  grid-template-rows: auto auto auto auto auto;
   padding-top: 16px;
+  width:max-content;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 20px;
 }
 
 .SorryText{
@@ -521,6 +558,279 @@ export default {
   display: grid;
   grid-template-columns: auto max-content auto;
   height: calc(100vh - 200px); /* 100vh - */
+}
+
+.FirstWhiteCircle{
+  width: 8px;
+  height: 8px;
+  border-radius: 30px;
+  background-color: white;
+  border: 0.7px solid black;
+  margin-top: 28px;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin-left: 12px;
+}
+
+.WhiteCircle{
+  width: 8px;
+  height: 8px;
+  border-radius: 30px;
+  background-color: white;
+  border: 0.7px solid black;
+  margin-top: 28px;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin-left: 8px;
+  margin-right: 8px;
+}
+.pacManIcon{
+  width: 20px;
+  display:inline;
+  margin-top: 22px;
+  margin-left: 4px;
+}
+.lastPacManIcon{
+  width: 20px;
+  display:inline;
+  margin-top: 22px;
+}
+.sliderBackground{
+  display: block;
+  width: calc(100% - 16px);
+  max-width: 575px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 164px;
+}
+
+.titleText{
+  -webkit-text-stroke-width: .007px;
+  -webkit-text-stroke-color: #c9c9c9;
+  font-family: 'Revalia', cursive;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 18.6px;
+  color: #FFFFFF;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.SlideShowDiv{
+  padding-top: 113px;
+  height: 30px;
+  background-color: #131313;
+  max-width: 575px;
+  display: grid;          /* Margin, Text, Margin, Pacman, margin, dot, margin, dot, margin */
+  grid-template-columns: 23px auto auto 20px 6px 20px 3px 20px 18px;
+  padding-bottom: 21px;
+  background-repeat: no-repeat;
+  width: calc(100% - 16px);
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: -164px;
+}
+
+
+@media screen and (min-width: 550px) {
+  .sliderBackground{
+    transform: scaleX(0.95);
+    transform: scaleY(1.05);
+
+    height: 164px;
+    z-index: -1;
+  }
+  .lastPacManIcon{
+    width: 20px;
+    display:inline;
+    margin-top: 22px;
+    z-index: 3;
+  }
+
+  .FirstWhiteCircle{
+    width: 8px;
+    height: 8px;
+    border-radius: 30px;
+    background-color: white;
+    border: 0.7px solid black;
+    margin-top: 28px;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin-left: 12px;
+    z-index: 3;
+  }
+
+  .WhiteCircle{
+    width: 8px;
+    height: 8px;
+    border-radius: 30px;
+    background-color: white;
+    border: 0.7px solid black;
+    margin-top: 28px;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin-left: 8px;
+    margin-right: 8px;
+    z-index: 3;
+  }
+  .pacManIcon{
+    width: 20px;
+    display:inline;
+    margin-top: 22px;
+    margin-left: 4px;
+    z-index: 3;
+  }
+
+  .titleText{
+    -webkit-text-stroke-width: .007px;
+    -webkit-text-stroke-color: #c9c9c9;
+    font-family: 'Revalia', cursive;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 18.6px;
+    color: #FFFFFF;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25);
+    z-index: 3;
+    position: absolute;
+  }
+  
+}
+
+@media screen and (min-width: 700px) {
+  .CardsContainer{
+    margin-top: 20px;
+  }
+  .sliderBackground{
+    transform: scaleX(0.90);
+    transform: scaleY(1.1);
+    height: 164px;
+    z-index: -1;
+  }
+  .lastPacManIcon{
+    width: 20px;
+    display:inline;
+    margin-top: 22px;
+    z-index: 3;
+  }
+
+  .FirstWhiteCircle{
+    width: 8px;
+    height: 8px;
+    border-radius: 30px;
+    background-color: white;
+    border: 0.7px solid black;
+    margin-top: 28px;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin-left: 12px;
+    z-index: 3;
+  }
+
+  .WhiteCircle{
+    width: 8px;
+    height: 8px;
+    border-radius: 30px;
+    background-color: white;
+    border: 0.7px solid black;
+    margin-top: 28px;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin-left: 8px;
+    margin-right: 8px;
+    z-index: 3;
+  }
+  .pacManIcon{
+    width: 20px;
+    display:inline;
+    margin-top: 22px;
+    margin-left: 4px;
+    z-index: 3;
+  }
+
+  .titleText{
+    -webkit-text-stroke-width: .007px;
+    -webkit-text-stroke-color: #c9c9c9;
+    font-family: 'Revalia', cursive;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 18.6px;
+    color: #FFFFFF;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25);
+    z-index: 3;
+    position: absolute;
+  }
+  
+}
+
+@media screen and (min-width: 850px) {
+  .sliderBackground{
+    width: 90%;
+    transform: scaleY(1.5);
+
+    height: 164px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    z-index: -1;
+  }
+  .lastPacManIcon{
+    width: 20px;
+    display:inline;
+    margin-top: 22px;
+    z-index: 3;
+  }
+
+  .FirstWhiteCircle{
+    width: 8px;
+    height: 8px;
+    border-radius: 30px;
+    background-color: white;
+    border: 0.7px solid black;
+    margin-top: 28px;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin-left: 12px;
+    z-index: 3;
+  }
+
+  .WhiteCircle{
+    width: 8px;
+    height: 8px;
+    border-radius: 30px;
+    background-color: white;
+    border: 0.7px solid black;
+    margin-top: 28px;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin-left: 8px;
+    margin-right: 8px;
+    z-index: 3;
+  }
+  .pacManIcon{
+    width: 20px;
+    display:inline;
+    margin-top: 22px;
+    margin-left: 4px;
+    z-index: 3;
+  }
+
+  .titleText{
+    -webkit-text-stroke-width: .007px;
+    -webkit-text-stroke-color: #c9c9c9;
+    font-family: 'Revalia', cursive;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 18.6px;
+    padding-left: 30px;
+    color: #FFFFFF;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25);
+    z-index: 3;
+    position: absolute;
+  }
+
+  
 }
 
 </style>
