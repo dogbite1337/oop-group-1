@@ -1,5 +1,6 @@
 <template>
   <router-link v-if="!$store.getters.getCurrentUser" :to="{ path: '/VideoPage/' + (video ? video.videoId : 0), query: (video ? video.videoId : 0)}">
+    <div class="BoxDiv">
     <div @click="clickedRelatedVideo" class="relatedVideoBox">
       <div class="SpaceBlock" />
       <div class="linkBox">
@@ -29,6 +30,7 @@
       </div>
       <div class="SpaceBlock" />
     </div>
+  </div>
   </router-link>
 </template>
 <script>
@@ -93,11 +95,14 @@ export default {
   background-color: black;
   height: max-content;
   display: grid;
-  grid-template-columns: 13px max-content 22px max-content auto;
-  padding-top: 7px;
-  padding-bottom: 7px;
+  grid-template-columns: auto max-content 22px max-content auto;
+  max-width: 1000px;
   border-bottom: solid 0.5px #BFBFBF;
-
+  width: 100vw;
+  z-index: 3;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .PlayerDiv{
