@@ -22,15 +22,21 @@
     <div v-if="!showWatchNowInstead" class="descriptionAndCommentsDiv">
       <div class="SpaceDiv"/>
       <div class="middleDiv">
-        <div v-if="!showDescriptionTab" class="notChosenDescriptionDiv">
+        <div v-if="!showDescriptionSection" class="notChosenDescriptionDiv">
           Description
         </div>
-        <div v-if="showDescriptionTab" class="ChosenDescriptionDiv">
+        <div v-if="showDescriptionSection" class="ChosenDescriptionDiv">
           Description
           <div class="LineDiv" />
         </div>
         <div class="SpaceDiv"/>
-        <div class="commentsDiv">Comments({{amountOfComments}})</div>
+        <div v-if="showDescriptionSection" class="notChosenCommentsDiv">
+          Comments({{amountOfComments}})
+        </div>
+        <div v-if="!showDescriptionSection" class="ChosenCommentsDiv">
+          Comments({{amountOfComments}})
+          <div class="LineDiv" />
+        </div>
       </div>     
       <div class="SpaceDiv"/>
     </div>
@@ -127,6 +133,7 @@
       <div class="SpaceDiv"/>
       </div>
     </div>
+    <CommentInput v-if="showCommentsSection" />
     <RelatedVideo
           v-for="(videoItem, index) of relatedVideos"
           :key="index"
@@ -141,6 +148,7 @@ import User from '../jsClasses/general/User'
 import Video from '../jsClasses/general/Video'
 import Footer from '../components/Footer.vue'
 import RelatedVideo from '../components/RelatedVideo.vue'
+import CommentInput from '../components/CommentInput.vue'
 import store from '../store'
 
 // 770/430 width - 1:1
@@ -148,12 +156,13 @@ export default {
   name: 'VideoPage',
   components: {
     RelatedVideo,
+    CommentInput,
     Footer
   },
   data() {
     return {
       showCommentsSection: false,
-      showDescriptionTab: true,
+      showDescriptionSection: true,
       amountOfComments: 52,
       relatedVideos: (this.$store.getters.getEightFirstVideos ? this.$store.getters.getEightFirstVideos : undefined),
       video: '',
@@ -167,7 +176,8 @@ export default {
       isOnVideosPage: false,
       showWatchNowInstead: false,
       width: window.screen.width/2,
-      height: window.screen.height/2
+      height: window.screen.height/2,
+      showCommentsSection: false
     };
   },
   async created() {
@@ -247,12 +257,13 @@ export default {
       return spacedString;  
     },
     clickedMe(e) {
-      if (e.target.className == "commentsTab") {
+      console.log(e.target.className)
+      if (e.target.className == "notChosenCommentsDiv") {
         this.showCommentsSection = true;
-        this.showDescriptionTab = false;
+        this.showDescriptionSection = false;
       }
-      if (e.target.className == "descriptionTab"){
-        this.showDescriptionTab = true;
+      if (e.target.className == "notChosenDescriptionDiv"){
+        this.showDescriptionSection = true;
         this.showCommentsSection = false;
       }
     },
@@ -506,7 +517,7 @@ export default {
   padding-left: 17px;
   padding-bottom: 9px;
 }
-.ChosenDescriptionDiv{
+.ChosenDescriptionDiv, .ChosenCommentsDiv{
   color: #E75858;
 }
 .LineDiv{
