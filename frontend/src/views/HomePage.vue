@@ -4,37 +4,6 @@
     <div class="NoLineDiv" />
     <BannerSlider v-if="showPage=='home'"/>
 
-    <!-- search page here -->
-    <!-- <div v-if="showSearchPage && !showResultsPage" class="searchPage">
-      <div class="topTrendingDiv">
-        <div/>
-        <p class="topTrendingSearches">Top 10 Trending Searches</p>
-        <div/>
-      </div>
-      <div class="trendsDiv">
-        <TrendLink :trends="topTenTrend"/>
-      </div>
-      <div class="SearchHistoryDiv">
-        <div/>
-        <p class="searchHistoryText">Search History</p>
-        <div/>
-        <button v-if="!expandedSearchHistory" @click="expandSearchHistory" class="expandButton">expand</button>
-        <button v-if="expandedSearchHistory" @click="closeSearchHistory" class="closeButton">close</button>
-        <div/>
-      </div>
-      <ExpandableSearchHistory :expandedSearchHistory="expandedSearchHistory" 
-      :values="mySearchHistory" />
-    </div>
-    <div v-if="showSearchPage && !showResultsPage" class="clearHistoryDiv">
-      <button class="clearHistoryButton">Clear history</button>
-    </div>
-    <div v-if="showSearchPage && !showResultsPage" class="clearHistoryDiv">
-      <button @click="showResultsOfSearch" class="Search">Search</button>
-    </div> -->
-
-
-
-
     <!-- search result page user -->
     <div v-if="relevantUsers.length > 0 && searchedYet && showResultsPage" class="userResultsTopDiv">
       <div class="userResultsDiv">
