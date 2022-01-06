@@ -63,7 +63,7 @@
       <div class="SpaceDiv"/>
     </div>
     <div v-if="!showWatchNowInstead" class="videoTitleDiv">
-      {{video.title}}
+      {{video.description}}
     </div> 
     <div v-if="!showWatchNowInstead" class="viewsAndDateDiv">
       <div class="SpaceDiv" />
@@ -76,7 +76,7 @@
       </div>
       <div class="SpaceDiv" />
       <div class="uploadDateDiv square">
-        {{(new Date(this.video.uploadDate)).toLocaleDateString()}}
+        {{(new Date(this.video.uploadDate)).toLocaleDateString().replaceAll('/', '-')}}
       </div>
       <div class="SpaceDiv"/>
     </div>
