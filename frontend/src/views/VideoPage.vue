@@ -76,7 +76,7 @@
       </div>
       <div class="SpaceDiv" />
       <div class="uploadDateDiv square">
-        11-04
+        {{(new Date(this.video.uploadDate)).toLocaleDateString()}}
       </div>
       <div class="SpaceDiv"/>
     </div>

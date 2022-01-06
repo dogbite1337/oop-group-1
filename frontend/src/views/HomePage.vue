@@ -150,7 +150,6 @@ export default {
       let video = new Video()
       let newVideo = Object.assign(video, allVideos[i-1])
       this.relevantVideos.push(newVideo);
-      console.log(newVideo)
     }
     this.$store.subscribe(async (mutation, state) => {
       if(mutation.type == "setShowSearchPage"){
