@@ -32,6 +32,8 @@ export default {
   },
 
   async created(){
+    // works upon visiting search page the first time
+    // when refresh, currentUser become null?
     if(this.$store.getters.getCurrentUser){
       console.log("logged in")
       // this.$store.getters.getCurrentUser.userId
