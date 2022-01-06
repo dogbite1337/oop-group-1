@@ -23,8 +23,11 @@ public class CommentsHandler {
 
         // login user
         app.post("/api/postComment", (req, res) -> {
-            res.json(commentsRepository.postNewComment((Integer) req.body().get("relatesToVideoId"), (String) req.body().get("postedByUsername"), (String) req.body().get("content"), (Integer) req.body().get("responseToCommentId")));
+            res.json(commentsRepository.postNewComment((Integer) req.body().get("relatesToVideoId"), (String) req.body().get("postedByUsername"), (String) req.body().get("content"), (Integer) req.body().get("responseToCommentId"), (Integer) req.body().get("timeOfPosting")));
         });
 
+        app.get("/rest/getCommentsForVideoId", (req, res) -> {
+            res.json(commentsRepository.getCommentsForVideo(Integer.parseInt(req.query("videoId"))));
+        });
     }
 }

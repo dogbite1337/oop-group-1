@@ -1,7 +1,7 @@
 package com.company.Entities;
 
 public class Comment {
-    Integer commentId, relatesToVideoId, likes, dislikes, responseToCommentId;
+    Integer commentId, relatesToVideoId, likes, dislikes, responseToCommentId, timeOfPosting;
     String postedByUsername, content;
 
     public Integer getCommentId() {
@@ -60,6 +60,16 @@ public class Comment {
         this.content = content;
     }
 
+
+    public Integer gettimeOfPosting() {
+        return timeOfPosting;
+    }
+
+    public void settimeOfPosting(Integer timeOfPosting) {
+        this.timeOfPosting = timeOfPosting;
+    }
+
+
     @Override
     public String toString() {
         return "Comment{" +
@@ -68,12 +78,13 @@ public class Comment {
                 ", likes=" + likes +
                 ", dislikes=" + dislikes +
                 ", responseToCommentId=" + responseToCommentId +
+                ", timeOfPosting=" + timeOfPosting +
                 ", postedByUsername='" + postedByUsername + '\'' +
                 ", content='" + content + '\'' +
                 '}';
     }
 
-    public Comment(Integer commentId, Integer relatesToVideoId, String postedByUsername, String content, Integer likes, Integer dislikes, Integer responseToCommentId){
+    public Comment(Integer commentId, Integer relatesToVideoId, String postedByUsername, String content, Integer likes, Integer dislikes, Integer responseToCommentId, Integer timeOfPosting) {
         this.commentId = commentId;
         this.relatesToVideoId = relatesToVideoId;
         this.postedByUsername = postedByUsername;
@@ -81,5 +92,6 @@ public class Comment {
         this.likes = likes;
         this.dislikes = dislikes;
         this.responseToCommentId = responseToCommentId;
+        this.timeOfPosting = timeOfPosting;
     }
 }

@@ -1,5 +1,12 @@
 export default class User {
-  constructor(userId, username, userDescription, profileURL, subscribers, videosPosted) {
+  constructor(
+    userId,
+    username,
+    userDescription,
+    profileURL,
+    subscribers,
+    videosPosted
+  ) {
     this.userId = userId;
     this.username = username;
     this.description = userDescription;
@@ -10,14 +17,16 @@ export default class User {
 
   getSubscribers() {
     let countedIndexes = 0;
-    let subscribersString = ''
-    for (let i = 1; i < this.subscribers.toString().length+1; i++){
-      
-      if ((this.subscribers.toString().length - countedIndexes) % 3 == 0 && countedIndexes != 0) {
-        subscribersString += ' '
+    let subscribersString = '';
+    for (let i = 1; i < this.subscribers.toString().length + 1; i++) {
+      if (
+        (this.subscribers.toString().length - countedIndexes) % 3 == 0 &&
+        countedIndexes != 0
+      ) {
+        subscribersString += ' ';
       }
       countedIndexes += 1;
-      subscribersString += this.subscribers.toString()[i-1]
+      subscribersString += this.subscribers.toString()[i - 1];
     }
     return subscribersString;
   }
@@ -42,7 +51,7 @@ export default class User {
   getUserId() {
     return this.userId;
   }
-  setUserId( newUserId ) {
+  setUserId(newUserId) {
     this.userId = newUserId;
   }
   getUsername() {
@@ -75,5 +84,4 @@ export default class User {
   changeUserVideoDescription(newDescription, videoId) {
     // TO DO
   }
-  
 }

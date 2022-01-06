@@ -6,7 +6,8 @@ export default class Comments {
     content,
     likes,
     dislikes,
-    respondedToCommentId
+    respondedToCommentId,
+    timeOfPosting
   ) {
     this.commentId = commentId;
     this.relatesToVideoId = relatesToVideoId;
@@ -15,8 +16,16 @@ export default class Comments {
     this.likes = likes;
     this.dislikes = dislikes;
     this.responseToCommentId = respondedToCommentId;
+    this.timeOfPosting = timeOfPosting;
   }
 
+  settimeOfPosting(timeOfPosting) {
+    this.timeOfPosting = timeOfPosting;
+  }
+
+  gettimeOfPosting() {
+    return this.timeOfPosting;
+  }
   getRespondedToCommentId() {
     return this.respondedToCommentId;
   }

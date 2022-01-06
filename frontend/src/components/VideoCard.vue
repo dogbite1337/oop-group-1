@@ -1,42 +1,52 @@
 <template>
-  <router-link :to="{ path: '/VideoPage/' + video.videoId, query: video.videoId}">
+  <router-link
+    :to="{ path: '/VideoPage/' + video.videoId, query: video.videoId }"
+  >
     <div class="CardBox">
-      <img class="ImageBox" :src="'https://img.youtube.com/vi/' + video.videoURL.substring(32,43) + '/default.jpg'" />
+      <img
+        class="ImageBox"
+        :src="
+          'https://img.youtube.com/vi/' +
+          video.videoURL.substring(32, 43) +
+          '/default.jpg'
+        "
+      />
       <div class="titleDiv">
-        <p class="titleText">{{video.title.length > 24 ? video.title.substring(0,24) + '...' : video.title}}</p>
+        <p class="titleText">
+          {{
+            video.title.length > 24
+              ? video.title.substring(0, 24) + '...'
+              : video.title
+          }}
+        </p>
       </div>
       <div class="upBoxAndUsernameDiv">
-        <div class="upDiv">
-          UP
-        </div>
+        <div class="upDiv">UP</div>
         <div class="userNameDiv">
-          {{video.postedByUsername}}
+          {{ video.postedByUsername }}
         </div>
       </div>
     </div>
   </router-link>
 </template>
 <script>
-
 export default {
   props: ['video'],
   name: 'VideoCard',
   data() {
     return {
-      thumbNail: "",
+      thumbNail: '',
     };
   },
 
-  methods: {
-
-  }
+  methods: {},
 };
 </script>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap');
 
-.upBoxAndUsernameDiv{
+.upBoxAndUsernameDiv {
   display: grid;
   grid-template-columns: auto auto auto;
   margin-top: 7.16px;
@@ -46,7 +56,7 @@ export default {
   margin-right: auto;
 }
 
-.CardBox{
+.CardBox {
   height: max-content;
   max-width: 192px;
   max-height: 160px;
@@ -59,12 +69,12 @@ export default {
   padding-bottom: 12px;
 }
 
-.ImageBox{
+.ImageBox {
   height: 80px;
   width: 100%;
 }
 
-.titleText{
+.titleText {
   color: white;
   text-align: center;
   font-weight: 500;
@@ -74,7 +84,7 @@ export default {
   margin-top: 8.15px;
 }
 
-.upDiv{
+.upDiv {
   color: white;
   text-align: center;
   font-weight: 500;

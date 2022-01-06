@@ -14,7 +14,14 @@ export default createStore({
   mutations: {
     setUser(state, user) {
       if (user !== null) {
-        user = new User(user.userId, user.username, user.description, user.profileURL, user.subscribers, user.videosPosted)
+        user = new User(
+          user.userId,
+          user.username,
+          user.description,
+          user.profileURL,
+          user.subscribers,
+          user.videosPosted
+        );
       }
       state.currentUser = user;
     },
@@ -35,7 +42,7 @@ export default createStore({
     },
     setRelatedVideoId(state, relatedVideoId) {
       state.relatedVideoId = relatedVideoId;
-    }
+    },
   },
   getters: {
     getCurrentUser: (state) => {
@@ -55,7 +62,7 @@ export default createStore({
     },
     getRelatedVideoId: (state) => {
       return state.relevantVideoId;
-    }
+    },
   },
   actions: {
     async login(store, currentUser) {
@@ -80,12 +87,12 @@ export default createStore({
       store.commit('setRelatedVideoId', relatedVideoId);
     },
     async whoAmI(store) {
-      let res = await fetch('/api/whoami')
+      let res = await fetch('/api/whoami');
       let currentUser = await res.json();
       store.commit('setUser', currentUser);
     },
     async logout(store) {
-      await fetch('/api/logout')
+      await fetch('/api/logout');
       store.commit('setUser', null);
     },
   },

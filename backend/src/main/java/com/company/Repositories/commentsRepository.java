@@ -3,12 +3,40 @@ package com.company.Repositories;
 import com.company.Entities.Comment;
 import com.company.utilities.Encrypter;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class commentsRepository {
     Connection con;
 
-    public Comment postNewComment(Integer relatesToVideoId, String postedByUsername, String content, Integer responseToCommentId) {
-        Comment newComment = new Comment(0, relatesToVideoId , postedByUsername , content ,0,0, responseToCommentId);
+    public ArrayList<Comment> getCommentsForVideo(Integer videoId) {
+        ArrayList<Comment> relevantComments = new ArrayList<Comment>();
+        try {
+            con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            PreparedStatement getAllComments = con.prepareStatement("SELECT * FROM comments WHERE relatesToVideoId = ?");
+            getAllComments.setInt(1, videoId);
+            ResultSet rs = getAllComments.executeQuery();
+
+            while(rs.next()) {
+                Comment newComment = new Comment(rs.getInt(1), rs.getInt(2), rs.getString(3) , rs.getString(4) ,rs.getInt(5),rs.getInt(6), rs.getInt(7), rs.getInt(8));
+                relevantComments.add(newComment);
+            }
+
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return relevantComments;
+
+    }
+
+    public Comment postNewComment(Integer relatesToVideoId, String postedByUsername, String content, Integer responseToCommentId, Integer timeOfPosting) {
+        Comment newComment = new Comment(0, relatesToVideoId , postedByUsername , content ,0,0, responseToCommentId, timeOfPosting);
         try {
             con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
