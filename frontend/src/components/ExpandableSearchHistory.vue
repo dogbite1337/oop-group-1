@@ -42,7 +42,7 @@ export default {
 <style scoped>
 
 .searchHistoryContainer{
-  margin: 5vh 5% 0 5%;
+  margin: 5vh 5% 5vh 5%;
   display: grid;
   grid-template-columns: 50% 50%;
 }
