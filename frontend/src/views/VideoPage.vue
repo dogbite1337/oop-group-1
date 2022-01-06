@@ -210,7 +210,7 @@ export default {
           }));
       let videoResponse = await videoRes.json();
 
-      let emptyVideo = new Video(0, 0, '', '', '', 0, '', 0, 0, 0)
+      let emptyVideo = new Video()
       this.video = Object.assign(emptyVideo, videoResponse);
 
       this.video.videoURL = this.video.videoURL.replace("watch?v=", "embed/").concat("?enablejsapi=1&origin=http://example.com")
