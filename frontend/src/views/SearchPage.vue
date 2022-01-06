@@ -93,11 +93,14 @@ export default {
             }
           await this.$store.dispatch("cacheSearchHistory", this.searchHistory)
       }
-      else if(this.currentUser && !this.searchHistory.includes(searchParam)){
-        console.log("user is logged in but search matched last search")
+      else if(this.currentUser && this.searchHistory.includes(searchParam)){
+        console.log("loggedin but already made this search before")
       }
-        else{
-          
+        else if(!this.currentUser && this.searchHistory.includes(searchParam)){
+          console.log("didn't log in but already made this search before")
+        }
+        else
+        { 
           if(this.searchHistory.length>5){
             this.searchHistory.splice(this.searchHistory.length-1,1);
           }
@@ -110,13 +113,17 @@ export default {
           console.log("keyword: " + this.$store.getters.getKeyWord + " has been added to list")
           await this.$store.dispatch("cacheSearchHistory", this.searchHistory)
           }
-        }
-      },
-    
-
-    clearHistory(){
-
+        },
+    async clearHistory(){
+      this.searchHistory = [];
+      await this.$store.dispatch("cacheSearchHistory", [])
+      if(this.currentUser){
+        await this.$store.dispatch('clearHistory', this.currentUser.userId)
+      }
     }
+      },
+
+    
   }
   
 </script>

@@ -35,8 +35,14 @@ export default {
     let boolean = false;
     this.$store.subscribe(async (mutation, state) => {
 
+      if(mutation.type == 'setMySearchHistoryList' && mutation.payload.length == 0){
+        this.mySearchHistoryList = []
+        return;
+      }
+
+      console.log(mutation);
+
       if(mutation.type == 'setUser' && !boolean && this.$store.getters.getCurrentUser){
-        console.log(this.$store.getters.getCurrentUser)
         this.mySearchHistoryList = await this.$store.dispatch("getSearchHistories", this.$store.getters.getCurrentUser.userId);
         boolean = true;
       }

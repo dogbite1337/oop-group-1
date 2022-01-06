@@ -22,4 +22,8 @@ public class SearchHistoryLogic {
     public ArrayList<SearchHistory> getSearchHistories(Integer userId) throws SQLException {
         return searchHistoryRepository.findHistoryListByUserId(userId);
     }
+
+    public void clearHistories(Integer userId) throws SQLException {
+        searchHistoryRepository.clearHistories(userId);
+    }
 }

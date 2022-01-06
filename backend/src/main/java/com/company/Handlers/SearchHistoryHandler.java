@@ -46,5 +46,16 @@ public class SearchHistoryHandler {
                 res.json("false");
             }
         });
+
+        app.delete("api/clearHistories/:id",(req,res) ->{
+            Integer userId = Integer.valueOf(req.params("id"));
+            try {
+                searchHistoryLogic.clearHistories(userId);
+                res.json("true");
+            } catch (SQLException e) {
+                e.printStackTrace();
+                res.json("false");
+            }
+        });
     }
 }

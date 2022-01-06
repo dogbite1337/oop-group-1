@@ -106,7 +106,6 @@ export default createStore({
       store.commit('setMySearchHistoryList', [])
     },
     async getSearchHistories(store, id){
-      console.log("called")
       let res = await fetch('/rest/getSearchHistories/' + id);
       return res.json();
     },
@@ -116,6 +115,10 @@ export default createStore({
     async setKeyWord(store, keyWord){
       store.commit('setKeyWord', keyWord)
     },
-
+    async clearHistory(store, userId){
+      await fetch('/api/clearHistories/' + userId, 
+      {
+      method: 'DELETE'});
+    }
   },
 });

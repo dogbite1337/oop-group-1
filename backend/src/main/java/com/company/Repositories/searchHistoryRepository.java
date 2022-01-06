@@ -89,4 +89,25 @@ public class searchHistoryRepository {
 
         con.close();
     }
+
+    public void clearHistories(Integer userId) throws SQLException {
+        try {
+            try {
+                con = DriverManager.getConnection(
+                        "jdbc:mysql://localhost:3306/kittykitty","root","root");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            PreparedStatement deleteSearchHistory = con.prepareStatement("Delete from searchhistories Where userId = ?", Statement.RETURN_GENERATED_KEYS);
+            deleteSearchHistory.setInt(1, userId);
+            deleteSearchHistory.executeUpdate();
+        }
+
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        con.close();
+    }
 }
