@@ -11,6 +11,7 @@ export default createStore({
     eightFirstVideos: null,
     relatedVideoId: null,
     mySearchHistoryList: [],
+    keyWord: "",
   },
   mutations: {
     setUser(state, user) {
@@ -36,6 +37,12 @@ export default createStore({
     },
     setRelatedVideoId(state, relatedVideoId) {
       state.relatedVideoId = relatedVideoId;
+    },
+    setMySearchHistoryList(state, searchHistory){
+      state.mySearchHistoryList = searchHistory
+    },
+    setKeyWord(state, keyWord){
+      state.keyWord = keyWord
     }
   },
   getters: {
@@ -59,6 +66,9 @@ export default createStore({
     },
     getMySearchHistoryList: (state) => {
       return state.mySearchHistoryList
+    },
+    getKeyWord:(state) => {
+      return state.keyWord
     }
   },
   actions: {
@@ -95,6 +105,13 @@ export default createStore({
     async getSearchHistories(store, id){
       let res = await fetch('/rest/getSearchHistories/' + id);
       return res.json();
+    },
+    async cacheSearchHistory(store, searchHistory){
+      store.commit('setMySearchHistoryList', searchHistory);
+    },
+    async setKeyWord(store, keyWord){
+      store.commit('setKeyWord', keyWord)
     }
+
   },
 });

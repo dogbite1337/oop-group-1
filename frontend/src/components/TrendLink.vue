@@ -55,6 +55,7 @@ h1{
 .trendGrid{
   border: 1px solid white;
   margin: 10px 5% 10px 5%;
+  border-radius: 5px;
 }
 
 .itemsContainer{
@@ -63,37 +64,4 @@ h1{
   grid-template-columns: repeat(2, 50%);
   grid-template-rows: repeat(5, 20%);
 }
-
-.trendDiv{
-  background-color: white;
-  margin-left: 17px;
-  margin-top: 12px;
-  color: black;
-  border-radius: 3px;
-  display: grid;
-  grid-template-columns: auto auto;
-  padding-top: 1px;
-  padding-bottom: 1px;
-  padding-right: 5px;
-}
-
-.LasttrendDiv{
-  background-color: white;
-  margin-left: 17px;
-  margin-top: 12px;
-  color: black;
-  border-radius: 3px;
-  display: grid;
-  grid-template-columns: auto auto;
-  padding-top: 1px;
-  padding-bottom: 1px;
-  padding-right: 5px;
-}
-
-.numberP{
-  display:inline;
-  padding-left: 8px;
-  padding-top: 2px;
-}
-
 </style>

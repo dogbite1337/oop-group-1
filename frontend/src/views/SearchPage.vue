@@ -3,7 +3,7 @@
     <Header/>
     <div class="searchPage">
         <TrendLink :trends="topTenTrend"/>
-        <ExpandableSearchHistory/>
+        <ExpandableSearchHistory v-if="searchHistory.length>0"/>
         <div class="searchPageButtonsContainer">
             <button @click="register">Search</button>
             <button >Clear History</button>
@@ -22,6 +22,8 @@ export default {
     return {
         topTenTrend: ['Cats', 'More Cats', 'All cats', 'Cats?!', 'Cats.', 'Cats!', 'Why are there so many cats', 'John', 'Stop This', 'Madness'],
         searchHistory: [],
+        // currentUser: this.$store.getters.getCurrentUser,
+        currentUser: null,
     };
   },
 
@@ -32,34 +34,33 @@ export default {
   },
 
   async created(){
-    // works upon visiting search page the first time
-    // when refresh, currentUser become null?
-    if(this.$store.getters.getCurrentUser){
-      console.log("logged in")
-      // this.$store.getters.getCurrentUser.userId
-      // 1
-      let detailedSearchList = await this.$store.dispatch("getSearchHistories", this.$store.getters.getCurrentUser.userId);
-      if(detailedSearchList.length>0){
-        detailedSearchList.forEach(element => {
-        this.searchHistory.push(element.keyWord)
-      });
-      }
-    }
-    else{
-      console.log("not Logged In")
-    }
-
-
-    if(this.searchHistory.length>0){
-      console.log("has searched")
-      this.searchHistory.forEach(element => {
-        console.log(element)
-      });
-    }
-    else{
-      console.log("user has no search history")
-    }
-
+    this.$store.subscribe(async (mutation, state) => {
+      let detailedSearchList
+      if(mutation.type == "setUser"){
+        this.currentUser = mutation.payload
+        if(this.currentUser){
+          console.log("user is logged in")
+          detailedSearchList = await this.$store.dispatch("getSearchHistories", 1);
+            if(detailedSearchList.length>0){
+               detailedSearchList.forEach(element => {
+               this.searchHistory.push(element.keyWord)
+               console.log("has searched: " + element.keyWord)
+              });
+              await this.$store.dispatch("cacheSearchHistory", this.searchHistory)
+            }
+        }
+        else{
+          console.log("user is not logged in")
+          this.searchHistory = this.$store.getters.getMySearchHistoryList
+          if(this.searchHistory.length>0){
+            console.log("you have searched for:")
+            this.searchHistory.forEach(element => {
+              console.log(element)
+            });
+          }
+          console.log("user has not made any search yet")
+        }
+    }})
   },
 
   beforeUnmount(){
@@ -67,17 +68,29 @@ export default {
 
   methods: {
     async register(){
+      if(this.currentUser){
         let obj = {
-            userId: 1,
-            keyWord: "hoho",
+            userId: this.currentUser.userId,
+            keyWord: this.$store.getters.getKeyword,
         }
-    
-       let res = await fetch('/api/registerHistory', {
-        method: 'POST',
-        body: JSON.stringify(obj),
-      });
+
+          let res = await fetch('/api/registerHistory', {
+          method: 'POST',
+          body: JSON.stringify(obj),
+          });
+          console.log("stored search in BD")
+        }
+
+        else{
+          if(this.searchHistory.length>5){
+            this.searchHistory.splice(0,1);
+          }
+
+          this.searchHistory.push(this.$store.getters.getKeyWord)
+          console.log("keyword: " + this.$store.getters.getKeyWord + " has been added to list")
+        }
+      }
     }
-  }
   }
 </script>
 

@@ -13,7 +13,7 @@
     <div class="searchDiv">
           <router-link :to="{ path: '/Search'}">
           <img class="iconInSearchField" src="../projectImages/magnifying_glass.png" />
-      <input v-model="searchParam" class="SearchField" type="text" placeholder="Search.."/>
+      <input @change="setKeyWord" v-model="searchParam" class="SearchField" type="text" placeholder="Search.."/>
     </router-link>
       <div class="SpaceDiv" />
     </div>
@@ -78,6 +78,9 @@ export default {
     },
     uploadNavigation() {
       this.$router.push('Upload')
+    },
+    setKeyWord(){
+      this.$store.dispatch("setKeyWord", this.searchParam)
     }
   },
 };
