@@ -199,8 +199,8 @@ public class videoRepository {
         Video uploadedVideo = new Video(0, 0, 0, "", "", "", 0, "", "0", "0", "0");
 
         uploadedVideo.setUserId(Integer.parseInt(userIdOfUpload));
-        uploadedVideo.setVideoURL(videoURL);
         uploadedVideo.setUploadDate(Long.parseLong(uploadDate));
+        uploadedVideo.setVideoURL(videoURL);
         uploadedVideo.setTitle(title);
         uploadedVideo.setDescription(description);
         uploadedVideo.setViews(Integer.parseInt(views));
@@ -216,17 +216,18 @@ public class videoRepository {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            //START HERE
-            PreparedStatement pStatement = con.prepareStatement("INSERT INTO videos (userId, videoURL, title, description, views, postedByUsername, likes, dislikes, stars) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+
+            PreparedStatement pStatement = con.prepareStatement("INSERT INTO videos (userId, uploadDate, videoURL, title, description, views, postedByUsername, likes, dislikes, stars) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             pStatement.setInt(1, uploadedVideo.getUserId());
-            pStatement.setString(2, uploadedVideo.getVideoURL());
-            pStatement.setString(3, uploadedVideo.getTitle());
-            pStatement.setString(4, uploadedVideo.getDescription());
-            pStatement.setInt(5, uploadedVideo.getViews());
-            pStatement.setString(6, uploadedVideo.getPostedByUsername());
-            pStatement.setString(7, uploadedVideo.getLikes());
-            pStatement.setString(8, uploadedVideo.getDislikes());
-            pStatement.setString(9, uploadedVideo.getStars());
+            pStatement.setTimestamp(2, new Timestamp(uploadedVideo.getUploadDate()));
+            pStatement.setString(3, uploadedVideo.getVideoURL());
+            pStatement.setString(4, uploadedVideo.getTitle());
+            pStatement.setString(5, uploadedVideo.getDescription());
+            pStatement.setInt(6, uploadedVideo.getViews());
+            pStatement.setString(7, uploadedVideo.getPostedByUsername());
+            pStatement.setString(8, uploadedVideo.getLikes());
+            pStatement.setString(9, uploadedVideo.getDislikes());
+            pStatement.setString(10, uploadedVideo.getStars());
             int newVideoUpload = pStatement.executeUpdate();
 
             try (ResultSet generatedKeys = pStatement.getGeneratedKeys()){
