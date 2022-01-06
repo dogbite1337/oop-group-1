@@ -3,6 +3,7 @@ package com.company.Repositories;
 import com.company.DTOs.UserWithoutPassword;
 import com.company.Entities.SearchHistory;
 import com.company.utilities.Encrypter;
+import io.netty.util.internal.IntegerHolder;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,11 +15,10 @@ public class searchHistoryRepository {
     public void registerSearchHistory(SearchHistory newSearchHistory) throws SQLException {
 
         ArrayList<SearchHistory> searchHistories = findHistoryListByUserId(newSearchHistory.getUserId());
-        if(searchHistories.size() > 5){
-            removeExceededHistoryByUserId(newSearchHistory.getUserId(), searchHistories.get(4).getTime());
+
+        if(searchHistories.size() >= 6){
+            removeExceededHistoryByUserId(newSearchHistory.getUserId(), searchHistories.get(4).getHistoryId());
         }
-
-
 
         try {
             try {
@@ -38,7 +38,6 @@ public class searchHistoryRepository {
         }
 
         con.close();
-
     }
 
     public ArrayList<SearchHistory> findHistoryListByUserId(Integer userId) throws SQLException {
@@ -50,25 +49,26 @@ public class searchHistoryRepository {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
             Statement searchHistoryList = con.createStatement();
-            String query = "Select * from searchhistories Where userId = " + userId + " ORDER BY time DESC;";
+            String query = "Select * from searchhistories Where userId = " + userId + " ORDER BY historyId DESC LIMIT 6;";
             ResultSet result = searchHistoryList.executeQuery(query);
             while(result.next()){
-                SearchHistory searchHistory = new SearchHistory(result.getInt("userId"), result.getString("keyWord"), result.getString("time"));
+                SearchHistory searchHistory = new SearchHistory(result.getInt("userId"), result.getString("keyWord"), result.getString("time"), result.getInt("historyId"));
                 historyListOfUserDescendingByTime.add(searchHistory);
             }
-
         }
         catch (SQLException ex) {
             ex.printStackTrace();
         }
 
         con.close();
+        System.out.println(historyListOfUserDescendingByTime.size());
         return historyListOfUserDescendingByTime;
     }
 
 
-    public void removeExceededHistoryByUserId(Integer userId, String time) throws SQLException {
+    public void removeExceededHistoryByUserId(Integer userId, Integer historyId) throws SQLException {
         try {
             try {
                 con = DriverManager.getConnection(
@@ -76,9 +76,10 @@ public class searchHistoryRepository {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            PreparedStatement deleteSearchHistory = con.prepareStatement("Delete from searchhistories Where userId = ? AND time < ?", Statement.RETURN_GENERATED_KEYS);
+
+            PreparedStatement deleteSearchHistory = con.prepareStatement("Delete from searchhistories Where userId = ? AND historyId < ?", Statement.RETURN_GENERATED_KEYS);
             deleteSearchHistory.setInt(1, userId);
-            deleteSearchHistory.setString(2, time);
+            deleteSearchHistory.setInt(2, historyId);
             deleteSearchHistory.executeUpdate();
         }
 

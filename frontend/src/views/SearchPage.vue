@@ -1,12 +1,12 @@
 <template>
   <div class="MainDiv">
-    <Header/>
+    <Header @update="register"/>
     <div class="searchPage">
         <TrendLink :trends="topTenTrend"/>
-        <ExpandableSearchHistory v-if="searchHistory.length>0"/>
+        <ExpandableSearchHistory/>
         <div class="searchPageButtonsContainer">
             <button @click="register">Search</button>
-            <button >Clear History</button>
+            <button @click="clearHistory">Clear History</button>
     </div>
     </div>
     </div>
@@ -18,11 +18,11 @@ import TrendLink from '../components/TrendLink.vue'
 import ExpandableSearchHistory from '../components/ExpandableSearchHistory.vue'
 
 export default {
+  emits:["update"],
   data() {
     return {
         topTenTrend: ['Cats', 'More Cats', 'All cats', 'Cats?!', 'Cats.', 'Cats!', 'Why are there so many cats', 'John', 'Stop This', 'Madness'],
         searchHistory: [],
-        // currentUser: this.$store.getters.getCurrentUser,
         currentUser: null,
     };
   },
@@ -33,34 +33,35 @@ export default {
     ExpandableSearchHistory,
   },
 
-  async created(){
+  created(){
+  },
+
+  async mounted(){
+    let boolean = false;
     this.$store.subscribe(async (mutation, state) => {
       let detailedSearchList
-      if(mutation.type == "setUser"){
+      if(mutation.type == "setUser" && mutation.payload && !boolean){
+        console.log("in Created")
+        this.$store.dispatch('cacheSearchHistory', []);
         this.currentUser = mutation.payload
         if(this.currentUser){
           console.log("user is logged in")
-          detailedSearchList = await this.$store.dispatch("getSearchHistories", 1);
+          detailedSearchList = [];
+          this.searchHistory = [];
+          detailedSearchList = await this.$store.dispatch("getSearchHistories", this.currentUser.userId);
             if(detailedSearchList.length>0){
                detailedSearchList.forEach(element => {
                this.searchHistory.push(element.keyWord)
-               console.log("has searched: " + element.keyWord)
               });
-              await this.$store.dispatch("cacheSearchHistory", this.searchHistory)
             }
         }
         else{
           console.log("user is not logged in")
-          this.searchHistory = this.$store.getters.getMySearchHistoryList
-          if(this.searchHistory.length>0){
-            console.log("you have searched for:")
-            this.searchHistory.forEach(element => {
-              console.log(element)
-            });
-          }
-          console.log("user has not made any search yet")
         }
-    }})
+        this.searchHistory = this.$store.getters.getMySearchHistoryList
+        boolean = true;
+      }
+    })
   },
 
   beforeUnmount(){
@@ -68,10 +69,11 @@ export default {
 
   methods: {
     async register(){
-      if(this.currentUser){
+      let searchParam = this.$store.getters.getKeyWord;
+      if(this.currentUser && !this.searchHistory.includes(searchParam)){
         let obj = {
             userId: this.currentUser.userId,
-            keyWord: this.$store.getters.getKeyword,
+            keyWord: this.$store.getters.getKeyWord,
         }
 
           let res = await fetch('/api/registerHistory', {
@@ -79,19 +81,44 @@ export default {
           body: JSON.stringify(obj),
           });
           console.log("stored search in BD")
-        }
 
+          // update from DB
+          let detailedSearchList = await this.$store.dispatch("getSearchHistories", this.currentUser.userId);
+          this.searchHistory = [];
+         
+          if(detailedSearchList.length>0){
+               detailedSearchList.forEach(element => {
+               this.searchHistory.push(element.keyWord)
+              })
+            }
+          await this.$store.dispatch("cacheSearchHistory", this.searchHistory)
+      }
+      else if(this.currentUser && !this.searchHistory.includes(searchParam)){
+        console.log("user is logged in but search matched last search")
+      }
         else{
+          
           if(this.searchHistory.length>5){
-            this.searchHistory.splice(0,1);
+            this.searchHistory.splice(this.searchHistory.length-1,1);
           }
 
-          this.searchHistory.push(this.$store.getters.getKeyWord)
+          let obj = {
+            keyWord: this.$store.getters.getKeyWord,
+          }
+
+          this.searchHistory.unshift(obj)
           console.log("keyword: " + this.$store.getters.getKeyWord + " has been added to list")
+          await this.$store.dispatch("cacheSearchHistory", this.searchHistory)
+          }
         }
-      }
+      },
+    
+
+    clearHistory(){
+
     }
   }
+  
 </script>
 
 <style scoped>

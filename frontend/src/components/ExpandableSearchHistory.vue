@@ -1,5 +1,5 @@
 <template>
-  <div class="searchHistoryContainer"> 
+  <div class="searchHistoryContainer" v-if="mySearchHistoryList.length > 0"> 
     <div class="title">
       <h1>Search History</h1>
     </div>
@@ -7,14 +7,14 @@
       <button @click="btnClicked ? btnClicked = false : btnClicked = true">{{btnClicked ? "close" : "expand"}}</button>
     </div>
     <div class="historyItemContainer" v-if="!btnClicked">
-      <div class="historyItem" v-for="item of mySearchHistoryList.slice().reverse().slice(0,3)" :key="item">
-        <p>{{item.length > 12 ? item.substring(0, 9) + '...' : item}}</p>
+      <div class="historyItem" v-for="item of mySearchHistoryList.slice(0,3)" :key="item">
+        <p>{{item.keyWord.length > 12 ? item.keyWord.substring(0, 9) + '...' : item.keyWord}}</p>
       </div>
     </div>
 
     <div class="historyItemContainer" v-if="btnClicked">
-      <div class="historyItem" v-for="item of mySearchHistoryList.slice().reverse()" :key="item">
-        <p>{{item.length > 12 ? item.substring(0, 9) + '...' : item}}</p>
+      <div class="historyItem" v-for="item of mySearchHistoryList" :key="item">
+        <p>{{item.keyWord.length > 12 ? item.keyWord.substring(0, 9) + '...' : item.keyWord}}</p>
       </div>
     </div>
   </div>
@@ -23,19 +23,35 @@
 
 export default {
   name: 'ExpandableSearchHistory',
+  props:["searchHistory"],
   data() {
     return {
       btnClicked: false,
       // getting from state atm, change to fetch from DB when search page shown
-      mySearchHistoryList: this.$store.getters.getMySearchHistoryList
+      mySearchHistoryList: [],
     };
   },
-  created(){
-    
+  async mounted(){
+    let boolean = false;
+    this.$store.subscribe(async (mutation, state) => {
+
+      if(mutation.type == 'setUser' && !boolean && this.$store.getters.getCurrentUser){
+        console.log(this.$store.getters.getCurrentUser)
+        this.mySearchHistoryList = await this.$store.dispatch("getSearchHistories", this.$store.getters.getCurrentUser.userId);
+        boolean = true;
+      }
+      if(mutation.type == 'setMySearchHistoryList' && this.$store.getters.getCurrentUser){
+        this.mySearchHistoryList = await this.$store.dispatch("getSearchHistories", this.$store.getters.getCurrentUser.userId);
+      }
+      if(mutation.type == 'setMySearchHistoryList' && !this.$store.getters.getCurrentUser){
+        this.mySearchHistoryList = await this.$store.getters.getMySearchHistoryList;
+      }
+    })
   },
+
   methods: {
 
-  }
+  },
 };
 </script>
 
@@ -52,7 +68,7 @@ h1{
 }
 
 .title{
-  margin: 10px 5% 10px 5%;
+  margin: 10px 0 10px 0;
 }
 
 .buttonContainer{

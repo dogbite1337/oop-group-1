@@ -10,10 +10,11 @@ public class SearchHistory {
     public SearchHistory() {
     }
 
-    public SearchHistory(Integer userId, String keyWord, String time) {
+    public SearchHistory(Integer userId, String keyWord, String time, Integer historyId) {
         this.userId = userId;
         this.keyWord = keyWord;
         this.time = time;
+        this.historyId = historyId;
     }
 
     public Integer getHistoryId() {

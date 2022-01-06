@@ -13,7 +13,7 @@
     <div class="searchDiv">
           <router-link :to="{ path: '/Search'}">
           <img class="iconInSearchField" src="../projectImages/magnifying_glass.png" />
-      <input @change="setKeyWord" v-model="searchParam" class="SearchField" type="text" placeholder="Search.."/>
+      <input v-on:keyup.enter="search" @change="setKeyWord"  v-on:click="searchParam=''" v-model="searchParam" class="SearchField" type="text" placeholder="Search.."/>
     </router-link>
       <div class="SpaceDiv" />
     </div>
@@ -43,6 +43,7 @@
 import store from "../store";
 export default {
   name: "Header",
+  emits:["update"],
   async mounted() {
     await this.$store.dispatch("whoAmI");
     if(this.$store.getters.getCurrentUser){
@@ -63,6 +64,7 @@ export default {
     resetToStartPage() {
       this.$store.dispatch("resetToStartPage", true);
       this.searchParam = "";
+      this.$router.push('/')
     },
     
     toggleProfileDropdown() {
@@ -75,9 +77,14 @@ export default {
     async logout() {
       await this.$store.dispatch("logout");
       this.toggleProfileDropdown();
+      this.$router.push('/')
     },
     uploadNavigation() {
       this.$router.push('Upload')
+    },
+    search(){
+      this.setKeyWord;
+      this.$emit("update");
     },
     setKeyWord(){
       this.$store.dispatch("setKeyWord", this.searchParam)

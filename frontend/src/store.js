@@ -43,7 +43,8 @@ export default createStore({
     },
     setKeyWord(state, keyWord){
       state.keyWord = keyWord
-    }
+    },
+
   },
   getters: {
     getCurrentUser: (state) => {
@@ -97,12 +98,15 @@ export default createStore({
       let res = await fetch('/api/whoami')
       let currentUser = await res.json();
       store.commit('setUser', currentUser);
+      store.commit('setMySearchHistoryList', [])
     },
     async logout(store) {
       await fetch('/api/logout')
       store.commit('setUser', null);
+      store.commit('setMySearchHistoryList', [])
     },
     async getSearchHistories(store, id){
+      console.log("called")
       let res = await fetch('/rest/getSearchHistories/' + id);
       return res.json();
     },
@@ -111,7 +115,7 @@ export default createStore({
     },
     async setKeyWord(store, keyWord){
       store.commit('setKeyWord', keyWord)
-    }
+    },
 
   },
 });

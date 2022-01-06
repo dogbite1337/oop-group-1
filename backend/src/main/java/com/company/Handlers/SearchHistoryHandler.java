@@ -26,7 +26,7 @@ public class SearchHistoryHandler {
             try {
                 Date date = new Date();
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                SearchHistory newSearch = new SearchHistory((Integer) req.body().get("userId"), (String)req.body().get("keyWord"), formatter.format(date));
+                SearchHistory newSearch = new SearchHistory((Integer) req.body().get("userId"), (String)req.body().get("keyWord"), formatter.format(date), null);
                 searchHistoryLogic.registerSearchHistory(newSearch);
                 res.json("true");
             } catch (SQLException e) {
@@ -40,6 +40,7 @@ public class SearchHistoryHandler {
             try {
                 ArrayList<SearchHistory> searchHistory = searchHistoryLogic.getSearchHistories(userId);
                 res.json(searchHistory);
+                System.out.println(searchHistory);
             } catch (SQLException e) {
                 e.printStackTrace();
                 res.json("false");

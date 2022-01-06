@@ -114,6 +114,7 @@ export default {
         user = Object.assign(currentUser, response);
         this.$store.dispatch('login', user);
         document.getElementsByClassName('HomeLink')[0].click();
+        this.$router.push('/')
       }
     },
     clickedMe(e) {
