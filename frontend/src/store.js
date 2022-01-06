@@ -92,5 +92,9 @@ export default createStore({
       await fetch('/api/logout')
       store.commit('setUser', null);
     },
+    async getSearchHistories(store, id){
+      let res = await fetch('/rest/getSearchHistories/' + id);
+      return res.json();
+    }
   },
 });

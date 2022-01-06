@@ -18,4 +18,8 @@ public class SearchHistoryLogic {
     public void registerSearchHistory(SearchHistory newSearchHistory) throws SQLException {
         searchHistoryRepository.registerSearchHistory(newSearchHistory);
     }
+
+    public ArrayList<SearchHistory> getSearchHistories(Integer userId) throws SQLException {
+        return searchHistoryRepository.findHistoryListByUserId(userId);
+    }
 }

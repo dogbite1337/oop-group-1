@@ -21,6 +21,7 @@ export default {
   data() {
     return {
         topTenTrend: ['Cats', 'More Cats', 'All cats', 'Cats?!', 'Cats.', 'Cats!', 'Why are there so many cats', 'John', 'Stop This', 'Madness'],
+        searchHistory: [],
     };
   },
 
@@ -30,7 +31,33 @@ export default {
     ExpandableSearchHistory,
   },
 
-  created(){
+  async created(){
+    if(this.$store.getters.getCurrentUser){
+      console.log("logged in")
+      // this.$store.getters.getCurrentUser.userId
+      // 1
+      let detailedSearchList = await this.$store.dispatch("getSearchHistories", this.$store.getters.getCurrentUser.userId);
+      if(detailedSearchList.length>0){
+        detailedSearchList.forEach(element => {
+        this.searchHistory.push(element.keyWord)
+      });
+      }
+    }
+    else{
+      console.log("not Logged In")
+    }
+
+
+    if(this.searchHistory.length>0){
+      console.log("has searched")
+      this.searchHistory.forEach(element => {
+        console.log(element)
+      });
+    }
+    else{
+      console.log("user has no search history")
+    }
+
   },
 
   beforeUnmount(){

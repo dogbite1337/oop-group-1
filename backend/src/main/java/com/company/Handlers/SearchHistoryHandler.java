@@ -34,5 +34,16 @@ public class SearchHistoryHandler {
                 res.json("false");
             }
         });
+
+        app.get("rest/getSearchHistories/:id",(req,res) ->{
+            Integer userId = Integer.valueOf(req.params("id"));
+            try {
+                ArrayList<SearchHistory> searchHistory = searchHistoryLogic.getSearchHistories(userId);
+                res.json(searchHistory);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                res.json("false");
+            }
+        });
     }
 }
