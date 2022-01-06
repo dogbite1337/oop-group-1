@@ -76,7 +76,7 @@
       </div>
       <div class="SpaceDiv" />
       <div class="uploadDateDiv square">
-        {{(new Date(this.video.uploadDate)).toLocaleDateString().replaceAll('/', '-')}}
+        {{(new Date(video.uploadDate)).toLocaleDateString().replaceAll('/', '-')}}
       </div>
       <div class="SpaceDiv"/>
     </div>
