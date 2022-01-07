@@ -58,7 +58,7 @@ export default {
         0,
         0,
         -1,
-        0
+        Date.now()
       );
       let res = await fetch('/api/postComment', {
         method: 'POST',
@@ -66,7 +66,7 @@ export default {
       });
 
       let response = await res.json();
-      this.$emit("postedComment", response);
+      this.$emit('postedComment', response);
     },
   },
 };

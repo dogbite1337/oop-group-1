@@ -23,7 +23,7 @@ public class CommentsHandler {
 
         // post a comment
         app.post("/api/postComment", (req, res) -> {
-            res.json(commentsRepository.postNewComment((Integer) req.body().get("relatesToVideoId"), (String) req.body().get("postedByUsername"), (String) req.body().get("content"), (Integer) req.body().get("responseToCommentId"), (Integer) req.body().get("timeOfPosting")));
+            res.json(commentsRepository.postNewComment((Integer) req.body().get("relatesToVideoId"), (String) req.body().get("postedByUsername"), (String) req.body().get("content"), (Integer) req.body().get("responseToCommentId"), (Long) req.body().get("timeOfPosting")));
         });
 
         app.post("/api/likeComment", (req, res) -> {
@@ -36,7 +36,7 @@ public class CommentsHandler {
                    (Integer) req.body().get("likes"),
                    (Integer) req.body().get("dislikes"),
                    (Integer) req.body().get("responseToCommentId"),
-                   (Integer) req.body().get("timeOfPosting"))));
+                   (Long) req.body().get("timeOfPosting"))));
         });
 
         app.post("/api/dislikeComment", (req, res) -> {
@@ -49,7 +49,7 @@ public class CommentsHandler {
                             (Integer) req.body().get("likes"),
                             (Integer) req.body().get("dislikes"),
                             (Integer) req.body().get("responseToCommentId"),
-                            (Integer) req.body().get("timeOfPosting"))));
+                            (Long) req.body().get("timeOfPosting"))));
         });
 
         app.get("/rest/getCommentsForVideoId", (req, res) -> {

@@ -40,16 +40,21 @@
     </div>
     <div class="SpaceDiv" />
     <div class="ReplyDiv">Reply</div>
+    <div class="SpaceBlock" />
+    <div class="timestampOfComments">
+      <div class="SpaceBlock" />
+      {{ timestampOfComments }}
+      <div class="SpaceBlock" />
+    </div>
+    <div class="SpaceBlock" />
   </div>
 </template>
 <script>
 import User from '../jsClasses/general/User';
 export default {
-  props: ['comment'],
+  props: ['comment', 'timestampOfComments'],
   name: 'PostedComment',
-  mounted() {
-    console.log(this.comment);
-  },
+  mounted() {},
   data() {
     return {
       User: null,
@@ -102,6 +107,13 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap');
 
+.timestampOfComments {
+  color: white;
+  width: max-content;
+  display: grid;
+  grid-template-columns: auto max-content 30px;
+  margin-top: -40px;
+}
 .LikesDiv,
 .DislikesDiv {
   display: grid;
@@ -120,7 +132,7 @@ export default {
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
-  padding-bottom: 3px;
+  padding-bottom: 10px;
 }
 .ReplyDiv {
   color: white;
@@ -135,14 +147,14 @@ export default {
 }
 .StatsDiv {
   display: grid;
-  grid-template-columns: 30px max-content 10px max-content 15px auto;
+  grid-template-columns: 30px max-content 10px max-content 15px auto auto max-content 1px;
   background-color: black;
   width: 100vw;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
   padding-top: 4px;
-  padding-bottom: 4px;
+  padding-bottom: 10px;
 }
 
 .usernameDiv {

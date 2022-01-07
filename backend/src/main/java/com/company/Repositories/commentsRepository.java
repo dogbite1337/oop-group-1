@@ -67,7 +67,7 @@ public class commentsRepository {
             ResultSet rs = getAllComments.executeQuery();
 
             while(rs.next()) {
-                Comment newComment = new Comment(rs.getInt(1), rs.getInt(2), rs.getString(3) , rs.getString(4) ,rs.getInt(5),rs.getInt(6), rs.getInt(7), rs.getInt(8));
+                Comment newComment = new Comment(rs.getInt(1), rs.getInt(2), rs.getString(3) , rs.getString(4) ,rs.getInt(5),rs.getInt(6), rs.getInt(7), rs.getLong(8));
                 relevantComments.add(newComment);
             }
 
@@ -79,7 +79,7 @@ public class commentsRepository {
 
     }
 
-    public Comment postNewComment(Integer relatesToVideoId, String postedByUsername, String content, Integer responseToCommentId, Integer timeOfPosting) {
+    public Comment postNewComment(Integer relatesToVideoId, String postedByUsername, String content, Integer responseToCommentId, Long timeOfPosting) {
         Comment newComment = new Comment(0, relatesToVideoId , postedByUsername , content ,0,0, responseToCommentId, timeOfPosting);
         try {
             con = DriverManager.getConnection(
@@ -89,11 +89,12 @@ public class commentsRepository {
         }
 
         try {
-            PreparedStatement postComment = con.prepareStatement("INSERT INTO comments (relatesToVideoId, postedByUsername, content, responseToCommentId) VALUES (?, ?,?, ?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement postComment = con.prepareStatement("INSERT INTO comments (relatesToVideoId, postedByUsername, content, responseToCommentId, timeOfPosting) VALUES (?, ?,?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             postComment.setInt(1, relatesToVideoId);
             postComment.setString(2, postedByUsername);
             postComment.setString(3, content);
             postComment.setInt(4, responseToCommentId);
+            postComment.setLong(5, timeOfPosting);
             postComment.executeUpdate();
 
             try (ResultSet generatedKeys = postComment.getGeneratedKeys()) {

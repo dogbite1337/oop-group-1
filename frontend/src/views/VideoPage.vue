@@ -7,7 +7,7 @@
         <div class="SpaceDiv" />
       </div>
     </router-link>
-    <div class="test" />
+    <div class="SpaceBlock" />
     <div class="FrameGrid">
       <div />
       <div class="iFrameDiv">
@@ -145,12 +145,18 @@
         <div class="SpaceDiv" />
       </div>
     </div>
-    <CommentInput class="postingCommentDiv" @postedComment="updateComments" :videoId="video.videoId" v-if="showCommentsSection" />
+    <CommentInput
+      class="postingCommentDiv"
+      @postedComment="updateComments"
+      :videoId="video.videoId"
+      v-if="showCommentsSection"
+    />
     <div class="postedCommentsDiv" v-if="showCommentsSection">
       <PostedComment
         v-for="(commentItem, index) of relevantComments"
         :key="index"
         :comment="commentItem"
+        :timestampOfComments="timestampOfComments[index]"
         class="commentBox"
       />
     </div>
@@ -202,6 +208,7 @@ export default {
       showCommentsSection: false,
       showDescriptionSection: true,
       relevantComments: [],
+      timestampOfComments: [],
     };
   },
   async created() {
@@ -228,9 +235,67 @@ export default {
     for (let i = 0; i < commentsResponse.length; i++) {
       let newComment = new Comment(0, 0, '', '', 0, 0, 0, 0);
       newComment = Object.assign(newComment, commentsResponse[i]);
+      newComment.timeOfPosting = this.convertDateObjectToString(
+        new Date(commentsResponse[i].timeOfPosting)
+      );
       this.relevantComments.push(newComment);
+      let minsAgo =
+        (Date.now() - new Date(commentsResponse[i].timeOfPosting)) / 60000;
+      if (minsAgo < 1.0) {
+        this.timestampOfComments.push('Less than a minute ago');
+      } else if (minsAgo >= 1.0 && minsAgo <= 59) {
+        this.timestampOfComments.push(
+          'About ' +
+            Math.floor(minsAgo) +
+            ' minute' +
+            (minsAgo >= 2.0 ? 's ' : ' ') +
+            'ago'
+        );
+      } else if (minsAgo >= 60 && minsAgo <= 1440) {
+        this.timestampOfComments.push(
+          'About ' +
+            Math.floor(minsAgo / 60) +
+            ' hour' +
+            (minsAgo / 60 >= 2.0 ? 's ' : ' ') +
+            'ago'
+        );
+      } else if (minsAgo >= 1441 && minsAgo <= 10080) {
+        this.timestampOfComments.push(
+          'About ' +
+            Math.floor(minsAgo / 60 / 24) +
+            ' day' +
+            (Math.floor(minsAgo / 60 / 24) >= 2.0 ? 's ' : ' ') +
+            'ago'
+        );
+      } else if (minsAgo >= 10081 && minsAgo <= 40324) {
+        this.timestampOfComments.push(
+          Math.floor(minsAgo / 60 / 24 / 7) +
+            ' week' +
+            (Math.floor(minsAgo / 60 / 24 / 7) >= 2.0 ? 's ' : ' ') +
+            'ago'
+        );
+      } else if (minsAgo >= 40325 && minsAgo <= 80648) {
+        this.timestampOfComments.push(
+          'About ' +
+            Math.floor(minsAgo / 60 / 24 / 7 / 30) +
+            ' month' +
+            (Math.floor(minsAgo / 60 / 24 / 7 / 30) >= 2.0 ? 's ' : ' ') +
+            'ago'
+        );
+      } else {
+        if (Math.floor(minsAgo / 60 / 24 / 7 / 30) > 12) {
+          this.timestampOfComments.push(
+            'About ' +
+              Math.floor(minsAgo / 60 / 24 / 7 / 30 / 12) +
+              ' years ago'
+          );
+        } else {
+          this.timestampOfComments.push(
+            'About ' + Math.floor(minsAgo / 60 / 24 / 7 / 30) + ' months ago'
+          );
+        }
+      }
     }
-    console.log(this.relevantComments);
 
     document.addEventListener('scroll', () => {
       if (window.scrollY >= 368) {
@@ -246,7 +311,25 @@ export default {
     updateComments(postedComment) {
       let newComment = new Comment();
       newComment = Object.assign(newComment, postedComment);
+      newComment.timeOfPosting = this.convertDateObjectToString(
+        new Date(newComment.timeOfPosting)
+      );
       this.relevantComments.push(newComment);
+    },
+    convertDateObjectToString(dateObject) {
+      let newDate =
+        (dateObject.getUTCDate() < 10
+          ? '0' + dateObject.getUTCDate()
+          : dateObject.getUTCDate()) +
+        ' - ' +
+        (dateObject.getUTCMonth() + 1 < 10
+          ? '0' + (dateObject.getUTCMonth() + 1)
+          : dateObject.getUTCMonth() + 1) +
+        ' - ' +
+        dateObject.getUTCFullYear();
+      newDate =
+        newDate + ' ' + dateObject.getHours() + ':' + dateObject.getMinutes();
+      return newDate;
     },
     async likeVideo() {
       let relevantInfo = {
@@ -379,6 +462,10 @@ export default {
   margin-top: 40px;
   overflow-y: hidden;
 }
+.postedCommentsDiv {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 .watchNowPlay {
   height: 45px;
   width: 45px;
@@ -451,7 +538,7 @@ export default {
 }
 .videosDiv {
   font-size: 9px;
-  margin-top: 29.5px;
+  margin-top: 16px;
   color: #939393;
 }
 .likeAndDislikeIconDiv {
