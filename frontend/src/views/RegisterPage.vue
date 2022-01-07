@@ -7,10 +7,7 @@
         <div class="SpaceDiv" />
         <p class="HomeText">Home</p>
         <div class="SpaceDiv" />
-        <img
-          class="catIcon"
-          src="../projectImages/whiteCatBlackBaground.png"
-        />
+        <img class="catIcon" src="../projectImages/whiteCatBlackBaground.png" />
         <div class="SpaceDiv" />
       </div>
     </router-link>
@@ -54,15 +51,45 @@
         <div />
         <div class="PreviewImageDiv">
           <p class="previewText">Preview</p>
-          <img class="PreviewImage" :src="`${currentImageURL == '' ? baseImage : currentImageURL}`"/>
+          <img
+            class="PreviewImage"
+            :src="`${currentImageURL == '' ? baseImage : currentImageURL}`"
+          />
         </div>
         <div />
         <div class="ImageURLInputDiv">
-          <input v-model="wantedImageURL" class="imageURLInput" type="text" placeholder="Image url goes here.." />
-          <input @click="uploadPreviewPicture" v-if="canUpload" class="uploadImageButton" type="button" value="Upload Profile Image">
-          <input v-if="!canUpload" class="disasbledUploadImageButton" type="button" value="Upload Profile Image">
-          <input v-if="!canRegister" class="DisabledRegisterButton" type="button" value="Register">
-          <input @click="registerUser" v-if="canRegister" class="RegisterButton" type="button" value="Register">
+          <input
+            v-model="wantedImageURL"
+            class="imageURLInput"
+            type="text"
+            placeholder="Image url goes here.."
+          />
+          <input
+            @click="uploadPreviewPicture"
+            v-if="canUpload"
+            class="uploadImageButton"
+            type="button"
+            value="Upload Profile Image"
+          />
+          <input
+            v-if="!canUpload"
+            class="disasbledUploadImageButton"
+            type="button"
+            value="Upload Profile Image"
+          />
+          <input
+            v-if="!canRegister"
+            class="DisabledRegisterButton"
+            type="button"
+            value="Register"
+          />
+          <input
+            @click="registerUser"
+            v-if="canRegister"
+            class="RegisterButton"
+            type="button"
+            value="Register"
+          />
         </div>
         <div />
       </div>
@@ -71,13 +98,13 @@
   <Footer />
 </template>
 <script>
-import User from '../jsClasses/general/User'
-import Footer from '../components/Footer.vue'
+import User from '../jsClasses/general/User';
+import Footer from '../components/Footer.vue';
 
 export default {
   name: 'RegisterPage',
   components: {
-    Footer
+    Footer,
   },
   data() {
     return {
@@ -89,36 +116,37 @@ export default {
       currentImageURL: '',
       wantedDescription: '',
       baseImage: 'src\\projectImages\\Dark_User.png',
-      canUpload: false
+      canUpload: false,
     };
   },
   watch: {
     currentImageURL() {
-      if(this.wantedUserName.length > 0 && this.wantedPassword.length > 0){
-          this.canRegister = true;
-        }
+      if (this.wantedUserName.length > 0 && this.wantedPassword.length > 0) {
+        this.canRegister = true;
+      }
     },
     wantedImageURL() {
-      if(this.wantedImageURL.length > 0){
-        this.canUpload = true;  
-      }
-      else{
+      if (this.wantedImageURL.length > 0) {
+        this.canUpload = true;
+      } else {
         this.canUpload = false;
       }
     },
     wantedUserName() {
-      if(this.wantedUserName.length > 0 && this.wantedPassword.length > 0 && this.currentImageURL.length > 0){
+      if (
+        this.wantedUserName.length > 0 &&
+        this.wantedPassword.length > 0 &&
+        this.currentImageURL.length > 0
+      ) {
         this.canRegister = true;
-      }
-      else{
+      } else {
         this.canRegister = false;
       }
     },
     wantedPassword() {
-      if(this.wantedUserName.length > 0 && this.wantedPassword.length > 0){
+      if (this.wantedUserName.length > 0 && this.wantedPassword.length > 0) {
         this.canLogIn = true;
-      }
-      else{
+      } else {
         this.canLogIn = false;
       }
     },
@@ -132,8 +160,8 @@ export default {
         providedUserName: this.wantedUserName,
         providedPassword: this.wantedPassword,
         providedDescription: this.wantedDescription,
-        providedProfileURL: this.currentImageURL
-      }
+        providedProfileURL: this.currentImageURL,
+      };
       let res = await fetch('/api/register', {
         method: 'POST',
         body: JSON.stringify(user),
@@ -172,38 +200,41 @@ export default {
   outline: none;
   border: none;
 }
-.HomeLink{
+.HomeLink {
   text-decoration: none;
 }
-.imageURLInput, .uploadImageButton, .registerButton{
+.imageURLInput,
+.uploadImageButton,
+.registerButton {
   display: block;
 }
-.RegisterContent{
+.RegisterContent {
   width: max-content;
   margin-left: auto;
   margin-right: auto;
 }
-.uploadImageButton, .registerButton{
+.uploadImageButton,
+.registerButton {
   margin-top: 9px;
 }
-.imageURLInput{
+.imageURLInput {
   width: 243px;
   padding-left: 5px;
-  border: 0.7px solid #FFFFFF;
+  border: 0.7px solid #ffffff;
   padding-top: 1px;
   height: 21px;
   margin-top: 3px;
   margin-right: 19px;
 }
-.uploadImageButton{
+.uploadImageButton {
   width: 192px;
   color: white;
   font-size: 16px;
   font-family: 'Roboto', sans-serif;
-  background-color: #2D2C2C;
-  border: 0.7px solid #FFFFFF;
+  background-color: #2d2c2c;
+  border: 0.7px solid #ffffff;
 }
-.disasbledUploadImageButton{
+.disasbledUploadImageButton {
   display: block;
   margin-top: 9px;
   width: 192px;
@@ -215,7 +246,7 @@ export default {
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
-.RegisterButton{
+.RegisterButton {
   width: 142px;
   color: white;
   font-size: 18px;
@@ -223,12 +254,12 @@ export default {
   font-family: 'Roboto', sans-serif;
   margin-top: 10px;
   height: 40px;
-  background: #2D2C2C;
-  border: 0.7px solid #FFFFFF;
+  background: #2d2c2c;
+  border: 0.7px solid #ffffff;
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
-.DisabledRegisterButton{
+.DisabledRegisterButton {
   width: 142px;
   font-size: 18px;
   line-height: 21px;
@@ -241,7 +272,7 @@ export default {
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
-.previewText{
+.previewText {
   color: white;
   margin-bottom: 3px;
   text-align: center;
@@ -260,25 +291,24 @@ export default {
   background-color: #c4c4c4;
 }
 
-.sevenPixelsLineDiv{
+.sevenPixelsLineDiv {
   height: 7px;
 }
-.fivePixelsLineDiv{
+.fivePixelsLineDiv {
   height: 5px;
 }
-.PreviewImage{
+.PreviewImage {
   width: 80px;
   height: 80px;
   border-radius: 60px;
 }
-.PreviewImageDiv{
+.PreviewImageDiv {
   width: max-content;
   padding-right: 10px;
 }
-.RegisterDiv{
+.RegisterDiv {
   display: grid; /* space, preview, space, input, space */
   grid-template-columns: 33px auto 0px auto 8px;
-
 }
 .UsernameText,
 .PasswordText {
@@ -324,7 +354,7 @@ export default {
   width: 214.5px;
   margin-left: -115.5px;
   padding-left: 129px;
-  background-color: #2D2C2C;
+  background-color: #2d2c2c;
   height: 46px;
   padding-bottom: 64px;
   margin-top: -14px;
@@ -337,7 +367,7 @@ export default {
   width: 214.5px;
   margin-left: -115.5px;
   padding-left: 129px;
-  background-color: #2D2C2C;
+  background-color: #2d2c2c;
   height: 46px;
   margin-top: -16px;
   padding-top: 5px;
@@ -351,7 +381,7 @@ export default {
   margin-left: -145px;
   padding-left: 129px;
   padding-right: 44px;
-  background-color: #2D2C2C;
+  background-color: #2d2c2c;
   height: 50px;
   margin-top: -16px;
   padding-top: 3px;
@@ -381,7 +411,7 @@ export default {
 .passwordDiv {
   margin-bottom: 12px;
 }
-.DescriptionDiv{
+.DescriptionDiv {
   display: block;
   width: 292px;
   margin-left: auto;

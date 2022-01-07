@@ -10,6 +10,8 @@ export default createStore({
     shouldResetToStartPage: null,
     eightFirstVideos: null,
     relatedVideoId: null,
+    mySearchHistoryList: [],
+    keyWord: "",
   },
   mutations: {
     setUser(state, user) {
@@ -35,7 +37,14 @@ export default createStore({
     },
     setRelatedVideoId(state, relatedVideoId) {
       state.relatedVideoId = relatedVideoId;
-    }
+    },
+    setMySearchHistoryList(state, searchHistory){
+      state.mySearchHistoryList = searchHistory
+    },
+    setKeyWord(state, keyWord){
+      state.keyWord = keyWord
+    },
+
   },
   getters: {
     getCurrentUser: (state) => {
@@ -55,6 +64,12 @@ export default createStore({
     },
     getRelatedVideoId: (state) => {
       return state.relevantVideoId;
+    },
+    getMySearchHistoryList: (state) => {
+      return state.mySearchHistoryList
+    },
+    getKeyWord:(state) => {
+      return state.keyWord
     }
   },
   actions: {
@@ -83,10 +98,27 @@ export default createStore({
       let res = await fetch('/api/whoami')
       let currentUser = await res.json();
       store.commit('setUser', currentUser);
+      store.commit('setMySearchHistoryList', [])
     },
     async logout(store) {
       await fetch('/api/logout')
       store.commit('setUser', null);
+      store.commit('setMySearchHistoryList', [])
     },
+    async getSearchHistories(store, id){
+      let res = await fetch('/rest/getSearchHistories/' + id);
+      return res.json();
+    },
+    async cacheSearchHistory(store, searchHistory){
+      store.commit('setMySearchHistoryList', searchHistory);
+    },
+    async setKeyWord(store, keyWord){
+      store.commit('setKeyWord', keyWord)
+    },
+    async clearHistory(store, userId){
+      await fetch('/api/clearHistories/' + userId, 
+      {
+      method: 'DELETE'});
+    }
   },
 });

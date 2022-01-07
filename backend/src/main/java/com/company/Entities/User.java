@@ -6,6 +6,7 @@ public class User {
     private Integer userId = 0, videosPosted = 0, subscribers = 0;
     private String username, password, description, profileURL;
     private ArrayList<Video> userVideos = new ArrayList<Video>();
+    private ArrayList<SearchHistory> userSearchHistories = new ArrayList<SearchHistory>();
 
     public Integer getUserId() {
         return userId;
@@ -72,6 +73,14 @@ public class User {
         this.subscribers = subscribers;
     }
 
+    public ArrayList<SearchHistory> getUserSearchHistories() {
+        return userSearchHistories;
+    }
+
+    public void setUserSearchHistories(ArrayList<SearchHistory> userSearchHistories) {
+        this.userSearchHistories = userSearchHistories;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -82,7 +91,8 @@ public class User {
                 ", password='" + password + '\'' +
                 ", description='" + description + '\'' +
                 ", profileURL='" + profileURL + '\'' +
-                ", userVideos=" + userVideos +
+                ", userVideos=" + userVideos + '\'' +
+                ", userSearchHistories=" + userSearchHistories + '\'' +
                 '}';
     }
 
