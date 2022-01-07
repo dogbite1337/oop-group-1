@@ -147,7 +147,7 @@ export default {
     this.$store.dispatch('cacheFirstEightVideos', allVideos);
     this.relevantVideos = []
     for(let i = allVideos.length; i > 0; i--){
-      let video = new Video(0, 0, '', '', '')
+      let video = new Video()
       let newVideo = Object.assign(video, allVideos[i-1])
       this.relevantVideos.push(newVideo);
     }
@@ -164,7 +164,7 @@ export default {
         this.relevantVideos = []
         let cachedVideos = this.$store.getters.getEightFirstVideos;
         for(let i = 0; i < cachedVideos.length; i++){
-          let oldVideo = new Video(0,0,'','','',0,'');
+          let oldVideo = new Video();
           oldVideo = Object.assign(oldVideo, cachedVideos[i])
           this.relevantVideos.push(oldVideo)
         }
@@ -173,7 +173,7 @@ export default {
         this.relevantVideos = []
         this.lastSearchQuery = this.$store.getters.getLastSearchQuery;
         for(let i = mutation.payload.length; i > 0; i--){
-          let video = new Video(0, 0, '', '', '', 0, '')
+          let video = new Video()
           let newVideo = Object.assign(video, mutation.payload[i-1])
           if(newVideo.getVideoId() !== 0){
             this.searchResults.push(newVideo);
@@ -208,7 +208,7 @@ export default {
     let cachedVideos = this.$store.getters.getEightFirstVideos;
     if(cachedVideos){
       for(let i = 0; i < cachedVideos.length; i++){
-        let oldVideo = new Video(0,0,'','','',0,'');
+        let oldVideo = new Video();
         oldVideo = Object.assign(oldVideo, cachedVideos[i])
         this.relevantVideos.push(oldVideo)
       }
@@ -230,7 +230,7 @@ export default {
       mySearchHistory: ['John..', 'Why', 'Is the', 'Entire website', 'About', 'Cats..'],
       topTenTrend: ['Cats', 'More Cats', 'All cats', 'Cats?!', 'Cats.', 'Cats!', 'Why are there so many cats', 'John', 'Stop This', 'Madness'],
       showResultsPage: false,
-      tempVideo: new Video(7, 8, "test", 'xQc talks about the meaning of "juice"', "ha", 5655123, "xQc"),
+      tempVideo: new Video(7, 8, null, "test", 'xQc talks about the meaning of "juice"', "ha", 5655123, "xQc"),
       searchResults: [],
       lastSearchQuery: (this.$store.getters.getLastSearchQuery ? this.$store.getters.getLastSearchQuery : ''),
       currentPage: 1,
