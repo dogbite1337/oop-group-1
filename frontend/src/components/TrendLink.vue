@@ -1,53 +1,19 @@
 <template>
+  <div class="title">
+    <h1>Top 10 Trending Searches</h1>
+  </div>
   <div class="trendGrid">
-    <div v-if="trends.length > 0" class="trendDiv">
-      <p class="numberP">#1 ~</p>
-      <p class="trendP">{{ trends[0] }}</p>
-    </div>
-    <div />
-    <div v-if="trends.length > 1" class="trendDiv">
-      <p class="numberP">#2 ~</p>
-      <p class="trendP">{{ trends[1] }}</p>
-    </div>
-
-    <div v-if="trends.length > 2" class="trendDiv">
-      <p class="numberP">#3 ~</p>
-      <p class="trendP">{{ trends[2] }}</p>
-    </div>
-    <div />
-    <div v-if="trends.length > 3" class="trendDiv">
-      <p class="numberP">#4 ~</p>
-      <p class="trendP">{{ trends[3] }}</p>
-    </div>
-
-    <div v-if="trends.length > 4" class="trendDiv">
-      <p class="numberP">#5 ~</p>
-      <p class="trendP">{{ trends[4] }}</p>
-    </div>
-    <div />
-    <div v-if="trends.length > 5" class="trendDiv">
-      <p class="numberP">#6 ~</p>
-      <p class="trendP">{{ trends[5] }}</p>
-    </div>
-
-    <div v-if="trends.length > 6" class="trendDiv">
-      <p class="numberP">#7 ~</p>
-      <p class="trendP">{{ trends[6] }}</p>
-    </div>
-    <div />
-    <div v-if="trends.length > 7" class="trendDiv">
-      <p class="numberP">#8 ~</p>
-      <p class="trendP">{{ trends[7] }}</p>
-    </div>
-
-    <div v-if="trends.length > 8" class="trendDiv">
-      <p class="numberP">#9 ~</p>
-      <p class="trendP">{{ trends[8] }}</p>
-    </div>
-    <div />
-    <div v-if="trends.length > 9" class="LasttrendDiv">
-      <p class="numberP">#10 ~</p>
-      <p class="trendP">{{ trends[9] }}</p>
+    <div class="itemsContainer">
+      <div v-for="(trend, index) of trends" :key="trend" class="item">
+        <p>
+          {{
+            index +
+            1 +
+            '. ' +
+            (trend.length > 15 ? trend.substring(0, 14) + '...' : trend)
+          }}
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -65,40 +31,42 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap');
 
+p {
+  color: white;
+}
+
+h1 {
+  font-size: 20px;
+}
+
+.title {
+  margin: 10px 5% 10px 5%;
+}
+
+.item {
+  background-color: white;
+  margin: 5px;
+  border-radius: 5px;
+  height: 3vh;
+  padding-top: 5px;
+}
+
+.item p {
+  margin-left: 10px;
+  color: black;
+}
+
 .trendGrid {
-  display: grid;
-  grid-template-columns: 173px 10px 173px;
+  border: 1px solid white;
+  margin: 10px 5% 10px 5%;
+  border-radius: 5px;
 }
+</style>
 
-.trendDiv {
-  background-color: white;
-  margin-left: 17px;
-  margin-top: 12px;
-  color: black;
-  border-radius: 3px;
+.itemsContainer {
+  margin: 10px 5px 10px 5px;
   display: grid;
-  grid-template-columns: auto auto;
-  padding-top: 1px;
-  padding-bottom: 1px;
-  padding-right: 5px;
-}
-
-.LasttrendDiv {
-  background-color: white;
-  margin-left: 17px;
-  margin-top: 12px;
-  color: black;
-  border-radius: 3px;
-  display: grid;
-  grid-template-columns: auto auto;
-  padding-top: 1px;
-  padding-bottom: 1px;
-  padding-right: 5px;
-}
-
-.numberP {
-  display: inline;
-  padding-left: 8px;
-  padding-top: 2px;
+  grid-template-columns: repeat(2, 50%);
+  grid-template-rows: repeat(5, 20%);
 }
 </style>

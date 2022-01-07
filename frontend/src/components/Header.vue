@@ -11,18 +11,21 @@
     <img class="CatInHeader" src="../projectImages/Cat no background.png" />
     <div class="SpaceDiv2" />
     <div class="searchDiv">
-      <img
-        class="iconInSearchField"
-        src="../projectImages/magnifying_glass.png"
-      />
-      <input
-        @click="showSearchMenu"
-        @change="searchForVideos"
-        v-model="searchParam"
-        class="SearchField"
-        type="text"
-        placeholder="Search.."
-      />
+      <router-link class="SearchLink" :to="{ path: '/Search' }">
+        <img
+          class="iconInSearchField"
+          src="../projectImages/magnifying_glass.png"
+        />
+        <input
+          v-on:keyup.enter="search"
+          @change="setKeyWord"
+          v-on:click="searchParam = ''"
+          v-model="searchParam"
+          class="SearchField"
+          type="text"
+          placeholder="Search.."
+        />
+      </router-link>
       <div class="SpaceDiv" />
     </div>
     <div class="SpaceDiv" />
@@ -51,6 +54,7 @@
 import store from '../store';
 export default {
   name: 'Header',
+  emits: ['update'],
   async mounted() {
     await this.$store.dispatch('whoAmI');
     if (this.$store.getters.getCurrentUser) {
@@ -71,22 +75,9 @@ export default {
     resetToStartPage() {
       this.$store.dispatch('resetToStartPage', true);
       this.searchParam = '';
+      this.$router.push('/');
     },
-    showSearchMenu() {
-      this.$store.dispatch('updateShowSearchPage', true);
-    },
-    async searchForVideos() {
-      this.$store.dispatch('updateLastSearchQuery', this.searchParam);
-      let res = await fetch(
-        '/rest/getAllVideosByTitle?' +
-          new URLSearchParams({
-            providedTitle: this.searchParam,
-          })
-      );
 
-      let response = await res.json();
-      this.$store.dispatch('updateSearchResult', response);
-    },
     toggleProfileDropdown() {
       if (!this.profileDropdown) {
         this.profileDropdown = true;
@@ -97,9 +88,17 @@ export default {
     async logout() {
       await this.$store.dispatch('logout');
       this.toggleProfileDropdown();
+      this.$router.push('/');
     },
     uploadNavigation() {
       this.$router.push('Upload');
+    },
+    search() {
+      this.setKeyWord;
+      this.$emit('update');
+    },
+    setKeyWord() {
+      this.$store.dispatch('setKeyWord', this.searchParam);
     },
   },
 };
@@ -136,11 +135,11 @@ export default {
 
 .iconInSearchField {
   position: relative;
-  top: 1px;
+  top: 5px;
   left: 15px;
   display: inline;
-  height: 25px;
-  width: 25px;
+  height: 20px;
+  width: 20px;
   z-index: 3;
   margin-left: 20px;
   margin-top: 5px;
@@ -230,6 +229,9 @@ export default {
   margin-top: 4px;
 }
 
+.SearchLink {
+  text-decoration: none;
+}
 .LoginText {
   margin-top: 12.5px;
   font-size: 12px;
@@ -243,7 +245,10 @@ export default {
   width: 40px;
   border-radius: 30px;
 }
-
+.SpaceDiv {
+  height: 10px;
+  width: 10px;
+}
 li {
   text-align: center;
   color: white;
