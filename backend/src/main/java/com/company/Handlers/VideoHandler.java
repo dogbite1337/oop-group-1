@@ -1,5 +1,6 @@
 package com.company.Handlers;
 
+import com.company.Entities.Video;
 import com.company.Repositories.videoRepository;
 import express.Express;
 
@@ -34,6 +35,10 @@ public class VideoHandler {
 
         app.get("/rest/getVideoById", (req, res) -> {
             res.json(videoRepository.getVideoById(req.query("videoId")));
+        });
+
+        app.post("/api/likeVideo", (req, res) -> {
+            //temp
         });
 
         app.post("/api/uploadVideo", (req, res) -> {

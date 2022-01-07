@@ -8,6 +8,50 @@ import java.util.ArrayList;
 public class commentsRepository {
     Connection con;
 
+    public Comment dislikeComment(Comment relevantComment) {
+        try {
+            con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            PreparedStatement likeComment = con.prepareStatement("UPDATE comments SET dislikes = ? WHERE commentId = ?");
+            likeComment.setInt(1, relevantComment.getDislikes() + 1);
+            likeComment.setInt(2, relevantComment.getCommentId());
+            int rs = likeComment.executeUpdate();
+
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        relevantComment.setDislikes(relevantComment.getDislikes() + 1);
+        return relevantComment;
+    }
+
+    public Comment likeComment(Comment relevantComment){
+        try {
+            con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            PreparedStatement likeComment = con.prepareStatement("UPDATE comments SET likes = ? WHERE commentId = ?");
+            likeComment.setInt(1, relevantComment.getLikes() + 1);
+            likeComment.setInt(2, relevantComment.getCommentId());
+            int rs = likeComment.executeUpdate();
+
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        relevantComment.setLikes(relevantComment.getLikes() + 1);
+        return relevantComment;
+    }
+
     public ArrayList<Comment> getCommentsForVideo(Integer videoId) {
         ArrayList<Comment> relevantComments = new ArrayList<Comment>();
         try {

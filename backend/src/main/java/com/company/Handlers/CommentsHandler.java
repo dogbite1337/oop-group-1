@@ -21,9 +21,35 @@ public class CommentsHandler {
 
     private void initCommentsHandler() {
 
-        // login user
+        // post a comment
         app.post("/api/postComment", (req, res) -> {
             res.json(commentsRepository.postNewComment((Integer) req.body().get("relatesToVideoId"), (String) req.body().get("postedByUsername"), (String) req.body().get("content"), (Integer) req.body().get("responseToCommentId"), (Integer) req.body().get("timeOfPosting")));
+        });
+
+        app.post("/api/likeComment", (req, res) -> {
+           res.json(commentsRepository.likeComment(
+                   new Comment(
+                   (Integer) req.body().get("commentId"),
+                   (Integer) req.body().get("relatesToVideoId"),
+                   (String) req.body().get("postedByUsername"),
+                   (String) req.body().get("content"),
+                   (Integer) req.body().get("likes"),
+                   (Integer) req.body().get("dislikes"),
+                   (Integer) req.body().get("responseToCommentId"),
+                   (Integer) req.body().get("timeOfPosting"))));
+        });
+
+        app.post("/api/dislikeComment", (req, res) -> {
+            res.json(commentsRepository.dislikeComment(
+                    new Comment(
+                            (Integer) req.body().get("commentId"),
+                            (Integer) req.body().get("relatesToVideoId"),
+                            (String) req.body().get("postedByUsername"),
+                            (String) req.body().get("content"),
+                            (Integer) req.body().get("likes"),
+                            (Integer) req.body().get("dislikes"),
+                            (Integer) req.body().get("responseToCommentId"),
+                            (Integer) req.body().get("timeOfPosting"))));
         });
 
         app.get("/rest/getCommentsForVideoId", (req, res) -> {
