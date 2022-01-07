@@ -79,7 +79,6 @@ export default {
   width: 38px;
   height: 26px;
   background: rgba(45, 44, 44, 0.5);
-  border: 0.7px solid rgba(255, 255, 255, 0.45);
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   color: rgba(255, 255, 255, 0.45);
@@ -92,7 +91,6 @@ export default {
 .postButton {
   width: 45px;
   height: 35px;
-  outline: solid 0.7px white;
   background: #2d2c2c;
   color: white;
   font-family: 'Roboto', sans-serif;

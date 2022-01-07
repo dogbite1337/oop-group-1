@@ -39,7 +39,17 @@
       {{ comment.dislikes }}
     </div>
     <div class="SpaceDiv" />
-    <div class="ReplyDiv">Reply</div>
+    <div v-if="!expandedReply" @click="toggleReplyInput" class="ReplyDiv">
+      Reply
+    </div>
+    <div v-if="expandedReply" class="PostReplyDiv">
+      <button class="cancelButton" @click="toggleReplyInput">Cancel</button>
+      <div class="SpaceBlock" />
+      <button v-if="wantedReply.length > 0" class="postButton">Reply To</button>
+      <button disabled v-if="wantedReply.length == 0" class="disabledPostButton">
+        Reply To
+      </button>
+    </div>
     <div class="SpaceBlock" />
     <div class="timestampOfComments">
       <div class="SpaceBlock" />
@@ -48,9 +58,31 @@
     </div>
     <div class="SpaceBlock" />
   </div>
+  <div v-if="expandedReply" class="ReplyOpenDiv">
+    <div class="SpaceBlock" />
+    <div class="Test">
+      <div class="SpaceBlock" />
+      <img class="imgInReply" :src="User.profileURL" />
+      <div class="SpaceBlock" />
+      <div class="replyInputDiv">
+        <label class="YourReplyLabel" for="yourReply">Your reply</label>
+        <textarea
+          name="yourReply"
+          class="replyInput"
+          rows="5"
+          cols="33"
+          placeholder="Write here.."
+        >
+        </textarea>
+      </div>
+      <div class="SpaceBlock" />
+    </div>
+    <div class="SpaceBlock" />
+  </div>
 </template>
 <script>
 import User from '../jsClasses/general/User';
+
 export default {
   props: ['comment', 'timestampOfComments'],
   name: 'PostedComment',
@@ -58,9 +90,18 @@ export default {
   data() {
     return {
       User: null,
+      expandedReply: false,
+      wantedReply: '',
     };
   },
   methods: {
+    toggleReplyInput() {
+      if (this.expandedReply) {
+        this.expandedReply = false;
+      } else {
+        this.expandedReply = true;
+      }
+    },
     async like() {
       let likedCommentRes = await fetch(
         '/api/likeComment?' +
@@ -114,6 +155,45 @@ export default {
   grid-template-columns: auto max-content 30px;
   margin-top: -40px;
 }
+.postButton {
+  background: #2d2c2c;
+  color: white;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+.disabledPostButton {
+  background: rgba(45, 44, 44, 0.5);
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  color: rgba(255, 255, 255, 0.45);
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.imgInReply {
+  height: 40px;
+  width: 40px;
+  border-radius: 30px;
+  position: relative;
+  left: 20px;
+}
+.Test {
+  display: grid;
+  margin-left: -40px;
+  grid-template-columns: 0px 0px 1px max-content auto;
+  height: max-content;
+  background-color: #131313;
+  padding-top: 25px;
+  padding-bottom: 20px;
+  width: 370px;
+}
+
+.cancelButton {
+  background-color: #2d2c2c;
+  color: white;
+  padding: 3px;
+}
+
 .LikesDiv,
 .DislikesDiv {
   display: grid;
@@ -124,6 +204,28 @@ export default {
   padding-top: 3px;
   padding-left: 3px;
   padding-right: 2px;
+}
+.ReplyOpenDiv {
+  display: grid;
+  width: 100vw;
+  grid-template-columns: auto max-content auto;
+  background-color: yellow;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: black;
+}
+.YourReplyLabel {
+  color: white;
+  position: relative;
+  top: -85px;
+  left: 72px;
+}
+.replyInput {
+  padding-left: 10px;
+  outline: none;
+  padding-top: 3px;
+  color: black;
 }
 .CommentGrid {
   height: max-content;
@@ -156,7 +258,11 @@ export default {
   padding-top: 4px;
   padding-bottom: 10px;
 }
-
+.PostReplyDiv {
+  display: grid;
+  grid-template-columns: max-content 10px max-content;
+  color: white;
+}
 .usernameDiv {
   margin-top: 16px;
 }
@@ -183,5 +289,17 @@ export default {
 }
 .timeOfPostingDiv {
   margin-top: 16px;
+}
+
+@media screen and (max-width: 450px){
+  .Test{
+    width: max-content;
+    padding-right: 20px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .replyInput{
+    width: 180px;
+  }
 }
 </style>
