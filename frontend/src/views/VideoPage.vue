@@ -63,7 +63,8 @@
       <div class="SpaceDiv"/>
     </div>
     <div v-if="!showWatchNowInstead" class="videoTitleDiv">
-      {{video.title}}
+      <div class="titleDiv">{{video.title}}</div>
+      <div class="descriptionDiv">{{video.description}}</div>
     </div> 
     <div v-if="!showWatchNowInstead" class="viewsAndDateDiv">
       <div class="SpaceDiv" />
@@ -76,7 +77,7 @@
       </div>
       <div class="SpaceDiv" />
       <div class="uploadDateDiv square">
-        11-04
+        {{(new Date(video.uploadDate)).toLocaleDateString().replaceAll('/', '-')}}
       </div>
       <div class="SpaceDiv"/>
     </div>
@@ -210,7 +211,7 @@ export default {
           }));
       let videoResponse = await videoRes.json();
 
-      let emptyVideo = new Video(0, 0, '', '', '', 0, '', 0, 0, 0)
+      let emptyVideo = new Video()
       this.video = Object.assign(emptyVideo, videoResponse);
 
       this.video.videoURL = this.video.videoURL.replace("watch?v=", "embed/").concat("?enablejsapi=1&origin=http://example.com")
@@ -505,6 +506,14 @@ export default {
   background-color: black;
   padding-left: 17px;
   padding-bottom: 9px;
+}
+.titleDiv{
+  color: #939393;
+}
+.descriptionDiv{
+  padding-top: 2px;
+  padding-left: 5px;
+  padding-bottom: 2px;
 }
 .ChosenDescriptionDiv{
   color: #E75858;
