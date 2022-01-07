@@ -39,9 +39,13 @@ export default {
   mounted() {},
   data() {
     return {
-      currentUser: (this.$store.getters.getCurrentUser ? this.$store.getters.getCurrentUser : null),
+      currentUser: this.$store.getters.getCurrentUser
+        ? this.$store.getters.getCurrentUser
+        : null,
       wantedComment: '',
-      myImageUrl: (this.$store.getters.getCurrentUser ? this.$store.getters.getCurrentUser.profileURL : '')
+      myImageUrl: this.$store.getters.getCurrentUser
+        ? this.$store.getters.getCurrentUser.profileURL
+        : '',
     };
   },
   methods: {

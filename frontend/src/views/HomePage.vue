@@ -223,10 +223,10 @@ export default {
   async created() {
     let allVideos = await this.getVideosForCurrentPage();
     this.$store.dispatch('cacheFirstEightVideos', allVideos);
-    this.relevantVideos = []
-    for(let i = allVideos.length; i > 0; i--){
-      let video = new Video()
-      let newVideo = Object.assign(video, allVideos[i-1])
+    this.relevantVideos = [];
+    for (let i = allVideos.length; i > 0; i--) {
+      let video = new Video();
+      let newVideo = Object.assign(video, allVideos[i - 1]);
       this.relevantVideos.push(newVideo);
     }
     this.$store.subscribe(async (mutation, state) => {
@@ -241,19 +241,19 @@ export default {
         this.relevantUsers = [];
         this.relevantVideos = [];
         let cachedVideos = this.$store.getters.getEightFirstVideos;
-        for(let i = 0; i < cachedVideos.length; i++){
+        for (let i = 0; i < cachedVideos.length; i++) {
           let oldVideo = new Video();
-          oldVideo = Object.assign(oldVideo, cachedVideos[i])
-          this.relevantVideos.push(oldVideo)
+          oldVideo = Object.assign(oldVideo, cachedVideos[i]);
+          this.relevantVideos.push(oldVideo);
         }
       }
       if (mutation.type == 'setSearchResults') {
         this.relevantVideos = [];
         this.lastSearchQuery = this.$store.getters.getLastSearchQuery;
-        for(let i = mutation.payload.length; i > 0; i--){
-          let video = new Video()
-          let newVideo = Object.assign(video, mutation.payload[i-1])
-          if(newVideo.getVideoId() !== 0){
+        for (let i = mutation.payload.length; i > 0; i--) {
+          let video = new Video();
+          let newVideo = Object.assign(video, mutation.payload[i - 1]);
+          if (newVideo.getVideoId() !== 0) {
             this.searchResults.push(newVideo);
           }
         }
@@ -287,11 +287,11 @@ export default {
     this.showSearchPage = false;
     this.showResultsPage = false;
     let cachedVideos = this.$store.getters.getEightFirstVideos;
-    if(cachedVideos){
-      for(let i = 0; i < cachedVideos.length; i++){
+    if (cachedVideos) {
+      for (let i = 0; i < cachedVideos.length; i++) {
         let oldVideo = new Video();
-        oldVideo = Object.assign(oldVideo, cachedVideos[i])
-        this.relevantVideos.push(oldVideo)
+        oldVideo = Object.assign(oldVideo, cachedVideos[i]);
+        this.relevantVideos.push(oldVideo);
       }
     }
   },
@@ -344,7 +344,16 @@ export default {
         'Madness',
       ],
       showResultsPage: false,
-      tempVideo: new Video(7, 8, null, "test", 'xQc talks about the meaning of "juice"', "ha", 5655123, "xQc"),
+      tempVideo: new Video(
+        7,
+        8,
+        null,
+        'test',
+        'xQc talks about the meaning of "juice"',
+        'ha',
+        5655123,
+        'xQc'
+      ),
       searchResults: [],
       lastSearchQuery: this.$store.getters.getLastSearchQuery
         ? this.$store.getters.getLastSearchQuery

@@ -38,7 +38,17 @@ public class VideoHandler {
         });
 
         app.post("/api/likeVideo", (req, res) -> {
-            //temp
+            res.json(videoRepository.likeVideo(
+                    Integer.parseInt(req.body().get("videoId").toString()),
+                    Integer.parseInt(req.body().get("likes").toString())
+            ));
+        });
+
+        app.post("/api/dislikeVideo", (req, res) -> {
+            res.json(videoRepository.dislikeVideo(
+                    Integer.parseInt(req.body().get("videoId").toString()),
+                    Integer.parseInt(req.body().get("dislikes").toString())
+            ));
         });
 
         app.post("/api/uploadVideo", (req, res) -> {

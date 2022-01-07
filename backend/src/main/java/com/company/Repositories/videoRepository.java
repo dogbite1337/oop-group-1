@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class videoRepository {
     Connection con;
 
-    public Video likeVideo(Video relevantVideo) {
+    public Integer likeVideo(Integer videoId, Integer likes) {
         try {
             try {
                 con = DriverManager.getConnection(
@@ -18,8 +18,8 @@ public class videoRepository {
 
             String baseQuery = ("UPDATE videos SET likes = ? WHERE videoId = ?");
             PreparedStatement likeVideo = con.prepareStatement(baseQuery);
-            likeVideo.setInt(1, Integer.parseInt(relevantVideo.getLikes()) + 1);
-            likeVideo.setInt(2, relevantVideo.getVideoId());
+            likeVideo.setInt(1, (likes + 1));
+            likeVideo.setInt(2, videoId);
 
             int rs = likeVideo.executeUpdate();
 
@@ -27,8 +27,32 @@ public class videoRepository {
         }catch(Exception e){
             System.out.println(e);
         }
-        relevantVideo.setLikes(String.valueOf((Integer.parseInt(relevantVideo.getLikes()) + 1)));
-        return relevantVideo;
+
+        return (likes + 1);
+    }
+
+    public Integer dislikeVideo(Integer videoId, Integer dislikes) {
+        try {
+            try {
+                con = DriverManager.getConnection(
+                        "jdbc:mysql://localhost:3306/kittykitty","root","root");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            String baseQuery = ("UPDATE videos SET dislikes = ? WHERE videoId = ?");
+            PreparedStatement likeVideo = con.prepareStatement(baseQuery);
+            likeVideo.setInt(1, (dislikes + 1));
+            likeVideo.setInt(2, videoId);
+
+            int rs = likeVideo.executeUpdate();
+
+            con.close();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
+        return (dislikes + 1);
     }
 
     public ArrayList<Video> getVideosByUsername(String username) {

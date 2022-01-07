@@ -73,16 +73,9 @@
         </div>
         <div class="SpaceDiv" />
       </div>
-      <div class="SpaceDiv"/>
-    </div>
-    <div v-if="!showWatchNowInstead" class="videoTitleDiv">
-      <div class="titleDiv">{{video.title}}</div>
-      <div class="descriptionDiv">{{video.description}}</div>
-    </div> 
-    <div v-if="!showWatchNowInstead" class="viewsAndDateDiv">
-      <div class="SpaceDiv" />
-      <div class="square playButtonDiv">
-        <img class="playButton" src="../projectImages/small_grey_trans.png" />
+      <div v-if="!showWatchNowInstead" class="videoTitleDiv">
+        <div class="titleDiv">{{ video.title }}</div>
+        <div class="descriptionDiv">{{ video.description }}</div>
       </div>
       <div v-if="!showWatchNowInstead" class="viewsAndDateDiv">
         <div class="SpaceDiv" />
@@ -92,21 +85,28 @@
         <div class="SpaceDiv" />
         <div class="viewsDiv square">{{ spacedViews }} views</div>
         <div class="SpaceDiv" />
-        <div class="uploadDateDiv square">11-04</div>
+        <div class="uploadDateDiv square">
+          {{
+            new Date(video.uploadDate).toLocaleDateString().replaceAll('/', '-')
+          }}
+        </div>
         <div class="SpaceDiv" />
       </div>
-      <div class="SpaceDiv" />
-      <div class="uploadDateDiv square">
-        {{(new Date(video.uploadDate)).toLocaleDateString().replaceAll('/', '-')}}
       <div v-if="!showWatchNowInstead" class="likesAndDislikesNumberDiv">
         <div class="SpaceDiv" />
         <div class="likesNumberDiv">
-          <img src="../projectImages/like_black_background.png" />
+          <img
+            @click="likeVideo"
+            src="../projectImages/like_black_background.png"
+          />
           <div class="likesDiv">{{ spacedLikes }}</div>
         </div>
         <div class="SpaceDiv" />
         <div class="dislikesNumberDiv">
-          <img src="../projectImages/dislike_black_background.png" />
+          <img
+            @click="dislikeVideo"
+            src="../projectImages/dislike_black_background.png"
+          />
           <div class="thumbsDownDiv">{{ spacedDislikes }}</div>
         </div>
         <div class="SpaceDiv" />
@@ -199,7 +199,7 @@ export default {
       height: window.screen.height / 2,
       showCommentsSection: false,
       showDescriptionSection: true,
-      relevantComments: []
+      relevantComments: [],
     };
   },
   async created() {
@@ -216,16 +216,16 @@ export default {
     window.scrollTo(0, 0);
 
     let commentsRes = await fetch(
-        '/rest/getCommentsForVideoId?' +
-          new URLSearchParams({
-            videoId: this.$route.params.id
-          })
-      );
+      '/rest/getCommentsForVideoId?' +
+        new URLSearchParams({
+          videoId: this.$route.params.id,
+        })
+    );
     let commentsResponse = await commentsRes.json();
     this.amountOfComments = commentsResponse.length;
-    for(let i = 0; i < commentsResponse.length; i++) {
-      let newComment = new Comment(0,0,"","",0,0,0,0);
-      newComment = Object.assign(newComment,commentsResponse[i]);
+    for (let i = 0; i < commentsResponse.length; i++) {
+      let newComment = new Comment(0, 0, '', '', 0, 0, 0, 0);
+      newComment = Object.assign(newComment, commentsResponse[i]);
       this.relevantComments.push(newComment);
     }
     console.log(this.relevantComments);
@@ -241,6 +241,34 @@ export default {
   },
   watch: {},
   methods: {
+    async likeVideo() {
+      let relevantInfo = {
+        videoId: this.video.videoId,
+        likes: this.video.likes,
+      };
+      let likedVideoRes = await fetch('/api/likeVideo', {
+        method: 'POST',
+        body: JSON.stringify(relevantInfo),
+      });
+      let likedVideoResponse = await likedVideoRes.json();
+
+      this.video.likes = likedVideoResponse;
+      this.spacedLikes = this.video.likes;
+    },
+    async dislikeVideo() {
+      let relevantInfo = {
+        videoId: this.video.videoId,
+        dislikes: this.video.dislikes,
+      };
+      let dislikedVideoRes = await fetch('/api/dislikeVideo', {
+        method: 'POST',
+        body: JSON.stringify(relevantInfo),
+      });
+      let dislikedVideoResponse = await dislikedVideoRes.json();
+
+      this.video.dislikes = dislikedVideoResponse;
+      this.spacedDislikes = this.video.dislikes;
+    },
     async actOnResize() {
       this.width = window.screen.width / 2;
       this.height = window.screen.height / 2;
@@ -261,8 +289,8 @@ export default {
       );
       let videoResponse = await videoRes.json();
 
-      let emptyVideo = new Video()
-      let emptyVideo = new Video(0, 0, '', '', '', 0, '', 0, 0, 0);
+      let emptyVideo = new Video();
+
       this.video = Object.assign(emptyVideo, videoResponse);
 
       this.video.videoURL = this.video.videoURL
@@ -297,6 +325,9 @@ export default {
       let startFrom = stringToPad % 1000;
       let spacedString = '';
       startFrom = startFrom.toString();
+      if (stringToPad.length <= 3) {
+        return parseInt(stringToPad);
+      }
 
       for (let i = 0; i < stringToPad.length; i++) {
         if (i != 0 && (i - (stringToPad.length % 3)) % 3 == 0) {
@@ -306,10 +337,10 @@ export default {
         }
         spacedString = base;
       }
-      return spacedString;
+
+      return parseInt(spacedString);
     },
     clickedMe(e) {
-      console.log(e.target.className);
       if (e.target.className == 'notChosenCommentsDiv') {
         this.showCommentsSection = true;
         this.showDescriptionSection = false;
@@ -573,16 +604,15 @@ export default {
   padding-left: 17px;
   padding-bottom: 9px;
 }
-.titleDiv{
+.titleDiv {
   color: #939393;
 }
-.descriptionDiv{
+.descriptionDiv {
   padding-top: 2px;
   padding-left: 5px;
   padding-bottom: 2px;
 }
-.ChosenDescriptionDiv{
-  color: #E75858;
+
 .ChosenDescriptionDiv,
 .ChosenCommentsDiv {
   color: #e75858;

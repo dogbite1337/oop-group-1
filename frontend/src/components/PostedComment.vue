@@ -60,7 +60,7 @@ export default {
       let likedCommentRes = await fetch(
         '/api/likeComment?' +
           new URLSearchParams({
-            commentId: this.comment.commentId
+            commentId: this.comment.commentId,
           }),
         {
           method: 'POST',
@@ -69,13 +69,12 @@ export default {
       );
       let likedCommentResponse = await likedCommentRes.json();
       this.comment.likes = likedCommentResponse.likes;
-   
     },
     async dislike() {
       let dislikedCommentRes = await fetch(
         '/api/dislikeComment?' +
           new URLSearchParams({
-            commentId: this.comment.commentId
+            commentId: this.comment.commentId,
           }),
         {
           method: 'POST',
