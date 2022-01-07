@@ -61,7 +61,6 @@ h1 {
   margin: 10px 5% 10px 5%;
   border-radius: 5px;
 }
-</style>
 
 .itemsContainer {
   margin: 10px 5px 10px 5px;
