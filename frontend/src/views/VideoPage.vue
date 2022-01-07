@@ -73,8 +73,16 @@
         </div>
         <div class="SpaceDiv" />
       </div>
-      <div v-if="!showWatchNowInstead" class="videoTitleDiv">
-        {{ video.title }}
+      <div class="SpaceDiv"/>
+    </div>
+    <div v-if="!showWatchNowInstead" class="videoTitleDiv">
+      <div class="titleDiv">{{video.title}}</div>
+      <div class="descriptionDiv">{{video.description}}</div>
+    </div> 
+    <div v-if="!showWatchNowInstead" class="viewsAndDateDiv">
+      <div class="SpaceDiv" />
+      <div class="square playButtonDiv">
+        <img class="playButton" src="../projectImages/small_grey_trans.png" />
       </div>
       <div v-if="!showWatchNowInstead" class="viewsAndDateDiv">
         <div class="SpaceDiv" />
@@ -87,6 +95,9 @@
         <div class="uploadDateDiv square">11-04</div>
         <div class="SpaceDiv" />
       </div>
+      <div class="SpaceDiv" />
+      <div class="uploadDateDiv square">
+        {{(new Date(video.uploadDate)).toLocaleDateString().replaceAll('/', '-')}}
       <div v-if="!showWatchNowInstead" class="likesAndDislikesNumberDiv">
         <div class="SpaceDiv" />
         <div class="likesNumberDiv">
@@ -250,6 +261,7 @@ export default {
       );
       let videoResponse = await videoRes.json();
 
+      let emptyVideo = new Video()
       let emptyVideo = new Video(0, 0, '', '', '', 0, '', 0, 0, 0);
       this.video = Object.assign(emptyVideo, videoResponse);
 
@@ -561,6 +573,16 @@ export default {
   padding-left: 17px;
   padding-bottom: 9px;
 }
+.titleDiv{
+  color: #939393;
+}
+.descriptionDiv{
+  padding-top: 2px;
+  padding-left: 5px;
+  padding-bottom: 2px;
+}
+.ChosenDescriptionDiv{
+  color: #E75858;
 .ChosenDescriptionDiv,
 .ChosenCommentsDiv {
   color: #e75858;

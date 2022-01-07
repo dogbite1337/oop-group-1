@@ -1,18 +1,8 @@
 export default class Video {
-  constructor(
-    videoId,
-    userId,
-    videoURL,
-    title,
-    description,
-    views,
-    postedByUsername,
-    likes,
-    dislikes,
-    stars
-  ) {
+  constructor(videoId, userId, uploadDate, videoURL, title, description, views, postedByUsername, likes, dislikes, stars) {
     this.videoId = videoId;
     this.userId = userId;
+    this.uploadDate = uploadDate
     this.videoURL = videoURL;
     this.title = title;
     this.description = description;
@@ -21,6 +11,14 @@ export default class Video {
     this.likes = likes;
     this.dislikes = dislikes;
     this.stars = stars;
+  }
+
+  getUploadDate() {
+    return this.uploadDate;
+  }
+
+  setUploadDate(uploadDate) {
+    this.uploadDate = uploadDate;
   }
 
   getStars() {

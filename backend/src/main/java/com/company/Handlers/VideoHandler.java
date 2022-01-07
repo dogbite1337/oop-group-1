@@ -44,6 +44,7 @@ public class VideoHandler {
         app.post("/api/uploadVideo", (req, res) -> {
             res.json(videoRepository.uploadNewVideo(
                     req.body().get("uploaderId").toString(),
+                    req.body().get("uploadDate").toString(),
                     req.body().get("videoURL").toString(),
                     req.body().get("title").toString(),
                     req.body().get("description").toString(),
