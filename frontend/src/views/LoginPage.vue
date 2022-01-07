@@ -7,10 +7,7 @@
         <div class="SpaceDiv" />
         <p class="HomeText">Home</p>
         <div class="SpaceDiv" />
-        <img
-          class="catIcon"
-          src="../projectImages/whiteCatBlackBaground.png"
-        />
+        <img class="catIcon" src="../projectImages/whiteCatBlackBaground.png" />
         <div class="SpaceDiv" />
       </div>
     </router-link>
@@ -24,8 +21,13 @@
       <div class="emailGrid">
         <div class="SpaceDiv" />
         <div class="usernameText">Username</div>
-        <div class="SpaceDiv"/>
-        <input v-model="wantedUserName" type="email" placeholder="Please enter your email" class="emailInput">
+        <div class="SpaceDiv" />
+        <input
+          v-model="wantedUserName"
+          type="email"
+          placeholder="Please enter your email"
+          class="emailInput"
+        />
         <div class="SpaceDiv" />
       </div>
       <div class="LineDiv" />
@@ -33,10 +35,14 @@
         <div class="SpaceDiv" />
         <div class="passwordText">Password</div>
         <div class="SpaceDiv" />
-        <input v-model="wantedPassword" type="password" class="passwordInput" placeholder="Please enter your password">
+        <input
+          v-model="wantedPassword"
+          type="password"
+          class="passwordInput"
+          placeholder="Please enter your password"
+        />
         <div class="SpaceDiv" />
       </div>
-      
     </div>
     <div class="ButtonsDiv">
       <div class="SpaceDiv" />
@@ -44,7 +50,14 @@
         <button class="registerButton" value="Register">Register</button>
       </router-link>
       <div class="SpaceDiv" />
-      <button class="loginButton" @click="tryToLogIn" value="Login" v-if="canLogIn">Login</button>
+      <button
+        class="loginButton"
+        @click="tryToLogIn"
+        value="Login"
+        v-if="canLogIn"
+      >
+        Login
+      </button>
       <button
         class="disabledLoginButton"
         disabled
@@ -60,13 +73,13 @@
   <Footer />
 </template>
 <script>
-import User from '../jsClasses/general/User'
-import Footer from '../components/Footer.vue'
+import User from '../jsClasses/general/User';
+import Footer from '../components/Footer.vue';
 
 export default {
   name: 'LoginPage',
   components: {
-    Footer
+    Footer,
   },
   data() {
     return {
@@ -78,18 +91,16 @@ export default {
   },
   watch: {
     wantedUserName() {
-      if(this.wantedUserName.length > 0 && this.wantedPassword.length > 0){
+      if (this.wantedUserName.length > 0 && this.wantedPassword.length > 0) {
         this.canLogIn = true;
-      }
-      else{
+      } else {
         this.canLogIn = false;
       }
     },
     wantedPassword() {
-      if(this.wantedUserName.length > 0 && this.wantedPassword.length > 0){
+      if (this.wantedUserName.length > 0 && this.wantedPassword.length > 0) {
         this.canLogIn = true;
-      }
-      else{
+      } else {
         this.canLogIn = false;
       }
     },
@@ -98,8 +109,8 @@ export default {
     async tryToLogIn() {
       let user = {
         providedUserName: this.wantedUserName,
-        providedPassword: this.wantedPassword
-      }
+        providedPassword: this.wantedPassword,
+      };
       let res = await fetch('/api/login', {
         method: 'POST',
         body: JSON.stringify(user),
@@ -114,7 +125,7 @@ export default {
         user = Object.assign(currentUser, response);
         this.$store.dispatch('login', user);
         document.getElementsByClassName('HomeLink')[0].click();
-        this.$router.push('/')
+        this.$router.push('/');
       }
     },
     clickedMe(e) {
@@ -139,7 +150,7 @@ export default {
   outline: none;
   border: none;
 }
-.HomeLink{
+.HomeLink {
   text-decoration: none;
 }
 
@@ -151,7 +162,7 @@ export default {
   margin-right: auto;
 }
 
-.LineDiv{
+.LineDiv {
   height: 1px;
   background-color: black;
   margin-left: -30px;
@@ -204,14 +215,12 @@ export default {
   height: 100vh;
 }
 
-
-
-.girlsGrid{
+.girlsGrid {
   display: grid;
   grid-template-columns: auto max-content auto;
 }
 
-.emailGrid{
+.emailGrid {
   display: grid;
   grid-template-columns: 24px max-content 20px max-content auto;
   margin-top: 10px;
@@ -219,7 +228,7 @@ export default {
   padding-bottom: 20px;
 }
 
-.passwordGrid{
+.passwordGrid {
   display: grid;
   grid-template-columns: 28px max-content 20px max-content auto;
   padding-top: 20px;
@@ -288,14 +297,17 @@ export default {
   margin-bottom: 12px;
 }
 
-@media screen and (min-width: 1000px){
-  .girlsOpenEyesDiv, .girlsClosedEyesDiv {
+@media screen and (min-width: 1000px) {
+  .girlsOpenEyesDiv,
+  .girlsClosedEyesDiv {
     transform: scale(1.5);
     position: relative;
     top: -50px;
   }
-  
-  .registerButton, .loginButton, .disabledLoginButton {
+
+  .registerButton,
+  .loginButton,
+  .disabledLoginButton {
     transform: scale(1.1);
   }
 
@@ -303,74 +315,86 @@ export default {
     width: 260px;
   }
 
-  .inputGrid{
+  .inputGrid {
     width: 500px;
   }
-  .usernameText, .passwordText {
+  .usernameText,
+  .passwordText {
     padding-left: 0px;
     margin-left: 0px;
   }
-  .ButtonsDiv{
+  .ButtonsDiv {
     width: 500px;
   }
 }
 
-@media screen and (max-width: 500px){
-  .girlsOpenEyesDiv{
+@media screen and (max-width: 500px) {
+  .girlsOpenEyesDiv {
     width: 400px;
   }
 }
 
-@media screen and (max-width: 450px){
-  .girlsOpenEyesDiv, .girlsClosedEyesDiv{
+@media screen and (max-width: 450px) {
+  .girlsOpenEyesDiv,
+  .girlsClosedEyesDiv {
     width: 350px;
   }
 
-  .ButtonsDiv{
+  .ButtonsDiv {
     width: max-content;
   }
-  .registerButton, .loginButton, .disabledLoginButton {
+  .registerButton,
+  .loginButton,
+  .disabledLoginButton {
     transform: scale(0.9);
   }
 }
 
-@media screen and (max-width: 400px){
-  .girlsOpenEyesDiv, .girlsClosedEyesDiv{
+@media screen and (max-width: 400px) {
+  .girlsOpenEyesDiv,
+  .girlsClosedEyesDiv {
     width: 300px;
   }
 
-  .ButtonsDiv{
+  .ButtonsDiv {
     width: max-content;
   }
-  .registerButton, .loginButton, .disabledLoginButton {
+  .registerButton,
+  .loginButton,
+  .disabledLoginButton {
     transform: scale(0.8);
   }
   .inputGrid {
     width: 260px;
   }
 
-  .usernameText, .passwordText {
+  .usernameText,
+  .passwordText {
     padding-left: 0px;
     margin-left: -40px;
   }
 }
 
-@media screen and (max-width: 325px){
-  .girlsOpenEyesDiv, .girlsClosedEyesDiv{
+@media screen and (max-width: 325px) {
+  .girlsOpenEyesDiv,
+  .girlsClosedEyesDiv {
     width: 250px;
   }
 
-  .ButtonsDiv{
+  .ButtonsDiv {
     width: max-content;
   }
-  .registerButton, .loginButton, .disabledLoginButton {
+  .registerButton,
+  .loginButton,
+  .disabledLoginButton {
     transform: scale(0.7);
   }
   .inputGrid {
     width: 220px;
   }
 
-  .usernameText, .passwordText {
+  .usernameText,
+  .passwordText {
     padding-left: 0px;
     margin-left: -40px;
   }
@@ -379,30 +403,33 @@ export default {
     width: 140px;
   }
 
-  .ButtonsDiv{
+  .ButtonsDiv {
     width: 250px;
     padding: 0px;
     margin: 0px;
   }
 }
 
-@media screen and (max-width: 325px){
-  
-  .girlsOpenEyesDiv, .girlsClosedEyesDiv{
+@media screen and (max-width: 325px) {
+  .girlsOpenEyesDiv,
+  .girlsClosedEyesDiv {
     width: 250px;
   }
 
-  .ButtonsDiv{
+  .ButtonsDiv {
     width: max-content;
   }
-  .registerButton, .loginButton, .disabledLoginButton {
+  .registerButton,
+  .loginButton,
+  .disabledLoginButton {
     transform: scale(0.6);
   }
   .inputGrid {
     width: 220px;
   }
 
-  .usernameText, .passwordText {
+  .usernameText,
+  .passwordText {
     padding-left: 0px;
     margin-left: -40px;
   }
@@ -411,7 +438,7 @@ export default {
     width: 140px;
   }
 
-  .ButtonsDiv{
+  .ButtonsDiv {
     grid-template-columns: auto 50px 70px 50px auto;
     width: 180px;
     padding: 0px;

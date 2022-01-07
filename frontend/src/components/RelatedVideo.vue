@@ -1,51 +1,68 @@
 <template>
-  <router-link v-if="!$store.getters.getCurrentUser" :to="{ path: '/VideoPage/' + (video ? video.videoId : 0), query: (video ? video.videoId : 0)}">
+  <router-link
+    v-if="!$store.getters.getCurrentUser"
+    :to="{
+      path: '/VideoPage/' + (video ? video.videoId : 0),
+      query: video ? video.videoId : 0,
+    }"
+  >
     <div class="BoxDiv">
-    <div @click="clickedRelatedVideo" class="relatedVideoBox">
-      <div class="SpaceBlock" />
-      <div class="linkBox">
-        <img class="videoImage" :src="'https://img.youtube.com/vi/' + video.videoURL.substring(32,43) + '/default.jpg'" />
-      </div>
-      <div class="SpaceBlock" />
-      <div class="textDiv">
-        <div class="SpaceBlock"/>
-        <div class="titleDiv">
-          {{video.title}}
+      <div @click="clickedRelatedVideo" class="relatedVideoBox">
+        <div class="SpaceBlock" />
+        <div class="linkBox">
+          <img
+            class="videoImage"
+            :src="
+              'https://img.youtube.com/vi/' +
+              video.videoURL.substring(32, 43) +
+              '/default.jpg'
+            "
+          />
         </div>
-        <div class="SpaceBlock"/>
-        <div class="UploaderDiv">
-          <div class="UpDiv">UP</div>
+        <div class="SpaceBlock" />
+        <div class="textDiv">
           <div class="SpaceBlock" />
-          <div class="UploaderTextDiv">{{video.postedByUsername}}</div>
-        </div>
-        <div class="SpaceBlock"/>
-        <div class="ViewsDiv">
-          <div class="PlayerDiv">
-            <img class="PlayerImage" src="../projectImages/video-player.png" />
+          <div class="titleDiv">
+            {{ video.title }}
           </div>
-          <div class="SpaceDiv" />
-          <div class="ViewsNumberDiv">{{spacedViews}} views</div>
+          <div class="SpaceBlock" />
+          <div class="UploaderDiv">
+            <div class="UpDiv">UP</div>
+            <div class="SpaceBlock" />
+            <div class="UploaderTextDiv">{{ video.postedByUsername }}</div>
+          </div>
+          <div class="SpaceBlock" />
+          <div class="ViewsDiv">
+            <div class="PlayerDiv">
+              <img
+                class="PlayerImage"
+                src="../projectImages/video-player.png"
+              />
+            </div>
+            <div class="SpaceDiv" />
+            <div class="ViewsNumberDiv">{{ spacedViews }} views</div>
+          </div>
+          <div class="SpaceBlock" />
         </div>
-        <div class="SpaceBlock"/>
+        <div class="SpaceBlock" />
       </div>
-      <div class="SpaceBlock" />
     </div>
-  </div>
   </router-link>
 </template>
 <script>
-
-import store from '../store'
+import store from '../store';
 export default {
   props: ['video'],
   name: 'RelatedVideo',
   mounted() {
-    this.spacedViews = this.renderSpacedNumbers(this.video.views.toString())
+    this.spacedViews = this.renderSpacedNumbers(this.video.views.toString());
   },
   data() {
     return {
-      linksTo: (this.$store.getters.getFirstEightVideos ? this.$store.getters.getFirstEightVideos : null),
-      spacedViews: 0
+      linksTo: this.$store.getters.getFirstEightVideos
+        ? this.$store.getters.getFirstEightVideos
+        : null,
+      spacedViews: 0,
     };
   },
   methods: {
@@ -53,23 +70,22 @@ export default {
       this.$store.dispatch('updateRelatedVideoId', this.video.videoId);
     },
     renderSpacedNumbers(stringToPad) {
-      let base = ''
+      let base = '';
       let startFrom = stringToPad % 1000;
       let spacedViews = '';
       startFrom = startFrom.toString();
 
-      for(let i = 0; i < stringToPad.length; i++){
-        if(i != 0 && (i - stringToPad.length % 3) % 3 == 0){
-          base += ' ' + stringToPad[i]
-        }
-        else{
-          base += stringToPad[i]
+      for (let i = 0; i < stringToPad.length; i++) {
+        if (i != 0 && (i - (stringToPad.length % 3)) % 3 == 0) {
+          base += ' ' + stringToPad[i];
+        } else {
+          base += stringToPad[i];
         }
         spacedViews = base;
       }
-      return spacedViews;  
-    }
-  }
+      return spacedViews;
+    },
+  },
 };
 </script>
 
@@ -80,7 +96,7 @@ export default {
   text-decoration: none;
 }
 
-.UpDiv{
+.UpDiv {
   height: 7px;
   width: 8px;
   background-color: black;
@@ -91,13 +107,13 @@ export default {
   font-size: 7px;
 }
 
-.relatedVideoBox{
+.relatedVideoBox {
   background-color: black;
   height: max-content;
   display: grid;
   grid-template-columns: auto max-content 22px max-content auto;
   max-width: 1000px;
-  border-bottom: solid 0.5px #BFBFBF;
+  border-bottom: solid 0.5px #bfbfbf;
   width: 100vw;
   z-index: 3;
   position: relative;
@@ -105,32 +121,34 @@ export default {
   margin-right: auto;
 }
 
-.PlayerDiv{
+.PlayerDiv {
   background-color: grey;
   width: 13px;
   height: 12.2px;
 }
 
-.PlayerImage{
+.PlayerImage {
   width: 11px;
   height: 13px;
   margin-left: 1px;
   margin-top: -0.5px;
 }
 
-.linkBox, .videoImage{
+.linkBox,
+.videoImage {
   width: 191px;
   height: 95px;
 }
 
-.titleDiv{
-  color: #FFFFFF;
+.titleDiv {
+  color: #ffffff;
   margin-top: 5px;
   font-size: 12px;
   width: 160px;
 }
 
-.UploaderDiv, .ViewsDiv{
+.UploaderDiv,
+.ViewsDiv {
   font-size: 10px;
   color: #939393;
 }
@@ -141,16 +159,16 @@ export default {
   grid-template-columns: max-content 8px auto;
 }
 
-.ViewsDiv{
+.ViewsDiv {
   display: grid;
   grid-template-columns: max-content 8px auto;
 }
 
-.ViewsNumberDiv{
+.ViewsNumberDiv {
   margin-top: 0.5px;
 }
 
-.textDiv{
+.textDiv {
   display: grid;
   grid-template-rows: 1px max-content auto max-content 1px max-content 3px;
 }
