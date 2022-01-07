@@ -34,7 +34,7 @@
 import Comment from '../jsClasses/general/Comment';
 import store from '../store';
 export default {
-  props: [],
+  props: ['videoId'],
   name: 'CommentInput',
   mounted() {},
   data() {
@@ -52,7 +52,7 @@ export default {
     async postComment() {
       let comment = new Comment(
         0,
-        14,
+        this.videoId,
         this.$store.getters.getCurrentUser.username,
         this.wantedComment,
         0,
@@ -66,6 +66,7 @@ export default {
       });
 
       let response = await res.json();
+      this.$emit("postedComment", response);
     },
   },
 };
@@ -106,6 +107,9 @@ export default {
   background-color: black;
   margin-top: 10px;
   padding-bottom: 30px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .profileImage {

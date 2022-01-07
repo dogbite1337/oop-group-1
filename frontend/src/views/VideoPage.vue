@@ -145,13 +145,15 @@
         <div class="SpaceDiv" />
       </div>
     </div>
-    <CommentInput v-if="showCommentsSection" />
-    <PostedComment
-      v-for="(commentItem, index) of relevantComments"
-      :key="index"
-      :comment="commentItem"
-      class="commentBox"
-    />
+    <CommentInput class="postingCommentDiv" @postedComment="updateComments" :videoId="video.videoId" v-if="showCommentsSection" />
+    <div class="postedCommentsDiv" v-if="showCommentsSection">
+      <PostedComment
+        v-for="(commentItem, index) of relevantComments"
+        :key="index"
+        :comment="commentItem"
+        class="commentBox"
+      />
+    </div>
     <RelatedVideo
       v-for="(videoItem, index) of relatedVideos"
       :key="index"
@@ -241,6 +243,11 @@ export default {
   },
   watch: {},
   methods: {
+    updateComments(postedComment) {
+      let newComment = new Comment();
+      newComment = Object.assign(newComment, postedComment);
+      this.relevantComments.push(newComment);
+    },
     async likeVideo() {
       let relevantInfo = {
         videoId: this.video.videoId,
@@ -363,6 +370,9 @@ export default {
   border: none;
   font-family: 'Roboto', sans-serif;
   overflow-x: hidden;
+}
+.postingCommentDiv {
+  margin-bottom: 20px;
 }
 .backHomeDiv {
   position: absolute;
