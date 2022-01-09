@@ -122,7 +122,7 @@ public class searchHistoryRepository {
 
 
             Statement trendingSearchList = con.createStatement();
-            String query = "SELECT keyword, COUNT(historyId) FROM searchhistories GROUP BY keyword ORDER BY COUNT(historyId) DESC;";
+            String query = "SELECT keyword, COUNT(historyId) FROM searchhistories GROUP BY keyword ORDER BY COUNT(historyId) DESC LIMIT 10;";
             ResultSet result = trendingSearchList.executeQuery(query);
 
             while(result.next()) {

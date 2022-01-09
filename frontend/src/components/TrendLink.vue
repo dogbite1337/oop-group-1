@@ -4,7 +4,7 @@
   </div>
   <div class="trendGrid">
     <div class="itemsContainer">
-      <div v-for="(trend, index) of trends" :key="trend" class="item">
+      <div v-for="(trend, index) of trendingSearch" :key="trend" class="item">
         <p>
           {{
             index +
@@ -19,11 +19,18 @@
 </template>
 <script>
 export default {
-  props: ['trends'],
   name: 'TrendLink',
   data() {
-    return {};
+    return {
+      trendingSearch: [],
+    };
   },
+
+  async mounted(){
+    this.trendingSearch = await this.$store.dispatch('getTrendingSearch');
+    console.log(this.trendingSearch)
+  },
+
   methods: {},
 };
 </script>
