@@ -158,6 +158,7 @@
         :comment="commentItem"
         :timestampOfComments="timestampOfComments[index]"
         class="commentBox"
+        @postedAReply="updateCommentSection"
       />
     </div>
     <RelatedVideo
@@ -299,7 +300,7 @@ export default {
 
     document.addEventListener('scroll', () => {
       if (window.scrollY >= 368) {
-        this.showWatchNowInstead = true;
+        this.showWatchNowInstead = false;
       } else {
         this.showWatchNowInstead = false;
       }
@@ -308,6 +309,11 @@ export default {
   },
   watch: {},
   methods: {
+
+    updateCommentSection(newComment) {
+      console.log("Temp, reconsider")
+
+    },
     updateComments(postedComment) {
       let newComment = new Comment();
       newComment = Object.assign(newComment, postedComment);
@@ -328,7 +334,17 @@ export default {
         ' - ' +
         dateObject.getUTCFullYear();
       newDate =
-        newDate + ' ' + dateObject.getHours() + ':' + dateObject.getMinutes();
+        newDate + ' ' + dateObject.getHours() + ':';
+
+      if(dateObject.getMinutes() < 1) {
+        newDate += '00';
+      }
+      else if(dateObject.getMinutes() < 10) {
+        newDate += '0' + dateObject.getMinutes();
+      }
+      else{
+        newDate += dateObject.getMinutes();
+      }
       return newDate;
     },
     async likeVideo() {
