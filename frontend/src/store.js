@@ -126,6 +126,10 @@ export default createStore({
       })
 
       return res.json();
+    },
+    async getMatchedVideoList(store, keyword){
+      let res = await fetch('/rest/getMatchedVideoList/' + keyword);
+      return res.json();
     }
   },
 });

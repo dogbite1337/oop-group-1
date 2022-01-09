@@ -2,6 +2,7 @@ package com.company.Repositories;
 
 import com.company.DTOs.UserWithoutPassword;
 import com.company.Entities.SearchHistory;
+import com.company.Entities.Video;
 import com.company.utilities.Encrypter;
 import io.netty.util.internal.IntegerHolder;
 
@@ -136,5 +137,26 @@ public class searchHistoryRepository {
         }
 
         return trendingHistoryList;
+    }
+
+    public ArrayList<Video> getMatchedVideoList(String keyword) throws SQLException {
+        ArrayList<Video> matchedVideoList = new ArrayList<>();
+        try {
+            con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/kittykitty","root","root");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Statement trendingSearchList = con.createStatement();
+        String query = "SELECT * FROM videos WHERE title LIKE " + "'%" + keyword  + "%'";
+        ResultSet result = trendingSearchList.executeQuery(query);
+
+        while(result.next()) {
+            Video video = new Video(result.getInt("videoId"),result.getInt("userId"),result.getLong("uploadDate"), result.getString("videoUrl"),result.getString("title"),result.getString("description"),result.getInt("views"),result.getString("postedByUsername"), result.getString("likes"), result.getString("dislike"),result.getString("stars"));
+            matchedVideoList.add(video);
+        }
+
+        return matchedVideoList;
     }
 }

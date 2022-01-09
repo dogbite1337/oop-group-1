@@ -2,6 +2,7 @@ package com.company.Services;
 
 
 import com.company.Entities.SearchHistory;
+import com.company.Entities.Video;
 import com.company.Repositories.searchHistoryRepository;
 
 import java.sql.SQLException;
@@ -29,5 +30,9 @@ public class SearchHistoryLogic {
 
     public ArrayList<String> getTrendingSearch(){
         return searchHistoryRepository.getTrendingSearch();
+    }
+
+    public ArrayList<Video> getMatchedVideoList(String keyword) throws SQLException {
+        return searchHistoryRepository.getMatchedVideoList(keyword);
     }
 }

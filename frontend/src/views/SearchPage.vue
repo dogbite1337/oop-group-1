@@ -2,7 +2,7 @@
   <div class="MainDiv">
     <Header @update="register" />
     <div class="searchPage">
-      <TrendLink :trends="topTenTrend" />
+      <TrendLink/>
       <ExpandableSearchHistory />
       <div class="searchPageButtonsContainer">
         <button @click="register">Search</button>
@@ -36,9 +36,6 @@ export default {
   created() {},
 
   async mounted(){
-
-    this.trendingSearch = await this.$store.dispatch('getTrendingSearch');
-    console.log(this.trendingSearch)
 
     let boolean = false;
     this.$store.subscribe(async (mutation, state) => {
@@ -95,6 +92,8 @@ export default {
           });
         }
         await this.$store.dispatch('cacheSearchHistory', this.searchHistory);
+        this.$router.push('/SearchResult');
+
       } else if (this.currentUser && this.searchHistory.includes(searchParam)) {
         console.log('loggedin but already made this search before');
       } else if (
@@ -114,6 +113,7 @@ export default {
         this.searchHistory.unshift(obj);
 
         await this.$store.dispatch('cacheSearchHistory', this.searchHistory);
+        this.$router.push('/SearchResult');
       }
     },
     async clearHistory() {
