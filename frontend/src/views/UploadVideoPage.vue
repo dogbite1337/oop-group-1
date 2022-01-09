@@ -7,83 +7,124 @@
         <div class="SpaceDiv" />
         <p class="HomeText">Home</p>
         <div class="SpaceDiv" />
-        <img
-          class="catIcon"
-          src="../projectImages/whiteCatBlackBaground.png"
-        />
+        <img class="catIcon" src="../projectImages/whiteCatBlackBaground.png" />
         <div class="SpaceDiv" />
       </div>
     </router-link>
     <div class="videoPreviewDiv">
       <p class="Video Preview">Video Preview</p>
       <div class="VideoLinkBox">
-        <img class ="previewImage" :src="videoURL.length > 0 ? 'https://img.youtube.com/vi/' + videoURL.substring(32,43) + '/default.jpg' : 'https://cdn.vox-cdn.com/thumbor/HIluJzxPz3qH66lFxxHKVl10UzQ=/0x0:2040x1360/1200x800/filters:focal(857x517:1183x843)/cdn.vox-cdn.com/uploads/chorus_image/image/60211577/acastro_180403_1777_youtube_0001.0.jpg'" />
+        <img
+          class="previewImage"
+          :src="
+            videoURL.length > 0
+              ? 'https://img.youtube.com/vi/' +
+                videoURL.substring(32, 43) +
+                '/default.jpg'
+              : 'https://cdn.vox-cdn.com/thumbor/HIluJzxPz3qH66lFxxHKVl10UzQ=/0x0:2040x1360/1200x800/filters:focal(857x517:1183x843)/cdn.vox-cdn.com/uploads/chorus_image/image/60211577/acastro_180403_1777_youtube_0001.0.jpg'
+          "
+        />
         <div class="TitleDivInVideoPreview">
-            {{(titleOfVideo == '' ? "Title" : titleOfVideo)}}
+          {{ titleOfVideo == '' ? 'Title' : titleOfVideo }}
         </div>
         <div class="uploaderDiv">
-          <div class="SpaceDiv"/>
-          <div class="upDiv">
-            UP
-          </div>
-          <div class="SpaceDiv"/>
+          <div class="SpaceDiv" />
+          <div class="upDiv">UP</div>
+          <div class="SpaceDiv" />
           <div class="usernameDiv">
-            {{(currentUser != '' ? currentUser.getUsername() : 'None')}}
+            {{ currentUser != '' ? currentUser.getUsername() : 'None' }}
           </div>
-          <div class="SpaceDiv"/>
+          <div class="SpaceDiv" />
         </div>
       </div>
       <div class="inputsDiv">
         <p class="VideoUrlP">Video Url</p>
-        <input v-model="videoURL" class="urlInput" type="text" placeholder="Video url goes here..">
+        <input
+          v-model="videoURL"
+          class="urlInput"
+          type="text"
+          placeholder="Video url goes here.."
+        />
         <p class="VideoTitleP">Video Title</p>
-        <input v-model="titleOfVideo" class="titleInput" type="text" placeholder="What is the title of the video?">
+        <input
+          v-model="titleOfVideo"
+          class="titleInput"
+          type="text"
+          placeholder="What is the title of the video?"
+        />
         <p class="DescriptionP">Description</p>
-        <textarea v-model="descriptionOfVideo" class="DescriptionInput" placeholder="What is the video about? (Optional)">
+        <textarea
+          v-model="descriptionOfVideo"
+          class="DescriptionInput"
+          placeholder="What is the video about? (Optional)"
+        >
         </textarea>
       </div>
-      <button @click="uploadVideo" v-if="canUpload" class="uploadButton" value="Upload Video">Upload Video</button>
-      <button v-if="!canUpload" class="DisabledUploadButton" value="Upload Video">Upload Video</button>
+      <button
+        @click="uploadVideo"
+        v-if="canUpload"
+        class="uploadButton"
+        value="Upload Video"
+      >
+        Upload Video
+      </button>
+      <button
+        v-if="!canUpload"
+        class="DisabledUploadButton"
+        value="Upload Video"
+      >
+        Upload Video
+      </button>
     </div>
   </div>
   <Footer />
 </template>
 <script>
-import User from '../jsClasses/general/User'
-import Footer from '../components/Footer.vue'
-import store from '../store'
+import User from '../jsClasses/general/User';
+import Footer from '../components/Footer.vue';
+import store from '../store';
 
 export default {
   name: 'UploadVideoPage',
   components: {
-    Footer
+    Footer,
   },
   data() {
     return {
       videoURL: '',
       titleOfVideo: '',
       descriptionOfVideo: '',
-      currentUser: (this.$store.getters.getCurrentUser ? this.$store.getters.getCurrentUser : ''),
-      canUpload: false
+      currentUser: this.$store.getters.getCurrentUser
+        ? this.$store.getters.getCurrentUser
+        : '',
+      canUpload: false,
     };
   },
   watch: {
     videoURL() {
-      if(this.videoURL.length > 0 && this.titleOfVideo.length > 0 && this.$store.getters.getCurrentUser){
+      if (
+        this.videoURL.length > 0 &&
+        this.titleOfVideo.length > 0 &&
+        this.$store.getters.getCurrentUser
+      ) {
         this.canUpload = true;
       }
     },
     titleOfVideo() {
-      if(this.videoURL.length > 0 && this.titleOfVideo.length > 0 && this.$store.getters.getCurrentUser){
+      if (
+        this.videoURL.length > 0 &&
+        this.titleOfVideo.length > 0 &&
+        this.$store.getters.getCurrentUser
+      ) {
         this.canUpload = true;
       }
-    }
+    },
   },
   methods: {
     async uploadVideo() {
       let video = {
         uploaderId: this.currentUser.getUserId(),
-        videoURL: this.videoURL.substring(0,43),
+        videoURL: this.videoURL.substring(0, 43),
         uploadDate: Date.now(),
         title: this.titleOfVideo,
         description: this.descriptionOfVideo,
@@ -91,14 +132,14 @@ export default {
         postedByUsername: this.currentUser.getUsername(),
         likes: 0,
         dislikes: 0,
-        stars: 0
-      }
+        stars: 0,
+      };
       let res = await fetch('/api/uploadVideo', {
         method: 'POST',
         body: JSON.stringify(video),
       });
       document.getElementsByClassName('HomeLink')[0].click();
-    }
+    },
   },
 };
 </script>
@@ -112,14 +153,15 @@ export default {
   border: none;
   font-family: 'Roboto', sans-serif;
 }
-.HomeLink{
+.HomeLink {
   text-decoration: none;
 }
-p, div {
+p,
+div {
   color: white;
   text-align: center;
 }
-.uploadButton{
+.uploadButton {
   margin-top: 10px;
   margin-bottom: 10px;
   width: max-content;
@@ -133,7 +175,7 @@ p, div {
   padding-top: 2px;
   padding-bottom: 2px;
 }
-.DisabledUploadButton{
+.DisabledUploadButton {
   margin-top: 10px;
   margin-bottom: 10px;
   width: max-content;
@@ -151,14 +193,14 @@ p, div {
   background-color: rgba(45, 44, 44, 0.5);
   border: 0.7px solid rgba(255, 255, 255, 0.45);
 }
-.upDiv{
+.upDiv {
   width: 12px;
   height: 8px;
   background-color: white;
   margin-bottom: 7px;
   border: solid 1px #939393;
   font-size: 7px;
-  text-align:center;
+  text-align: center;
   padding-top: 1.5px;
   font-family: 'Roboto', sans-serif;
 }
@@ -175,17 +217,17 @@ input {
   padding-left: 10px;
   background-color: #131313;
   color: white;
-  border: 0.7px solid #FFFFFF;
+  border: 0.7px solid #ffffff;
   box-sizing: border-box;
   padding-top: 2.5px;
   padding-bottom: 2.5px;
 }
 
-.usernameDiv{
+.usernameDiv {
   padding-top: 0.75px;
   height: max-content;
 }
-.VideoLinkBox{
+.VideoLinkBox {
   border: solid 1px white;
   width: max-content;
   margin-left: auto;
@@ -214,7 +256,9 @@ input {
   padding-top: 5px;
   color: white;
 }
-.VideoUrlP, .DescriptionP, .VideoTitleP {
+.VideoUrlP,
+.DescriptionP,
+.VideoTitleP {
   margin-bottom: 2px;
   margin-top: 7px;
 }
@@ -225,7 +269,7 @@ input {
   height: 25px;
   width: 28px;
 }
-.TitleDivInVideoPreview{
+.TitleDivInVideoPreview {
   font-size: 13px;
   margin-bottom: 2px;
 }
@@ -238,16 +282,16 @@ input {
   color: white;
   margin-bottom: 15px;
 }
-.uploaderDiv{
+.uploaderDiv {
   display: grid;
   grid-template-columns: auto 14px 9px 100px auto;
   font-size: 10px;
   background-color: #131313;
-  height:14px;
+  height: 14px;
   padding: 0px;
   margin: 0px;
 }
-.upDiv{
+.upDiv {
   margin-top: 1.25px;
   margin-left: 2.5px;
   color: white;
@@ -260,14 +304,14 @@ input {
   margin-top: 15px;
   margin-bottom: 12px;
 }
-.videoPreviewDiv{
+.videoPreviewDiv {
   height: max-content;
   width: 388px;
   margin-left: auto;
   margin-right: auto;
   background-color: #131313;
   margin-bottom: 19px;
-  border: 0.7px solid #FFFFFF;
+  border: 0.7px solid #ffffff;
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   padding-top: 3px;

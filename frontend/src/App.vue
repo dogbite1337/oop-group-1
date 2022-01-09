@@ -7,34 +7,30 @@
 </template>
 <script>
 import Header from './components/Header.vue';
-import store from './store'
+import store from './store';
 
 export default {
   name: 'App',
   components: {
-    Header
+    Header,
   },
   data() {
-    return {
-    };
+    return {};
   },
-  created() {
-    
-  },
+  created() {},
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
 <style>
 * {
   margin: 0px;
   padding: 0px;
 }
-.app-main{
+.app-main {
   background-color: #131313;
 }
-.BackDrop{
+.BackDrop {
   height: 100vh;
   background-color: #131313;
 }
