@@ -310,9 +310,21 @@ export default {
   watch: {},
   methods: {
 
-    updateCommentSection(newComment) {
-      console.log("Temp, reconsider")
-
+    async updateCommentSection() {
+      let commentsRes = await fetch(
+      '/rest/getCommentsForVideoId?' +
+        new URLSearchParams({
+          videoId: this.$route.params.id,
+        })
+    );
+    let commentsResponse = await commentsRes.json();
+    let base = [];
+    base.append(commentsResponse[0])
+    // pop -1 responseToCommentId Comment
+    // find all comments that has above commentId as responseToCommentId
+    // increment
+    // if responseToCommentId != -1, break
+    console.log(commentsResponse);
     },
     updateComments(postedComment) {
       let newComment = new Comment();

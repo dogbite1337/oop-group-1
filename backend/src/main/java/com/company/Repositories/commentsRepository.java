@@ -62,7 +62,7 @@ public class commentsRepository {
         }
 
         try {
-            PreparedStatement getAllComments = con.prepareStatement("SELECT * FROM comments WHERE relatesToVideoId = ?");
+            PreparedStatement getAllComments = con.prepareStatement("SELECT * FROM comments WHERE relatesToVideoId = ? ORDER BY responseToCommentId ASC");
             getAllComments.setInt(1, videoId);
             ResultSet rs = getAllComments.executeQuery();
 
