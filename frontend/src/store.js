@@ -119,6 +119,13 @@ export default createStore({
       await fetch('/api/clearHistories/' + userId, 
       {
       method: 'DELETE'});
+    },
+    async getTrendingSearch(store){
+      let res = await fetch('/api/getTrendingSearch',{
+        method: 'GET'
+      })
+
+      return res.json();
     }
   },
 });

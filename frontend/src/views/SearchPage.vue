@@ -24,6 +24,7 @@ export default {
         topTenTrend: ['Cats', 'More Cats', 'All cats', 'Cats?!', 'Cats.', 'Cats!', 'Why are there so many cats', 'John', 'Stop This', 'Madness'],
         searchHistory: [],
         currentUser: null,
+        trendingSearch: [],
     };
   },
 
@@ -37,6 +38,10 @@ export default {
   },
 
   async mounted(){
+
+    this.trendingSearch = await this.$store.dispatch('getTrendingSearch');
+    console.log(this.trendingSearch)
+
     let boolean = false;
     this.$store.subscribe(async (mutation, state) => {
       let detailedSearchList

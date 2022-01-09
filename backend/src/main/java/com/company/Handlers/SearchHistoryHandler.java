@@ -40,7 +40,6 @@ public class SearchHistoryHandler {
             try {
                 ArrayList<SearchHistory> searchHistory = searchHistoryLogic.getSearchHistories(userId);
                 res.json(searchHistory);
-                System.out.println(searchHistory);
             } catch (SQLException e) {
                 e.printStackTrace();
                 res.json("false");
@@ -56,6 +55,10 @@ public class SearchHistoryHandler {
                 e.printStackTrace();
                 res.json("false");
             }
+        });
+
+        app.get("api/getTrendingSearch",(req,res) -> {
+            res.json(searchHistoryLogic.getTrendingSearch());
         });
     }
 }

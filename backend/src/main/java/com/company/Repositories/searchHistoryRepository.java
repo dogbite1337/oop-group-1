@@ -63,7 +63,6 @@ public class searchHistoryRepository {
         }
 
         con.close();
-        System.out.println(historyListOfUserDescendingByTime.size());
         return historyListOfUserDescendingByTime;
     }
 
@@ -109,5 +108,33 @@ public class searchHistoryRepository {
         }
 
         con.close();
+    }
+
+    public ArrayList<String> getTrendingSearch(){
+        ArrayList<String> trendingHistoryList = new ArrayList<>();
+        try{
+            try {
+                con = DriverManager.getConnection(
+                        "jdbc:mysql://localhost:3306/kittykitty","root","root");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+
+            Statement trendingSearchList = con.createStatement();
+            String query = "SELECT keyword, COUNT(historyId) FROM searchhistories GROUP BY keyword ORDER BY COUNT(historyId) DESC;";
+            ResultSet result = trendingSearchList.executeQuery(query);
+
+            while(result.next()) {
+                trendingHistoryList.add(result.getString("keyword"));
+            }
+
+
+        }
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return trendingHistoryList;
     }
 }
