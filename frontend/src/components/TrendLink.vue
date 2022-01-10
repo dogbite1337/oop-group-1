@@ -5,7 +5,7 @@
   <div class="trendGrid">
     <div class="itemsContainer">
       <div v-for="(trend, index) of trendingSearch" :key="trend" class="item">
-        <p>
+        <p @click="makeSearch(trend)">
           {{
             index +
             1 +
@@ -30,7 +30,12 @@ export default {
     this.trendingSearch = await this.$store.dispatch('getTrendingSearch');
   },
 
-  methods: {},
+  methods: {
+    async makeSearch(keyWord){
+      await this.$store.dispatch('setKeyWord', keyWord)
+      this.$router.push('/SearchResult');
+    }
+  },
 };
 </script>
 

@@ -9,7 +9,7 @@
              <div class="title">
                  <a class="titleText" :href="'/VideoPage/' + video.videoId">
                      {{displayTitleBeforeKey(video.title)}}
-                     <p class="keyword">{{keyword.trim()}}</p>
+                     <p class="keyword">{{displayKeyWord(video.title)}}</p>
                      {{displayTitleAfterKey(video.title)}}
                  </a>
                  <!-- <p>{{video.title}}</p> -->
@@ -38,16 +38,26 @@ export default {
         }
     },
 
+    created(){
+        console.log(this.$props.matchedVideoList)
+        console.log(this.$props.matchedVideoList[1].title)
+    },
+
     methods:{
         displayTitleBeforeKey(orginalTitle){
             let index = orginalTitle.toLowerCase().indexOf(this.keyword.toLowerCase())
             
-            return orginalTitle.substring(0,index).trim()
+            return orginalTitle.substring(0,index)
         },
         displayTitleAfterKey(orginalTitle){
             let index = orginalTitle.toLowerCase().indexOf(this.keyword.toLowerCase())
-            return orginalTitle.substring((index+this.keyword.length),orginalTitle.length).trim()
+            return orginalTitle.substring((index+this.keyword.length),orginalTitle.length)
         },
+        displayKeyWord(orginalTitle){
+            let index = orginalTitle.toLowerCase().indexOf(this.keyword.toLowerCase())
+            return orginalTitle.substring(index, index + this.keyword.length)
+
+        }
     }
 }
 </script>

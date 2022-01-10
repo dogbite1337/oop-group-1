@@ -58,7 +58,11 @@ public class SearchHistoryHandler {
         });
 
         app.get("api/getTrendingSearch",(req,res) -> {
-            res.json(searchHistoryLogic.getTrendingSearch());
+            try {
+                res.json(searchHistoryLogic.getTrendingSearch());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         });
 
         app.get("rest/getMatchedVideoList/:keyword", (req,res) ->{

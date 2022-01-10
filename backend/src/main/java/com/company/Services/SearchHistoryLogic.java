@@ -28,7 +28,7 @@ public class SearchHistoryLogic {
         searchHistoryRepository.clearHistories(userId);
     }
 
-    public ArrayList<String> getTrendingSearch(){
+    public ArrayList<String> getTrendingSearch() throws SQLException {
         return searchHistoryRepository.getTrendingSearch();
     }
 

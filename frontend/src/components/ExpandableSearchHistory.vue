@@ -14,7 +14,7 @@
         v-for="item of mySearchHistoryList.slice(0, 3)"
         :key="item"
       >
-        <p v-if="item">
+        <p v-if="item" @click="makeSearch(item.keyWord)">
           {{
             item.keyWord.length > 12
               ? item.keyWord.substring(0, 9) + '...'
@@ -26,7 +26,7 @@
 
     <div class="historyItemContainer" v-if="btnClicked && mySearchHistoryList">
       <div class="historyItem" v-for="item of mySearchHistoryList" :key="item">
-        <p v-if="item">
+        <p v-if="item" @click="makeSearch(item.keyWord)">
           {{
             item.keyWord.length > 12
               ? item.keyWord.substring(0, 9) + '...'
@@ -96,7 +96,12 @@ export default {
     });
   },
 
-  methods: {},
+  methods: {
+    async makeSearch(keyWord){
+      await this.$store.dispatch('setKeyWord', keyWord)
+      this.$router.push('/SearchResult');
+    }
+  },
 };
 </script>
 

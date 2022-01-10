@@ -111,7 +111,7 @@ public class searchHistoryRepository {
         con.close();
     }
 
-    public ArrayList<String> getTrendingSearch(){
+    public ArrayList<String> getTrendingSearch() throws SQLException {
         ArrayList<String> trendingHistoryList = new ArrayList<>();
         try{
             try {
@@ -135,7 +135,7 @@ public class searchHistoryRepository {
         catch (SQLException ex) {
             ex.printStackTrace();
         }
-
+        con.close();
         return trendingHistoryList;
     }
 
@@ -169,6 +169,7 @@ public class searchHistoryRepository {
             matchedVideoList.add(video);
         }
 
+        con.close();
         return matchedVideoList;
     }
 }

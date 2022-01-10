@@ -14,8 +14,8 @@ export default {
     },
 
     mounted(){
-        console.log("in Hasresult")
-        console.log(this.$props.matchedVideoList.length)
+        // console.log("in Hasresult")
+        // console.log(this.$props.matchedVideoList)
     },
 
     data(){
