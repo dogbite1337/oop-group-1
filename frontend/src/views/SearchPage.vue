@@ -57,7 +57,7 @@ export default {
         } else {
           console.log('user is not logged in');
         }
-        this.searchHistory = this.$store.getters.getMySearchHistoryList;
+        // this.searchHistory = this.$store.getters.getMySearchHistoryList;
         boolean = true;
       }
     });
@@ -69,6 +69,7 @@ export default {
     async register() {
       let searchParam = this.$store.getters.getKeyWord;
       if (this.currentUser && !this.searchHistory.includes(searchParam)) {
+        console.log("we r in ")
         let obj = {
           userId: this.currentUser.userId,
           keyWord: this.$store.getters.getKeyWord,
