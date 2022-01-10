@@ -36,7 +36,7 @@ export default {
   created() {},
 
   async mounted(){
-
+    let detailedSearchList;
     let boolean = false;
     this.$store.subscribe(async (mutation, state) => {
       if (mutation.type == 'setUser' && mutation.payload && !boolean) {

@@ -74,5 +74,7 @@ h1 {
   display: grid;
   grid-template-columns: repeat(2, 50%);
   grid-template-rows: repeat(5, 20%);
+  grid-gap: 5px;
+  justify-content: center;
 }
 </style>

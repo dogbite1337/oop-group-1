@@ -153,7 +153,19 @@ public class searchHistoryRepository {
         ResultSet result = trendingSearchList.executeQuery(query);
 
         while(result.next()) {
-            Video video = new Video(result.getInt("videoId"),result.getInt("userId"),result.getLong("uploadDate"), result.getString("videoUrl"),result.getString("title"),result.getString("description"),result.getInt("views"),result.getString("postedByUsername"), result.getString("likes"), result.getString("dislike"),result.getString("stars"));
+            Video video =
+                    new Video(result.getInt("videoId"),
+                            result.getInt("userId"),
+                            result.getTimestamp("uploadDate").getTime(),
+                            result.getString("videoUrl"),
+                            result.getString("title"),
+                            result.getString("description"),
+                            result.getInt("views"),
+                            result.getString("postedByUsername"),
+                            String.valueOf(result.getInt("likes")),
+                            String.valueOf(result.getInt("dislikes")),
+                            String.valueOf(result.getInt("stars")));
+
             matchedVideoList.add(video);
         }
 
