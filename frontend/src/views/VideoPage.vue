@@ -198,7 +198,7 @@ export default {
     window.addEventListener("resize", this.actOnResize);
 
     // See comment on method
-    this.incrementViewCount();
+    this.incrementViewCount(this.$route.path);
   },
   watch: {},
   methods: {
@@ -215,12 +215,15 @@ export default {
     // This is a rudimentary view count method. I spent a lot of time trying to get the
     // YouTube API to work in order to make this more robust, but didn't have any luck.
     // Using this for the time being
-    incrementViewCount() {
+    incrementViewCount(urlPath) {
       setTimeout(async function() {
-        await fetch("/api/incrementViewCount", {
-          method: "PUT",
-          body: JSON.stringify(this.video),
-        });
+        // the if statement verifies (partially) that the user has been on the same page for 15 seconds
+        if (this.$route.path === urlPath) {
+          await fetch("/api/incrementViewCount", {
+            method: "PUT",
+            body: JSON.stringify(this.video),
+          });
+        }
       }.bind(this), 15000);
     },
     async loadRelevantInformation(wantedUserId) {
