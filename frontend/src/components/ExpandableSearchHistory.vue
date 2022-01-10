@@ -40,12 +40,12 @@
 <script>
 export default {
   name: 'ExpandableSearchHistory',
-  props: ['searchHistory'],
   data() {
     return {
       btnClicked: false,
       // getting from state atm, change to fetch from DB when search page shown
-      mySearchHistoryList: [],
+      mySearchHistoryList: this.$store.getters
+          .getMySearchHistoryList,
     };
   },
   async mounted() {
@@ -53,11 +53,20 @@ export default {
     this.$store.subscribe(async (mutation, state) => {
       if (
         mutation.type == 'setMySearchHistoryList' &&
-        mutation.payload.length == 0
+        !this.$store.getters.getCurrentUser
       ) {
-        this.mySearchHistoryList = [];
+        this.mySearchHistoryList = await this.$store.getters
+          .getMySearchHistoryList;
         return;
       }
+
+      // if (
+      //   mutation.type == 'setMySearchHistoryList' &&
+      //   mutation.payload.length == 0
+      // ) {
+      //   this.mySearchHistoryList = [];
+      //   return;
+      // }
 
       if (
         mutation.type == 'setUser' &&
@@ -69,6 +78,7 @@ export default {
           this.$store.getters.getCurrentUser.userId
         );
         boolean = true;
+        return;
       }
       if (
         mutation.type == 'setMySearchHistoryList' &&
@@ -78,13 +88,7 @@ export default {
           'getSearchHistories',
           this.$store.getters.getCurrentUser.userId
         );
-      }
-      if (
-        mutation.type == 'setMySearchHistoryList' &&
-        !this.$store.getters.getCurrentUser
-      ) {
-        this.mySearchHistoryList = await this.$store.getters
-          .getMySearchHistoryList;
+        return;
       }
     });
   },

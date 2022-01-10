@@ -75,6 +75,7 @@ export default createStore({
   actions: {
     async login(store, currentUser) {
       store.commit('setUser', currentUser);
+      store.commit('setMySearchHistoryList', [])
     },
     async updateSearchResult(store, searchResults) {
       store.commit('setSearchResults', searchResults);
@@ -98,7 +99,7 @@ export default createStore({
       let res = await fetch('/api/whoami')
       let currentUser = await res.json();
       store.commit('setUser', currentUser);
-      store.commit('setMySearchHistoryList', [])
+      // store.commit('setMySearchHistoryList', [])
     },
     async logout(store) {
       await fetch('/api/logout')

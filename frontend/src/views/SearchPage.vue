@@ -5,8 +5,8 @@
       <TrendLink/>
       <ExpandableSearchHistory />
       <div class="searchPageButtonsContainer">
-        <button @click="register">Search</button>
-        <button @click="clearHistory">Clear History</button>
+        <button @click="register" type="button">Search</button>
+        <button @click="clearHistory" type="button">Clear History</button>
       </div>
     </div>
   </div>
@@ -40,7 +40,7 @@ export default {
     let boolean = false;
     this.$store.subscribe(async (mutation, state) => {
       if (mutation.type == 'setUser' && mutation.payload && !boolean) {
-        this.$store.dispatch('cacheSearchHistory', []);
+        // this.$store.dispatch('cacheSearchHistory', []);
         this.currentUser = mutation.payload;
         if (this.currentUser) {
           detailedSearchList = [];
@@ -56,6 +56,7 @@ export default {
           }
         } else {
           console.log('user is not logged in');
+          this.searchHistory = this.$store.getters.getMySearchHistoryList;
         }
         // this.searchHistory = this.$store.getters.getMySearchHistoryList;
         boolean = true;
@@ -68,8 +69,7 @@ export default {
   methods: {
     async register() {
       let searchParam = this.$store.getters.getKeyWord;
-      if (this.currentUser && !this.searchHistory.includes(searchParam)) {
-        console.log("we r in ")
+      if (this.currentUser && !this.searchHistory.includes(searchParam) && searchParam) {
         let obj = {
           userId: this.currentUser.userId,
           keyWord: this.$store.getters.getKeyWord,
@@ -95,14 +95,17 @@ export default {
         await this.$store.dispatch('cacheSearchHistory', this.searchHistory);
         this.$router.push('/SearchResult');
 
-      } else if (this.currentUser && this.searchHistory.includes(searchParam)) {
+      } else if (this.currentUser && this.searchHistory.includes(searchParam) && searchParam) {
         console.log('loggedin but already made this search before');
       } else if (
         !this.currentUser &&
         this.searchHistory.includes(searchParam)
+        && searchParam
       ) {
         console.log("didn't log in but already made this search before");
-      } else {
+      } else if(!this.currentUser &&
+        !this.searchHistory.includes(searchParam)
+        && searchParam) {
         if (this.searchHistory.length > 5) {
           this.searchHistory.splice(this.searchHistory.length - 1, 1);
         }
@@ -117,6 +120,7 @@ export default {
         this.$router.push('/SearchResult');
       }
     },
+
     async clearHistory() {
       this.searchHistory = [];
       await this.$store.dispatch('cacheSearchHistory', []);
