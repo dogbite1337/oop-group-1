@@ -157,8 +157,11 @@
         :key="index"
         :comment="commentItem"
         :timestampOfComments="timestampOfComments[index]"
+        :replies="currentReplies"
+        :commenters="currentCommenters"
         class="commentBox"
         @postedAReply="updateCommentSection"
+        @updateReplies="updateReplies"
       />
     </div>
     <RelatedVideo
@@ -210,6 +213,8 @@ export default {
       showDescriptionSection: true,
       relevantComments: [],
       timestampOfComments: [],
+      currentReplies: [],
+      currentCommenters: []
     };
   },
   async created() {
@@ -231,6 +236,7 @@ export default {
           videoId: this.$route.params.id,
         })
     );
+    // full width on mobile view on cards
     let commentsResponse = await commentsRes.json();
     this.amountOfComments = commentsResponse.length;
     for (let i = 0; i < commentsResponse.length; i++) {
@@ -309,22 +315,39 @@ export default {
   },
   watch: {},
   methods: {
-
+    async updateReplies(commentId) {
+      this.currentReplies = [];
+      this.currentCommenters = [];
+      let res = await fetch(
+        '/rest/getRepliesToComment?' +
+          new URLSearchParams({
+            commentId: commentId
+          }),
+        {
+          method: 'GET',
+        }
+      );
+      let response = await res.json();
+      console.log(response);
+      let newComment = new Comment(0, 0, '', '', 0, 0, 0, 0);
+      for(let i = 0; i < response.length; i++){
+        this.currentReplies.push(Object.assign(newComment, response[i]));
+        let uploaderRes = await fetch(
+        '/rest/getUserByUsername?' +
+          new URLSearchParams({
+            providedUsername: response[i].postedByUsername,
+          })
+        );
+        let userResponse = await uploaderRes.json();
+        console.log(userResponse);
+        let myUser = new User(userResponse.userId, userResponse.username, userResponse.description, userResponse.profileURL, userResponse.subscribers, userResponse.videosPosted)
+        console.log(myUser);
+        this.currentCommenters.push(myUser)
+      }
+      
+    },
     async updateCommentSection() {
-      let commentsRes = await fetch(
-      '/rest/getCommentsForVideoId?' +
-        new URLSearchParams({
-          videoId: this.$route.params.id,
-        })
-    );
-    let commentsResponse = await commentsRes.json();
-    let base = [];
-    base.append(commentsResponse[0])
-    // pop -1 responseToCommentId Comment
-    // find all comments that has above commentId as responseToCommentId
-    // increment
-    // if responseToCommentId != -1, break
-    console.log(commentsResponse);
+
     },
     updateComments(postedComment) {
       let newComment = new Comment();
@@ -345,16 +368,13 @@ export default {
           : dateObject.getUTCMonth() + 1) +
         ' - ' +
         dateObject.getUTCFullYear();
-      newDate =
-        newDate + ' ' + dateObject.getHours() + ':';
+      newDate = newDate + ' ' + dateObject.getHours() + ':';
 
-      if(dateObject.getMinutes() < 1) {
+      if (dateObject.getMinutes() < 1) {
         newDate += '00';
-      }
-      else if(dateObject.getMinutes() < 10) {
+      } else if (dateObject.getMinutes() < 10) {
         newDate += '0' + dateObject.getMinutes();
-      }
-      else{
+      } else {
         newDate += dateObject.getMinutes();
       }
       return newDate;

@@ -39,88 +39,37 @@
       {{ comment.dislikes }}
     </div>
     <div class="SpaceDiv" />
-    <div v-if="!expandedReply" @click="toggleReplyInput" class="ReplyDiv">
-      Reply
+    <div v-if="!expandedReply" class="ReplyDiv">
+      <div @click="toggleReplyInput" class="ReplyTextDiv">Reply</div>
+      <div class="SpaceBlock" />
+      <div v-if="!showComments" @click="showReplies" class="showRepliesDiv">
+        Show Replies
+      </div>
+      <div v-if="showComments" @click="hideReplies" class="showRepliesDiv">
+        Hide Replies
+      </div>
     </div>
     <div v-if="expandedReply" class="PostReplyDiv">
       <button class="cancelButton" @click="toggleReplyInput">Cancel</button>
       <div class="SpaceBlock" />
-      <button @click="postReply" v-if="wantedReply.length > 0" class="postButton">Reply To</button>
-      <button disabled v-if="wantedReply.length == 0" class="disabledPostButton">
+      <button
+        @click="postReply"
+        v-if="wantedReply.length > 0"
+        class="postButton"
+      >
+        Reply To
+      </button>
+      <button
+        disabled
+        v-if="wantedReply.length == 0"
+        class="disabledPostButton"
+      >
         Reply To
       </button>
     </div>
     <div class="SpaceBlock" />
-    <div class="timestampOfComments">
-
-    </div>
+    <div class="timestampOfComments"></div>
     <div class="SpaceBlock" />
-  </div>
-  <div v-if="isAReply" class="replyDiv">
-
-      <div class="ReplyGrid">
-        <div class="mainGrid">
-          <div class="SpaceDiv" />
-          <div class="userInReplyGrid">
-            <div class="SpaceDiv" />
-            <img v-if="User" :src="User.profileURL" class="commentImage" />
-            <div class="SpaceDiv" />
-            <div v-if="User" class="usernameDiv">{{ User.username }}</div>
-            <div class="SpaceDiv" />
-            <div v-if="comment && isANumberInput" class="timeOfPostingDiv">
-              Posted at {{ comment.timeOfPosting }}
-            </div>
-            <div v-if="comment && !isANumberInput" class="timeOfPostingDiv">
-              Posted at {{ convertDateObjectToString(new Date(comment.timeOfPosting)) }}
-            </div>
-            <div class="SpaceDiv" />
-          </div>
-          <div class="SpaceDiv" />
-        </div>
-        <div class="replyToCommentDiv">{{ comment.content }}</div>
-      </div>
-      <div v-if="comment" class="StatsInReplyDiv">
-        <div class="SpaceDiv" />
-        <div class="LikesDiv">
-          <img
-            @click="like"
-            class="commentLike"
-            src="../projectImages/like_black_background.png"
-          />
-          <div class="SpaceDiv" />
-          {{ comment.likes }}
-        </div>
-        <div class="SpaceDiv" />
-        <div class="DislikesDiv">
-          <img
-            @click="dislike"
-            class="commentDislike"
-            src="../projectImages/dislike_black_background.png"
-          />
-          <div class="SpaceDiv" />
-          {{ comment.dislikes }}
-        </div>
-        <div class="SpaceDiv" />
-        <div v-if="!expandedReply" @click="toggleReplyInput" class="ReplyDiv">
-          Reply
-        </div>
-        <div v-if="expandedReply" class="PostReplyDiv">
-          <button class="cancelButton" @click="toggleReplyInput">Cancel</button>
-          <div class="SpaceBlock" />
-          <button @click="postReply" v-if="wantedReply.length > 0" class="postButton">Reply To</button>
-          <button disabled v-if="wantedReply.length == 0" class="disabledPostButton">
-            Reply To
-          </button>
-        </div>
-        <div class="SpaceBlock" />
-        <div class="timestampOfReplies">
-          <div class="SpaceBlock" />
-          {{ timestampOfReplies[index] }}
-          <div class="EndBlock" />
-        </div>
-        <div class="SpaceBlock" />
-      </div>
-
   </div>
   <div v-if="expandedReply" class="ReplyOpenDiv">
     <div class="SpaceBlock" />
@@ -148,35 +97,40 @@
     </div>
     <div class="SpaceBlock" />
   </div>
+  <div class="commentersBox">
+    {{ commenters }}
+  </div>
 </template>
 <script>
 import User from '../jsClasses/general/User';
 import Comment from '../jsClasses/general/Comment';
+import CommentReply from '../components/CommentReply.vue';
 
 export default {
-  props: ['comment', 'timestampOfComments'],
+  components: ['CommentReply'],
+  props: ['comment', 'replies', 'timestampOfComments', 'commenters'],
   name: 'PostedComment',
-  mounted() {
-
-  },
-  created() {
-
-    if(this.comment.responseToCommentId != -1){
-      this.isAReply = true;
-    }
-  },
+  mounted() {},
+  created() {},
   data() {
     return {
       User: null,
       expandedReply: false,
       wantedReply: '',
-      replies: [],
       timestampOfReplies: [],
-      isAReply: false,
-      isANumberInput: isNaN(this.comment.timeOfPosting)
+      isAReply: this.comment.responseToCommentId == -1 ? false : true,
+      isANumberInput: isNaN(this.comment.timeOfPosting),
+      showComments: false,
     };
   },
   methods: {
+    async showReplies() {
+      this.$emit('updateReplies', this.comment.commentId);
+      this.showComments = true;
+    },
+    hideReplies() {
+      this.showComments = false;
+    },
     convertDateObjectToString(dateObject) {
       let newDate =
         (dateObject.getUTCDate() < 10
@@ -188,16 +142,13 @@ export default {
           : dateObject.getUTCMonth() + 1) +
         ' - ' +
         dateObject.getUTCFullYear();
-      newDate =
-        newDate + ' ' + dateObject.getHours() + ':';
+      newDate = newDate + ' ' + dateObject.getHours() + ':';
 
-      if(dateObject.getMinutes() < 1) {
+      if (dateObject.getMinutes() < 1) {
         newDate += '00';
-      }
-      else if(dateObject.getMinutes() < 10) {
+      } else if (dateObject.getMinutes() < 10) {
         newDate += '0' + dateObject.getMinutes();
-      }
-      else{
+      } else {
         newDate += dateObject.getMinutes();
       }
       return newDate;
@@ -219,11 +170,10 @@ export default {
       });
 
       let response = await res.json();
-      let newResponse = new Comment(0,0,'','',0,0,0,0)
-      newResponse = Object.assign(newResponse,response);
+      let newResponse = new Comment(0, 0, '', '', 0, 0, 0, 0);
+      newResponse = Object.assign(newResponse, response);
       this.replies.push(newResponse);
-      let minsAgo =
-        (Date.now() - new Date(newResponse.timeOfPosting)) / 60000;
+      let minsAgo = (Date.now() - new Date(newResponse.timeOfPosting)) / 60000;
       if (minsAgo < 1.0) {
         this.timestampOfReplies.push('Less than a minute ago');
       } else if (minsAgo >= 1.0 && minsAgo <= 59) {
@@ -279,7 +229,7 @@ export default {
         }
       }
       this.expandedReply = false;
-      this.$emit("postedAReply", this.replies);
+      this.$emit('postedAReply', this.replies);
     },
     toggleReplyInput() {
       if (this.expandedReply) {
@@ -318,6 +268,7 @@ export default {
     },
   },
   async mounted() {
+    console.log(this.replies);
     let commenterRes = await fetch(
       '/rest/getUserByUsername?' +
         new URLSearchParams({
@@ -327,10 +278,9 @@ export default {
     let commenterResponse = await commenterRes.json();
     let emptyUser = new User(0, '', '', '', 0, 0);
     this.User = Object.assign(emptyUser, commenterResponse);
-    if(this.comment.responseToCommentId == -1){
+    if (this.comment.responseToCommentId == -1) {
       this.isNotAReply = true;
-    }
-    else{
+    } else {
       this.isNotAReply = false;
     }
   },
@@ -340,7 +290,17 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap');
 
+.misc {
+  width: max-content;
+  height: max-content;
+  background-color: white;
+  margin-left: auto;
+  margin-right: auto;
+}
 
+.commentersBox {
+  background-color: white;
+}
 .timestampOfComments {
   color: white;
   width: 100vw;
@@ -366,7 +326,11 @@ export default {
   justify-items: right;
   max-width: 400px;
 }
-.StatsInReplyDiv{
+.CommentReplyDiv {
+  width: 100vw;
+  max-width: 400px;
+}
+.StatsInReplyDiv {
   display: grid;
   grid-template-columns: 30px max-content 10px max-content 15px auto auto max-content 1px;
   background-color: black;
@@ -427,7 +391,7 @@ export default {
   padding-left: 3px;
   padding-right: 2px;
 }
-.replyInputDiv{
+.replyInputDiv {
   display: grid;
   grid-template-rows: max-content max-content;
   color: white;
@@ -445,7 +409,7 @@ export default {
 .EndBlock {
   width: 30px;
 }
-.replyHolderDiv{
+.replyHolderDiv {
   display: grid;
   grid-template-columns: auto max-content auto max-content auto;
 }
@@ -464,6 +428,14 @@ export default {
   margin-right: auto;
   padding-bottom: 10px;
 }
+.ReplyCommentGrid {
+  height: max-content;
+  background-color: black;
+  color: white;
+  max-width: 400px;
+  width: 100vw;
+  padding-bottom: 10px;
+}
 .CommentGrid {
   height: max-content;
   background-color: black;
@@ -473,7 +445,7 @@ export default {
   margin-right: auto;
   padding-bottom: 10px;
 }
-.yourReplyDiv{
+.yourReplyDiv {
   position: relative;
   left: 80px;
   top: -20px;
@@ -481,6 +453,8 @@ export default {
 .ReplyDiv {
   color: white;
   padding-top: 2px;
+  display: grid;
+  grid-template-columns: max-content 10px max-content;
 }
 .commentImage {
   height: 40px;
@@ -488,6 +462,16 @@ export default {
   border-radius: 30px;
   padding-top: 4px;
   padding-bottom: 4px;
+}
+.ReplyStatsDiv {
+  display: grid;
+  grid-template-columns: 30px max-content 10px max-content 15px auto auto max-content 1px;
+  background-color: black;
+  width: 100vw;
+  max-width: 400px;
+
+  padding-top: 4px;
+  padding-bottom: 10px;
 }
 .StatsDiv {
   display: grid;
@@ -508,6 +492,15 @@ export default {
 .usernameDiv {
   margin-top: 16px;
 }
+.ReplyContentDiv {
+  width: 100vw;
+  background-color: black;
+  max-width: 365px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 35px;
+  padding-top: 10px;
+}
 .CommentDiv {
   width: 100vw;
   background-color: black;
@@ -526,7 +519,15 @@ export default {
   padding-left: 35px;
   padding-top: 10px;
 }
-.userInReplyGrid{
+.userInReplyGrid {
+  display: grid;
+  grid-template-columns: 25px max-content 15px max-content auto max-content 25px;
+  width: 100vw;
+  max-width: 400px;
+  background-color: black;
+  padding-top: 5px;
+}
+.CommenterGrid {
   display: grid;
   grid-template-columns: 25px max-content 15px max-content auto max-content 25px;
   width: 100vw;
@@ -550,14 +551,14 @@ export default {
   margin-top: 16px;
 }
 
-@media screen and (max-width: 450px){
-  .Test{
+@media screen and (max-width: 450px) {
+  .Test {
     width: max-content;
     padding-right: 20px;
     margin-left: auto;
     margin-right: auto;
   }
-  .replyInput{
+  .replyInput {
     width: 180px;
   }
 }

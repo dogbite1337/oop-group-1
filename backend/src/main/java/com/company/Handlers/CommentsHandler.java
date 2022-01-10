@@ -21,6 +21,11 @@ public class CommentsHandler {
 
     private void initCommentsHandler() {
 
+        app.get("/rest/getRepliesToComment", (req, res) -> {
+            System.out.println(req.query("commentId"));
+            res.json(commentsRepository.getRepliesForComment(Integer.parseInt(req.query("commentId"))));
+        });
+
         // post a comment
         app.post("/api/postComment", (req, res) -> {
             System.out.println(req.body());

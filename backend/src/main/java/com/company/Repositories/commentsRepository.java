@@ -52,6 +52,33 @@ public class commentsRepository {
         return relevantComment;
     }
 
+    public ArrayList<Comment> getRepliesForComment(Integer commentId) {
+        ArrayList<Comment> relevantReplies= new ArrayList<Comment>();
+        try {
+            con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            PreparedStatement getAllReplies = con.prepareStatement("SELECT * FROM comments WHERE responseToCommentId = ? ORDER BY responseToCommentId ASC");
+            getAllReplies.setInt(1, commentId);
+            ResultSet rs = getAllReplies.executeQuery();
+
+            while(rs.next()) {
+                Comment newComment = new Comment(rs.getInt(1), rs.getInt(2), rs.getString(3) , rs.getString(4) ,rs.getInt(5),rs.getInt(6), rs.getInt(7), rs.getLong(8));
+                relevantReplies.add(newComment);
+            }
+
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return relevantReplies;
+
+    }
+
     public ArrayList<Comment> getCommentsForVideo(Integer videoId) {
         ArrayList<Comment> relevantComments = new ArrayList<Comment>();
         try {
@@ -62,7 +89,7 @@ public class commentsRepository {
         }
 
         try {
-            PreparedStatement getAllComments = con.prepareStatement("SELECT * FROM comments WHERE relatesToVideoId = ? ORDER BY responseToCommentId ASC");
+            PreparedStatement getAllComments = con.prepareStatement("SELECT * FROM comments WHERE relatesToVideoId = ? AND responseToCommentId = -1 ORDER BY responseToCommentId ASC");
             getAllComments.setInt(1, videoId);
             ResultSet rs = getAllComments.executeQuery();
 
