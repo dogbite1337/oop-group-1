@@ -8,13 +8,13 @@
         {{ btnClicked ? 'close' : 'expand' }}
       </button>
     </div>
-    <div class="historyItemContainer" v-if="!btnClicked">
+    <div class="historyItemContainer" v-if="!btnClicked && mySearchHistoryList">
       <div
         class="historyItem"
         v-for="item of mySearchHistoryList.slice(0, 3)"
         :key="item"
       >
-        <p>
+        <p v-if="item">
           {{
             item.keyWord.length > 12
               ? item.keyWord.substring(0, 9) + '...'
@@ -24,9 +24,9 @@
       </div>
     </div>
 
-    <div class="historyItemContainer" v-if="btnClicked">
+    <div class="historyItemContainer" v-if="btnClicked && mySearchHistoryList">
       <div class="historyItem" v-for="item of mySearchHistoryList" :key="item">
-        <p>
+        <p v-if="item">
           {{
             item.keyWord.length > 12
               ? item.keyWord.substring(0, 9) + '...'
@@ -44,15 +44,14 @@ export default {
     return {
       btnClicked: false,
       // getting from state atm, change to fetch from DB when search page shown
-      mySearchHistoryList: this.$store.getters
-          .getMySearchHistoryList,
+      mySearchHistoryList: []
     };
   },
   async mounted() {
     let boolean = false;
     this.$store.subscribe(async (mutation, state) => {
       if (
-        mutation.type == 'setMySearchHistoryList' &&
+        (mutation.type == 'setMySearchHistoryList' || mutation.type == 'setUser') &&
         !this.$store.getters.getCurrentUser
       ) {
         this.mySearchHistoryList = await this.$store.getters
@@ -73,21 +72,25 @@ export default {
         !boolean &&
         this.$store.getters.getCurrentUser
       ) {
+        console.log("mutation 2")
         this.mySearchHistoryList = await this.$store.dispatch(
           'getSearchHistories',
           this.$store.getters.getCurrentUser.userId
         );
         boolean = true;
+        console.log(this.mySearchHistoryList)
         return;
       }
       if (
         mutation.type == 'setMySearchHistoryList' &&
         this.$store.getters.getCurrentUser
       ) {
+        console.log("mutation 3")
         this.mySearchHistoryList = await this.$store.dispatch(
           'getSearchHistories',
           this.$store.getters.getCurrentUser.userId
         );
+        console.log(this.mySearchHistoryList)
         return;
       }
     });

@@ -58,7 +58,6 @@ export default {
           console.log('user is not logged in');
           this.searchHistory = this.$store.getters.getMySearchHistoryList;
         }
-        // this.searchHistory = this.$store.getters.getMySearchHistoryList;
         boolean = true;
       }
     });
@@ -92,7 +91,6 @@ export default {
             this.searchHistory.push(element.keyWord);
           });
         }
-        await this.$store.dispatch('cacheSearchHistory', this.searchHistory);
         this.$router.push('/SearchResult');
 
       } else if (this.currentUser && this.searchHistory.includes(searchParam) && searchParam) {
@@ -106,6 +104,9 @@ export default {
       } else if(!this.currentUser &&
         !this.searchHistory.includes(searchParam)
         && searchParam) {
+
+        this.searchHistory = this.$store.getters.getMySearchHistoryList;
+        
         if (this.searchHistory.length > 5) {
           this.searchHistory.splice(this.searchHistory.length - 1, 1);
         }
@@ -115,6 +116,8 @@ export default {
         };
 
         this.searchHistory.unshift(obj);
+
+        console.log(this.searchHistory)
 
         await this.$store.dispatch('cacheSearchHistory', this.searchHistory);
         this.$router.push('/SearchResult');

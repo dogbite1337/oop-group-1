@@ -104,7 +104,6 @@
 import Header from '../components/Header.vue';
 import VideoCard from '../components/VideoCard.vue';
 import Footer from '../components/Footer.vue';
-import ExpandableSearchHistory from '../components/ExpandableSearchHistory.vue';
 import Video from '../jsClasses/general/Video';
 import TrendLink from '../components/TrendLink.vue';
 import VideoResultCard from '../components/VideoResultCard.vue';
@@ -117,7 +116,6 @@ export default {
   components: {
     Header,
     VideoCard,
-    ExpandableSearchHistory,
     VideoResultCard,
     TrendLink,
     Footer,
@@ -211,7 +209,7 @@ export default {
       relevantUsers: [],
       searchedYet: this.$store.getters.getSearchResults === null ? false : true,
       showSearchPage: false,
-      expandedSearchHistory: false,
+      // expandedSearchHistory: false,
       mySearchHistory: [
         'John..',
         'Why',
@@ -283,12 +281,12 @@ export default {
       this.showResultsPage = true;
       this.showSearchPage = false;
     },
-    expandSearchHistory() {
-      this.expandedSearchHistory = true;
-    },
-    closeSearchHistory() {
-      this.expandedSearchHistory = false;
-    },
+    // expandSearchHistory() {
+    //   this.expandedSearchHistory = true;
+    // },
+    // closeSearchHistory() {
+    //   this.expandedSearchHistory = false;
+    // },
     async getVideosForCurrentPage() {
       if (this.currentPage == 1 && this.$store.getters.getEightFirstVideos) {
         return this.$store.getters.getEightFirstVideos;

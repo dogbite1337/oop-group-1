@@ -75,7 +75,7 @@ export default createStore({
   actions: {
     async login(store, currentUser) {
       store.commit('setUser', currentUser);
-      store.commit('setMySearchHistoryList', [])
+      // store.commit('setMySearchHistoryList', [])
     },
     async updateSearchResult(store, searchResults) {
       store.commit('setSearchResults', searchResults);
@@ -104,7 +104,7 @@ export default createStore({
     async logout(store) {
       await fetch('/api/logout')
       store.commit('setUser', null);
-      store.commit('setMySearchHistoryList', [])
+      // store.commit('setMySearchHistoryList', [])
     },
     async getSearchHistories(store, id){
       let res = await fetch('/rest/getSearchHistories/' + id);
