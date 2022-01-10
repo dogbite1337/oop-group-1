@@ -28,7 +28,6 @@ export default {
 
   async mounted(){
     this.trendingSearch = await this.$store.dispatch('getTrendingSearch');
-    console.log(this.trendingSearch)
   },
 
   methods: {},
