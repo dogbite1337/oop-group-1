@@ -54,6 +54,7 @@ public class searchHistoryRepository {
             Statement searchHistoryList = con.createStatement();
             String query = "Select * from searchhistories Where userId = " + userId + " ORDER BY historyId DESC LIMIT 6;";
             ResultSet result = searchHistoryList.executeQuery(query);
+
             while(result.next()){
                 SearchHistory searchHistory = new SearchHistory(result.getInt("userId"), result.getString("keyWord"), result.getString("time"), result.getInt("historyId"));
                 historyListOfUserDescendingByTime.add(searchHistory);
@@ -149,7 +150,7 @@ public class searchHistoryRepository {
         }
 
         Statement trendingSearchList = con.createStatement();
-        String query = "SELECT * FROM videos WHERE title LIKE " + "'%" + keyword  + "%'";
+        String query = "SELECT * FROM videos WHERE LOWER(title) LIKE " + "'%" + keyword  + "%'";
         ResultSet result = trendingSearchList.executeQuery(query);
 
         while(result.next()) {

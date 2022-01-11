@@ -8,17 +8,17 @@
 
                 <div class="otherInfoContainer">
                 <div class="username">
-                    <p>{{user.username}}</p>
+                    <p class="userNameTEXT">{{user.username}}</p>
                 </div>
 
                 <div class="subAndVideo">
                     <div class="subContainer">
-                        <p>{{"Subscribers: " + user.subscribers}}</p>
+                        <p class="time">{{"Subscribers: " + user.subscribers}}</p>
                         </div>
                         <div class="videoCountContainer">
-                        <p>{{"Videos: " + user.videosPosted}}</p>
+                        <p class="time">{{"Videos: " + user.videosPosted}}</p>
                     </div>
-                    <button class="subBtn">+ Subscribe</button>
+                    <button class="subBtn" v-if="loggedInUser && loggedInUser.userId != user.userId">+ Subscribe</button>
                 </div>
                 </div>
             </div>
@@ -29,6 +29,9 @@
                     <p class="title">{{video.title}}</p>
                     <p class="time">{{uploadTime(video.uploadDate)}}</p>
                 </div>
+                <div class="textContainer" v-if="user.userVideos.length > 2">
+                    <p>{{"check all " + user.videosPosted + " videos >"}}</p>
+                </div>
             </div>
 
         </div>
@@ -36,20 +39,16 @@
 </template>
 
 <script>
-
-import MatchedUserCard from "./MatchedUserCard.vue"
 export default {
     props:["matchedUserList"],
-    components:{
-        MatchedUserCard
-    },
 
     created(){
+
     },
 
     data(){
         return{
-
+            loggedInUser: this.$store.getters.getCurrentUser
         }
     },
 
@@ -105,11 +104,14 @@ p{
 }
 
 .subAndVideo{
-    display: flex;
-    flex-direction: row;
-    place-content: space-between;
+    display: grid;
     align-items: center;
+    grid-template-columns: repeat(3, 33%);
 }
+
+/* .username{
+    margin-bottom: 5vh;
+} */
 
 .subContainer p,
 .videoCountContainer p,
@@ -117,6 +119,7 @@ p{
 {
     font-size: smaller;
     font: menu;
+    color: grey;
 }
 
 .subBtn{
@@ -144,5 +147,18 @@ p{
     font-size: smaller;
 }
 
+.textContainer{
+    grid-column: span 3;
+    margin: 3%;
+}
+
+.textContainer p,
+.userNameTEXT{
+    color: #e75858;
+}
+
+.userCard{
+    border-bottom: solid 1px #bfbfbf;
+}
 
 </style>

@@ -39,8 +39,6 @@ export default {
     },
 
     created(){
-        console.log(this.$props.matchedVideoList)
-        console.log(this.$props.matchedVideoList[1].title)
     },
 
     methods:{
@@ -85,8 +83,8 @@ p{
 .videoCard{
     display: grid;
     grid-template-columns: 50% 50%;
-    margin: 2% 5% 2% 5%;
-    
+    padding: 2% 5% 2% 5%;
+    border-bottom: solid 1px #ababab75;
 }
 
 .thumbnail{
@@ -98,6 +96,7 @@ img{
     width: -webkit-fill-available;
     max-block-size: -webkit-fill-available;
     height: -webkit-fill-available;
+    border: solid 1px grey;
 }
 
 .textInfo{
@@ -140,6 +139,7 @@ img{
 .viewCount{
     margin-left: 3vw;
     align-self: center;
+    height: 2.5vh;
 }
 
 </style>

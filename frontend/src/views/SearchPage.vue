@@ -68,7 +68,8 @@ export default {
   methods: {
     async register() {
       let searchParam = this.$store.getters.getKeyWord;
-      if (this.currentUser && !this.searchHistory.includes(searchParam) && searchParam) {
+      let boolean = await this.checkIfListContainsKey(this.searchHistory, searchParam)
+      if (this.currentUser && !boolean && searchParam) {
         let obj = {
           userId: this.currentUser.userId,
           keyWord: this.$store.getters.getKeyWord,
@@ -93,16 +94,19 @@ export default {
         }
         this.$router.push('/SearchResult');
 
-      } else if (this.currentUser && this.searchHistory.includes(searchParam) && searchParam) {
+      } else if (this.currentUser && boolean && searchParam) {
+        console.log(this.currentUser)
+        console.log(this.searchHistory)
+        console.log(searchParam)
         console.log('loggedin but already made this search before');
       } else if (
         !this.currentUser &&
-        this.searchHistory.includes(searchParam)
+        boolean
         && searchParam
       ) {
         console.log("didn't log in but already made this search before");
       } else if(!this.currentUser &&
-        !this.searchHistory.includes(searchParam)
+        !boolean
         && searchParam) {
 
         this.searchHistory = this.$store.getters.getMySearchHistoryList;
@@ -126,11 +130,27 @@ export default {
 
     async clearHistory() {
       this.searchHistory = [];
-      await this.$store.dispatch('cacheSearchHistory', []);
+      await this.$store.dispatch('cacheSearchHistory', this.searchHistory);
       if (this.currentUser) {
         await this.$store.dispatch('clearHistory', this.currentUser.userId);
       }
     },
+
+    async checkIfListContainsKey(list, keyword){
+      let boolean = false;
+      if(list.length == 0){
+        return boolean;
+      }
+
+      list.forEach(element => {
+        if(element.toLowerCase() == keyword.toLowerCase()){
+          boolean == true;
+          return boolean;
+        }
+      });
+
+      return boolean;
+    }
   },
 };
 </script>
@@ -142,7 +162,7 @@ export default {
 
 .searchPage {
   color: white;
-  height: 100vh;
+  /* height: 100vh; */
 }
 
 .searchPageButtonsContainer {

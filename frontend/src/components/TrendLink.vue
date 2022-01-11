@@ -78,7 +78,8 @@ h1 {
   display: grid;
   grid-template-columns: repeat(2, 50%);
   grid-template-rows: repeat(5, 20%);
-  grid-gap: 5px;
+  grid-gap: 2px;
   justify-content: center;
+  height: 25vh;
 }
 </style>

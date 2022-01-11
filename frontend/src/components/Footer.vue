@@ -45,6 +45,9 @@ export default {
   text-align: center;
   background-color: black;
   padding-top: 7px;
+  top: 100vh;
+  width: 100vw;
+  position: sticky;
 }
 
 .PantherDiv {

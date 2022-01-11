@@ -8,7 +8,8 @@
   </div>
   <div class="SearchAndLoginDiv">
     <div class="SpaceDiv" />
-    <img class="CatInHeader" src="../projectImages/Cat no background.png" />
+    <img class="CatInHeader" src="../projectImages/Cat no background.png" @click="playMe"/>
+    <audio ref="meow" src="src/projectImages/meowSound.mp3"></audio>
     <div class="SpaceDiv2" />
     <div class="searchDiv">
       <router-link class="SearchLink" :to="{ path: '/Search' }">
@@ -72,6 +73,10 @@ export default {
     };
   },
   methods: {
+    playMe(){
+      this.$refs.meow.play();
+    },
+
     resetToStartPage() {
       this.$store.dispatch('resetToStartPage', true);
       this.searchParam = '';
@@ -212,7 +217,7 @@ export default {
   max-width: max-content;
   margin-left: auto;
   margin-right: auto;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
 }
 
 .LoginButton {

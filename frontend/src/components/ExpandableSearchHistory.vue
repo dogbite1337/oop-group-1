@@ -72,25 +72,21 @@ export default {
         !boolean &&
         this.$store.getters.getCurrentUser
       ) {
-        console.log("mutation 2")
         this.mySearchHistoryList = await this.$store.dispatch(
           'getSearchHistories',
           this.$store.getters.getCurrentUser.userId
         );
         boolean = true;
-        console.log(this.mySearchHistoryList)
         return;
       }
       if (
         mutation.type == 'setMySearchHistoryList' &&
         this.$store.getters.getCurrentUser
       ) {
-        console.log("mutation 3")
         this.mySearchHistoryList = await this.$store.dispatch(
           'getSearchHistories',
           this.$store.getters.getCurrentUser.userId
         );
-        console.log(this.mySearchHistoryList)
         return;
       }
     });
