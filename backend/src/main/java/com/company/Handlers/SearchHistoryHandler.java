@@ -40,7 +40,6 @@ public class SearchHistoryHandler {
             try {
                 ArrayList<SearchHistory> searchHistory = searchHistoryLogic.getSearchHistories(userId);
                 res.json(searchHistory);
-                System.out.println(searchHistory);
             } catch (SQLException e) {
                 e.printStackTrace();
                 res.json("false");
@@ -55,6 +54,23 @@ public class SearchHistoryHandler {
             } catch (SQLException e) {
                 e.printStackTrace();
                 res.json("false");
+            }
+        });
+
+        app.get("api/getTrendingSearch",(req,res) -> {
+            try {
+                res.json(searchHistoryLogic.getTrendingSearch());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+
+        app.get("rest/getMatchedVideoList/:keyword", (req,res) ->{
+            String keyword = req.params("keyword");
+            try {
+                res.json(searchHistoryLogic.getMatchedVideoList(keyword));
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         });
     }

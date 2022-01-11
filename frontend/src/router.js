@@ -7,6 +7,7 @@ import RegisterPage from './views/RegisterPage.vue'
 import UploadVideoPage from './views/UploadVideoPage.vue'
 import VideoPage from './views/VideoPage.vue'
 import SearchPage from './views/SearchPage.vue'
+import SearchResultPage from './views/SearchResultPage.vue'
 
 export default createRouter({
   history: createWebHistory(),
@@ -34,6 +35,10 @@ export default createRouter({
     {
       path: '/Search',
       component: SearchPage
+    },
+    {
+      path: '/SearchResult',
+      component: SearchResultPage
     }
   ],
 });

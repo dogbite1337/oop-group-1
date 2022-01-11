@@ -2,6 +2,7 @@ package com.company.Services;
 
 
 import com.company.Entities.SearchHistory;
+import com.company.Entities.Video;
 import com.company.Repositories.searchHistoryRepository;
 
 import java.sql.SQLException;
@@ -25,5 +26,13 @@ public class SearchHistoryLogic {
 
     public void clearHistories(Integer userId) throws SQLException {
         searchHistoryRepository.clearHistories(userId);
+    }
+
+    public ArrayList<String> getTrendingSearch() throws SQLException {
+        return searchHistoryRepository.getTrendingSearch();
+    }
+
+    public ArrayList<Video> getMatchedVideoList(String keyword) throws SQLException {
+        return searchHistoryRepository.getMatchedVideoList(keyword);
     }
 }
