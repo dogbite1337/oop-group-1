@@ -31,11 +31,11 @@ export default {
         }
     },
 
-    async created(){
-        let keyword = this.$store.getters.getKeyWord;
-        this.matchedVideoList = await this.$store.dispatch('getMatchedVideoList', keyword);
-        this.matchedUserList = await this.$store.dispatch('getMatchedUserList', keyword);
-    }
+    // async created(){
+    //     let keyword = this.$store.getters.getKeyWord;
+    //     this.matchedVideoList = await this.$store.dispatch('getMatchedVideoList', keyword);
+    //     this.matchedUserList = await this.$store.dispatch('getMatchedUserList', keyword);
+    // }
     
 }
 </script>
