@@ -156,7 +156,6 @@
         v-for="(commentItem, index) of relevantComments"
         :key="index"
         :comment="commentItem"
-        :timestampOfComments="timestampOfComments[index]"
         :replies="currentReplies"
         :commenters="currentCommenters"
         class="commentBox"
@@ -185,6 +184,7 @@ import store from '../store';
 // 770/430 width - 1:1
 export default {
   name: "VideoPage",
+  emits: ['updateReplies', 'postedAReply'],
   components: {
     RelatedVideo,
     CommentInput,

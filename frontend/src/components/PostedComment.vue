@@ -116,7 +116,8 @@ export default {
   components: {
     CommentReply,
   },
-  props: ['comment', 'replies', 'timestampOfComments', 'commenters'],
+  emits: ['updateReplies', 'postedAReply'],
+  props: ['comment', 'replies', 'commenters'],
   name: 'PostedComment',
   mounted() {},
   created() {},
