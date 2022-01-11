@@ -445,6 +445,9 @@ export default {
 	background-image: url("../projectImages/open eyes.PNG");
 	background-size: 100% 140px;
 	background-repeat: no-repeat;
+	margin-left:40px;
+margin-right:40px;
+margin-top:20px;
 }
 .girlsClosedEyesDiv {
 	height: 140px;
@@ -452,6 +455,9 @@ export default {
 	background-image: url("../projectImages/cover eyes.PNG");
 	background-size: 100% 140px;
 	background-repeat: no-repeat;
+margin-left:40px;
+margin-right:40px;
+margin-top:20px;
 }
 .backHomeDiv {
 	display: grid; /* space, Arrow, space, Home, space, Cat */
@@ -491,45 +497,48 @@ export default {
 	margin-bottom: 60px;
 }
 
-@media screen and (min-width: 325px) {
+@media screen and (min-width: 550px) {
 	.girlsOpenEyesDiv,
 	.girlsClosedEyesDiv {
-		width: 360px;
+		width: 460px;
 		margin-left: auto;
 		margin-right: auto;
 		margin-top: 30px;
 		margin-bottom: 30px;
-		height: 250px;
-		background-size: 100% 250px;
+		height: 200px;
+		background-size: 100% 200px;
+	}
+		.upScaleDiv {
+		transform: scale(1.1, 1.1);
 	}
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 700px) {
 	.girlsOpenEyesDiv,
 	.girlsClosedEyesDiv {
-		width: 440px;
+		width: 580px;
 		margin-left: auto;
 		margin-right: auto;
 		margin-top: 40px;
 		margin-bottom: 40px;
-		height: 300px;
-		background-size: 100% 300px;
+		height: 240px;
+		background-size: 100% 240px;
 	}
 	.upScaleDiv {
 		transform: scale(1.2, 1.1);
 	}
 }
 
-@media screen and (min-width: 1280px) {
+@media screen and (min-width: 850px) {
 	.girlsOpenEyesDiv,
 	.girlsClosedEyesDiv {
-		width: 540px;
+		width: 640px;
 		margin-left: auto;
 		margin-right: auto;
 		margin-top: 50px;
 		margin-bottom: 60px;
-		height: 350px;
-		background-size: 100% 350px;
+		height: 300px;
+		background-size: 100% 300px;
 	}
 	.upScaleDiv {
 		transform: scale(1.3, 1.1);
