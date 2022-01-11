@@ -20,7 +20,6 @@ export default {
   emits: ['update'],
   data() {
     return {
-        topTenTrend: ['Cats', 'More Cats', 'All cats', 'Cats?!', 'Cats.', 'Cats!', 'Why are there so many cats', 'John', 'Stop This', 'Madness'],
         searchHistory: [],
         currentUser: null,
         trendingSearch: [],
@@ -67,6 +66,21 @@ export default {
 
   methods: {
     async register() {
+      this.searchHistory = this.$store.getters.getMySearchHistoryList;
+      if(this.currentUser){
+        let detailedSearchList = await this.$store.dispatch(
+          'getSearchHistories',
+          this.currentUser.userId
+        );
+        this.searchHistory = [];
+
+        if (detailedSearchList.length > 0) {
+          detailedSearchList.forEach((element) => {
+            this.searchHistory.push(element);
+          });
+        }
+      }
+
       let searchParam = this.$store.getters.getKeyWord;
       let boolean = await this.checkIfListContainsKey(this.searchHistory, searchParam)
       if (this.currentUser && !boolean && searchParam) {
@@ -95,16 +109,15 @@ export default {
         this.$router.push('/SearchResult');
 
       } else if (this.currentUser && boolean && searchParam) {
-        console.log(this.currentUser)
-        console.log(this.searchHistory)
-        console.log(searchParam)
         console.log('loggedin but already made this search before');
+        this.$router.push('/SearchResult');
       } else if (
         !this.currentUser &&
         boolean
         && searchParam
       ) {
         console.log("didn't log in but already made this search before");
+        this.$router.push('/SearchResult');
       } else if(!this.currentUser &&
         !boolean
         && searchParam) {
@@ -121,9 +134,8 @@ export default {
 
         this.searchHistory.unshift(obj);
 
-        console.log(this.searchHistory)
-
         await this.$store.dispatch('cacheSearchHistory', this.searchHistory);
+        console.log(this.searchHistory)
         this.$router.push('/SearchResult');
       }
     },
@@ -139,12 +151,13 @@ export default {
     async checkIfListContainsKey(list, keyword){
       let boolean = false;
       if(list.length == 0){
+        console.log("returned")
         return boolean;
       }
 
       list.forEach(element => {
-        if(element.toLowerCase() == keyword.toLowerCase()){
-          boolean == true;
+        if((element.keyWord.toLowerCase()) == (keyword.toLowerCase())){
+          boolean = true;
           return boolean;
         }
       });
