@@ -49,8 +49,9 @@
       <img v-if="currentSliderImageIndex == 2" class="lastPacManIcon" src="../projectImages/cleaned_pacman.png" />
       <div v-if="currentSliderImageIndex != 2" @click="setSliderIndexToTwo" class="WhiteCircle LastWhiteCircle" />
     </div>
-    
+          
     <div v-if="relevantUsers.length > 0 && searchedYet && showResultsPage" class="userResultsTopDiv">
+
       <div class="userResultsDiv">
         <div />
         <div class="profileImageDiv">
@@ -102,13 +103,15 @@
     <div v-if="searchResults.length > 0 && showResultsPage">
       <VideoResultCard :video="searchResults[0]" :searchQuery="lastSearchQuery" v-if="searchResults[0]" />
     </div>
-    <div v-if="!searchedYet && !showSearchPage && !showResultsPage" class="CardsContainer">
+    
+          <div v-if="!searchedYet && !showSearchPage && !showResultsPage" class="CardsContainer">
       <VideoCard
         v-for="(videoItem, index) of relevantVideos"
         :key="index"
         :video="videoItem"
         class="videoBox"
       />
+    </div>
     </div>
     <div v-if="searchResults.length == 0 && searchedYet && showResultsPage" class="SorryDiv">
       <div />
@@ -117,7 +120,6 @@
       </div>
       <div />
     </div>
-  </div>
   <Footer class="footerDiv"/>
 </template>
 <script>
@@ -320,9 +322,7 @@ export default {
   width: 200px;
   height: 200px;
 }
-.videoBox{
-  margin-bottom: 10px;
-}
+
 .coveringDiv{
   background-color: #131313;
   width: 45px;
@@ -344,8 +344,8 @@ export default {
   background-color: transparent;
   outline: 10px solid #131313;
   border-radius: 30px;
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   z-index: 3;
   margin-top: -50px;
   position: relative;
@@ -356,9 +356,11 @@ export default {
 }
 .usernameP{
   color: #E75858;
+  margin-left:5px;
 }
 .subscribersP{
   color: #939393;
+  margin-left:5px;
 }
 .NoLineDiv{
   height: 2px;
@@ -700,8 +702,55 @@ export default {
     z-index: 3;
     position: absolute;
   }
+      .topVideosGrid{
+  transform: scale(1.1, 1.1);
+  margin-bottom:10px;
+   margin-top:15px;
+  }
+
+  .CardBox{
+    transform: scale(1.1, 1.1);
+  margin-bottom:10px;
+   margin-top:10px;
+  }
+
   
+.userResultsDiv{
+transform: scale(1.3, 1.3);
+  margin-bottom:20px;
+   margin-top:20px;
+  margin-left:40px;
+    position: sticky;
 }
+
+.SubscribeButton{
+  height: 18px;
+  width: 80px;
+  font-size: 12px;
+  line-height: 12px;
+  margin-bottom: 20px;
+  top: -30px;
+}
+  
+    .topVideosGrid{
+  transform: scale(1.1, 1.1);
+  margin-bottom:10px;
+   margin-top:20px;
+  }
+    .checkAllVideosLink{
+  font-size: 12px;
+
+}
+
+  .CardBox{
+    transform: scale(1.1, 1.1);
+  margin-bottom:20px;
+   margin-top:20px;
+   margin-left:30px;
+
+  }
+}
+  
 
 @media screen and (min-width: 700px) {
   .CardsContainer{
@@ -767,7 +816,41 @@ export default {
     z-index: 3;
     position: absolute;
   }
+
+.userResultsDiv{
+transform: scale(1.3, 1.3);
+  margin-bottom:40px;
+   margin-top:40px;
+  margin-left:65px;
+    position: sticky;
+}
+
+.SubscribeButton{
+  height: 20px;
+  width: 80px;
+  font-size: 13px;
+  line-height: 12px;
+  margin-bottom: 20px;
+  top: -30px;
+}
   
+    .topVideosGrid{
+  transform: scale(1.3, 1.3);
+  margin-bottom:20px;
+   margin-top:40px;
+  }
+    .checkAllVideosLink{
+  font-size: 13px;
+
+}
+
+  .CardBox{
+    transform: scale(1.3, 1.3);
+  margin-bottom:20px;
+   margin-top:30px;
+   margin-left:110px;
+
+  }
 }
 
 @media screen and (min-width: 850px) {
@@ -835,8 +918,41 @@ export default {
     z-index: 3;
     position: absolute;
   }
+.userResultsDiv{
+transform: scale(1.5, 1.5);
+  margin-bottom:40px;
+   margin-top:60px;
+  margin-left:85px;
+    position: sticky;
+}
 
+.SubscribeButton{
+  height: 24px;
+  width: 100px;
+  font-size: 14px;
+  line-height: 12px;
+  margin-bottom: 20px;
+  top: -30px;
+     position:relative;
+}
   
+  .topVideosGrid{
+  transform: scale(1.5, 1.5);
+  margin-bottom:40px;
+   margin-top:60px;
+  }
+  .checkAllVideosLink{
+  font-size: 15px;
+
+}
+
+  .CardBox{
+ transform: scale(1.5, 1.5);
+  margin-bottom:40px;
+   margin-top:60px;
+       margin-left:110px;
+       position:fixed;
+  }
 }
 
 </style>
