@@ -46,6 +46,9 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap');
 
+* {
+  text-decoration: none;
+}
 .upBoxAndUsernameDiv {
   display: grid;
   grid-template-columns: auto auto auto;
