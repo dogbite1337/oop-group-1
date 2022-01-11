@@ -24,7 +24,6 @@ export default {
     return {
         searchHistory: [],
         currentUser: null,
-        trendingSearch: [],
     };
   },
 
