@@ -445,9 +445,9 @@ export default {
 	background-image: url("../projectImages/open eyes.PNG");
 	background-size: 100% 140px;
 	background-repeat: no-repeat;
-	margin-left:40px;
-margin-right:40px;
-margin-top:20px;
+	margin-left: 40px;
+	margin-right: 40px;
+	margin-top: 20px;
 }
 .girlsClosedEyesDiv {
 	height: 140px;
@@ -455,9 +455,9 @@ margin-top:20px;
 	background-image: url("../projectImages/cover eyes.PNG");
 	background-size: 100% 140px;
 	background-repeat: no-repeat;
-margin-left:40px;
-margin-right:40px;
-margin-top:20px;
+	margin-left: 40px;
+	margin-right: 40px;
+	margin-top: 20px;
 }
 .backHomeDiv {
 	display: grid; /* space, Arrow, space, Home, space, Cat */
@@ -508,7 +508,7 @@ margin-top:20px;
 		height: 200px;
 		background-size: 100% 200px;
 	}
-		.upScaleDiv {
+	.upScaleDiv {
 		transform: scale(1.1, 1.1);
 	}
 }
