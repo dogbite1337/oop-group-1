@@ -18,15 +18,15 @@ export default createRouter({
     },
     {
       path: '/Login',
-      component: LoginPage
+      component: LoginPage,
     },
     {
       path: '/Register',
-      component: RegisterPage
+      component: RegisterPage,
     },
     {
       path: '/Upload',
-      component: UploadVideoPage
+      component: UploadVideoPage,
     },
     {
       path: '/VideoPage/:id',

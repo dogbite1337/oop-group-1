@@ -7,6 +7,54 @@ import java.util.ArrayList;
 public class videoRepository {
     Connection con;
 
+    public Integer likeVideo(Integer videoId, Integer likes) {
+        try {
+            try {
+                con = DriverManager.getConnection(
+                        "jdbc:mysql://localhost:3306/kittykitty","root","root");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            String baseQuery = ("UPDATE videos SET likes = ? WHERE videoId = ?");
+            PreparedStatement likeVideo = con.prepareStatement(baseQuery);
+            likeVideo.setInt(1, (likes + 1));
+            likeVideo.setInt(2, videoId);
+
+            int rs = likeVideo.executeUpdate();
+
+            con.close();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
+        return (likes + 1);
+    }
+
+    public Integer dislikeVideo(Integer videoId, Integer dislikes) {
+        try {
+            try {
+                con = DriverManager.getConnection(
+                        "jdbc:mysql://localhost:3306/kittykitty","root","root");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            String baseQuery = ("UPDATE videos SET dislikes = ? WHERE videoId = ?");
+            PreparedStatement likeVideo = con.prepareStatement(baseQuery);
+            likeVideo.setInt(1, (dislikes + 1));
+            likeVideo.setInt(2, videoId);
+
+            int rs = likeVideo.executeUpdate();
+
+            con.close();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
+        return (dislikes + 1);
+    }
+
     public ArrayList<Video> getVideosByUsername(String username) {
         ArrayList<Video> allVideosByUser = new ArrayList<Video>();
 

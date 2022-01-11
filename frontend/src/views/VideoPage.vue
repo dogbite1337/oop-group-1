@@ -7,7 +7,7 @@
         <div class="SpaceDiv" />
       </div>
     </router-link>
-    <div class="test" />
+    <div class="SpaceBlock" />
     <div class="FrameGrid">
       <div />
       <div class="iFrameDiv">
@@ -28,15 +28,21 @@
       <div v-if="!showWatchNowInstead" class="descriptionAndCommentsDiv">
         <div class="SpaceDiv" />
         <div class="middleDiv">
-          <div v-if="!showDescriptionTab" class="notChosenDescriptionDiv">
+          <div v-if="!showDescriptionSection" class="notChosenDescriptionDiv">
             Description
           </div>
-          <div v-if="showDescriptionTab" class="ChosenDescriptionDiv">
+          <div v-if="showDescriptionSection" class="ChosenDescriptionDiv">
             Description
             <div class="LineDiv" />
           </div>
           <div class="SpaceDiv" />
-          <div class="commentsDiv">Comments({{ amountOfComments }})</div>
+          <div v-if="showDescriptionSection" class="notChosenCommentsDiv">
+            Comments({{ amountOfComments }})
+          </div>
+          <div v-if="!showDescriptionSection" class="ChosenCommentsDiv">
+            Comments({{ amountOfComments }})
+            <div class="LineDiv" />
+          </div>
         </div>
         <div class="SpaceDiv" />
       </div>
@@ -89,12 +95,18 @@
       <div v-if="!showWatchNowInstead" class="likesAndDislikesNumberDiv">
         <div class="SpaceDiv" />
         <div class="likesNumberDiv">
-          <img src="../projectImages/like_black_background.png" />
+          <img
+            @click="likeVideo"
+            src="../projectImages/like_black_background.png"
+          />
           <div class="likesDiv">{{ spacedLikes }}</div>
         </div>
         <div class="SpaceDiv" />
         <div class="dislikesNumberDiv">
-          <img src="../projectImages/dislike_black_background.png" />
+          <img
+            @click="dislikeVideo"
+            src="../projectImages/dislike_black_background.png"
+          />
           <div class="thumbsDownDiv">{{ spacedDislikes }}</div>
         </div>
         <div class="SpaceDiv" />
@@ -133,6 +145,24 @@
         <div class="SpaceDiv" />
       </div>
     </div>
+    <CommentInput
+      class="postingCommentDiv"
+      @postedComment="updateComments"
+      :videoId="video.videoId"
+      v-if="showCommentsSection"
+    />
+    <div class="postedCommentsDiv" v-if="showCommentsSection">
+      <PostedComment
+        v-for="(commentItem, index) of relevantComments"
+        :key="index"
+        :comment="commentItem"
+        :replies="currentReplies"
+        :commenters="currentCommenters"
+        class="commentBox"
+        @postedAReply="updateCommentSection"
+        @updateReplies="updateReplies"
+      />
+    </div>
     <RelatedVideo
       v-for="(videoItem, index) of relatedVideos"
       :key="index"
@@ -142,24 +172,28 @@
   </div>
 </template>
 <script>
-import User from "../jsClasses/general/User";
-import Video from "../jsClasses/general/Video";
-import Footer from "../components/Footer.vue";
-import RelatedVideo from "../components/RelatedVideo.vue";
-import store from "../store";
+import User from '../jsClasses/general/User';
+import Video from '../jsClasses/general/Video';
+import Comment from '../jsClasses/general/Comment';
+import Footer from '../components/Footer.vue';
+import RelatedVideo from '../components/RelatedVideo.vue';
+import CommentInput from '../components/CommentInput.vue';
+import PostedComment from '../components/PostedComment.vue';
+import store from '../store';
 
 // 770/430 width - 1:1
 export default {
   name: "VideoPage",
+  emits: ['updateReplies', 'postedAReply'],
   components: {
     RelatedVideo,
+    CommentInput,
+    PostedComment,
     Footer,
   },
   data() {
     return {
-      showCommentsSection: false,
-      showDescriptionTab: true,
-      amountOfComments: 52,
+      amountOfComments: 0,
       relatedVideos: this.$store.getters.getEightFirstVideos
         ? this.$store.getters.getEightFirstVideos
         : undefined,
@@ -175,6 +209,12 @@ export default {
       showWatchNowInstead: false,
       width: window.screen.width / 2,
       height: window.screen.height / 2,
+      showCommentsSection: false,
+      showDescriptionSection: true,
+      relevantComments: [],
+      timestampOfComments: [],
+      currentReplies: [],
+      currentCommenters: [],
     };
   },
   async created() {
@@ -186,11 +226,87 @@ export default {
   },
   async mounted() {
     this.loadRelevantInformation();
+    this.actOnResize();
     this.isOnVideosPage = true;
     window.scrollTo(0, 0);
-    document.addEventListener("scroll", () => {
+
+    let commentsRes = await fetch(
+      '/rest/getCommentsForVideoId?' +
+        new URLSearchParams({
+          videoId: this.$route.params.id,
+        })
+    );
+    // full width on mobile view on cards
+    let commentsResponse = await commentsRes.json();
+    this.amountOfComments = commentsResponse.length;
+    for (let i = 0; i < commentsResponse.length; i++) {
+      let newComment = new Comment(0, 0, '', '', 0, 0, 0, 0);
+      newComment = Object.assign(newComment, commentsResponse[i]);
+      newComment.timeOfPosting = this.convertDateObjectToString(
+        new Date(commentsResponse[i].timeOfPosting)
+      );
+      this.relevantComments.push(newComment);
+      let minsAgo =
+        (Date.now() - new Date(commentsResponse[i].timeOfPosting)) / 60000;
+      if (minsAgo < 1.0) {
+        this.timestampOfComments.push('Less than a minute ago');
+      } else if (minsAgo >= 1.0 && minsAgo <= 59) {
+        this.timestampOfComments.push(
+          'About ' +
+            Math.floor(minsAgo) +
+            ' minute' +
+            (minsAgo >= 2.0 ? 's ' : ' ') +
+            'ago'
+        );
+      } else if (minsAgo >= 60 && minsAgo <= 1440) {
+        this.timestampOfComments.push(
+          'About ' +
+            Math.floor(minsAgo / 60) +
+            ' hour' +
+            (minsAgo / 60 >= 2.0 ? 's ' : ' ') +
+            'ago'
+        );
+      } else if (minsAgo >= 1441 && minsAgo <= 10080) {
+        this.timestampOfComments.push(
+          'About ' +
+            Math.floor(minsAgo / 60 / 24) +
+            ' day' +
+            (Math.floor(minsAgo / 60 / 24) >= 2.0 ? 's ' : ' ') +
+            'ago'
+        );
+      } else if (minsAgo >= 10081 && minsAgo <= 40324) {
+        this.timestampOfComments.push(
+          Math.floor(minsAgo / 60 / 24 / 7) +
+            ' week' +
+            (Math.floor(minsAgo / 60 / 24 / 7) >= 2.0 ? 's ' : ' ') +
+            'ago'
+        );
+      } else if (minsAgo >= 40325 && minsAgo <= 80648) {
+        this.timestampOfComments.push(
+          'About ' +
+            Math.floor(minsAgo / 60 / 24 / 7 / 30) +
+            ' month' +
+            (Math.floor(minsAgo / 60 / 24 / 7 / 30) >= 2.0 ? 's ' : ' ') +
+            'ago'
+        );
+      } else {
+        if (Math.floor(minsAgo / 60 / 24 / 7 / 30) > 12) {
+          this.timestampOfComments.push(
+            'About ' +
+              Math.floor(minsAgo / 60 / 24 / 7 / 30 / 12) +
+              ' years ago'
+          );
+        } else {
+          this.timestampOfComments.push(
+            'About ' + Math.floor(minsAgo / 60 / 24 / 7 / 30) + ' months ago'
+          );
+        }
+      }
+    }
+
+    document.addEventListener('scroll', () => {
       if (window.scrollY >= 368) {
-        this.showWatchNowInstead = true;
+        this.showWatchNowInstead = false;
       } else {
         this.showWatchNowInstead = false;
       }
@@ -202,6 +318,110 @@ export default {
   },
   watch: {},
   methods: {
+    async updateReplies(commentId) {
+      this.currentReplies = [];
+      this.currentCommenters = [];
+      let res = await fetch(
+        '/rest/getRepliesToComment?' +
+          new URLSearchParams({
+            commentId: commentId,
+          }),
+        {
+          method: 'GET',
+        }
+      );
+      let response = await res.json();
+
+      for (let i = 0; i < response.length; i++) {
+        this.currentReplies.push(
+          new Comment(
+            response[i].commentId,
+            response[i].relatesToVideoId,
+            response[i].postedByUsername,
+            response[i].content,
+            response[i].likes,
+            response[i].dislikes,
+            response[i].responseToCommentId,
+            response[i].timeOfPosting
+          )
+        );
+        let uploaderRes = await fetch(
+          '/rest/getUserByUsername?' +
+            new URLSearchParams({
+              providedUsername: response[i].postedByUsername,
+            })
+        );
+        let userResponse = await uploaderRes.json();
+        let myUser = new User(
+          userResponse.userId,
+          userResponse.username,
+          userResponse.description,
+          userResponse.profileURL,
+          userResponse.subscribers,
+          userResponse.videosPosted
+        );
+        this.currentCommenters.push(myUser);
+      }
+    },
+    async updateCommentSection() {},
+    updateComments(postedComment) {
+      let newComment = new Comment();
+      newComment = Object.assign(newComment, postedComment);
+      newComment.timeOfPosting = this.convertDateObjectToString(
+        new Date(newComment.timeOfPosting)
+      );
+      this.relevantComments.push(newComment);
+    },
+    convertDateObjectToString(dateObject) {
+      let newDate =
+        (dateObject.getUTCDate() < 10
+          ? '0' + dateObject.getUTCDate()
+          : dateObject.getUTCDate()) +
+        ' - ' +
+        (dateObject.getUTCMonth() + 1 < 10
+          ? '0' + (dateObject.getUTCMonth() + 1)
+          : dateObject.getUTCMonth() + 1) +
+        ' - ' +
+        dateObject.getUTCFullYear();
+      newDate = newDate + ' ' + dateObject.getHours() + ':';
+
+      if (dateObject.getMinutes() < 1) {
+        newDate += '00';
+      } else if (dateObject.getMinutes() < 10) {
+        newDate += '0' + dateObject.getMinutes();
+      } else {
+        newDate += dateObject.getMinutes();
+      }
+      return newDate;
+    },
+    async likeVideo() {
+      let relevantInfo = {
+        videoId: this.video.videoId,
+        likes: this.video.likes,
+      };
+      let likedVideoRes = await fetch('/api/likeVideo', {
+        method: 'POST',
+        body: JSON.stringify(relevantInfo),
+      });
+      let likedVideoResponse = await likedVideoRes.json();
+
+      this.video.likes = likedVideoResponse;
+      this.spacedLikes = this.video.likes;
+    },
+    async dislikeVideo() {
+      let relevantInfo = {
+        videoId: this.video.videoId,
+        dislikes: this.video.dislikes,
+      };
+      let dislikedVideoRes = await fetch('/api/dislikeVideo', {
+        method: 'POST',
+        body: JSON.stringify(relevantInfo),
+      });
+      let dislikedVideoResponse = await dislikedVideoRes.json();
+
+      this.video.dislikes = dislikedVideoResponse;
+      this.spacedDislikes = this.video.dislikes;
+    },
     async actOnResize() {
       this.width = window.screen.width / 2;
       this.height = window.screen.height / 2;
@@ -237,6 +457,7 @@ export default {
       let videoResponse = await videoRes.json();
 
       let emptyVideo = new Video();
+
       this.video = Object.assign(emptyVideo, videoResponse);
 
       this.video.videoURL = this.video.videoURL
@@ -271,6 +492,9 @@ export default {
       let startFrom = stringToPad % 1000;
       let spacedString = "";
       startFrom = startFrom.toString();
+      if (stringToPad.length <= 3) {
+        return parseInt(stringToPad);
+      }
 
       for (let i = 0; i < stringToPad.length; i++) {
         if (i != 0 && (i - (stringToPad.length % 3)) % 3 == 0) {
@@ -280,15 +504,16 @@ export default {
         }
         spacedString = base;
       }
-      return spacedString;
+
+      return parseInt(spacedString);
     },
     clickedMe(e) {
-      if (e.target.className == "commentsTab") {
+      if (e.target.className == 'notChosenCommentsDiv') {
         this.showCommentsSection = true;
-        this.showDescriptionTab = false;
+        this.showDescriptionSection = false;
       }
-      if (e.target.className == "descriptionTab") {
-        this.showDescriptionTab = true;
+      if (e.target.className == 'notChosenDescriptionDiv') {
+        this.showDescriptionSection = true;
         this.showCommentsSection = false;
       }
     },
@@ -306,10 +531,17 @@ export default {
   font-family: "Roboto", sans-serif;
   overflow-x: hidden;
 }
+.postingCommentDiv {
+  margin-bottom: 20px;
+}
 .backHomeDiv {
   position: absolute;
   margin-top: 40px;
   overflow-y: hidden;
+}
+.postedCommentsDiv {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 .watchNowPlay {
   height: 45px;
@@ -383,7 +615,7 @@ export default {
 }
 .videosDiv {
   font-size: 9px;
-  margin-top: 29.5px;
+  margin-top: 16px;
   color: #939393;
 }
 .likeAndDislikeIconDiv {
@@ -554,7 +786,9 @@ export default {
   padding-left: 5px;
   padding-bottom: 2px;
 }
-.ChosenDescriptionDiv {
+
+.ChosenDescriptionDiv,
+.ChosenCommentsDiv {
   color: #e75858;
 }
 .LineDiv {

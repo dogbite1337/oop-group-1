@@ -355,7 +355,7 @@ export default {
   color: black;
   border-radius: 3px;
 }
-.trendsDiv{
+.trendsDiv {
   height: 193px;
   outline: 1px solid white;
   margin-left: 19px;
@@ -366,21 +366,21 @@ export default {
   margin-right: auto;
   padding-bottom: 9px;
 }
-.searchHistoryText{
+.searchHistoryText {
   font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 18px;
   line-height: 21px;
 }
-.SorryKitty{
-  display:block;
+.SorryKitty {
+  display: block;
   width: 200px;
   height: 224px;
-  margin-left:auto;
+  margin-left: auto;
   margin-right: auto;
 }
-.SearchHistoryDiv{
+.SearchHistoryDiv {
   background-color: #131313;
   display: grid;
   grid-template-columns: 1px auto auto 72px 1px;
@@ -392,7 +392,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
-.topTrendingDiv{
+.topTrendingDiv {
   display: grid;
   grid-template-columns: 19px 168px auto;
   margin-bottom: 4px;

@@ -206,8 +206,12 @@ export default {
   max-width: 725px;
   margin-left: auto;
   margin-right: auto;
+  overflow-y: hidden;
 }
 
+.SeasonText {
+  overflow-y: hidden;
+}
 .SearchAndLoginDiv {
   display: grid; /* Margin, Cat, Margin, search icon, margin, Search Field, margin, Login Button, Margin */
   grid-template-columns: auto 43px auto max-content auto auto;

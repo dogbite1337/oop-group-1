@@ -140,6 +140,9 @@ export default {
   height: 95px;
 }
 
+.relatedVideoBox {
+  border-top: solid 1px #939393;
+}
 .titleDiv {
   color: #ffffff;
   margin-top: 5px;
