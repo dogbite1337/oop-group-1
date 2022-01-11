@@ -1,6 +1,5 @@
 <template>
   <router-link
-    v-if="!$store.getters.getCurrentUser"
     :to="{
       path: '/VideoPage/' + (video ? video.videoId : 0),
       query: video ? video.videoId : 0,
