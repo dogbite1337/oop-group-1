@@ -3,6 +3,8 @@ package com.company.Handlers;
 import com.company.Repositories.videoRepository;
 import express.Express;
 
+import java.sql.SQLException;
+
 public class VideoHandler {
     private final Express app;
     private final videoRepository videoRepository;
@@ -51,6 +53,13 @@ public class VideoHandler {
             );
         });
 
+        app.put("/api/incrementViewCount", (req, res) -> {
+            try {
+                videoRepository.incrementViewCount(req.body().get("videoId").toString());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
     }
 }
 

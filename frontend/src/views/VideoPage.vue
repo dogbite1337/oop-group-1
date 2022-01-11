@@ -81,7 +81,7 @@
         <div class="SpaceDiv" />
         <div class="uploadDateDiv square">
           {{
-            new Date(video.uploadDate).toLocaleDateString().replaceAll('/', '-')
+            new Date(video.uploadDate).toLocaleDateString().replaceAll("/", "-")
           }}
         </div>
         <div class="SpaceDiv" />
@@ -142,15 +142,15 @@
   </div>
 </template>
 <script>
-import User from '../jsClasses/general/User';
-import Video from '../jsClasses/general/Video';
-import Footer from '../components/Footer.vue';
-import RelatedVideo from '../components/RelatedVideo.vue';
-import store from '../store';
+import User from "../jsClasses/general/User";
+import Video from "../jsClasses/general/Video";
+import Footer from "../components/Footer.vue";
+import RelatedVideo from "../components/RelatedVideo.vue";
+import store from "../store";
 
 // 770/430 width - 1:1
 export default {
-  name: 'VideoPage',
+  name: "VideoPage",
   components: {
     RelatedVideo,
     Footer,
@@ -163,14 +163,14 @@ export default {
       relatedVideos: this.$store.getters.getEightFirstVideos
         ? this.$store.getters.getEightFirstVideos
         : undefined,
-      video: '',
+      video: "",
       spacedViews: 0,
       spacedLikes: 0,
       spacedDislikes: 0,
       spacedStars: 0,
       spacedSubs: 0,
       spacedVideos: 0,
-      User: '',
+      User: "",
       isOnVideosPage: false,
       showWatchNowInstead: false,
       width: window.screen.width / 2,
@@ -179,7 +179,7 @@ export default {
   },
   async created() {
     this.$store.subscribe(async (mutation, state) => {
-      if (mutation.type == 'setRelatedVideoId') {
+      if (mutation.type == "setRelatedVideoId") {
         this.loadRelevantInformation(mutation.payload);
       }
     });
@@ -188,14 +188,17 @@ export default {
     this.loadRelevantInformation();
     this.isOnVideosPage = true;
     window.scrollTo(0, 0);
-    document.addEventListener('scroll', () => {
+    document.addEventListener("scroll", () => {
       if (window.scrollY >= 368) {
         this.showWatchNowInstead = true;
       } else {
         this.showWatchNowInstead = false;
       }
     });
-    window.addEventListener('resize', this.actOnResize);
+    window.addEventListener("resize", this.actOnResize);
+
+    // See comment on method
+    this.incrementViewCount(this.$route.path);
   },
   watch: {},
   methods: {
@@ -209,9 +212,23 @@ export default {
         this.width = 280;
       }
     },
+    // This is a rudimentary view count method. I spent a lot of time trying to get the
+    // YouTube API to work in order to make this more robust, but didn't have any luck.
+    // Using this for the time being
+    incrementViewCount(urlPath) {
+      setTimeout(async function() {
+        // the if statement verifies (partially) that the user has been on the same page for 15 seconds
+        if (this.$route.path === urlPath) {
+          await fetch("/api/incrementViewCount", {
+            method: "PUT",
+            body: JSON.stringify(this.video),
+          });
+        }
+      }.bind(this), 15000);
+    },
     async loadRelevantInformation(wantedUserId) {
       let videoRes = await fetch(
-        '/rest/getVideoById?' +
+        "/rest/getVideoById?" +
           new URLSearchParams({
             videoId:
               wantedUserId === undefined ? this.$route.params.id : wantedUserId,
@@ -223,8 +240,8 @@ export default {
       this.video = Object.assign(emptyVideo, videoResponse);
 
       this.video.videoURL = this.video.videoURL
-        .replace('watch?v=', 'embed/')
-        .concat('?enablejsapi=1&origin=http://example.com');
+        .replace("watch?v=", "embed/")
+        .concat("?enablejsapi=1&origin=http://example.com");
 
       this.spacedViews = this.renderSpacedNumbers(this.video.views.toString());
       this.spacedLikes = this.renderSpacedNumbers(this.video.likes.toString());
@@ -234,13 +251,13 @@ export default {
       this.spacedStars = this.renderSpacedNumbers(this.video.stars.toString());
 
       let uploaderRes = await fetch(
-        '/rest/getUserByUsername?' +
+        "/rest/getUserByUsername?" +
           new URLSearchParams({
             providedUsername: videoResponse.postedByUsername,
           })
       );
       let uploaderResponse = await uploaderRes.json();
-      let emptyUser = new User(0, '', '', '', 0, 0);
+      let emptyUser = new User(0, "", "", "", 0, 0);
       this.User = Object.assign(emptyUser, uploaderResponse);
       this.spacedSubs = this.renderSpacedNumbers(
         this.User.subscribers.toString()
@@ -250,14 +267,14 @@ export default {
       );
     },
     renderSpacedNumbers(stringToPad) {
-      let base = '';
+      let base = "";
       let startFrom = stringToPad % 1000;
-      let spacedString = '';
+      let spacedString = "";
       startFrom = startFrom.toString();
 
       for (let i = 0; i < stringToPad.length; i++) {
         if (i != 0 && (i - (stringToPad.length % 3)) % 3 == 0) {
-          base += ' ' + stringToPad[i];
+          base += " " + stringToPad[i];
         } else {
           base += stringToPad[i];
         }
@@ -266,11 +283,11 @@ export default {
       return spacedString;
     },
     clickedMe(e) {
-      if (e.target.className == 'commentsTab') {
+      if (e.target.className == "commentsTab") {
         this.showCommentsSection = true;
         this.showDescriptionTab = false;
       }
-      if (e.target.className == 'descriptionTab') {
+      if (e.target.className == "descriptionTab") {
         this.showDescriptionTab = true;
         this.showCommentsSection = false;
       }
@@ -280,13 +297,13 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto:wght@300;400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Revalia&family=Roboto:wght@300;400&display=swap");
 
 * {
   outline: none;
   border: none;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   overflow-x: hidden;
 }
 .backHomeDiv {
@@ -421,7 +438,7 @@ export default {
 .descriptionAndCommentsDivInScroll {
   display: grid;
   grid-template-columns: auto max-content auto;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   background-color: black;
   color: white;
   padding-top: 14px;
@@ -432,7 +449,7 @@ export default {
 .descriptionAndCommentsDiv {
   display: grid;
   grid-template-columns: auto max-content auto;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   background-color: black;
   color: white;
   padding-top: 14px;
@@ -568,7 +585,7 @@ export default {
   .descriptionAndCommentsDiv {
     display: grid;
     grid-template-columns: 10px max-content auto max-content 10px;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     background-color: black;
     color: white;
     padding-top: 14px;
