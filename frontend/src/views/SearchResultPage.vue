@@ -1,9 +1,11 @@
 <template>
     <Header />
+    <div class="mainContainer">
     <HasResult v-if="matchedVideoList.length > 0 || matchedUserList.length > 0" 
         :matchedVideoList = matchedVideoList 
         :matchedUserList = matchedUserList />
     <NoResult v-if="matchedVideoList.length <= 0 && matchedUserList.length <= 0"/>
+    </div>
     <Footer />
 </template>
 
@@ -39,5 +41,10 @@ export default {
 </script>
 
 <style scoped>
+
+.mainContainer{
+    height: 80vh;
+    overflow: scroll;
+}
 
 </style>

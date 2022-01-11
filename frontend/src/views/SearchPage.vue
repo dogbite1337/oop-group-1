@@ -9,12 +9,14 @@
         <button @click="clearHistory" type="button">Clear History</button>
       </div>
     </div>
+    <Footer />
   </div>
 </template>
 <script>
 import Header from '../components/Header.vue';
 import TrendLink from '../components/TrendLink.vue';
 import ExpandableSearchHistory from '../components/ExpandableSearchHistory.vue';
+import Footer from '../components/Footer.vue'
 
 export default {
   emits: ['update'],
@@ -28,6 +30,7 @@ export default {
 
   components: {
     Header,
+    Footer,
     TrendLink,
     ExpandableSearchHistory,
   },
@@ -175,7 +178,7 @@ export default {
 
 .searchPage {
   color: white;
-  /* height: 100vh; */
+  height: 74vh;
 }
 
 .searchPageButtonsContainer {

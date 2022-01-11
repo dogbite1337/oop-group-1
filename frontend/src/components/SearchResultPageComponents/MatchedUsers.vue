@@ -24,7 +24,7 @@
             </div>
 
             <div class="videosContianer" v-if="user.userVideos.length > 0">
-                <div class="videoCard" v-for="video in (user.userVideos.length > 3 ? user.userVideos.slice(0,3) : user.userVideos)" :key="video.title">
+                <div class="videoCard" v-for="video in userVideos(user)" :key="video.title" @click="goToVideoPage(video)">
                     <img class="thumbnail" :src="'https://img.youtube.com/vi/' + video.videoURL.substring(32, 43) + '/default.jpg'" alt="">
                     <p class="title">{{video.title}}</p>
                     <p class="time">{{uploadTime(video.uploadDate)}}</p>
@@ -48,11 +48,27 @@ export default {
 
     data(){
         return{
-            loggedInUser: this.$store.getters.getCurrentUser
+            loggedInUser: this.$store.getters.getCurrentUser,
         }
     },
 
     methods:{
+        goToVideoPage(video){
+            this.$router.push('/VideoPage/' + video.videoId)
+        },
+        userVideos(user){
+            let orderedList = user.userVideos
+            .sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+
+            if(orderedList.length > 3){
+                return orderedList.slice(0,3)
+            }
+            else{
+                return orderedList
+            }
+            // user.userVideos.length > 3 ? user.userVideos.slice(0,3) : user.userVideos
+        },
+
         uploadTime(timeInMilSec){
             let unixNow = Math.round(+new Date()/1000);
             let unix24Hours = 24*60*60;
@@ -69,7 +85,6 @@ export default {
                     return time
                 }
                 else{
-                    console.log(new Date().getDate())
                     let time = (t.getMonth()+1 < 10 ? "0" + (t.getMonth()+1).toString() : t.getMonth()+1) + "-" + (t.getDate()<10 ? "0" + t.getDate() : t.getDate())
                     return time
                 }

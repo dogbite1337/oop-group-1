@@ -1,7 +1,7 @@
 <template>
     <div v-for="video of matchedVideoList" :key="video" class="videoCard">
          <div class="thumbnail">
-             <img :src="'https://img.youtube.com/vi/' +
+             <img @click="goToVideoPage(video)" :src="'https://img.youtube.com/vi/' +
                 video.videoURL.substring(32, 43) +
                 '/default.jpg'">
          </div>
@@ -42,6 +42,9 @@ export default {
     },
 
     methods:{
+        goToVideoPage(video){
+            this.$router.push('/VideoPage/' + video.videoId)
+        },
         displayTitleBeforeKey(orginalTitle){
             let index = orginalTitle.toLowerCase().indexOf(this.keyword.toLowerCase())
             

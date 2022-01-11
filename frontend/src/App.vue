@@ -31,7 +31,7 @@ export default {
   background-color: #131313;
 }
 .BackDrop {
-  height: 100vh;
+  /* height: 100vh; */
   background-color: #131313;
 }
 </style>
