@@ -8,7 +8,9 @@ import java.util.ArrayList;
 public class commentsRepository {
     Connection con;
 
-    public Comment dislikeComment(Comment relevantComment) {
+    public Comment dislikeComment(Integer commentId){
+        Comment newComment = new Comment(0,0,"","",0,0,0,Long.valueOf("0"));
+
         try {
             con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
@@ -17,20 +19,34 @@ public class commentsRepository {
         }
 
         try {
-            PreparedStatement likeComment = con.prepareStatement("UPDATE comments SET dislikes = ? WHERE commentId = ?");
-            likeComment.setInt(1, relevantComment.getDislikes() + 1);
-            likeComment.setInt(2, relevantComment.getCommentId());
-            int rs = likeComment.executeUpdate();
+            PreparedStatement dislikedComment = con.prepareStatement("SELECT * FROM comments WHERE commentId = ?");
+            dislikedComment.setInt(1,commentId);
+            ResultSet rs = dislikedComment.executeQuery();
+
+
+            while(rs.next()) {
+                newComment = new Comment(rs.getInt(1), rs.getInt(2), rs.getString(3) , rs.getString(4) ,rs.getInt(5),rs.getInt(6), rs.getInt(7), rs.getLong(8));
+            }
+
+
+            PreparedStatement dislikeComment = con.prepareStatement("UPDATE comments SET dislikes = ? WHERE commentId = ?");
+            dislikeComment.setInt(1, newComment.getDislikes() + 1);
+            dislikeComment.setInt(2, newComment.getCommentId());
+            int resultSetFromLiking = dislikeComment.executeUpdate();
+
+
 
             con.close();
         } catch (Exception e) {
             System.out.println(e);
         }
-        relevantComment.setDislikes(relevantComment.getDislikes() + 1);
-        return relevantComment;
+        newComment.setDislikes(newComment.getDislikes() + 1);
+        return newComment;
     }
 
-    public Comment likeComment(Comment relevantComment){
+    public Comment likeComment(Integer commentId){
+        Comment newComment = new Comment(0,0,"","",0,0,0,Long.valueOf("0"));
+
         try {
             con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
@@ -39,17 +55,29 @@ public class commentsRepository {
         }
 
         try {
+            PreparedStatement likedComment = con.prepareStatement("SELECT * FROM comments WHERE commentId = ?");
+            likedComment.setInt(1,commentId);
+            ResultSet rs = likedComment.executeQuery();
+
+
+            while(rs.next()) {
+                newComment = new Comment(rs.getInt(1), rs.getInt(2), rs.getString(3) , rs.getString(4) ,rs.getInt(5),rs.getInt(6), rs.getInt(7), rs.getLong(8));
+            }
+
+
             PreparedStatement likeComment = con.prepareStatement("UPDATE comments SET likes = ? WHERE commentId = ?");
-            likeComment.setInt(1, relevantComment.getLikes() + 1);
-            likeComment.setInt(2, relevantComment.getCommentId());
-            int rs = likeComment.executeUpdate();
+            likeComment.setInt(1, newComment.getLikes() + 1);
+            likeComment.setInt(2, newComment.getCommentId());
+            int resultSetFromLiking = likeComment.executeUpdate();
+
+
 
             con.close();
         } catch (Exception e) {
             System.out.println(e);
         }
-        relevantComment.setLikes(relevantComment.getLikes() + 1);
-        return relevantComment;
+        newComment.setLikes(newComment.getLikes() + 1);
+        return newComment;
     }
 
     public ArrayList<Comment> getRepliesForComment(Integer commentId) {

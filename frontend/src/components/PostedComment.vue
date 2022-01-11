@@ -97,17 +97,25 @@
     </div>
     <div class="SpaceBlock" />
   </div>
-  <div class="commentersBox">
-    {{ commenters }}
+  <div v-if="showComments" class="commentersBox">
+    <CommentReply
+      v-for="(replyItem, index) of replies"
+      :key="index"
+      :commenter="commenters[index]"
+      :reply="replyItem"
+    />
   </div>
 </template>
 <script>
 import User from '../jsClasses/general/User';
 import Comment from '../jsClasses/general/Comment';
 import CommentReply from '../components/CommentReply.vue';
+import store from '../store';
 
 export default {
-  components: ['CommentReply'],
+  components: {
+    CommentReply,
+  },
   props: ['comment', 'replies', 'timestampOfComments', 'commenters'],
   name: 'PostedComment',
   mounted() {},
@@ -268,7 +276,6 @@ export default {
     },
   },
   async mounted() {
-    console.log(this.replies);
     let commenterRes = await fetch(
       '/rest/getUserByUsername?' +
         new URLSearchParams({
@@ -293,14 +300,11 @@ export default {
 .misc {
   width: max-content;
   height: max-content;
-  background-color: white;
+  background-color: black;
   margin-left: auto;
   margin-right: auto;
 }
 
-.commentersBox {
-  background-color: white;
-}
 .timestampOfComments {
   color: white;
   width: 100vw;

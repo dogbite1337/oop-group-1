@@ -214,7 +214,7 @@ export default {
       relevantComments: [],
       timestampOfComments: [],
       currentReplies: [],
-      currentCommenters: []
+      currentCommenters: [],
     };
   },
   async created() {
@@ -321,34 +321,46 @@ export default {
       let res = await fetch(
         '/rest/getRepliesToComment?' +
           new URLSearchParams({
-            commentId: commentId
+            commentId: commentId,
           }),
         {
           method: 'GET',
         }
       );
       let response = await res.json();
-      console.log(response);
-      let newComment = new Comment(0, 0, '', '', 0, 0, 0, 0);
-      for(let i = 0; i < response.length; i++){
-        this.currentReplies.push(Object.assign(newComment, response[i]));
+
+      for (let i = 0; i < response.length; i++) {
+        this.currentReplies.push(
+          new Comment(
+            response[i].commentId,
+            response[i].relatesToVideoId,
+            response[i].postedByUsername,
+            response[i].content,
+            response[i].likes,
+            response[i].dislikes,
+            response[i].responseToCommentId,
+            response[i].timeOfPosting
+          )
+        );
         let uploaderRes = await fetch(
-        '/rest/getUserByUsername?' +
-          new URLSearchParams({
-            providedUsername: response[i].postedByUsername,
-          })
+          '/rest/getUserByUsername?' +
+            new URLSearchParams({
+              providedUsername: response[i].postedByUsername,
+            })
         );
         let userResponse = await uploaderRes.json();
-        console.log(userResponse);
-        let myUser = new User(userResponse.userId, userResponse.username, userResponse.description, userResponse.profileURL, userResponse.subscribers, userResponse.videosPosted)
-        console.log(myUser);
-        this.currentCommenters.push(myUser)
+        let myUser = new User(
+          userResponse.userId,
+          userResponse.username,
+          userResponse.description,
+          userResponse.profileURL,
+          userResponse.subscribers,
+          userResponse.videosPosted
+        );
+        this.currentCommenters.push(myUser);
       }
-      
     },
-    async updateCommentSection() {
-
-    },
+    async updateCommentSection() {},
     updateComments(postedComment) {
       let newComment = new Comment();
       newComment = Object.assign(newComment, postedComment);

@@ -40,7 +40,6 @@ public class SearchHistoryHandler {
             try {
                 ArrayList<SearchHistory> searchHistory = searchHistoryLogic.getSearchHistories(userId);
                 res.json(searchHistory);
-                System.out.println(searchHistory);
             } catch (SQLException e) {
                 e.printStackTrace();
                 res.json("false");

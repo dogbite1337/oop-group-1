@@ -204,7 +204,7 @@ export default {
   overflow-y: hidden;
 }
 
-.SeasonText{
+.SeasonText {
   overflow-y: hidden;
 }
 .SearchAndLoginDiv {

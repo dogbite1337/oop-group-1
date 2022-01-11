@@ -63,7 +63,6 @@ public class searchHistoryRepository {
         }
 
         con.close();
-        System.out.println(historyListOfUserDescendingByTime.size());
         return historyListOfUserDescendingByTime;
     }
 

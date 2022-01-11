@@ -22,40 +22,20 @@ public class CommentsHandler {
     private void initCommentsHandler() {
 
         app.get("/rest/getRepliesToComment", (req, res) -> {
-            System.out.println(req.query("commentId"));
             res.json(commentsRepository.getRepliesForComment(Integer.parseInt(req.query("commentId"))));
         });
 
         // post a comment
         app.post("/api/postComment", (req, res) -> {
-            System.out.println(req.body());
             res.json(commentsRepository.postNewComment((Integer) req.body().get("relatesToVideoId"), (String) req.body().get("postedByUsername"), (String) req.body().get("content"), (Integer) req.body().get("responseToCommentId"), (Long) req.body().get("timeOfPosting")));
         });
 
         app.post("/api/likeComment", (req, res) -> {
-           res.json(commentsRepository.likeComment(
-                   new Comment(
-                   (Integer) req.body().get("commentId"),
-                   (Integer) req.body().get("relatesToVideoId"),
-                   (String) req.body().get("postedByUsername"),
-                   (String) req.body().get("content"),
-                   (Integer) req.body().get("likes"),
-                   (Integer) req.body().get("dislikes"),
-                   (Integer) req.body().get("responseToCommentId"),
-                   (Long) req.body().get("timeOfPosting"))));
+           res.json(commentsRepository.likeComment((Integer) req.body().get("commentId")));
         });
 
         app.post("/api/dislikeComment", (req, res) -> {
-            res.json(commentsRepository.dislikeComment(
-                    new Comment(
-                            (Integer) req.body().get("commentId"),
-                            (Integer) req.body().get("relatesToVideoId"),
-                            (String) req.body().get("postedByUsername"),
-                            (String) req.body().get("content"),
-                            (Integer) req.body().get("likes"),
-                            (Integer) req.body().get("dislikes"),
-                            (Integer) req.body().get("responseToCommentId"),
-                            (Long) req.body().get("timeOfPosting"))));
+            res.json(commentsRepository.dislikeComment((Integer) req.body().get("commentId")));
         });
 
         app.get("/rest/getCommentsForVideoId", (req, res) -> {
