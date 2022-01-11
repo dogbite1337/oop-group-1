@@ -8,6 +8,7 @@ public class User {
     private ArrayList<Video> userVideos = new ArrayList<Video>();
     private ArrayList<SearchHistory> userSearchHistories = new ArrayList<SearchHistory>();
 
+
     public Integer getUserId() {
         return userId;
     }
@@ -104,5 +105,15 @@ public class User {
         this.profileURL = profileURL;
         this.subscribers = subscribers;
         this.videosPosted = videosPosted;
+    }
+
+    public User(Integer userId, String username, String description, String profileURL, Integer subscribers, Integer videosPosted, ArrayList<Video> userVideos){
+        this.userId = userId;
+        this.username = username;
+        this.description = description;
+        this.profileURL = profileURL;
+        this.subscribers = subscribers;
+        this.videosPosted = videosPosted;
+        this.userVideos = userVideos;
     }
 }

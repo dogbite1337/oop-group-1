@@ -1,6 +1,8 @@
 <template>
     <Header />
-    <HasResult v-if="matchedVideoList.length > 0" :matchedVideoList = matchedVideoList />
+    <HasResult v-if="matchedVideoList.length > 0 || matchedUserList.length > 0" 
+        :matchedVideoList = matchedVideoList 
+        :matchedUserList = matchedUserList />
     
     <Footer />
 </template>
@@ -28,7 +30,8 @@ export default {
     async mounted(){
         let keyword = this.$store.getters.getKeyWord;
         this.matchedVideoList = await this.$store.dispatch('getMatchedVideoList', keyword);
-        // this.matchedUserList = this.$store.dispatch('getMatchedUserList', keyword);
+        this.matchedUserList = await this.$store.dispatch('getMatchedUserList', keyword);
+        console.log(this.matchedUserList)
     }
     
 }

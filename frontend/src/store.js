@@ -131,6 +131,15 @@ export default createStore({
     async getMatchedVideoList(store, keyword){
       let res = await fetch('/rest/getMatchedVideoList/' + keyword);
       return res.json();
+    },
+    async getMatchedUserList(store, keyword){
+      let res = await fetch(
+        '/rest/getMatchedUserList?' +
+          new URLSearchParams({
+            keyword: keyword,
+          })
+      );
+      return res.json();
     }
   },
 });

@@ -1,4 +1,5 @@
 <template>
+    <MatchedUsers v-if="matchedUserList.length> 0" :matchedUserList = matchedUserList />
     <MatchedVideos v-if="matchedVideoList.length > 0" :matchedVideoList = matchedVideoList />
 </template>
 <script>
@@ -6,7 +7,7 @@ import MatchedUsers from "./MatchedUsers.vue"
 import MatchedVideos from "./MatchedVideos.vue"
 
 export default {
-    props:['matchedVideoList'],
+    props:['matchedVideoList', 'matchedUserList'],
     
     components:{
         MatchedUsers,
@@ -14,8 +15,6 @@ export default {
     },
 
     mounted(){
-        // console.log("in Hasresult")
-        // console.log(this.$props.matchedVideoList)
     },
 
     data(){
