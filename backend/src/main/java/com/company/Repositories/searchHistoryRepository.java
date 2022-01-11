@@ -2,6 +2,7 @@ package com.company.Repositories;
 
 import com.company.DTOs.UserWithoutPassword;
 import com.company.Entities.SearchHistory;
+import com.company.Entities.Video;
 import com.company.utilities.Encrypter;
 import io.netty.util.internal.IntegerHolder;
 
@@ -53,6 +54,7 @@ public class searchHistoryRepository {
             Statement searchHistoryList = con.createStatement();
             String query = "Select * from searchhistories Where userId = " + userId + " ORDER BY historyId DESC LIMIT 6;";
             ResultSet result = searchHistoryList.executeQuery(query);
+
             while(result.next()){
                 SearchHistory searchHistory = new SearchHistory(result.getInt("userId"), result.getString("keyWord"), result.getString("time"), result.getInt("historyId"));
                 historyListOfUserDescendingByTime.add(searchHistory);
@@ -108,5 +110,67 @@ public class searchHistoryRepository {
         }
 
         con.close();
+    }
+
+    public ArrayList<String> getTrendingSearch() throws SQLException {
+        ArrayList<String> trendingHistoryList = new ArrayList<>();
+        try{
+            try {
+                con = DriverManager.getConnection(
+                        "jdbc:mysql://localhost:3306/kittykitty","root","root");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+
+            Statement trendingSearchList = con.createStatement();
+            String query = "SELECT keyword, COUNT(historyId) FROM searchhistories GROUP BY keyword ORDER BY COUNT(historyId) DESC LIMIT 10;";
+            ResultSet result = trendingSearchList.executeQuery(query);
+
+            while(result.next()) {
+                trendingHistoryList.add(result.getString("keyword"));
+            }
+
+
+        }
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        con.close();
+        return trendingHistoryList;
+    }
+
+    public ArrayList<Video> getMatchedVideoList(String keyword) throws SQLException {
+        ArrayList<Video> matchedVideoList = new ArrayList<>();
+        try {
+            con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/kittykitty","root","root");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Statement trendingSearchList = con.createStatement();
+        String query = "SELECT * FROM videos WHERE LOWER(title) LIKE " + "'%" + keyword  + "%'";
+        ResultSet result = trendingSearchList.executeQuery(query);
+
+        while(result.next()) {
+            Video video =
+                    new Video(result.getInt("videoId"),
+                            result.getInt("userId"),
+                            result.getTimestamp("uploadDate").getTime(),
+                            result.getString("videoUrl"),
+                            result.getString("title"),
+                            result.getString("description"),
+                            result.getInt("views"),
+                            result.getString("postedByUsername"),
+                            String.valueOf(result.getInt("likes")),
+                            String.valueOf(result.getInt("dislikes")),
+                            String.valueOf(result.getInt("stars")));
+
+            matchedVideoList.add(video);
+        }
+
+        con.close();
+        return matchedVideoList;
     }
 }

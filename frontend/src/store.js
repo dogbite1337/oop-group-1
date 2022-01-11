@@ -82,6 +82,7 @@ export default createStore({
   actions: {
     async login(store, currentUser) {
       store.commit('setUser', currentUser);
+      // store.commit('setMySearchHistoryList', [])
     },
     async updateSearchResult(store, searchResults) {
       store.commit('setSearchResults', searchResults);
@@ -105,12 +106,12 @@ export default createStore({
       let res = await fetch('/api/whoami');
       let currentUser = await res.json();
       store.commit('setUser', currentUser);
-      store.commit('setMySearchHistoryList', [])
+      // store.commit('setMySearchHistoryList', [])
     },
     async logout(store) {
       await fetch('/api/logout');
       store.commit('setUser', null);
-      store.commit('setMySearchHistoryList', [])
+      // store.commit('setMySearchHistoryList', [])
     },
     async getSearchHistories(store, id){
       let res = await fetch('/rest/getSearchHistories/' + id);
@@ -126,6 +127,26 @@ export default createStore({
       await fetch('/api/clearHistories/' + userId, 
       {
       method: 'DELETE'});
+    },
+    async getTrendingSearch(store){
+      let res = await fetch('/api/getTrendingSearch',{
+        method: 'GET'
+      })
+
+      return res.json();
+    },
+    async getMatchedVideoList(store, keyword){
+      let res = await fetch('/rest/getMatchedVideoList/' + keyword);
+      return res.json();
+    },
+    async getMatchedUserList(store, keyword){
+      let res = await fetch(
+        '/rest/getMatchedUserList?' +
+          new URLSearchParams({
+            keyword: keyword,
+          })
+      );
+      return res.json();
     }
   },
 });

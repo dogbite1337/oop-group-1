@@ -2,54 +2,46 @@
   <div class="MainDiv">
     <Header @update="register" />
     <div class="searchPage">
-      <TrendLink :trends="topTenTrend" />
+      <TrendLink/>
       <ExpandableSearchHistory />
       <div class="searchPageButtonsContainer">
-        <button @click="register">Search</button>
-        <button @click="clearHistory">Clear History</button>
+        <button @click="register" type="button">Search</button>
+        <button @click="clearHistory" type="button">Clear History</button>
       </div>
     </div>
+    <Footer />
   </div>
 </template>
 <script>
 import Header from '../components/Header.vue';
 import TrendLink from '../components/TrendLink.vue';
 import ExpandableSearchHistory from '../components/ExpandableSearchHistory.vue';
+import Footer from '../components/Footer.vue'
 
 export default {
   emits: ['update'],
   data() {
     return {
-      topTenTrend: [
-        'Cats',
-        'More Cats',
-        'All cats',
-        'Cats?!',
-        'Cats.',
-        'Cats!',
-        'Why are there so many cats',
-        'John',
-        'Stop This',
-        'Madness',
-      ],
-      searchHistory: [],
-      currentUser: null,
+        searchHistory: [],
+        currentUser: null,
     };
   },
 
   components: {
     Header,
+    Footer,
     TrendLink,
     ExpandableSearchHistory,
   },
 
   created() {},
 
-  async mounted() {
+  async mounted(){
+    let detailedSearchList;
     let boolean = false;
     this.$store.subscribe(async (mutation, state) => {
       if (mutation.type == 'setUser' && mutation.payload && !boolean) {
-        this.$store.dispatch('cacheSearchHistory', []);
+        // this.$store.dispatch('cacheSearchHistory', []);
         this.currentUser = mutation.payload;
         if (this.currentUser) {
           detailedSearchList = [];
@@ -65,8 +57,8 @@ export default {
           }
         } else {
           console.log('user is not logged in');
+          this.searchHistory = this.$store.getters.getMySearchHistoryList;
         }
-        this.searchHistory = this.$store.getters.getMySearchHistoryList;
         boolean = true;
       }
     });
@@ -76,8 +68,24 @@ export default {
 
   methods: {
     async register() {
+      this.searchHistory = this.$store.getters.getMySearchHistoryList;
+      if(this.currentUser){
+        let detailedSearchList = await this.$store.dispatch(
+          'getSearchHistories',
+          this.currentUser.userId
+        );
+        this.searchHistory = [];
+
+        if (detailedSearchList.length > 0) {
+          detailedSearchList.forEach((element) => {
+            this.searchHistory.push(element);
+          });
+        }
+      }
+
       let searchParam = this.$store.getters.getKeyWord;
-      if (this.currentUser && !this.searchHistory.includes(searchParam)) {
+      let boolean = await this.checkIfListContainsKey(this.searchHistory, searchParam)
+      if (this.currentUser && !boolean && searchParam) {
         let obj = {
           userId: this.currentUser.userId,
           keyWord: this.$store.getters.getKeyWord,
@@ -100,15 +108,24 @@ export default {
             this.searchHistory.push(element.keyWord);
           });
         }
-        await this.$store.dispatch('cacheSearchHistory', this.searchHistory);
-      } else if (this.currentUser && this.searchHistory.includes(searchParam)) {
+        this.$router.push('/SearchResult');
+
+      } else if (this.currentUser && boolean && searchParam) {
         console.log('loggedin but already made this search before');
+        this.$router.push('/SearchResult');
       } else if (
         !this.currentUser &&
-        this.searchHistory.includes(searchParam)
+        boolean
+        && searchParam
       ) {
         console.log("didn't log in but already made this search before");
-      } else {
+        this.$router.push('/SearchResult');
+      } else if(!this.currentUser &&
+        !boolean
+        && searchParam) {
+
+        this.searchHistory = this.$store.getters.getMySearchHistoryList;
+        
         if (this.searchHistory.length > 5) {
           this.searchHistory.splice(this.searchHistory.length - 1, 1);
         }
@@ -120,15 +137,35 @@ export default {
         this.searchHistory.unshift(obj);
 
         await this.$store.dispatch('cacheSearchHistory', this.searchHistory);
+        console.log(this.searchHistory)
+        this.$router.push('/SearchResult');
       }
     },
+
     async clearHistory() {
       this.searchHistory = [];
-      await this.$store.dispatch('cacheSearchHistory', []);
+      await this.$store.dispatch('cacheSearchHistory', this.searchHistory);
       if (this.currentUser) {
         await this.$store.dispatch('clearHistory', this.currentUser.userId);
       }
     },
+
+    async checkIfListContainsKey(list, keyword){
+      let boolean = false;
+      if(list.length == 0){
+        console.log("returned")
+        return boolean;
+      }
+
+      list.forEach(element => {
+        if((element.keyWord.toLowerCase()) == (keyword.toLowerCase())){
+          boolean = true;
+          return boolean;
+        }
+      });
+
+      return boolean;
+    }
   },
 };
 </script>
@@ -140,7 +177,7 @@ export default {
 
 .searchPage {
   color: white;
-  height: 100vh;
+  height: 74vh;
 }
 
 .searchPageButtonsContainer {

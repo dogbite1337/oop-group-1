@@ -2,6 +2,7 @@ package com.company.Repositories;
 
 import com.company.DTOs.UserWithoutPassword;
 import com.company.Entities.User;
+import com.company.Entities.Video;
 import com.company.utilities.Encrypter;
 
 import java.sql.*;
@@ -198,5 +199,68 @@ public class userRepository {
 
 
         return foundUser;
+    }
+    public ArrayList<User> getMatchedUserList(String keyword){
+        ArrayList<User> matchedUserList = new ArrayList<>();
+        ArrayList<Video> videoList;
+
+        try {
+            try {
+                con = DriverManager.getConnection(
+                        "jdbc:mysql://localhost:3306/kittykitty","root","root");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            PreparedStatement pStatement = con.prepareStatement("SELECT * FROM users WHERE LOWER(username) LIKE LOWER(?)");
+            pStatement.setString(1, keyword);
+            ResultSet rs = pStatement.executeQuery();
+
+            while(rs.next()) {
+                videoList = matchedUserVideoList(rs.getInt(1));
+                matchedUserList.add(new User(rs.getInt(1), rs.getString(2), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getInt(7), videoList));
+            }
+            con.close();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
+
+        return matchedUserList;
+    }
+
+    public ArrayList<Video> matchedUserVideoList(Integer userId){
+
+        ArrayList<Video> videoListOfUser = new ArrayList<>();
+        try {
+            try {
+                con = DriverManager.getConnection(
+                        "jdbc:mysql://localhost:3306/kittykitty","root","root");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            PreparedStatement pStatement2 = con.prepareStatement("SELECT * FROM videos WHERE userId = ?");
+            pStatement2.setInt(1, userId);
+            ResultSet videosRS = pStatement2.executeQuery();
+
+            while(videosRS.next()){
+                videoListOfUser.add(new Video(videosRS.getInt("videoId"),
+                        videosRS.getInt("userId"),
+                        videosRS.getTimestamp("uploadDate").getTime(),
+                        videosRS.getString("videoUrl"),
+                        videosRS.getString("title"),
+                        videosRS.getString("description"),
+                        videosRS.getInt("views"),
+                        videosRS.getString("postedByUsername"),
+                        String.valueOf(videosRS.getInt("likes")),
+                        String.valueOf(videosRS.getInt("dislikes")),
+                        String.valueOf(videosRS.getInt("stars"))));
+            }
+            con.close();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        return videoListOfUser;
     }
 }

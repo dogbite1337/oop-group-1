@@ -59,6 +59,10 @@ public class UserHandler {
         app.get("/rest/getUserByUsername", (req, res) -> {
            res.json(userRepository.getUserByUsername(req.query("providedUsername")));
         });
+
+        app.get("/rest/getMatchedUserList", (req,res) ->{
+            res.json(userRepository.getMatchedUserList(req.query("keyword")));
+        });
     }
 }
 

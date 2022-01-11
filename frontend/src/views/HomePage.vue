@@ -2,84 +2,8 @@
   <div class="MainDiv">
     <Header />
     <div class="NoLineDiv" />
-    <BannerSlider v-if="showPage == 'home'" />
-
-    <!-- search result page user -->
+    <BannerSlider/>
     <div
-      v-if="relevantUsers.length > 0 && searchedYet && showResultsPage"
-      class="userResultsTopDiv"
-    >
-      <div class="userResultsDiv">
-        <div />
-        <div class="profileImageDiv">
-          <div class="profileDivResultPage">
-            <img
-              class="profileInResultsPage"
-              src="../projectImages/xqcBanned.png"
-            />
-          </div>
-          <div class="coveringDiv" />
-          <div class="roundingDiv" />
-        </div>
-        <div />
-        <div class="SubsDiv">
-          <p class="usernameP">{{ relevantUsers[0].getUsername() }}</p>
-          <p class="subscribersP">
-            Subscribers: {{ relevantUsers[0].getSubscribers() }}
-          </p>
-        </div>
-        <div />
-        <p class="videosP">Videos: {{ relevantUsers[0].getVideosPosted() }}</p>
-        <div />
-      </div>
-    </div>
-    <div
-      v-if="searchedYet && relevantUsers.length > 0 && showResultsPage"
-      class="SubscribeDiv"
-    >
-      <button class="SubscribeButton" value="Subscribe">+ Subscribe</button>
-    </div>
-    <div
-      v-if="searchedYet && relevantUsers.length > 0 && showResultsPage"
-      class="topVideosGrid"
-    >
-      <div class="SpaceBlock" />
-      <div class="firstVideo">
-        <img class="linkVideoPic" src="../projectImages/birthdayPepe.png" />
-        <div class="VideoTitleDiv">
-          <p class="videoTitleP">Birthday presents</p>
-          <p class="uploadedP">6 hours ago</p>
-        </div>
-      </div>
-      <div class="SpaceBlock" />
-      <div class="secondVideo">
-        <img class="linkVideoPic" src="../projectImages/reallyXQC.png" />
-        <div class="VideoTitleDiv">
-          <p class="videoTitleP">I made the day for this kid</p>
-          <p class="uploadedP">12:17</p>
-        </div>
-      </div>
-      <div class="SpaceBlock" />
-      <div class="thirdVideo">
-        <img class="linkVideoPic" src="../projectImages/pepeBike.png" />
-        <div class="VideoTitleDiv">
-          <p class="videoTitleP">xQcOW</p>
-          <p class="uploadedP">11:15</p>
-        </div>
-      </div>
-      <div class="SpaceBlock" />
-    </div>
-
-    <!-- <p v-if="searchedYet && relevantUsers.length > 0 && showResultsPage" class="checkAllVideosLink">check all 10 videos ></p> -->
-    <div v-if="searchResults.length > 0 && showResultsPage">
-      <VideoResultCard
-        :video="searchResults[0]"
-        :searchQuery="lastSearchQuery"
-        v-if="searchResults[0]"
-      />
-    </div>
-    <div
-      v-if="!searchedYet && !showSearchPage && !showResultsPage"
       class="CardsContainer"
     >
       <VideoCard
@@ -89,14 +13,6 @@
         class="videoBox"
       />
     </div>
-    <div
-      v-if="searchResults.length == 0 && searchedYet && showResultsPage"
-      class="SorryDiv"
-    >
-      <div />
-      <div class="SorryText">No result was found</div>
-      <div />
-    </div>
   </div>
   <Footer class="footerDiv" />
 </template>
@@ -104,7 +20,6 @@
 import Header from '../components/Header.vue';
 import VideoCard from '../components/VideoCard.vue';
 import Footer from '../components/Footer.vue';
-import ExpandableSearchHistory from '../components/ExpandableSearchHistory.vue';
 import Video from '../jsClasses/general/Video';
 import TrendLink from '../components/TrendLink.vue';
 import VideoResultCard from '../components/VideoResultCard.vue';
@@ -117,7 +32,6 @@ export default {
   components: {
     Header,
     VideoCard,
-    ExpandableSearchHistory,
     VideoResultCard,
     TrendLink,
     Footer,
@@ -200,55 +114,9 @@ export default {
   data() {
     return {
       showPage: 'home',
-      // currentSliderImageIndex: 0,
-      // sliderImageURls: ['happyCats', 'smile', 'samuelCatJackson'],
-      // sliderTitles: ['Kitty Kissaten in Kyoto', 'Top 10 feel Good Animes', 'What did you call me? Meowdafaka'],
-      // gifs: ['ghosts', 'sorryKitty', 'sumo-run', 'shalsha-aizawa-falfa-aizawa', 'sleepyCat',
-      // 'WinterCold', 'samuelCatJackson', 'WinterWarm', 'smiling-cat-creepy-cat', 'cat-shooting'],
       relevantVideos: this.$store.getters.getSearchResults
         ? this.$store.getters.getSearchResults
         : [],
-      relevantUsers: [],
-      searchedYet: this.$store.getters.getSearchResults === null ? false : true,
-      showSearchPage: false,
-      expandedSearchHistory: false,
-      mySearchHistory: [
-        'John..',
-        'Why',
-        'Is the',
-        'Entire website',
-        'About',
-        'Cats..',
-      ],
-      topTenTrend: [
-        'Cats',
-        'More Cats',
-        'All cats',
-        'Cats?!',
-        'Cats.',
-        'Cats!',
-        'Why are there so many cats',
-        'John',
-        'Stop This',
-        'Madness',
-      ],
-      showResultsPage: false,
-      tempVideo: new Video(
-        7,
-        8,
-        null,
-        'test',
-        'xQc talks about the meaning of "juice"',
-        'ha',
-        5655123,
-        'xQc'
-      ),
-      searchResults: [],
-      lastSearchQuery: this.$store.getters.getLastSearchQuery
-        ? this.$store.getters.getLastSearchQuery
-        : '',
-      currentPage: 1,
-      currentWindowSize: window.screen.width,
     };
   },
   mounted() {
@@ -283,12 +151,12 @@ export default {
       this.showResultsPage = true;
       this.showSearchPage = false;
     },
-    expandSearchHistory() {
-      this.expandedSearchHistory = true;
-    },
-    closeSearchHistory() {
-      this.expandedSearchHistory = false;
-    },
+    // expandSearchHistory() {
+    //   this.expandedSearchHistory = true;
+    // },
+    // closeSearchHistory() {
+    //   this.expandedSearchHistory = false;
+    // },
     async getVideosForCurrentPage() {
       if (this.currentPage == 1 && this.$store.getters.getEightFirstVideos) {
         return this.$store.getters.getEightFirstVideos;

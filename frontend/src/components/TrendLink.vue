@@ -4,8 +4,8 @@
   </div>
   <div class="trendGrid">
     <div class="itemsContainer">
-      <div v-for="(trend, index) of trends" :key="trend" class="item">
-        <p>
+      <div v-for="(trend, index) of trendingSearch" :key="trend" class="item">
+        <p @click="makeSearch(trend)">
           {{
             index +
             1 +
@@ -19,12 +19,23 @@
 </template>
 <script>
 export default {
-  props: ['trends'],
   name: 'TrendLink',
   data() {
-    return {};
+    return {
+      trendingSearch: [],
+    };
   },
-  methods: {},
+
+  async mounted(){
+    this.trendingSearch = await this.$store.dispatch('getTrendingSearch');
+  },
+
+  methods: {
+    async makeSearch(keyWord){
+      await this.$store.dispatch('setKeyWord', keyWord)
+      this.$router.push('/SearchResult');
+    }
+  },
 };
 </script>
 
@@ -67,5 +78,8 @@ h1 {
   display: grid;
   grid-template-columns: repeat(2, 50%);
   grid-template-rows: repeat(5, 20%);
+  grid-gap: 2px;
+  justify-content: center;
+  height: 25vh;
 }
 </style>

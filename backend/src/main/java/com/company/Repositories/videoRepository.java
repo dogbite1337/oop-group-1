@@ -296,4 +296,17 @@ public class videoRepository {
         return uploadedVideo;
     }
 
+    public void incrementViewCount(String videoId) throws SQLException {
+        try {
+            con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/kittykitty","root","root");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        String baseQuery = ("UPDATE videos SET views = views + 1 WHERE videoId = $replaceThis").replace("$replaceThis", videoId);
+        PreparedStatement pStatement = con.prepareStatement(baseQuery);
+        pStatement.executeUpdate();
+        con.close();
+    }
 }
