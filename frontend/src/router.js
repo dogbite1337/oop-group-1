@@ -6,6 +6,7 @@ import LoginPage from './views/LoginPage.vue';
 import RegisterPage from './views/RegisterPage.vue'
 import UploadVideoPage from './views/UploadVideoPage.vue'
 import VideoPage from './views/VideoPage.vue'
+import SearchPage from './views/SearchPage.vue'
 
 export default createRouter({
   history: createWebHistory(),
@@ -29,6 +30,10 @@ export default createRouter({
     {
       path: '/VideoPage/:id',
       component: VideoPage
+    },
+    {
+      path: '/Search',
+      component: SearchPage
     }
   ],
 });

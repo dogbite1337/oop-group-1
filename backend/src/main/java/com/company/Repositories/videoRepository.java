@@ -24,17 +24,18 @@ public class videoRepository {
 
             while(rs.next()) {
                 // We must manually specify at which index and which datatypes each column in the result is.
-                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "", "0", "0", "0");
+                Video newVideo = new Video(0,0, 0,"Not found", "Not found", "Not found", 0, "", "0", "0", "0");
                 newVideo.setVideoId(rs.getInt(1));
                 newVideo.setUserId(rs.getInt(2));
-                newVideo.setVideoURL(rs.getString(3));
-                newVideo.setTitle(rs.getString(4));
-                newVideo.setDescription(rs.getString(5));
-                newVideo.setViews(rs.getInt(6));
-                newVideo.setPostedByUsername(rs.getString(7));
-                newVideo.setLikes(String.valueOf(rs.getInt(8)));
-                newVideo.setDislikes(String.valueOf(rs.getInt(9)));
-                newVideo.setStars(String.valueOf(rs.getInt(10)));
+                newVideo.setUploadDate(rs.getTimestamp(3).getTime());
+                newVideo.setVideoURL(rs.getString(4));
+                newVideo.setTitle(rs.getString(5));
+                newVideo.setDescription(rs.getString(6));
+                newVideo.setViews(rs.getInt(7));
+                newVideo.setPostedByUsername(rs.getString(8));
+                newVideo.setLikes(String.valueOf(rs.getInt(9)));
+                newVideo.setDislikes(String.valueOf(rs.getInt(10)));
+                newVideo.setStars(String.valueOf(rs.getInt(11)));
                 allVideosByUser.add(newVideo);
             }
             con.close();
@@ -62,17 +63,18 @@ public class videoRepository {
 
             while(rs.next()) {
                 // We must manually specify at which index and which datatypes each column in the result is.
-                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "", "0", "0", "0");
+                Video newVideo = new Video(0,0, 0,"Not found", "Not found", "Not found", 0, "", "0", "0", "0");
                 newVideo.setVideoId(rs.getInt(1));
                 newVideo.setUserId(rs.getInt(2));
-                newVideo.setVideoURL(rs.getString(3));
-                newVideo.setTitle(rs.getString(4));
-                newVideo.setDescription(rs.getString(5));
-                newVideo.setViews(rs.getInt(6));
-                newVideo.setPostedByUsername(rs.getString(7));
-                newVideo.setLikes(String.valueOf(rs.getInt(8)));
-                newVideo.setDislikes(String.valueOf(rs.getInt(9)));
-                newVideo.setStars(String.valueOf(rs.getInt(10)));
+                newVideo.setUploadDate(rs.getTimestamp(3).getTime());
+                newVideo.setVideoURL(rs.getString(4));
+                newVideo.setTitle(rs.getString(5));
+                newVideo.setDescription(rs.getString(6));
+                newVideo.setViews(rs.getInt(7));
+                newVideo.setPostedByUsername(rs.getString(8));
+                newVideo.setLikes(String.valueOf(rs.getInt(9)));
+                newVideo.setDislikes(String.valueOf(rs.getInt(10)));
+                newVideo.setStars(String.valueOf(rs.getInt(11)));
                 videosToReturn.add(newVideo);
             }
             con.close();
@@ -99,17 +101,18 @@ public class videoRepository {
 
             while(rs.next()) {
                 // We must manually specify at which index and which datatypes each column in the result is.
-                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "", "0", "0", "0");
+                Video newVideo = new Video(0,0, 0,"Not found", "Not found", "Not found", 0, "", "0", "0", "0");
                 newVideo.setVideoId(rs.getInt(1));
                 newVideo.setUserId(rs.getInt(2));
-                newVideo.setVideoURL(rs.getString(3));
-                newVideo.setTitle(rs.getString(4));
-                newVideo.setDescription(rs.getString(5));
-                newVideo.setViews(rs.getInt(6));
-                newVideo.setPostedByUsername(rs.getString(7));
-                newVideo.setLikes(String.valueOf(rs.getInt(8)));
-                newVideo.setDislikes(String.valueOf(rs.getInt(9)));
-                newVideo.setStars(String.valueOf(rs.getInt(10)));
+                newVideo.setUploadDate(rs.getTimestamp(3).getTime());
+                newVideo.setVideoURL(rs.getString(4));
+                newVideo.setTitle(rs.getString(5));
+                newVideo.setDescription(rs.getString(6));
+                newVideo.setViews(rs.getInt(7));
+                newVideo.setPostedByUsername(rs.getString(8));
+                newVideo.setLikes(String.valueOf(rs.getInt(9)));
+                newVideo.setDislikes(String.valueOf(rs.getInt(10)));
+                newVideo.setStars(String.valueOf(rs.getInt(11)));
                 videosToReturn.add(newVideo);
             }
             con.close();
@@ -136,17 +139,18 @@ public class videoRepository {
 
             while(rs.next()) {
                 // We must manually specify at which index and which datatypes each column in the result is.
-                Video newVideo = new Video(0,0,"Not found", "Not found", "Not found", 0, "", "0","0", "0");
+                Video newVideo = new Video(0,0, 0,"Not found", "Not found", "Not found", 0, "", "0","0", "0");
                 newVideo.setVideoId(rs.getInt(1));
                 newVideo.setUserId(rs.getInt(2));
-                newVideo.setVideoURL(rs.getString(3));
-                newVideo.setTitle(rs.getString(4));
-                newVideo.setDescription(rs.getString(5));
-                newVideo.setViews(rs.getInt(6));
-                newVideo.setPostedByUsername(rs.getString(7));
-                newVideo.setLikes(String.valueOf(rs.getInt(8)));
-                newVideo.setDislikes(String.valueOf(rs.getInt(9)));
-                newVideo.setStars(String.valueOf(rs.getInt(10)));
+                newVideo.setUploadDate(rs.getTimestamp(3).getTime());
+                newVideo.setVideoURL(rs.getString(4));
+                newVideo.setTitle(rs.getString(5));
+                newVideo.setDescription(rs.getString(6));
+                newVideo.setViews(rs.getInt(7));
+                newVideo.setPostedByUsername(rs.getString(8));
+                newVideo.setLikes(String.valueOf(rs.getInt(9)));
+                newVideo.setDislikes(String.valueOf(rs.getInt(10)));
+                newVideo.setStars(String.valueOf(rs.getInt(11)));
                 videosToReturn.add(newVideo);
             }
             con.close();
@@ -159,7 +163,7 @@ public class videoRepository {
 
     public Video getVideoById(String videoId)
     {
-        Video relevantVideo = new Video(0, 0, "", "", "", 0, "", "0", "0", "0");
+        Video relevantVideo = new Video(0, 0, 0, "", "", "", 0, "", "0", "0", "0");
 
         try {
             try {
@@ -176,14 +180,15 @@ public class videoRepository {
             while(rs.next()){
                 relevantVideo.setVideoId(rs.getInt(1));
                 relevantVideo.setUserId(rs.getInt(2));
-                relevantVideo.setVideoURL(rs.getString(3));
-                relevantVideo.setTitle(rs.getString(4));
-                relevantVideo.setDescription(rs.getString(5));
-                relevantVideo.setViews(rs.getInt(6));
-                relevantVideo.setPostedByUsername(rs.getString(7));
-                relevantVideo.setLikes(String.valueOf(rs.getInt(8)));
-                relevantVideo.setDislikes(String.valueOf(rs.getInt(9)));
-                relevantVideo.setStars(String.valueOf(rs.getInt(10)));
+                relevantVideo.setUploadDate(rs.getTimestamp(3).getTime());
+                relevantVideo.setVideoURL(rs.getString(4));
+                relevantVideo.setTitle(rs.getString(5));
+                relevantVideo.setDescription(rs.getString(6));
+                relevantVideo.setViews(rs.getInt(7));
+                relevantVideo.setPostedByUsername(rs.getString(8));
+                relevantVideo.setLikes(String.valueOf(rs.getInt(9)));
+                relevantVideo.setDislikes(String.valueOf(rs.getInt(10)));
+                relevantVideo.setStars(String.valueOf(rs.getInt(11)));
             }
 
             con.close();
@@ -194,11 +199,12 @@ public class videoRepository {
         return relevantVideo;
     }
 
-    public Video uploadNewVideo(String userIdOfUpload, String videoURL, String title, String description, String views, String postedByUsername, String likes, String dislikes, String stars)
+    public Video uploadNewVideo(String userIdOfUpload, String uploadDate, String videoURL, String title, String description, String views, String postedByUsername, String likes, String dislikes, String stars)
     {
-        Video uploadedVideo = new Video(0, 0, "", "", "", 0, "", "0", "0", "0");
+        Video uploadedVideo = new Video(0, 0, 0, "", "", "", 0, "", "0", "0", "0");
 
         uploadedVideo.setUserId(Integer.parseInt(userIdOfUpload));
+        uploadedVideo.setUploadDate(Long.parseLong(uploadDate));
         uploadedVideo.setVideoURL(videoURL);
         uploadedVideo.setTitle(title);
         uploadedVideo.setDescription(description);
@@ -216,16 +222,17 @@ public class videoRepository {
                 e.printStackTrace();
             }
 
-            PreparedStatement pStatement = con.prepareStatement("INSERT INTO videos (userId, videoURL, title, description, views, postedByUsername, likes, dislikes, stars) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement pStatement = con.prepareStatement("INSERT INTO videos (userId, uploadDate, videoURL, title, description, views, postedByUsername, likes, dislikes, stars) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             pStatement.setInt(1, uploadedVideo.getUserId());
-            pStatement.setString(2, uploadedVideo.getVideoURL());
-            pStatement.setString(3, uploadedVideo.getTitle());
-            pStatement.setString(4, uploadedVideo.getDescription());
-            pStatement.setInt(5, uploadedVideo.getViews());
-            pStatement.setString(6, uploadedVideo.getPostedByUsername());
-            pStatement.setString(7, uploadedVideo.getLikes());
-            pStatement.setString(8, uploadedVideo.getDislikes());
-            pStatement.setString(9, uploadedVideo.getStars());
+            pStatement.setTimestamp(2, new Timestamp(uploadedVideo.getUploadDate()));
+            pStatement.setString(3, uploadedVideo.getVideoURL());
+            pStatement.setString(4, uploadedVideo.getTitle());
+            pStatement.setString(5, uploadedVideo.getDescription());
+            pStatement.setInt(6, uploadedVideo.getViews());
+            pStatement.setString(7, uploadedVideo.getPostedByUsername());
+            pStatement.setString(8, uploadedVideo.getLikes());
+            pStatement.setString(9, uploadedVideo.getDislikes());
+            pStatement.setString(10, uploadedVideo.getStars());
             int newVideoUpload = pStatement.executeUpdate();
 
             try (ResultSet generatedKeys = pStatement.getGeneratedKeys()){

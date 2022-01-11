@@ -1,91 +1,135 @@
 <template>
-  <div class="historyDivUnexpanded">
-    <div class="EmptyDiv"/>
-    <div v-if="values.length > 0" class="searchHistoryItem">{{values[0].length > 14 ? values[0].substring(0,14) + '...' : values[0]}}</div>
-    <div v-if="values.length <= 0" class="EmptysearchHistoryItem" />
-    <div class="EmptyDiv"/>
-    <div v-if="values.length > 1" class="searchHistoryItem">{{values[1].length > 14 ? values[1].substring(0,14) + '...' : values[1]}}</div>
-    <div v-if="values.length <= 1" class="NosearchHistoryItemYet">No Searches Yet</div>
-    <div class="EmptyDiv"/>
-    <div v-if="values.length > 2" class="searchHistoryItem">{{values[2].length > 14 ? values[2].substring(0,14) + '...' : values[2]}}</div>
-    <div v-if="values.length <= 2" class="EmptysearchHistoryItem" />
-    <div class="EmptyDiv"/>
-  </div>
-  <div v-if="expandedSearchHistory" class="historyDivUnexpanded">
-    <div class="EmptyDiv"/>
-    <div v-if="values.length > 3" class="searchHistoryItem">{{values[3].length > 14 ? values[3].substring(0,14) + '...' : values[3]}}</div>
-    <div v-if="values.length <= 3" class="EmptysearchHistoryItem" />
-    <div class="EmptyDiv"/>
-    <div v-if="values.length > 4" class="searchHistoryItem">{{values[4].length > 14 ? values[4].substring(0,14) + '...' : values[4]}}</div>
-    <div v-if="values.length <= 4" class="EmptysearchHistoryItem" />
-    <div class="EmptyDiv"/>
-    <div v-if="values.length > 5" class="searchHistoryItem">{{values[5].length > 14 ? values[5].substring(0,14) + '...' : values[5]}}</div>
-    <div v-if="values.length <= 5" class="EmptysearchHistoryItem" />
-    <div class="EmptyDiv"/>
+  <div class="searchHistoryContainer" v-if="mySearchHistoryList.length > 0">
+    <div class="title">
+      <h1>Search History</h1>
+    </div>
+    <div class="buttonContainer">
+      <button @click="btnClicked ? (btnClicked = false) : (btnClicked = true)">
+        {{ btnClicked ? 'close' : 'expand' }}
+      </button>
+    </div>
+    <div class="historyItemContainer" v-if="!btnClicked">
+      <div
+        class="historyItem"
+        v-for="item of mySearchHistoryList.slice(0, 3)"
+        :key="item"
+      >
+        <p>
+          {{
+            item.keyWord.length > 12
+              ? item.keyWord.substring(0, 9) + '...'
+              : item.keyWord
+          }}
+        </p>
+      </div>
+    </div>
+
+    <div class="historyItemContainer" v-if="btnClicked">
+      <div class="historyItem" v-for="item of mySearchHistoryList" :key="item">
+        <p>
+          {{
+            item.keyWord.length > 12
+              ? item.keyWord.substring(0, 9) + '...'
+              : item.keyWord
+          }}
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-
 export default {
-  props: ['expandedSearchHistory', 'values'],
   name: 'ExpandableSearchHistory',
+  props: ['searchHistory'],
   data() {
     return {
+      btnClicked: false,
+      // getting from state atm, change to fetch from DB when search page shown
+      mySearchHistoryList: [],
     };
   },
-  methods: {
+  async mounted() {
+    let boolean = false;
+    this.$store.subscribe(async (mutation, state) => {
+      if (
+        mutation.type == 'setMySearchHistoryList' &&
+        mutation.payload.length == 0
+      ) {
+        this.mySearchHistoryList = [];
+        return;
+      }
 
-  }
+      if (
+        mutation.type == 'setUser' &&
+        !boolean &&
+        this.$store.getters.getCurrentUser
+      ) {
+        this.mySearchHistoryList = await this.$store.dispatch(
+          'getSearchHistories',
+          this.$store.getters.getCurrentUser.userId
+        );
+        boolean = true;
+      }
+      if (
+        mutation.type == 'setMySearchHistoryList' &&
+        this.$store.getters.getCurrentUser
+      ) {
+        this.mySearchHistoryList = await this.$store.dispatch(
+          'getSearchHistories',
+          this.$store.getters.getCurrentUser.userId
+        );
+      }
+      if (
+        mutation.type == 'setMySearchHistoryList' &&
+        !this.$store.getters.getCurrentUser
+      ) {
+        this.mySearchHistoryList = await this.$store.getters
+          .getMySearchHistoryList;
+      }
+    });
+  },
+
+  methods: {},
 };
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap');
-
-.historyDivUnexpanded{
-  height: 46px;
-  background-color: white;
-  margin-left: 19px;
-  margin-right: 19px;
+.searchHistoryContainer {
+  margin: 5vh 5% 5vh 5%;
   display: grid;
-  grid-template-columns: 13px 108px 13px 108px 13px 108px 13px;
-  grid-template-rows: 100px;
-  width: 372px;
-  margin-left: auto;
-  margin-right: auto;
+  grid-template-columns: 50% 50%;
 }
 
-.NosearchHistoryItemYet{
-  color: black;
-  background-color: white;
-  height: 20.5px;
-  text-align: center;
-  padding-top: 6.5px;
-  border-radius: 3px;
-  margin-top: 12px;
-  font-size: 13px;
+h1 {
+  font-size: 20px;
 }
 
-.searchHistoryItem{
-  color: white;
-  background-color: rgba(0, 0, 0, 0.7);
-  height: 20.5px;
-  text-align: center;
-  padding-top: 6.5px;
-  border-radius: 3px;
-  margin-top: 12px;
-  font-size: 13px;
+.title {
+  margin: 10px 0 10px 0;
 }
 
-.EmptysearchHistoryItem{
-  color: white;
-  background-color: white;
-  width: 108px;
-  height: 20.5px;
+.buttonContainer {
+  align-self: center;
+  text-align: right;
+}
+
+button {
+  width: 15vw;
+}
+
+.historyItemContainer {
+  grid-column-start: span 2;
+  background: white;
+  border-radius: 5px;
+  display: grid;
+  grid-template-columns: repeat(3, 33%);
+}
+
+.historyItem {
+  background: #595959;
+  margin: 5px;
+  border-radius: 5px;
+  height: 3vh;
   text-align: center;
-  padding-top: 6.5px;
-  border-radius: 3px;
-  margin-top: 12px;
-  font-size: 13px;
 }
 </style>

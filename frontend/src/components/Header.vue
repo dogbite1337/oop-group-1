@@ -11,18 +11,21 @@
     <img class="CatInHeader" src="../projectImages/Cat no background.png" />
     <div class="SpaceDiv2" />
     <div class="searchDiv">
-      <img
-        class="iconInSearchField"
-        src="../projectImages/magnifying_glass.png"
-      />
-      <input
-        @click="showSearchMenu"
-        @change="searchForVideos"
-        v-model="searchParam"
-        class="SearchField"
-        type="text"
-        placeholder="Search.."
-      />
+      <router-link class="SearchLink" :to="{ path: '/Search' }">
+        <img
+          class="iconInSearchField"
+          src="../projectImages/magnifying_glass.png"
+        />
+        <input
+          v-on:keyup.enter="search"
+          @change="setKeyWord"
+          v-on:click="searchParam = ''"
+          v-model="searchParam"
+          class="SearchField"
+          type="text"
+          placeholder="Search.."
+        />
+      </router-link>
       <div class="SpaceDiv" />
     </div>
     <div class="SpaceDiv" />
@@ -48,45 +51,33 @@
   </div>
 </template>
 <script>
-import store from "../store";
+import store from '../store';
 export default {
-  name: "Header",
+  name: 'Header',
+  emits: ['update'],
   async mounted() {
-    await this.$store.dispatch("whoAmI");
-    if(this.$store.getters.getCurrentUser){
+    await this.$store.dispatch('whoAmI');
+    if (this.$store.getters.getCurrentUser) {
       this.profilePic = this.$store.getters.getCurrentUser.getProfileURL();
     }
   },
   data() {
     return {
       isLoggedIn: false,
-      searchParam: "",
+      searchParam: '',
       profilePic: this.$store.getters.getCurrentUser
         ? this.$store.getters.getCurrentUser.getProfileURL()
-        : "",
+        : '',
       profileDropdown: false,
     };
   },
   methods: {
     resetToStartPage() {
-      this.$store.dispatch("resetToStartPage", true);
-      this.searchParam = "";
+      this.$store.dispatch('resetToStartPage', true);
+      this.searchParam = '';
+      this.$router.push('/');
     },
-    showSearchMenu() {
-      this.$store.dispatch("updateShowSearchPage", true);
-    },
-    async searchForVideos() {
-      this.$store.dispatch("updateLastSearchQuery", this.searchParam);
-      let res = await fetch(
-        "/rest/getAllVideosByTitle?" +
-          new URLSearchParams({
-            providedTitle: this.searchParam,
-          })
-      );
 
-      let response = await res.json();
-      this.$store.dispatch("updateSearchResult", response);
-    },
     toggleProfileDropdown() {
       if (!this.profileDropdown) {
         this.profileDropdown = true;
@@ -95,37 +86,45 @@ export default {
       }
     },
     async logout() {
-      await this.$store.dispatch("logout");
+      await this.$store.dispatch('logout');
       this.toggleProfileDropdown();
+      this.$router.push('/');
     },
     uploadNavigation() {
-      this.$router.push('Upload')
-    }
+      this.$router.push('Upload');
+    },
+    search() {
+      this.setKeyWord;
+      this.$emit('update');
+    },
+    setKeyWord() {
+      this.$store.dispatch('setKeyWord', this.searchParam);
+    },
   },
 };
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap');
 
 * {
   overflow-x: hidden;
 }
 
-.searchDiv{
+.searchDiv {
   display: grid;
   grid-template-columns: max-content max-content 10px;
   margin-left: 16px;
   margin-right: 30px;
 }
 
-@media screen and (max-width: 380px){
-  .searchDiv{
+@media screen and (max-width: 380px) {
+  .searchDiv {
     margin-left: 5px;
     margin-right: 10px;
   }
 }
-.searchIcon{
+.searchIcon {
   height: 20px;
   width: 20px;
   z-index: 3;
@@ -136,11 +135,11 @@ export default {
 
 .iconInSearchField {
   position: relative;
-  top: 1px;
+  top: 5px;
   left: 15px;
   display: inline;
-  height: 25px;
-  width: 25px;
+  height: 20px;
+  width: 20px;
   z-index: 3;
   margin-left: 20px;
   margin-top: 5px;
@@ -155,7 +154,7 @@ export default {
   min-width: 100px;
   padding-left: 37px;
   display: inline;
-  outline:none;
+  outline: none;
   margin-left: -20px;
 }
 
@@ -168,7 +167,7 @@ export default {
 .KittyText {
   -webkit-text-stroke-width: 0.007px;
   -webkit-text-stroke-color: #c9c9c9;
-  font-family: "Revalia", cursive;
+  font-family: 'Revalia', cursive;
   font-style: normal;
   font-weight: 700;
   font-size: 15px;
@@ -181,7 +180,7 @@ export default {
 .SeasonText {
   -webkit-text-stroke-width: 0.007px;
   -webkit-text-stroke-color: #c9c9c9;
-  font-family: "Revalia", cursive;
+  font-family: 'Revalia', cursive;
   font-style: normal;
   font-weight: 700;
   font-size: 15px;
@@ -196,7 +195,7 @@ export default {
   grid-template-columns: 16px 100px auto 80px;
   height: 60px;
   text-align: center;
-  background-image:url('../projectImages/ghosts.gif');
+  background-image: url('../projectImages/ghosts.gif');
   background-size: 100% 120px;
   background-repeat: no-repeat;
   max-width: 725px;
@@ -204,12 +203,12 @@ export default {
   margin-right: auto;
 }
 
-.SearchAndLoginDiv{
-  display: grid;    /* Margin, Cat, Margin, search icon, margin, Search Field, margin, Login Button, Margin */
-  grid-template-columns: auto 43px auto max-content auto auto; 
+.SearchAndLoginDiv {
+  display: grid; /* Margin, Cat, Margin, search icon, margin, Search Field, margin, Login Button, Margin */
+  grid-template-columns: auto 43px auto max-content auto auto;
   background-color: #131313;
   padding-top: 16px;
-  border-bottom: solid 1px #BFBFBF;
+  border-bottom: solid 1px #bfbfbf;
   max-width: max-content;
   margin-left: auto;
   margin-right: auto;
@@ -230,11 +229,14 @@ export default {
   margin-top: 4px;
 }
 
+.SearchLink {
+  text-decoration: none;
+}
 .LoginText {
   margin-top: 12.5px;
   font-size: 12px;
   font-weight: 500;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   line-height: 14.06px;
 }
 
@@ -243,11 +245,14 @@ export default {
   width: 40px;
   border-radius: 30px;
 }
-
+.SpaceDiv {
+  height: 10px;
+  width: 10px;
+}
 li {
   text-align: center;
   color: white;
   font-family: 'Roboto', sans-serif;
-  margin-bottom: 10px;
+  margin-top: 10px;
 }
 </style>
