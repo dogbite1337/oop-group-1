@@ -231,12 +231,14 @@ export default {
     window.scrollTo(0, 0);
 
     let fixedList = [];
-    for (let i = 0; i < this.relatedVideos.length; i++) {
-      if (this.relatedVideos[i].videoId != this.$route.params.id) {
-        fixedList.push(this.relatedVideos[i]);
+    if (this.relatedVideos) {
+      for (let i = 0; i < this.relatedVideos.length; i++) {
+        if (this.relatedVideos[i].videoId != this.$route.params.id) {
+          fixedList.push(this.relatedVideos[i]);
+        }
       }
+      this.relatedVideos = fixedList;
     }
-    this.relatedVideos = fixedList;
 
     let commentsRes = await fetch(
       '/rest/getCommentsForVideoId?' +

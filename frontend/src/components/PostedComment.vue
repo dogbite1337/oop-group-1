@@ -19,7 +19,12 @@
       <div class="commentGrid">
         {{ comment.content }}
         <div v-if="activeUser" class="trashIconDiv">
-          <img v-if="activeUser.username == comment.postedByUsername" @click="removeComment" class="trashCanIcon" src="../projectImages/Trashcan.png" />
+          <img
+            v-if="activeUser.username == comment.postedByUsername"
+            @click="removeComment"
+            class="trashCanIcon"
+            src="../projectImages/Trashcan.png"
+          />
         </div>
       </div>
     </div>
@@ -138,7 +143,7 @@ export default {
       isANumberInput: isNaN(this.comment.timeOfPosting),
       showComments: false,
       isActive: this.activeId == this.comment.commentId,
-      activeUser: this.$store.getters.getCurrentUser
+      activeUser: this.$store.getters.getCurrentUser,
     };
   },
   methods: {
@@ -175,20 +180,22 @@ export default {
       return newDate;
     },
     async removeComment() {
-      let res = await fetch('/api/removeComment?' +
-            new URLSearchParams({
-              commentId: this.comment.commentId,
-              videoId: this.comment.relatesToVideoId
-            }), {
-        method: 'DELETE'
-      });
+      let res = await fetch(
+        '/api/removeComment?' +
+          new URLSearchParams({
+            commentId: this.comment.commentId,
+            videoId: this.comment.relatesToVideoId,
+          }),
+        {
+          method: 'DELETE',
+        }
+      );
 
       let response = await res.json();
-      console.log("Response in comment")
-      this.$emit("removedAReply", response);
+      this.$emit('removedAReply', response);
     },
     async postReply() {
-      let currentUser = new User(0, '', '', '', 0, 0);
+      let currentUser = new User();
       currentUser = Object.assign(
         currentUser,
         this.$store.getters.getCurrentUser
@@ -209,8 +216,9 @@ export default {
       });
 
       let response = await res.json();
-      let newResponse = new Comment(0, 0, '', '', 0, 0, 0, 0);
+      let newResponse = new Comment();
       newResponse = Object.assign(newResponse, response);
+      this.commenters.push(currentUser);
       this.replies.push(newResponse);
       let minsAgo = (Date.now() - new Date(newResponse.timeOfPosting)) / 60000;
       if (minsAgo < 1.0) {
@@ -400,7 +408,7 @@ export default {
   padding-right: 3px;
 }
 
-.trashCanIcon{
+.trashCanIcon {
   height: 30px;
   width: 30px;
   position: relative;
@@ -498,7 +506,7 @@ export default {
   margin-right: auto;
   padding-bottom: 10px;
 }
-.commentGrid{
+.commentGrid {
   display: grid;
   grid-template-columns: auto 50px;
 }
