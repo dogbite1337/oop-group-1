@@ -11,7 +11,7 @@ export default createStore({
     eightFirstVideos: null,
     relatedVideoId: null,
     mySearchHistoryList: [],
-    keyWord: "",
+    keyWord: '',
   },
   mutations: {
     setUser(state, user) {
@@ -45,13 +45,12 @@ export default createStore({
     setRelatedVideoId(state, relatedVideoId) {
       state.relatedVideoId = relatedVideoId;
     },
-    setMySearchHistoryList(state, searchHistory){
-      state.mySearchHistoryList = searchHistory
+    setMySearchHistoryList(state, searchHistory) {
+      state.mySearchHistoryList = searchHistory;
     },
-    setKeyWord(state, keyWord){
-      state.keyWord = keyWord
+    setKeyWord(state, keyWord) {
+      state.keyWord = keyWord;
     },
-
   },
   getters: {
     getCurrentUser: (state) => {
@@ -73,11 +72,11 @@ export default createStore({
       return state.relevantVideoId;
     },
     getMySearchHistoryList: (state) => {
-      return state.mySearchHistoryList
+      return state.mySearchHistoryList;
     },
-    getKeyWord:(state) => {
-      return state.keyWord
-    }
+    getKeyWord: (state) => {
+      return state.keyWord;
+    },
   },
   actions: {
     async login(store, currentUser) {
@@ -113,33 +112,33 @@ export default createStore({
       store.commit('setUser', null);
       // store.commit('setMySearchHistoryList', [])
     },
-    async getSearchHistories(store, id){
+    async getSearchHistories(store, id) {
       let res = await fetch('/rest/getSearchHistories/' + id);
       return res.json();
     },
-    async cacheSearchHistory(store, searchHistory){
+    async cacheSearchHistory(store, searchHistory) {
       store.commit('setMySearchHistoryList', searchHistory);
     },
-    async setKeyWord(store, keyWord){
-      store.commit('setKeyWord', keyWord)
+    async setKeyWord(store, keyWord) {
+      store.commit('setKeyWord', keyWord);
     },
-    async clearHistory(store, userId){
-      await fetch('/api/clearHistories/' + userId, 
-      {
-      method: 'DELETE'});
+    async clearHistory(store, userId) {
+      await fetch('/api/clearHistories/' + userId, {
+        method: 'DELETE',
+      });
     },
-    async getTrendingSearch(store){
-      let res = await fetch('/api/getTrendingSearch',{
-        method: 'GET'
-      })
+    async getTrendingSearch(store) {
+      let res = await fetch('/api/getTrendingSearch', {
+        method: 'GET',
+      });
 
       return res.json();
     },
-    async getMatchedVideoList(store, keyword){
+    async getMatchedVideoList(store, keyword) {
       let res = await fetch('/rest/getMatchedVideoList/' + keyword);
       return res.json();
     },
-    async getMatchedUserList(store, keyword){
+    async getMatchedUserList(store, keyword) {
       let res = await fetch(
         '/rest/getMatchedUserList?' +
           new URLSearchParams({
@@ -147,6 +146,6 @@ export default createStore({
           })
       );
       return res.json();
-    }
+    },
   },
 });

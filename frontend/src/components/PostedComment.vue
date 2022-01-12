@@ -117,7 +117,7 @@ export default {
     CommentReply,
   },
   emits: ['updateReplies', 'postedAReply'],
-  props: ['comment', 'replies', 'commenters'],
+  props: ['activeId', 'comment', 'replies', 'commenters'],
   name: 'PostedComment',
   mounted() {},
   created() {},
@@ -130,14 +130,18 @@ export default {
       isAReply: this.comment.responseToCommentId == -1 ? false : true,
       isANumberInput: isNaN(this.comment.timeOfPosting),
       showComments: false,
+      isActive: this.activeId == this.comment.commentId,
     };
   },
   methods: {
     async showReplies() {
-      this.$emit('updateReplies', this.comment.commentId);
-      this.showComments = true;
+      if (this.isActive || this.activeId == 0) {
+        this.$emit('updateReplies', this.comment.commentId);
+        this.showComments = true;
+      }
     },
     hideReplies() {
+      this.$emit('updateReplies', 0);
       this.showComments = false;
     },
     convertDateObjectToString(dateObject) {
@@ -163,10 +167,15 @@ export default {
       return newDate;
     },
     async postReply() {
+      let currentUser = new User(0, '', '', '', 0, 0);
+      currentUser = Object.assign(
+        currentUser,
+        this.$store.getters.getCurrentUser
+      );
       let myReply = new Comment(
         0,
         this.comment.relatesToVideoId,
-        this.User.username,
+        currentUser.username,
         this.wantedReply,
         0,
         0,
@@ -248,35 +257,44 @@ export default {
       }
     },
     async like() {
-      let likedCommentRes = await fetch(
-        '/api/likeComment?' +
-          new URLSearchParams({
-            commentId: this.comment.commentId,
-          }),
-        {
-          method: 'POST',
-          body: JSON.stringify(this.comment),
-        }
-      );
-      let likedCommentResponse = await likedCommentRes.json();
-      this.comment.likes = likedCommentResponse.likes;
+      if (this.$store.getters.getCurrentUser) {
+        let likedCommentRes = await fetch(
+          '/api/likeComment?' +
+            new URLSearchParams({
+              commentId: this.comment.commentId,
+            }),
+          {
+            method: 'POST',
+            body: JSON.stringify(this.comment),
+          }
+        );
+        let likedCommentResponse = await likedCommentRes.json();
+        this.comment.likes = likedCommentResponse.likes;
+      } else {
+        alert('You have to log in to like Comments!');
+      }
     },
     async dislike() {
-      let dislikedCommentRes = await fetch(
-        '/api/dislikeComment?' +
-          new URLSearchParams({
-            commentId: this.comment.commentId,
-          }),
-        {
-          method: 'POST',
-          body: JSON.stringify(this.comment),
-        }
-      );
-      let dislikedCommentResponse = await dislikedCommentRes.json();
-      this.comment.dislikes = dislikedCommentResponse.dislikes;
+      if (this.$store.getters.getCurrentUser) {
+        let dislikedCommentRes = await fetch(
+          '/api/dislikeComment?' +
+            new URLSearchParams({
+              commentId: this.comment.commentId,
+            }),
+          {
+            method: 'POST',
+            body: JSON.stringify(this.comment),
+          }
+        );
+        let dislikedCommentResponse = await dislikedCommentRes.json();
+        this.comment.dislikes = dislikedCommentResponse.dislikes;
+      } else {
+        alert('You have to log in to dislike Comments!');
+      }
     },
   },
   async mounted() {
+    this.User = this.$store.getters.getCurrentUser;
     let commenterRes = await fetch(
       '/rest/getUserByUsername?' +
         new URLSearchParams({
@@ -410,6 +428,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
   background-color: black;
+  padding-bottom: 20px;
 }
 .EndBlock {
   width: 30px;

@@ -44,14 +44,15 @@ export default {
     return {
       btnClicked: false,
       // getting from state atm, change to fetch from DB when search page shown
-      mySearchHistoryList: []
+      mySearchHistoryList: [],
     };
   },
   async mounted() {
     let boolean = false;
     this.$store.subscribe(async (mutation, state) => {
       if (
-        (mutation.type == 'setMySearchHistoryList' || mutation.type == 'setUser') &&
+        (mutation.type == 'setMySearchHistoryList' ||
+          mutation.type == 'setUser') &&
         !this.$store.getters.getCurrentUser
       ) {
         this.mySearchHistoryList = await this.$store.getters
@@ -93,10 +94,10 @@ export default {
   },
 
   methods: {
-    async makeSearch(keyWord){
-      await this.$store.dispatch('setKeyWord', keyWord)
+    async makeSearch(keyWord) {
+      await this.$store.dispatch('setKeyWord', keyWord);
       this.$router.push('/SearchResult');
-    }
+    },
   },
 };
 </script>
