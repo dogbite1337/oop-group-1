@@ -47,7 +47,7 @@
     <div class="SpaceDiv" />
     <div class="SpaceDiv" />
     <div v-if="profileDropdown" class="profile-dropdown">
-      <ul>
+      <ul class="UlMenu">
         <li @click="uploadNavigation">Upload Video</li>
         <li @click="logout">Logout</li>
       </ul>
@@ -227,7 +227,15 @@ export default {
   margin-right: auto;
   padding-bottom: 10px;
 }
-
+.UlMenu{
+  height: max-content;
+  width: 100vw;
+  z-index: 5;
+  color: white;
+  position: absolute;
+  background-color: transparent;
+  left: 0px;
+}
 .LoginButton {
   border-radius: 30px;
   width: 40px;
@@ -267,6 +275,11 @@ li {
   color: white;
   font-family: 'Roboto', sans-serif;
   margin-top: 10px;
+}
+.profile-dropdown{
+  height: max-content;
+  padding-top: 45px;
+  padding-bottom: 60px;
 }
 @media screen and (max-width: 300px) {
   .SearchAndLoginDiv {

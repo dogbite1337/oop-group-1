@@ -157,6 +157,7 @@
         :commenters="currentCommenters"
         :activeId="activeId"
         class="commentBox"
+        @removedAReply="updateBasedOnDelete"
         @postedAReply="updateCommentSection"
         @updateReplies="updateReplies"
       />
@@ -317,6 +318,25 @@ export default {
   },
   watch: {},
   methods: {
+    async updateBasedOnDelete(commentsAfterRemoval) {
+      if (commentsAfterRemoval.length == 0) {
+        this.relevantComments = [];
+      } else {
+        this.relevantComments = [];
+        for (let i = 0; i < commentsAfterRemoval.length; i++) {
+          if (commentsAfterRemoval[i].responseToCommentId == -1) {
+            let newComment = new Comment(0, 0, '', '', 0, 0, 0, 0);
+            newComment = Object.assign(newComment, commentsAfterRemoval[i]);
+            newComment.timeOfPosting = this.convertDateObjectToString(
+              new Date(commentsAfterRemoval[i].timeOfPosting)
+            );
+            this.relevantComments.push(newComment);
+          }
+        }
+      }
+      this.amountOfComments = this.relevantComments.length;
+      this.activeId = 0;
+    },
     async updateReplies(commentId) {
       this.activeId = commentId;
       this.currentReplies = [];
@@ -362,6 +382,8 @@ export default {
         );
         this.currentCommenters.push(myUser);
       }
+      this.amountOfComments =
+        this.currentReplies.length + this.relevantComments.length;
     },
     async updateCommentSection() {},
     updateComments(postedComment) {
@@ -371,6 +393,7 @@ export default {
         new Date(newComment.timeOfPosting)
       );
       this.relevantComments.push(newComment);
+      this.amountOfComments = this.relevantComments.length;
     },
     convertDateObjectToString(dateObject) {
       let newDate =

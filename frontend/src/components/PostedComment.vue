@@ -15,7 +15,14 @@
       </div>
       <div class="SpaceDiv" />
     </div>
-    <div class="CommentDiv">{{ comment.content }}</div>
+    <div class="CommentDiv">
+      <div class="commentGrid">
+        {{ comment.content }}
+        <div v-if="activeUser" class="trashIconDiv">
+          <img v-if="activeUser.username == comment.postedByUsername" @click="removeComment" class="trashCanIcon" src="../projectImages/Trashcan.png" />
+        </div>
+      </div>
+    </div>
   </div>
   <div v-if="comment && !isAReply" class="StatsDiv">
     <div class="SpaceDiv" />
@@ -73,9 +80,9 @@
   </div>
   <div v-if="expandedReply" class="ReplyOpenDiv">
     <div class="SpaceBlock" />
-    <div class="Test">
+    <div v-if="activeUser" class="replyOpenGrid">
       <div class="SpaceBlock" />
-      <img class="imgInReply" :src="User.profileURL" />
+      <img class="imgInReply" :src="activeUser.profileURL" />
       <div class="SpaceBlock" />
       <div class="replyInputDiv">
         <div class="SpaceBlock" />
@@ -116,10 +123,10 @@ export default {
   components: {
     CommentReply,
   },
-  emits: ['updateReplies', 'postedAReply'],
+  emits: ['updateReplies', 'removedAReply'],
   props: ['activeId', 'comment', 'replies', 'commenters'],
   name: 'PostedComment',
-  mounted() {},
+
   created() {},
   data() {
     return {
@@ -131,6 +138,7 @@ export default {
       isANumberInput: isNaN(this.comment.timeOfPosting),
       showComments: false,
       isActive: this.activeId == this.comment.commentId,
+      activeUser: this.$store.getters.getCurrentUser
     };
   },
   methods: {
@@ -165,6 +173,19 @@ export default {
         newDate += dateObject.getMinutes();
       }
       return newDate;
+    },
+    async removeComment() {
+      let res = await fetch('/api/removeComment?' +
+            new URLSearchParams({
+              commentId: this.comment.commentId,
+              videoId: this.comment.relatesToVideoId
+            }), {
+        method: 'DELETE'
+      });
+
+      let response = await res.json();
+      console.log("Response in comment")
+      this.$emit("removedAReply", response);
     },
     async postReply() {
       let currentUser = new User(0, '', '', '', 0, 0);
@@ -379,6 +400,14 @@ export default {
   padding-right: 3px;
 }
 
+.trashCanIcon{
+  height: 30px;
+  width: 30px;
+  position: relative;
+  top: -15px;
+  right: 0px;
+}
+
 .imgInReply {
   height: 40px;
   width: 40px;
@@ -386,7 +415,7 @@ export default {
   position: relative;
   left: 20px;
 }
-.Test {
+.replyOpenGrid {
   display: grid;
   margin-left: -40px;
   grid-template-columns: 0px 0px 1px max-content auto;
@@ -468,6 +497,10 @@ export default {
   margin-left: auto;
   margin-right: auto;
   padding-bottom: 10px;
+}
+.commentGrid{
+  display: grid;
+  grid-template-columns: auto 50px;
 }
 .yourReplyDiv {
   position: relative;
@@ -576,7 +609,7 @@ export default {
 }
 
 @media screen and (max-width: 450px) {
-  .Test {
+  .replyOpenGrid {
     width: max-content;
     padding-right: 20px;
     margin-left: auto;
