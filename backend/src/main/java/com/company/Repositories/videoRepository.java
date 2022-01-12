@@ -288,6 +288,15 @@ public class videoRepository {
                     uploadedVideo.setVideoId(generatedKeys.getInt(1));
                 }
             }
+
+            PreparedStatement findUser = con.prepareStatement("SELECT * FROM users WHERE userId = ?");
+            findUser.setInt(1, uploadedVideo.getUserId());
+            ResultSet userFound = findUser.executeQuery();
+            while(userFound.next()){
+                PreparedStatement updatedVideosCount = con.prepareStatement("UPDATE users SET videosPosted = videosPosted + 1 WHERE userId = ?");
+                updatedVideosCount.setInt(1, uploadedVideo.getUserId());
+                updatedVideosCount.executeUpdate();
+            }
             con.close();
         }catch(Exception e){
             System.out.println(e);
