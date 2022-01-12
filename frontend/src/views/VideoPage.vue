@@ -652,6 +652,7 @@ export default {
   width: 40px;
   border-radius: 30px;
   margin-top: 9.5px;
+  overflow: hidden;
 }
 
 .UploaderDiv {
