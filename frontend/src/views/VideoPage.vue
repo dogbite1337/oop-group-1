@@ -230,6 +230,14 @@ export default {
     this.isOnVideosPage = true;
     window.scrollTo(0, 0);
 
+    let fixedList = [];
+    for (let i = 0; i < this.relatedVideos.length; i++) {
+      if (this.relatedVideos[i].videoId != this.$route.params.id) {
+        fixedList.push(this.relatedVideos[i]);
+      }
+    }
+    this.relatedVideos = fixedList;
+
     let commentsRes = await fetch(
       '/rest/getCommentsForVideoId?' +
         new URLSearchParams({
