@@ -1,7 +1,6 @@
 package com.company.Repositories;
 
 import com.company.Entities.Comment;
-import com.company.utilities.Encrypter;
 import java.sql.*;
 import java.util.ArrayList;
 

@@ -1,9 +1,7 @@
 package com.company.Handlers;
 
-import com.company.Entities.Video;
 import com.company.Repositories.videoRepository;
 import express.Express;
-
 import java.sql.SQLException;
 
 public class VideoHandler {
