@@ -26,20 +26,32 @@
     <div class="SpaceDiv" />
     <div class="LikesDiv">
       <img
+        v-if="!likedReplyAlready"
         @click="like"
         class="commentLike"
         src="../projectImages/like_black_background.png"
       />
+      <img
+        v-if="likedReplyAlready"
+        class="commentLike"
+        src="../projectImages/blue_like.png"
+        />
       <div class="SpaceDiv" />
       {{ reply.likes }}
     </div>
     <div class="SpaceDiv" />
     <div class="DislikesDiv">
       <img
+        v-if="!dislikedReplyAlready"
         @click="dislike"
         class="commentDislike"
         src="../projectImages/dislike_black_background.png"
       />
+      <img
+        v-if="dislikedReplyAlready"
+        class="commentDislike"
+        src="../projectImages/blue_dislike.png"
+        />
       <div class="SpaceDiv" />
       {{ reply.dislikes }}
     </div>
@@ -55,7 +67,10 @@ export default {
   props: ['commenter', 'reply'],
   name: 'CommentReply',
   data() {
-    return {};
+    return {
+      likedReplyAlready: false,
+      dislikedReplyAlready: false
+    };
   },
   methods: {
     async like() {
@@ -70,13 +85,16 @@ export default {
         }
       );
       let likedCommentResponse = await likedCommentRes.json();
+      this.likedReplyAlready = true;
       this.reply.likes = likedCommentResponse.likes;
     },
     async dislike() {
+      
       let dislikedCommentRes = await fetch(
         '/api/dislikeComment?' +
           new URLSearchParams({
             commentId: this.reply.commentId,
+            userId: this.$store.getters.getCurrentUser.userId,
           }),
         {
           method: 'POST',
@@ -85,6 +103,7 @@ export default {
       );
       let dislikedCommentResponse = await dislikedCommentRes.json();
       this.reply.dislikes = dislikedCommentResponse.dislikes;
+      this.dislikedReplyAlready = true;
     },
     convertDateObjectToString(dateObject) {
       let newDate =

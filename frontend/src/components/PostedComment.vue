@@ -33,10 +33,15 @@
     <div class="SpaceDiv" />
     <div class="LikesDiv">
       <img
+      v-if="!likedCommentAlready"
         @click="like"
         class="commentLike"
         src="../projectImages/like_black_background.png"
       />
+      <img
+        v-if="likedCommentAlready"
+        class="commentLike"
+        src="../projectImages/blue_like.png" />
       <div class="SpaceDiv" />
       {{ comment.likes }}
     </div>
@@ -46,6 +51,12 @@
         @click="dislike"
         class="commentDislike"
         src="../projectImages/dislike_black_background.png"
+        v-if="!dislikedCommentAlready"
+      />
+      <img
+        class="commentDislike"
+        src="../projectImages/blue_dislike.png"
+        v-if="dislikedCommentAlready"
       />
       <div class="SpaceDiv" />
       {{ comment.dislikes }}
@@ -144,6 +155,8 @@ export default {
       showComments: false,
       isActive: this.activeId == this.comment.commentId,
       activeUser: this.$store.getters.getCurrentUser,
+      dislikedCommentAlready: false,
+      likedCommentAlready: false
     };
   },
   methods: {
@@ -299,6 +312,21 @@ export default {
         );
         let likedCommentResponse = await likedCommentRes.json();
         this.comment.likes = likedCommentResponse.likes;
+        
+        let registerlikedCommentRes = await fetch(
+          '/api/registerLikeOnComment?' +
+            new URLSearchParams({
+              userId: this.$store.getters.getCurrentUser.userId,
+              videoId: 0,
+              commentId: this.comment.commentId,
+            }),
+          {
+            method: 'POST',
+            body: JSON.stringify(this.comment),
+          }
+        );
+
+        this.likedCommentAlready = true;
       } else {
         alert('You have to log in to like Comments!');
       }
@@ -309,6 +337,7 @@ export default {
           '/api/dislikeComment?' +
             new URLSearchParams({
               commentId: this.comment.commentId,
+              userId: this.$store.getters.getCurrentUser.userId
             }),
           {
             method: 'POST',
@@ -317,6 +346,7 @@ export default {
         );
         let dislikedCommentResponse = await dislikedCommentRes.json();
         this.comment.dislikes = dislikedCommentResponse.dislikes;
+        this.dislikedCommentAlready = true;
       } else {
         alert('You have to log in to dislike Comments!');
       }
@@ -337,6 +367,36 @@ export default {
       this.isNotAReply = true;
     } else {
       this.isNotAReply = false;
+    }
+    let dislikesRes = await fetch(
+      '/rest/getDislikesForComment?' +
+        new URLSearchParams({
+          commentId: this.comment.commentId,
+        })
+    );
+    let dislikesResponse = await dislikesRes.json();
+    for(let i = 0; i < dislikesResponse.length; i++){
+      if(this.$store.getters.getCurrentUser){
+        if(dislikesResponse[i].dislikedByUserId == this.$store.getters.getCurrentUser.userId){
+          this.dislikedCommentAlready = true;
+        }
+      }
+    }
+    
+
+    let likesRes = await fetch(
+      '/rest/getLikesForComment?' +
+        new URLSearchParams({
+          commentId: this.comment.commentId,
+        })
+    );
+    let likesResponse = await likesRes.json();
+    for(let i = 0; i < likesResponse.length; i++){
+      if(this.$store.getters.getCurrentUser){
+        if(likesResponse[i].likedByUserId == this.$store.getters.getCurrentUser.userId){
+          this.likedCommentAlready = true;
+        }
+      }
     }
   },
 };

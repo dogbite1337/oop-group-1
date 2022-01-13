@@ -39,6 +39,7 @@ public class VideoHandler {
 
         app.post("/api/likeVideo", (req, res) -> {
             res.json(videoRepository.likeVideo(
+                    Integer.parseInt(req.body().get("userId").toString()),
                     Integer.parseInt(req.body().get("videoId").toString()),
                     Integer.parseInt(req.body().get("likes").toString())
             ));
@@ -46,6 +47,7 @@ public class VideoHandler {
 
         app.post("/api/dislikeVideo", (req, res) -> {
             res.json(videoRepository.dislikeVideo(
+                    Integer.parseInt(req.body().get("userId").toString()),
                     Integer.parseInt(req.body().get("videoId").toString()),
                     Integer.parseInt(req.body().get("dislikes").toString())
             ));

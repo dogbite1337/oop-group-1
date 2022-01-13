@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class videoRepository {
     Connection con;
 
-    public Integer likeVideo(Integer videoId, Integer likes) {
+    public Integer likeVideo(Integer userId, Integer videoId, Integer likes) {
         try {
             try {
                 con = DriverManager.getConnection(
@@ -16,22 +16,31 @@ public class videoRepository {
                 e.printStackTrace();
             }
 
-            String baseQuery = ("UPDATE videos SET likes = ? WHERE videoId = ?");
-            PreparedStatement likeVideo = con.prepareStatement(baseQuery);
-            likeVideo.setInt(1, (likes + 1));
-            likeVideo.setInt(2, videoId);
+            PreparedStatement checkVideo = con.prepareStatement("SELECT * FROM likes WHERE likedByUserId = ? AND likedVideoId = ?");
+            checkVideo.setInt(1, userId);
+            checkVideo.setInt(2, videoId);
 
-            int rs = likeVideo.executeUpdate();
+            ResultSet foundVideo = checkVideo.executeQuery();
+            if(!foundVideo.next()){
+                String baseQuery = ("UPDATE videos SET likes = ? WHERE videoId = ?");
+                PreparedStatement likeVideo = con.prepareStatement(baseQuery);
+                likeVideo.setInt(1, (likes + 1));
+                likeVideo.setInt(2, videoId);
+
+                int rs = likeVideo.executeUpdate();
+                return (likes + 1);
+            }
+
 
             con.close();
         }catch(Exception e){
             System.out.println(e);
         }
 
-        return (likes + 1);
+        return (likes);
     }
 
-    public Integer dislikeVideo(Integer videoId, Integer dislikes) {
+    public Integer dislikeVideo(Integer userId, Integer videoId, Integer dislikes) {
         try {
             try {
                 con = DriverManager.getConnection(
@@ -40,19 +49,27 @@ public class videoRepository {
                 e.printStackTrace();
             }
 
-            String baseQuery = ("UPDATE videos SET dislikes = ? WHERE videoId = ?");
-            PreparedStatement likeVideo = con.prepareStatement(baseQuery);
-            likeVideo.setInt(1, (dislikes + 1));
-            likeVideo.setInt(2, videoId);
+            PreparedStatement checkVideo = con.prepareStatement("SELECT * FROM dislikes WHERE dislikedByUserId = ? AND dislikedVideoId = ?");
+            checkVideo.setInt(1, userId);
+            checkVideo.setInt(2, videoId);
 
-            int rs = likeVideo.executeUpdate();
+            ResultSet foundVideo = checkVideo.executeQuery();
+            if(!foundVideo.next()){
+                String baseQuery = ("UPDATE videos SET dislikes = ? WHERE videoId = ?");
+                PreparedStatement likeVideo = con.prepareStatement(baseQuery);
+                likeVideo.setInt(1, (dislikes + 1));
+                likeVideo.setInt(2, videoId);
+
+                int rs = likeVideo.executeUpdate();
+                return (dislikes + 1);
+            }
 
             con.close();
         }catch(Exception e){
             System.out.println(e);
         }
 
-        return (dislikes + 1);
+        return (dislikes);
     }
 
     public ArrayList<Video> getVideosByUsername(String username) {

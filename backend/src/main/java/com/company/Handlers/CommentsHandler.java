@@ -31,11 +31,13 @@ public class CommentsHandler {
         });
 
         app.post("/api/likeComment", (req, res) -> {
-           res.json(commentsRepository.likeComment((Integer) req.body().get("commentId")));
+            System.out.println("Got a request IN HERE");
+           res.json(commentsRepository.likeComment(Integer.parseInt(req.query("commentId"))));
         });
 
         app.post("/api/dislikeComment", (req, res) -> {
-            res.json(commentsRepository.dislikeComment((Integer) req.body().get("commentId")));
+            System.out.println(req.body());
+            res.json(commentsRepository.dislikeComment(Integer.parseInt(req.query("commentId")), Integer.parseInt(req.query("userId"))));
         });
 
         app.get("/rest/getCommentsForVideoId", (req, res) -> {
