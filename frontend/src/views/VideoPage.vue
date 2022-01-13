@@ -91,16 +91,23 @@
         <div class="SpaceDiv" />
         <div class="likesNumberDiv">
           <img
+            v-if="!likedVideoAlready"
             @click="likeVideo"
             src="../projectImages/like_black_background.png"
           />
+          <img v-if="likedVideoAlready" src="../projectImages/blue_like.png" />
           <div class="likesDiv">{{ spacedLikes }}</div>
         </div>
         <div class="SpaceDiv" />
         <div class="dislikesNumberDiv">
           <img
+            v-if="!dislikedVideoAlready"
             @click="dislikeVideo"
             src="../projectImages/dislike_black_background.png"
+          />
+          <img
+            v-if="dislikedVideoAlready"
+            src="../projectImages/blue_dislike.png"
           />
           <div class="thumbsDownDiv">{{ spacedDislikes }}</div>
         </div>
@@ -212,6 +219,8 @@ export default {
       timestampOfComments: [],
       currentReplies: [],
       currentCommenters: [],
+      likedVideoAlready: false,
+      dislikedVideoAlready: false,
     };
   },
   async created() {
@@ -235,6 +244,42 @@ export default {
         }
       }
       this.relatedVideos = fixedList;
+    }
+
+    let likesRes = await fetch(
+      '/rest/getLikesForVideo?' +
+        new URLSearchParams({
+          videoId: this.$route.params.id,
+        })
+    );
+    let likesResponse = await likesRes.json();
+    for (let i = 0; i < likesResponse.length; i++) {
+      if (this.$store.getters.getCurrentUser) {
+        if (
+          likesResponse[i].likedByUserId ==
+          this.$store.getters.getCurrentUser.userId
+        ) {
+          this.likedVideoAlready = true;
+        }
+      }
+    }
+
+    let dislikesRes = await fetch(
+      '/rest/getDislikesForVideo?' +
+        new URLSearchParams({
+          videoId: this.$route.params.id,
+        })
+    );
+    let dislikesResponse = await dislikesRes.json();
+    for (let i = 0; i < dislikesResponse.length; i++) {
+      if (this.$store.getters.getCurrentUser) {
+        if (
+          dislikesResponse[i].dislikedByUserId ==
+          this.$store.getters.getCurrentUser.userId
+        ) {
+          this.dislikedVideoAlready = true;
+        }
+      }
     }
 
     let commentsRes = await fetch(
@@ -425,8 +470,9 @@ export default {
       return newDate;
     },
     async likeVideo() {
-      if (this.$store.getters.getCurrentUser) {
+      if (this.$store.getters.getCurrentUser && !this.likedVideoAlready) {
         let relevantInfo = {
+          userId: this.$store.getters.getCurrentUser.userId,
           videoId: this.video.videoId,
           likes: this.video.likes,
         };
@@ -436,15 +482,27 @@ export default {
         });
         let likedVideoResponse = await likedVideoRes.json();
 
+        let likeObject = {
+          userId: this.$store.getters.getCurrentUser.userId,
+          videoId: this.video.videoId,
+          commentId: -1,
+        };
+        let registeredLikeRes = await fetch('/api/registerLikeOnVideo', {
+          method: 'POST',
+          body: JSON.stringify(likeObject),
+        });
+
         this.video.likes = likedVideoResponse;
         this.spacedLikes = this.video.likes;
+        this.likedVideoAlready = true;
       } else {
         alert('You have to log in to like Videos!');
       }
     },
     async dislikeVideo() {
-      if (this.$store.getters.getCurrentUser) {
+      if (this.$store.getters.getCurrentUser && !this.dislikedVideoAlready) {
         let relevantInfo = {
+          userId: this.$store.getters.getCurrentUser.userId,
           videoId: this.video.videoId,
           dislikes: this.video.dislikes,
         };
@@ -454,8 +512,19 @@ export default {
         });
         let dislikedVideoResponse = await dislikedVideoRes.json();
 
+        let dislikeObject = {
+          userId: this.$store.getters.getCurrentUser.userId,
+          videoId: this.video.videoId,
+          commentId: -1,
+        };
+        let registeredDislikeRes = await fetch('/api/registerDislikeOnVideo', {
+          method: 'POST',
+          body: JSON.stringify(dislikeObject),
+        });
+
         this.video.dislikes = dislikedVideoResponse;
         this.spacedDislikes = this.video.dislikes;
+        this.dislikedVideoAlready = true;
       } else {
         alert('You have to log in to dislike Videos!');
       }

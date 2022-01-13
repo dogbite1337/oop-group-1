@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class commentsRepository {
     Connection con;
 
-    public Comment dislikeComment(Integer commentId){
+    public Comment dislikeComment(Integer commentId, Integer userId){
         Comment newComment = new Comment(0,0,"","",0,0,0,Long.valueOf("0"));
 
         try {
@@ -22,9 +22,18 @@ public class commentsRepository {
             dislikedComment.setInt(1,commentId);
             ResultSet rs = dislikedComment.executeQuery();
 
-
             while(rs.next()) {
                 newComment = new Comment(rs.getInt(1), rs.getInt(2), rs.getString(3) , rs.getString(4) ,rs.getInt(5),rs.getInt(6), rs.getInt(7), rs.getLong(8));
+            }
+
+            PreparedStatement checkForDislikedComment = con.prepareStatement("SELECT * FROM dislikes WHERE dislikedCommentId = ? AND dislikedByUserId = ?");
+            checkForDislikedComment.setInt(1, commentId);
+            checkForDislikedComment.setInt(2, userId);
+            ResultSet foundDislikedComments = checkForDislikedComment.executeQuery();
+
+            if(foundDislikedComments.next()){
+                con.close();
+                return newComment;
             }
 
 
@@ -33,6 +42,11 @@ public class commentsRepository {
             dislikeComment.setInt(2, newComment.getCommentId());
             int resultSetFromLiking = dislikeComment.executeUpdate();
 
+            PreparedStatement insertDislike = con.prepareStatement("INSERT INTO dislikes (dislikedByUserId, dislikedVideoId, dislikedCommentId) VALUES (?, ?, ?)");
+            insertDislike.setInt(1,userId);
+            insertDislike.setInt(2, 0);
+            insertDislike.setInt(3, commentId);
+            int resultFromDisliking = insertDislike.executeUpdate();
 
 
             con.close();

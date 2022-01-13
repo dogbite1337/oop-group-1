@@ -70,14 +70,14 @@ export default {
       profileDropdown: false,
     };
   },
-  created(){
+  created() {
     let route = this.$router.currentRoute.value.fullPath;
-    if(route == "/SearchResult"){
+    if (route == '/SearchResult') {
       this.searchParam = this.$store.getters.getKeyWord;
     }
   },
 
-    async mounted() {
+  async mounted() {
     await this.$store.dispatch('whoAmI');
     if (this.$store.getters.getCurrentUser) {
       this.profilePic = this.$store.getters.getCurrentUser.getProfileURL();
@@ -89,7 +89,7 @@ export default {
       this.$refs.meow.play();
     },
 
-    fetchKeyWord(){
+    fetchKeyWord() {
       this.searchParam = '';
     },
 
@@ -239,7 +239,7 @@ export default {
   margin-right: auto;
   padding-bottom: 10px;
 }
-.UlMenu{
+.UlMenu {
   height: max-content;
   width: 100vw;
   z-index: 5;
@@ -288,7 +288,7 @@ li {
   font-family: 'Roboto', sans-serif;
   margin-top: 10px;
 }
-.profile-dropdown{
+.profile-dropdown {
   height: max-content;
   padding-top: 45px;
   padding-bottom: 60px;

@@ -26,15 +26,15 @@ export default {
     };
   },
 
-  async mounted(){
+  async mounted() {
     this.trendingSearch = await this.$store.dispatch('getTrendingSearch');
   },
 
   methods: {
-    async makeSearch(keyWord){
-      await this.$store.dispatch('setKeyWord', keyWord)
+    async makeSearch(keyWord) {
+      await this.$store.dispatch('setKeyWord', keyWord);
       this.$router.push('/SearchResult');
-    }
+    },
   },
 };
 </script>
