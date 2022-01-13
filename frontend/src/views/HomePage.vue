@@ -9,6 +9,7 @@
         :key="index"
         :video="videoItem"
         class="videoBox"
+        ref="videoBox"
       />
     </div>
   </div>
@@ -43,6 +44,7 @@ export default {
     if (allVideos.length > 8) {
       allVideos = allVideos.slice(allVideos.length - 8, allVideos.length);
     }
+
 
     this.$store.dispatch('cacheFirstEightVideos', allVideos);
     this.relevantVideos = [];
@@ -124,11 +126,47 @@ export default {
         : [],
     };
   },
-  mounted() {
+  async mounted() {
     document.getElementsByClassName('CardsContainer')[0].style =
       'grid-template-columns: ' + this.getGridDimensions() + ';';
 
     window.addEventListener('resize', this.recalculateGrid);
+
+    this.$nextTick(function () {
+      // Intersection
+      let videoBoxes = document.querySelectorAll(".videoBox")
+      // let videoBoxes = this.$refs.videoBox;
+      // console.log(this.relevantVideos)
+      console.log(videoBoxes.length)
+      // console.log(videoBoxes[0])
+
+      let observer = new IntersectionObserver(entries =>{
+        console.log(entries)
+        entries.forEach(entry =>{
+          // console.log("showed")
+          // console.log(entry)
+          // entry.target.classList.toggle("show", entry.isIntersecting)
+        })
+      },{
+        threshold: 1,
+      })
+
+      observer.observe(videoBoxes[0])
+
+      // videoBoxes.forEach(videoBox =>{
+      //   observer.observe(videoBox)
+      // })
+
+      // let lastVideoObserver = new IntersectionObserver(entries =>{
+      //   let lastVideo = entries[0]
+      //   if(!lastVideo.isIntersecting) return
+      //   this.loadMoreVideos()
+      // })
+
+      // lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
+  })
+
+    
   },
   unmounted() {
     window.removeEventListener('resize', this.recalculateGrid);
