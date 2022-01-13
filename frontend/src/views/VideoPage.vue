@@ -95,10 +95,7 @@
             @click="likeVideo"
             src="../projectImages/like_black_background.png"
           />
-          <img
-            v-if="likedVideoAlready"
-            src="../projectImages/blue_like.png"
-          />
+          <img v-if="likedVideoAlready" src="../projectImages/blue_like.png" />
           <div class="likesDiv">{{ spacedLikes }}</div>
         </div>
         <div class="SpaceDiv" />
@@ -223,7 +220,7 @@ export default {
       currentReplies: [],
       currentCommenters: [],
       likedVideoAlready: false,
-      dislikedVideoAlready: false
+      dislikedVideoAlready: false,
     };
   },
   async created() {
@@ -251,35 +248,39 @@ export default {
 
     let likesRes = await fetch(
       '/rest/getLikesForVideo?' +
-      new URLSearchParams({
-        videoId: this.$route.params.id,
-      })
+        new URLSearchParams({
+          videoId: this.$route.params.id,
+        })
     );
     let likesResponse = await likesRes.json();
-    for(let i = 0; i < likesResponse.length; i++){
-      if(this.$store.getters.getCurrentUser){
-        if(likesResponse[i].likedByUserId == this.$store.getters.getCurrentUser.userId){
+    for (let i = 0; i < likesResponse.length; i++) {
+      if (this.$store.getters.getCurrentUser) {
+        if (
+          likesResponse[i].likedByUserId ==
+          this.$store.getters.getCurrentUser.userId
+        ) {
           this.likedVideoAlready = true;
         }
-      }  
+      }
     }
 
     let dislikesRes = await fetch(
       '/rest/getDislikesForVideo?' +
-      new URLSearchParams({
-        videoId: this.$route.params.id,
-      })
+        new URLSearchParams({
+          videoId: this.$route.params.id,
+        })
     );
     let dislikesResponse = await dislikesRes.json();
-    for(let i = 0; i < dislikesResponse.length; i++){
-      if(this.$store.getters.getCurrentUser){
-        if(dislikesResponse[i].dislikedByUserId == this.$store.getters.getCurrentUser.userId){
+    for (let i = 0; i < dislikesResponse.length; i++) {
+      if (this.$store.getters.getCurrentUser) {
+        if (
+          dislikesResponse[i].dislikedByUserId ==
+          this.$store.getters.getCurrentUser.userId
+        ) {
           this.dislikedVideoAlready = true;
         }
       }
-      
     }
- 
 
     let commentsRes = await fetch(
       '/rest/getCommentsForVideoId?' +
@@ -481,16 +482,15 @@ export default {
         });
         let likedVideoResponse = await likedVideoRes.json();
 
-        let likeObject = 
-        {
+        let likeObject = {
           userId: this.$store.getters.getCurrentUser.userId,
           videoId: this.video.videoId,
-          commentId: -1
-        }
+          commentId: -1,
+        };
         let registeredLikeRes = await fetch('/api/registerLikeOnVideo', {
           method: 'POST',
-          body: JSON.stringify(likeObject)
-        })
+          body: JSON.stringify(likeObject),
+        });
 
         this.video.likes = likedVideoResponse;
         this.spacedLikes = this.video.likes;
@@ -512,16 +512,15 @@ export default {
         });
         let dislikedVideoResponse = await dislikedVideoRes.json();
 
-        let dislikeObject = 
-        {
+        let dislikeObject = {
           userId: this.$store.getters.getCurrentUser.userId,
           videoId: this.video.videoId,
-          commentId: -1
-        }
+          commentId: -1,
+        };
         let registeredDislikeRes = await fetch('/api/registerDislikeOnVideo', {
           method: 'POST',
-          body: JSON.stringify(dislikeObject)
-        })
+          body: JSON.stringify(dislikeObject),
+        });
 
         this.video.dislikes = dislikedVideoResponse;
         this.spacedDislikes = this.video.dislikes;

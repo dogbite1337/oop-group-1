@@ -33,7 +33,7 @@
     <div class="SpaceDiv" />
     <div class="LikesDiv">
       <img
-      v-if="!likedCommentAlready"
+        v-if="!likedCommentAlready"
         @click="like"
         class="commentLike"
         src="../projectImages/like_black_background.png"
@@ -41,7 +41,8 @@
       <img
         v-if="likedCommentAlready"
         class="commentLike"
-        src="../projectImages/blue_like.png" />
+        src="../projectImages/blue_like.png"
+      />
       <div class="SpaceDiv" />
       {{ comment.likes }}
     </div>
@@ -156,7 +157,7 @@ export default {
       isActive: this.activeId == this.comment.commentId,
       activeUser: this.$store.getters.getCurrentUser,
       dislikedCommentAlready: false,
-      likedCommentAlready: false
+      likedCommentAlready: false,
     };
   },
   methods: {
@@ -312,7 +313,7 @@ export default {
         );
         let likedCommentResponse = await likedCommentRes.json();
         this.comment.likes = likedCommentResponse.likes;
-        
+
         let registerlikedCommentRes = await fetch(
           '/api/registerLikeOnComment?' +
             new URLSearchParams({
@@ -337,7 +338,7 @@ export default {
           '/api/dislikeComment?' +
             new URLSearchParams({
               commentId: this.comment.commentId,
-              userId: this.$store.getters.getCurrentUser.userId
+              userId: this.$store.getters.getCurrentUser.userId,
             }),
           {
             method: 'POST',
@@ -375,14 +376,16 @@ export default {
         })
     );
     let dislikesResponse = await dislikesRes.json();
-    for(let i = 0; i < dislikesResponse.length; i++){
-      if(this.$store.getters.getCurrentUser){
-        if(dislikesResponse[i].dislikedByUserId == this.$store.getters.getCurrentUser.userId){
+    for (let i = 0; i < dislikesResponse.length; i++) {
+      if (this.$store.getters.getCurrentUser) {
+        if (
+          dislikesResponse[i].dislikedByUserId ==
+          this.$store.getters.getCurrentUser.userId
+        ) {
           this.dislikedCommentAlready = true;
         }
       }
     }
-    
 
     let likesRes = await fetch(
       '/rest/getLikesForComment?' +
@@ -391,9 +394,12 @@ export default {
         })
     );
     let likesResponse = await likesRes.json();
-    for(let i = 0; i < likesResponse.length; i++){
-      if(this.$store.getters.getCurrentUser){
-        if(likesResponse[i].likedByUserId == this.$store.getters.getCurrentUser.userId){
+    for (let i = 0; i < likesResponse.length; i++) {
+      if (this.$store.getters.getCurrentUser) {
+        if (
+          likesResponse[i].likedByUserId ==
+          this.$store.getters.getCurrentUser.userId
+        ) {
           this.likedCommentAlready = true;
         }
       }

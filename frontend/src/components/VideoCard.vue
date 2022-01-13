@@ -12,22 +12,22 @@
         "
       />
       <div class="lowerDiv">
-      <div class="titleDiv">
-        <p class="titleText">
-          {{
-            video.title.length > 24
-              ? video.title.substring(0, 24) + '...'
-              : video.title
-          }}
-        </p>
-      </div>
-      <div class="upBoxAndUsernameDiv">
-        <div class="upDiv">UP</div>
-        <div class="userNameDiv">
-          {{ video.postedByUsername }}
+        <div class="titleDiv">
+          <p class="titleText">
+            {{
+              video.title.length > 24
+                ? video.title.substring(0, 24) + '...'
+                : video.title
+            }}
+          </p>
+        </div>
+        <div class="upBoxAndUsernameDiv">
+          <div class="upDiv">UP</div>
+          <div class="userNameDiv">
+            {{ video.postedByUsername }}
+          </div>
         </div>
       </div>
-    </div>
     </div>
   </router-link>
 </template>
@@ -114,7 +114,7 @@ export default {
   margin-top: 2px;
   padding-top: 1.5px;
 }
-@media screen and (max-width: 400px){
+@media screen and (max-width: 400px) {
   .CardBox {
     max-width: 100vw;
     max-height: 600px;
@@ -124,10 +124,10 @@ export default {
     margin-bottom: 5px;
     margin-top: 5px;
   }
-  .ImageBox{
+  .ImageBox {
     height: 300px;
   }
-  .lowerDiv{
+  .lowerDiv {
     position: relative;
   }
 }

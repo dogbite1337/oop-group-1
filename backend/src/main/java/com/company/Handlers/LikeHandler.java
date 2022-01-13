@@ -15,7 +15,6 @@ public class LikeHandler {
 
     private void initLikeHandler() {
         app.post("/api/registerLikeOnComment", (req, res) -> {
-            System.out.println("Got a call to the registering of liking a comment");
             likeRepository.registerLikeOnComment(Integer.parseInt(req.query("userId")), Integer.parseInt(req.query("videoId")), Integer.parseInt(req.query("commentId")));
             res.json(0);
         });
@@ -25,7 +24,6 @@ public class LikeHandler {
         });
 
         app.post("/api/registerLikeOnVideo", (req, res) -> {
-            System.out.println("Got in a request");
             likeRepository.registerLikeOnVideo(Integer.parseInt(req.body().get("userId").toString()), Integer.parseInt(req.body().get("videoId").toString()), Integer.parseInt(req.body().get("commentId").toString()));
             res.json(0);
         });

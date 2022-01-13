@@ -21,7 +21,6 @@ public class dislikeRepository {
             registerDislikeOnAVideo.setInt(1, videoId);
             ResultSet allDislikes = registerDislikeOnAVideo.executeQuery();
             while(allDislikes.next()){
-                System.out.println(allDislikes.getInt(1));
                 Dislike newDislike = new Dislike(allDislikes.getInt(1), allDislikes.getInt(2), allDislikes.getInt(3), allDislikes.getInt(4));
                 relevantDislikes.add(newDislike);
             }
@@ -79,7 +78,6 @@ public class dislikeRepository {
             ResultSet allDislikes = registerDislikeOnAVideo.executeQuery();
             while(allDislikes.next()){
                 Dislike newDislike = new Dislike(allDislikes.getInt(1), allDislikes.getInt(2), allDislikes.getInt(3), allDislikes.getInt(4));
-                System.out.println(newDislike);
                 relevantDislikes.add(newDislike);
             }
 

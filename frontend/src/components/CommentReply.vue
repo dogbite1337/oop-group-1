@@ -35,7 +35,7 @@
         v-if="likedReplyAlready"
         class="commentLike"
         src="../projectImages/blue_like.png"
-        />
+      />
       <div class="SpaceDiv" />
       {{ reply.likes }}
     </div>
@@ -51,7 +51,7 @@
         v-if="dislikedReplyAlready"
         class="commentDislike"
         src="../projectImages/blue_dislike.png"
-        />
+      />
       <div class="SpaceDiv" />
       {{ reply.dislikes }}
     </div>
@@ -69,8 +69,45 @@ export default {
   data() {
     return {
       likedReplyAlready: false,
-      dislikedReplyAlready: false
+      dislikedReplyAlready: false,
     };
+  },
+  async mounted() {
+    let likesRes = await fetch(
+      '/rest/getLikesForComment?' +
+        new URLSearchParams({
+          commentId: this.reply.commentId,
+        })
+    );
+    let likesResponse = await likesRes.json();
+    for (let i = 0; i < likesResponse.length; i++) {
+      if (this.$store.getters.getCurrentUser) {
+        if (
+          likesResponse[i].likedByUserId ==
+          this.$store.getters.getCurrentUser.userId
+        ) {
+          this.likedReplyAlready = true;
+        }
+      }
+    }
+
+    let dislikesRes = await fetch(
+      '/rest/getDislikesForComment?' +
+        new URLSearchParams({
+          commentId: this.reply.commentId,
+        })
+    );
+    let dislikesResponse = await dislikesRes.json();
+    for (let e = 0; e < dislikesResponse.length; e++) {
+      if (this.$store.getters.getCurrentUser) {
+        if (
+          dislikesResponse[e].dislikedByUserId ==
+          this.$store.getters.getCurrentUser.userId
+        ) {
+          this.dislikedReplyAlready = true;
+        }
+      }
+    }
   },
   methods: {
     async like() {
@@ -85,11 +122,23 @@ export default {
         }
       );
       let likedCommentResponse = await likedCommentRes.json();
-      this.likedReplyAlready = true;
       this.reply.likes = likedCommentResponse.likes;
+
+      let registerlikedCommentRes = await fetch(
+        '/api/registerLikeOnComment?' +
+          new URLSearchParams({
+            userId: this.$store.getters.getCurrentUser.userId,
+            videoId: 0,
+            commentId: this.reply.commentId,
+          }),
+        {
+          method: 'POST',
+          body: JSON.stringify(this.reply),
+        }
+      );
+      this.likedReplyAlready = true;
     },
     async dislike() {
-      
       let dislikedCommentRes = await fetch(
         '/api/dislikeComment?' +
           new URLSearchParams({
@@ -103,6 +152,7 @@ export default {
       );
       let dislikedCommentResponse = await dislikedCommentRes.json();
       this.reply.dislikes = dislikedCommentResponse.dislikes;
+
       this.dislikedReplyAlready = true;
     },
     convertDateObjectToString(dateObject) {

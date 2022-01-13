@@ -21,9 +21,9 @@ public class likeRepository {
             PreparedStatement checkLikesOnAVideo = con.prepareStatement("SELECT * FROM likes WHERE likedVideoId = ?");
             checkLikesOnAVideo.setInt(1, videoId);
             ResultSet allLikes = checkLikesOnAVideo.executeQuery();
-            System.out.println(allLikes);
+
             while(allLikes.next()){
-                System.out.println(allLikes.getInt(1));
+
                 Like newLike = new Like(allLikes.getInt(1), allLikes.getInt(2), allLikes.getInt(3), allLikes.getInt(4));
                 relevantLikes.add(newLike);
             }
@@ -80,7 +80,6 @@ public class likeRepository {
             checkVideo.setInt(2, commentId);
 
             ResultSet foundVideo = checkVideo.executeQuery();
-            System.out.println("Tried to register a like for a comment");
             if(!foundVideo.next()){
                 PreparedStatement registerLikeOnAVideo = con.prepareStatement("INSERT INTO likes (likedByUserId, likedVideoId, likedCommentId) VALUES (?, ?, ?)");
                 registerLikeOnAVideo.setInt(1, userId);
@@ -111,7 +110,7 @@ public class likeRepository {
             ResultSet allLikes = checkLikesOnAComment.executeQuery();
             while(allLikes.next()){
                 Like newLike = new Like(allLikes.getInt(1), allLikes.getInt(2), allLikes.getInt(3), allLikes.getInt(4));
-                System.out.println(newLike);
+
                 relevantLikes.add(newLike);
             }
 
@@ -120,7 +119,7 @@ public class likeRepository {
         catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println(relevantLikes);
+
         return relevantLikes;
     }
 }

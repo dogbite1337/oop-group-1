@@ -40,8 +40,8 @@ export default {
 
     // Yang new code
     allVideos = await this.getAllVideos();
-    if(allVideos.length > 8){
-      allVideos = allVideos.slice(allVideos.length-8 ,allVideos.length)
+    if (allVideos.length > 8) {
+      allVideos = allVideos.slice(allVideos.length - 8, allVideos.length);
     }
 
     this.$store.dispatch('cacheFirstEightVideos', allVideos);
