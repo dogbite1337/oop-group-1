@@ -9,19 +9,17 @@
     </router-link>
     <div class="SpaceBlock" />
     <div class="FrameGrid">
-      <div />
       <div class="iFrameDiv">
         <iframe
           id="existing-iframe-example"
           class="PlayerDiv"
           type="text/html"
-          :width="width"
+          width="100%"
           :height="height"
           :src="video.videoURL"
           frameborder="0"
         ></iframe>
       </div>
-      <div />
     </div>
     <div class="someOther" />
     <div class="UpperSection">
@@ -207,7 +205,6 @@ export default {
       User: '',
       isOnVideosPage: false,
       showWatchNowInstead: false,
-      width: window.screen.width / 2,
       height: window.screen.height / 2,
       showCommentsSection: false,
       showDescriptionSection: true,

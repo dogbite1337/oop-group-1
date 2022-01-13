@@ -24,7 +24,7 @@
         <input
           v-on:keyup.enter="search"
           @change="setKeyWord"
-          v-on:click="searchParam = ''"
+          @click="resetKey"
           v-model="searchParam"
           class="SearchField"
           type="text"
@@ -60,12 +60,6 @@ import store from '../store';
 export default {
   name: 'Header',
   emits: ['update'],
-  async mounted() {
-    await this.$store.dispatch('whoAmI');
-    if (this.$store.getters.getCurrentUser) {
-      this.profilePic = this.$store.getters.getCurrentUser.getProfileURL();
-    }
-  },
   data() {
     return {
       isLoggedIn: false,
@@ -76,9 +70,27 @@ export default {
       profileDropdown: false,
     };
   },
+  created(){
+    let route = this.$router.currentRoute.value.fullPath;
+    if(route == "/SearchResult"){
+      this.searchParam = this.$store.getters.getKeyWord;
+    }
+  },
+
+    async mounted() {
+    await this.$store.dispatch('whoAmI');
+    if (this.$store.getters.getCurrentUser) {
+      this.profilePic = this.$store.getters.getCurrentUser.getProfileURL();
+    }
+  },
+
   methods: {
     playMe() {
       this.$refs.meow.play();
+    },
+
+    fetchKeyWord(){
+      this.searchParam = '';
     },
 
     resetToStartPage() {
