@@ -39,6 +39,14 @@ export default {
   },
   async created() {
     let allVideos = await this.getVideosForCurrentPage();
+
+    // Yang new code
+    allVideos = await this.getAllVideos();
+    if(allVideos.length > 8){
+      allVideos = allVideos.slice(allVideos.length-8 ,allVideos.length)
+    }
+    console.log(allVideos);
+
     this.$store.dispatch('cacheFirstEightVideos', allVideos);
     this.relevantVideos = [];
     for (let i = allVideos.length; i > 0; i--) {
