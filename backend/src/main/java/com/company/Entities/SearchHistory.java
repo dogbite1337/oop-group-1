@@ -1,11 +1,8 @@
 package com.company.Entities;
 
-import java.sql.Timestamp;
-
 public class SearchHistory {
     private Integer historyId, userId;
-    private String keyWord;
-    private String time;
+    private String keyWord, time;
 
     public SearchHistory() {
     }

@@ -2,7 +2,7 @@
   <div class="MainDiv">
     <Header @update="register" />
     <div class="searchPage">
-      <TrendLink/>
+      <TrendLink />
       <ExpandableSearchHistory />
       <div class="searchPageButtonsContainer">
         <button @click="register" type="button">Search</button>
@@ -16,14 +16,14 @@
 import Header from '../components/Header.vue';
 import TrendLink from '../components/TrendLink.vue';
 import ExpandableSearchHistory from '../components/ExpandableSearchHistory.vue';
-import Footer from '../components/Footer.vue'
+import Footer from '../components/Footer.vue';
 
 export default {
   emits: ['update'],
   data() {
     return {
-        searchHistory: [],
-        currentUser: null,
+      searchHistory: [],
+      currentUser: null,
     };
   },
 
@@ -36,7 +36,7 @@ export default {
 
   created() {},
 
-  async mounted(){
+  async mounted() {
     let detailedSearchList;
     let boolean = false;
     this.$store.subscribe(async (mutation, state) => {
@@ -69,7 +69,7 @@ export default {
   methods: {
     async register() {
       this.searchHistory = this.$store.getters.getMySearchHistoryList;
-      if(this.currentUser){
+      if (this.currentUser) {
         let detailedSearchList = await this.$store.dispatch(
           'getSearchHistories',
           this.currentUser.userId
@@ -84,7 +84,10 @@ export default {
       }
 
       let searchParam = this.$store.getters.getKeyWord;
-      let boolean = await this.checkIfListContainsKey(this.searchHistory, searchParam)
+      let boolean = await this.checkIfListContainsKey(
+        this.searchHistory,
+        searchParam
+      );
       if (this.currentUser && !boolean && searchParam) {
         let obj = {
           userId: this.currentUser.userId,
@@ -109,23 +112,15 @@ export default {
           });
         }
         this.$router.push('/SearchResult');
-
       } else if (this.currentUser && boolean && searchParam) {
         console.log('loggedin but already made this search before');
         this.$router.push('/SearchResult');
-      } else if (
-        !this.currentUser &&
-        boolean
-        && searchParam
-      ) {
+      } else if (!this.currentUser && boolean && searchParam) {
         console.log("didn't log in but already made this search before");
         this.$router.push('/SearchResult');
-      } else if(!this.currentUser &&
-        !boolean
-        && searchParam) {
-
+      } else if (!this.currentUser && !boolean && searchParam) {
         this.searchHistory = this.$store.getters.getMySearchHistoryList;
-        
+
         if (this.searchHistory.length > 5) {
           this.searchHistory.splice(this.searchHistory.length - 1, 1);
         }
@@ -137,7 +132,7 @@ export default {
         this.searchHistory.unshift(obj);
 
         await this.$store.dispatch('cacheSearchHistory', this.searchHistory);
-        console.log(this.searchHistory)
+        console.log(this.searchHistory);
         this.$router.push('/SearchResult');
       }
     },
@@ -150,22 +145,22 @@ export default {
       }
     },
 
-    async checkIfListContainsKey(list, keyword){
+    async checkIfListContainsKey(list, keyword) {
       let boolean = false;
-      if(list.length == 0){
-        console.log("returned")
+      if (list.length == 0) {
+        console.log('returned');
         return boolean;
       }
 
-      list.forEach(element => {
-        if((element.keyWord.toLowerCase()) == (keyword.toLowerCase())){
+      list.forEach((element) => {
+        if (element.keyWord.toLowerCase() == keyword.toLowerCase()) {
           boolean = true;
           return boolean;
         }
       });
 
       return boolean;
-    }
+    },
   },
 };
 </script>

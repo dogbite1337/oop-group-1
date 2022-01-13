@@ -49,10 +49,7 @@
       <div v-if="!showWatchNowInstead" class="UploaderDiv">
         <div class="SpaceDiv" />
         <div class="square1 square">
-          <img
-            class="uploaderProfileDiv"
-            src="../projectImages/xQcBanned.png"
-          />
+          <img class="uploaderProfileDiv" :src="User.profileURL" />
         </div>
         <div class="SpaceDiv" />
         <div class="square2 square">
@@ -87,7 +84,7 @@
         <div class="SpaceDiv" />
         <div class="uploadDateDiv square">
           {{
-            new Date(video.uploadDate).toLocaleDateString().replaceAll("/", "-")
+            new Date(video.uploadDate).toLocaleDateString().replaceAll('/', '-')
           }}
         </div>
         <div class="SpaceDiv" />
@@ -158,7 +155,9 @@
         :comment="commentItem"
         :replies="currentReplies"
         :commenters="currentCommenters"
+        :activeId="activeId"
         class="commentBox"
+        @removedAReply="updateBasedOnDelete"
         @postedAReply="updateCommentSection"
         @updateReplies="updateReplies"
       />
@@ -183,8 +182,8 @@ import store from '../store';
 
 // 770/430 width - 1:1
 export default {
-  name: "VideoPage",
-  emits: ['updateReplies', 'postedAReply'],
+  name: 'VideoPage',
+  emits: ['updateReplies', 'postedAReply', 'postedComment'],
   components: {
     RelatedVideo,
     CommentInput,
@@ -197,14 +196,15 @@ export default {
       relatedVideos: this.$store.getters.getEightFirstVideos
         ? this.$store.getters.getEightFirstVideos
         : undefined,
-      video: "",
+      video: '',
+      activeId: 0,
       spacedViews: 0,
       spacedLikes: 0,
       spacedDislikes: 0,
       spacedStars: 0,
       spacedSubs: 0,
       spacedVideos: 0,
-      User: "",
+      User: '',
       isOnVideosPage: false,
       showWatchNowInstead: false,
       width: window.screen.width / 2,
@@ -219,7 +219,7 @@ export default {
   },
   async created() {
     this.$store.subscribe(async (mutation, state) => {
-      if (mutation.type == "setRelatedVideoId") {
+      if (mutation.type == 'setRelatedVideoId') {
         this.loadRelevantInformation(mutation.payload);
       }
     });
@@ -229,6 +229,16 @@ export default {
     this.actOnResize();
     this.isOnVideosPage = true;
     window.scrollTo(0, 0);
+
+    let fixedList = [];
+    if (this.relatedVideos) {
+      for (let i = 0; i < this.relatedVideos.length; i++) {
+        if (this.relatedVideos[i].videoId != this.$route.params.id) {
+          fixedList.push(this.relatedVideos[i]);
+        }
+      }
+      this.relatedVideos = fixedList;
+    }
 
     let commentsRes = await fetch(
       '/rest/getCommentsForVideoId?' +
@@ -311,14 +321,34 @@ export default {
         this.showWatchNowInstead = false;
       }
     });
-    window.addEventListener("resize", this.actOnResize);
+    window.addEventListener('resize', this.actOnResize);
 
     // See comment on method
     this.incrementViewCount(this.$route.path);
   },
   watch: {},
   methods: {
+    async updateBasedOnDelete(commentsAfterRemoval) {
+      if (commentsAfterRemoval.length == 0) {
+        this.relevantComments = [];
+      } else {
+        this.relevantComments = [];
+        for (let i = 0; i < commentsAfterRemoval.length; i++) {
+          if (commentsAfterRemoval[i].responseToCommentId == -1) {
+            let newComment = new Comment(0, 0, '', '', 0, 0, 0, 0);
+            newComment = Object.assign(newComment, commentsAfterRemoval[i]);
+            newComment.timeOfPosting = this.convertDateObjectToString(
+              new Date(commentsAfterRemoval[i].timeOfPosting)
+            );
+            this.relevantComments.push(newComment);
+          }
+        }
+      }
+      this.amountOfComments = this.relevantComments.length;
+      this.activeId = 0;
+    },
     async updateReplies(commentId) {
+      this.activeId = commentId;
       this.currentReplies = [];
       this.currentCommenters = [];
       let res = await fetch(
@@ -362,6 +392,8 @@ export default {
         );
         this.currentCommenters.push(myUser);
       }
+      this.amountOfComments =
+        this.currentReplies.length + this.relevantComments.length;
     },
     async updateCommentSection() {},
     updateComments(postedComment) {
@@ -371,6 +403,7 @@ export default {
         new Date(newComment.timeOfPosting)
       );
       this.relevantComments.push(newComment);
+      this.amountOfComments = this.relevantComments.length;
     },
     convertDateObjectToString(dateObject) {
       let newDate =
@@ -395,60 +428,71 @@ export default {
       return newDate;
     },
     async likeVideo() {
-      let relevantInfo = {
-        videoId: this.video.videoId,
-        likes: this.video.likes,
-      };
-      let likedVideoRes = await fetch('/api/likeVideo', {
-        method: 'POST',
-        body: JSON.stringify(relevantInfo),
-      });
-      let likedVideoResponse = await likedVideoRes.json();
+      if (this.$store.getters.getCurrentUser) {
+        let relevantInfo = {
+          videoId: this.video.videoId,
+          likes: this.video.likes,
+        };
+        let likedVideoRes = await fetch('/api/likeVideo', {
+          method: 'POST',
+          body: JSON.stringify(relevantInfo),
+        });
+        let likedVideoResponse = await likedVideoRes.json();
 
-      this.video.likes = likedVideoResponse;
-      this.spacedLikes = this.video.likes;
+        this.video.likes = likedVideoResponse;
+        this.spacedLikes = this.video.likes;
+      } else {
+        alert('You have to log in to like Videos!');
+      }
     },
     async dislikeVideo() {
-      let relevantInfo = {
-        videoId: this.video.videoId,
-        dislikes: this.video.dislikes,
-      };
-      let dislikedVideoRes = await fetch('/api/dislikeVideo', {
-        method: 'POST',
-        body: JSON.stringify(relevantInfo),
-      });
-      let dislikedVideoResponse = await dislikedVideoRes.json();
+      if (this.$store.getters.getCurrentUser) {
+        let relevantInfo = {
+          videoId: this.video.videoId,
+          dislikes: this.video.dislikes,
+        };
+        let dislikedVideoRes = await fetch('/api/dislikeVideo', {
+          method: 'POST',
+          body: JSON.stringify(relevantInfo),
+        });
+        let dislikedVideoResponse = await dislikedVideoRes.json();
 
-      this.video.dislikes = dislikedVideoResponse;
-      this.spacedDislikes = this.video.dislikes;
+        this.video.dislikes = dislikedVideoResponse;
+        this.spacedDislikes = this.video.dislikes;
+      } else {
+        alert('You have to log in to dislike Videos!');
+      }
     },
     async actOnResize() {
-      this.width = window.screen.width / 2;
-      this.height = window.screen.height / 2;
-      if (this.height <= 360) {
-        this.height = 360;
+      this.width = 280;
+      this.height = 500;
+      if (window.innerWidth < 500) {
+        this.height = 400;
       }
-      if (this.width <= 280) {
-        this.width = 280;
+      if (window.innerWidth < 400) {
+        this.height = 300;
       }
     },
     // This is a rudimentary view count method. I spent a lot of time trying to get the
     // YouTube API to work in order to make this more robust, but didn't have any luck.
     // Using this for the time being
     incrementViewCount(urlPath) {
-      setTimeout(async function() {
-        // the if statement verifies (partially) that the user has been on the same page for 15 seconds
-        if (this.$route.path === urlPath) {
-          await fetch("/api/incrementViewCount", {
-            method: "PUT",
-            body: JSON.stringify(this.video),
-          });
-        }
-      }.bind(this), 15000);
+      setTimeout(
+        async function () {
+          // the if statement verifies (partially) that the user has been on the same page for 15 seconds
+          if (this.$route.path === urlPath) {
+            await fetch('/api/incrementViewCount', {
+              method: 'PUT',
+              body: JSON.stringify(this.video),
+            });
+          }
+        }.bind(this),
+        15000
+      );
     },
     async loadRelevantInformation(wantedUserId) {
       let videoRes = await fetch(
-        "/rest/getVideoById?" +
+        '/rest/getVideoById?' +
           new URLSearchParams({
             videoId:
               wantedUserId === undefined ? this.$route.params.id : wantedUserId,
@@ -461,8 +505,8 @@ export default {
       this.video = Object.assign(emptyVideo, videoResponse);
 
       this.video.videoURL = this.video.videoURL
-        .replace("watch?v=", "embed/")
-        .concat("?enablejsapi=1&origin=http://example.com");
+        .replace('watch?v=', 'embed/')
+        .concat('?enablejsapi=1&origin=http://example.com');
 
       this.spacedViews = this.renderSpacedNumbers(this.video.views.toString());
       this.spacedLikes = this.renderSpacedNumbers(this.video.likes.toString());
@@ -472,13 +516,13 @@ export default {
       this.spacedStars = this.renderSpacedNumbers(this.video.stars.toString());
 
       let uploaderRes = await fetch(
-        "/rest/getUserByUsername?" +
+        '/rest/getUserByUsername?' +
           new URLSearchParams({
             providedUsername: videoResponse.postedByUsername,
           })
       );
       let uploaderResponse = await uploaderRes.json();
-      let emptyUser = new User(0, "", "", "", 0, 0);
+      let emptyUser = new User(0, '', '', '', 0, 0);
       this.User = Object.assign(emptyUser, uploaderResponse);
       this.spacedSubs = this.renderSpacedNumbers(
         this.User.subscribers.toString()
@@ -488,9 +532,9 @@ export default {
       );
     },
     renderSpacedNumbers(stringToPad) {
-      let base = "";
+      let base = '';
       let startFrom = stringToPad % 1000;
-      let spacedString = "";
+      let spacedString = '';
       startFrom = startFrom.toString();
       if (stringToPad.length <= 3) {
         return parseInt(stringToPad);
@@ -498,7 +542,7 @@ export default {
 
       for (let i = 0; i < stringToPad.length; i++) {
         if (i != 0 && (i - (stringToPad.length % 3)) % 3 == 0) {
-          base += " " + stringToPad[i];
+          base += ' ' + stringToPad[i];
         } else {
           base += stringToPad[i];
         }
@@ -522,14 +566,18 @@ export default {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Revalia&family=Roboto:wght@300;400&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto:wght@300;400&display=swap');
 
 * {
   outline: none;
   border: none;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   overflow-x: hidden;
+}
+.square3 {
+  position: relative;
+  top: 13px;
 }
 .postingCommentDiv {
   margin-bottom: 20px;
@@ -604,6 +652,7 @@ export default {
   width: 40px;
   border-radius: 30px;
   margin-top: 9.5px;
+  overflow: hidden;
 }
 
 .UploaderDiv {
@@ -640,6 +689,11 @@ export default {
   top: 2px;
   left: -3px;
 }
+.PlayerDiv {
+  width: 100vw;
+  max-width: 820px;
+}
+
 .square {
   margin-top: 1px;
   width: max-content;
@@ -670,7 +724,7 @@ export default {
 .descriptionAndCommentsDivInScroll {
   display: grid;
   grid-template-columns: auto max-content auto;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   background-color: black;
   color: white;
   padding-top: 14px;
@@ -681,7 +735,7 @@ export default {
 .descriptionAndCommentsDiv {
   display: grid;
   grid-template-columns: auto max-content auto;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   background-color: black;
   color: white;
   padding-top: 14px;
@@ -707,11 +761,15 @@ export default {
 }
 .FrameGrid {
   display: grid;
-  grid-template-columns: auto max-content auto;
+  grid-template-columns: 0px auto 0px;
+  max-width: 820px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .iFrameDiv {
   display: block;
-  min-width: 280px;
+  min-width: 100vw;
+  width: 100vw;
 }
 .playButtonDiv {
   width: 13px;
@@ -819,7 +877,7 @@ export default {
   .descriptionAndCommentsDiv {
     display: grid;
     grid-template-columns: 10px max-content auto max-content 10px;
-    font-family: "Roboto", sans-serif;
+    font-family: 'Roboto', sans-serif;
     background-color: black;
     color: white;
     padding-top: 14px;
