@@ -15,7 +15,7 @@ public class LikeHandler {
 
     private void initLikeHandler() {
         app.post("/api/registerLikeOnComment", (req, res) -> {
-            likeRepository.registerLikeOnComment(Integer.parseInt(req.query("userId")), Integer.parseInt(req.query("videoId")), Integer.parseInt(req.query("commentId")));
+            likeRepository.registerLikeOnComment(Integer.parseInt(req.query("relatesToVideoId")), Integer.parseInt(req.query("userId")), Integer.parseInt(req.query("videoId")), Integer.parseInt(req.query("commentId")));
             res.json(0);
         });
 
@@ -24,7 +24,7 @@ public class LikeHandler {
         });
 
         app.post("/api/registerLikeOnVideo", (req, res) -> {
-            likeRepository.registerLikeOnVideo(Integer.parseInt(req.body().get("userId").toString()), Integer.parseInt(req.body().get("videoId").toString()), Integer.parseInt(req.body().get("commentId").toString()));
+            likeRepository.registerLikeOnVideo(Integer.parseInt(req.body().get("relatesToVideoId").toString()), Integer.parseInt(req.body().get("userId").toString()), Integer.parseInt(req.body().get("videoId").toString()), Integer.parseInt(req.body().get("commentId").toString()));
             res.json(0);
         });
 

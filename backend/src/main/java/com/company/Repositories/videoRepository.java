@@ -264,6 +264,37 @@ public class videoRepository {
         return relevantVideo;
     }
 
+    public void deleteVideo(Integer videoId) {
+        try {
+            try {
+                con = DriverManager.getConnection(
+                        "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            PreparedStatement removeComments = con.prepareStatement("DELETE FROM comments WHERE relatesToVideoId = ?");
+            removeComments.setInt(1, videoId);
+            removeComments.executeUpdate();
+
+            PreparedStatement removeLikes = con.prepareStatement("DELETE FROM likes WHERE relatesToVideoId = ?");
+            removeLikes.setInt(1, videoId);
+            removeLikes.executeUpdate();
+
+            PreparedStatement removeDislikes = con.prepareStatement("DELETE FROM dislikes WHERE relatesToVideoId = ?");
+            removeDislikes.setInt(1, videoId);
+            removeDislikes.executeUpdate();
+
+            PreparedStatement removeVideo = con.prepareStatement("DELETE FROM videos WHERE videoId = ?");
+            removeVideo.setInt(1, videoId);
+            removeVideo.executeUpdate();
+
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
     public void updateVideo(Integer videoId, String videoURL, String title, String description) {
         try {
             try {

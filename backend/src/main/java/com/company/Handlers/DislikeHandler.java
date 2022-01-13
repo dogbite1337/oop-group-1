@@ -15,7 +15,7 @@ public class DislikeHandler {
 
     private void initDislikeHandler() {
         app.post("/api/registerDislikeOnVideo", (req, res) -> {
-            dislikeRepository.registerDislikeOnVideo(Integer.parseInt(req.body().get("userId").toString()), Integer.parseInt(req.body().get("videoId").toString()), Integer.parseInt(req.body().get("commentId").toString()));
+            dislikeRepository.registerDislikeOnVideo(Integer.parseInt(req.body().get("relatesToVideoId").toString()), Integer.parseInt(req.body().get("userId").toString()), Integer.parseInt(req.body().get("videoId").toString()), Integer.parseInt(req.body().get("commentId").toString()));
             res.json(0);
         });
 

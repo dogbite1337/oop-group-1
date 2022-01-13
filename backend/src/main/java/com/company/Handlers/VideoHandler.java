@@ -46,6 +46,10 @@ public class VideoHandler {
             ));
         });
 
+        app.delete("/api/deleteVideo", (req, res) -> {
+           videoRepository.deleteVideo(Integer.parseInt(req.query("videoId")));
+        });
+
         app.post("/api/updateVideo", (req, res) -> {
             videoRepository.updateVideo(
                     Integer.parseInt(req.body().get("videoId").toString()),

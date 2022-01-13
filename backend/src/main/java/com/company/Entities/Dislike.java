@@ -1,23 +1,22 @@
 package com.company.Entities;
 
 public class Dislike {
-    private Integer dislikeId, dislikedByUserId, dislikedVideoId, dislikedCommentId;
+    private Integer dislikeId, relatesToVideoId, dislikedByUserId, dislikedVideoId, dislikedCommentId;
 
-    public Dislike(Integer dislikeId, Integer dislikedByUserId, Integer dislikedVideoId, Integer dislikedCommentId) {
+    public Dislike(Integer dislikeId, Integer relatesToVideoId, Integer dislikedByUserId, Integer dislikedVideoId, Integer dislikedCommentId) {
         this.dislikeId = dislikeId;
+        this.relatesToVideoId = relatesToVideoId;
         this.dislikedByUserId = dislikedByUserId;
         this.dislikedVideoId = dislikedVideoId;
         this.dislikedCommentId = dislikedCommentId;
     }
 
-    @Override
-    public String toString() {
-        return "Dislike{" +
-                "dislikeId=" + dislikeId +
-                ", dislikedByUserId=" + dislikedByUserId +
-                ", dislikedVideoId=" + dislikedVideoId +
-                ", dislikedCommentId=" + dislikedCommentId +
-                '}';
+    public Integer getRelatesToVideoId() {
+        return relatesToVideoId;
+    }
+
+    public void setRelatesToVideoId(Integer relatesToVideoId) {
+        this.relatesToVideoId = relatesToVideoId;
     }
 
     public Integer getDislikeId() {
@@ -50,6 +49,17 @@ public class Dislike {
 
     public void setDislikedCommentId(Integer dislikedCommentId) {
         this.dislikedCommentId = dislikedCommentId;
+    }
+
+    @Override
+    public String toString() {
+        return "Dislike{" +
+                "dislikeId=" + dislikeId +
+                ", relatesToVideoId=" + relatesToVideoId +
+                ", dislikedByUserId=" + dislikedByUserId +
+                ", dislikedVideoId=" + dislikedVideoId +
+                ", dislikedCommentId=" + dislikedCommentId +
+                '}';
     }
 
 }

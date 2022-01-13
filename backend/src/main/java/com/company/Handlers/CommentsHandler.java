@@ -35,7 +35,7 @@ public class CommentsHandler {
         });
 
         app.post("/api/dislikeComment", (req, res) -> {
-            res.json(commentsRepository.dislikeComment(Integer.parseInt(req.query("commentId")), Integer.parseInt(req.query("userId"))));
+            res.json(commentsRepository.dislikeComment(Integer.parseInt(req.query("relatesToVideoId")), Integer.parseInt(req.query("commentId")), Integer.parseInt(req.query("userId"))));
         });
 
         app.get("/rest/getCommentsForVideoId", (req, res) -> {

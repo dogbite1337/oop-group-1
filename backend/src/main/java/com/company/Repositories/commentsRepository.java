@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class commentsRepository {
     Connection con;
 
-    public Comment dislikeComment(Integer commentId, Integer userId) {
+    public Comment dislikeComment(Integer relatesToVideoId, Integer commentId, Integer userId) {
         Comment newComment = new Comment(0, 0, "", "", 0, 0, 0, Long.valueOf("0"));
 
         try {
@@ -43,10 +43,11 @@ public class commentsRepository {
             dislikeComment.setInt(2, newComment.getCommentId());
             int resultSetFromLiking = dislikeComment.executeUpdate();
 
-            PreparedStatement insertDislike = con.prepareStatement("INSERT INTO dislikes (dislikedByUserId, dislikedVideoId, dislikedCommentId) VALUES (?, ?, ?)");
-            insertDislike.setInt(1, userId);
-            insertDislike.setInt(2, 0);
-            insertDislike.setInt(3, commentId);
+            PreparedStatement insertDislike = con.prepareStatement("INSERT INTO dislikes (relatesToVideoId, dislikedByUserId, dislikedVideoId, dislikedCommentId) VALUES (?,?, ?, ?)");
+            insertDislike.setInt(1, relatesToVideoId);
+            insertDislike.setInt(2, userId);
+            insertDislike.setInt(3, 0);
+            insertDislike.setInt(4, commentId);
             int resultFromDisliking = insertDislike.executeUpdate();
 
 

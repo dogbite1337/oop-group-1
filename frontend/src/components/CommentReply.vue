@@ -111,49 +111,61 @@ export default {
   },
   methods: {
     async like() {
-      let likedCommentRes = await fetch(
-        '/api/likeComment?' +
-          new URLSearchParams({
-            commentId: this.reply.commentId,
-          }),
-        {
-          method: 'POST',
-          body: JSON.stringify(this.reply),
-        }
-      );
-      let likedCommentResponse = await likedCommentRes.json();
-      this.reply.likes = likedCommentResponse.likes;
+      if (this.$store.getters.getCurrentUser) {
+        let likedCommentRes = await fetch(
+          '/api/likeComment?' +
+            new URLSearchParams({
+              commentId: this.reply.commentId,
+            }),
+          {
+            method: 'POST',
+            body: JSON.stringify(this.reply),
+          }
+        );
+        let likedCommentResponse = await likedCommentRes.json();
+        this.reply.likes = likedCommentResponse.likes;
 
-      let registerlikedCommentRes = await fetch(
-        '/api/registerLikeOnComment?' +
-          new URLSearchParams({
-            userId: this.$store.getters.getCurrentUser.userId,
-            videoId: 0,
-            commentId: this.reply.commentId,
-          }),
-        {
-          method: 'POST',
-          body: JSON.stringify(this.reply),
-        }
-      );
-      this.likedReplyAlready = true;
+        let registerlikedCommentRes = await fetch(
+          '/api/registerLikeOnComment?' +
+            new URLSearchParams({
+              relatesToVideoId: this.$route.params.id,
+              userId: this.$store.getters.getCurrentUser.userId,
+              videoId: 0,
+              commentId: this.reply.commentId,
+            }),
+          {
+            method: 'POST',
+            body: JSON.stringify(this.reply),
+          }
+        );
+        this.likedReplyAlready = true;
+      }
+      else{
+        alert("You have to be logged in to like a Reply!")
+      }
     },
     async dislike() {
-      let dislikedCommentRes = await fetch(
-        '/api/dislikeComment?' +
-          new URLSearchParams({
-            commentId: this.reply.commentId,
-            userId: this.$store.getters.getCurrentUser.userId,
-          }),
-        {
-          method: 'POST',
-          body: JSON.stringify(this.reply),
-        }
-      );
-      let dislikedCommentResponse = await dislikedCommentRes.json();
-      this.reply.dislikes = dislikedCommentResponse.dislikes;
+      console.log(this.$route.params.id);
+      if (this.$store.getters.getCurrentUser) {
+        let dislikedCommentRes = await fetch(
+          '/api/dislikeComment?' +
+            new URLSearchParams({
+              relatesToVideoId: this.$route.params.id,
+              commentId: this.reply.commentId,
+              userId: this.$store.getters.getCurrentUser.userId,
+            }),
+          {
+            method: 'POST',
+            body: JSON.stringify(this.reply),
+          }
+        );
+        let dislikedCommentResponse = await dislikedCommentRes.json();
+        this.reply.dislikes = dislikedCommentResponse.dislikes;
 
-      this.dislikedReplyAlready = true;
+        this.dislikedReplyAlready = true;
+      } else {
+        alert('You have to be logged in to dislike a reply!');
+      }
     },
     convertDateObjectToString(dateObject) {
       let newDate =

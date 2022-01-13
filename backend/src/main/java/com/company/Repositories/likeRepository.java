@@ -24,7 +24,7 @@ public class likeRepository {
 
             while (allLikes.next()) {
 
-                Like newLike = new Like(allLikes.getInt(1), allLikes.getInt(2), allLikes.getInt(3), allLikes.getInt(4));
+                Like newLike = new Like(allLikes.getInt(1), allLikes.getInt(2), allLikes.getInt(3), allLikes.getInt(4), allLikes.getInt(5));
                 relevantLikes.add(newLike);
             }
 
@@ -35,7 +35,7 @@ public class likeRepository {
         return relevantLikes;
     }
 
-    public void registerLikeOnVideo(Integer userId, Integer videoId, Integer commentId) {
+    public void registerLikeOnVideo(Integer relatesToVideoId, Integer userId, Integer videoId, Integer commentId) {
 
         try {
             con = DriverManager.getConnection(
@@ -51,10 +51,11 @@ public class likeRepository {
 
             ResultSet foundVideo = checkVideo.executeQuery();
             if (!foundVideo.next()) {
-                PreparedStatement registerLikeOnAVideo = con.prepareStatement("INSERT IGNORE INTO likes (likedByUserId, likedVideoId, likedCommentId) VALUES (?, ?, ?)");
-                registerLikeOnAVideo.setInt(1, userId);
-                registerLikeOnAVideo.setInt(2, videoId);
-                registerLikeOnAVideo.setInt(3, commentId);
+                PreparedStatement registerLikeOnAVideo = con.prepareStatement("INSERT IGNORE INTO likes (relatesToVideoId, likedByUserId, likedVideoId, likedCommentId) VALUES (?, ?, ?, ?)");
+                registerLikeOnAVideo.setInt(1, relatesToVideoId);
+                registerLikeOnAVideo.setInt(2, userId);
+                registerLikeOnAVideo.setInt(3, videoId);
+                registerLikeOnAVideo.setInt(4, commentId);
                 registerLikeOnAVideo.executeUpdate();
             }
 
@@ -64,7 +65,7 @@ public class likeRepository {
         }
     }
 
-    public void registerLikeOnComment(Integer userId, Integer videoId, Integer commentId) {
+    public void registerLikeOnComment(Integer relatesToVideoId, Integer userId, Integer videoId, Integer commentId) {
         try {
             con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
@@ -79,10 +80,11 @@ public class likeRepository {
 
             ResultSet foundVideo = checkVideo.executeQuery();
             if (!foundVideo.next()) {
-                PreparedStatement registerLikeOnAVideo = con.prepareStatement("INSERT INTO likes (likedByUserId, likedVideoId, likedCommentId) VALUES (?, ?, ?)");
-                registerLikeOnAVideo.setInt(1, userId);
-                registerLikeOnAVideo.setInt(2, videoId);
-                registerLikeOnAVideo.setInt(3, commentId);
+                PreparedStatement registerLikeOnAVideo = con.prepareStatement("INSERT INTO likes (relatesToVideoId, likedByUserId, likedVideoId, likedCommentId) VALUES (?, ?, ?, ?)");
+                registerLikeOnAVideo.setInt(1, relatesToVideoId);
+                registerLikeOnAVideo.setInt(2, userId);
+                registerLikeOnAVideo.setInt(3, videoId);
+                registerLikeOnAVideo.setInt(4, commentId);
                 registerLikeOnAVideo.executeUpdate();
             }
 
@@ -106,7 +108,7 @@ public class likeRepository {
             checkLikesOnAComment.setInt(1, commentId);
             ResultSet allLikes = checkLikesOnAComment.executeQuery();
             while (allLikes.next()) {
-                Like newLike = new Like(allLikes.getInt(1), allLikes.getInt(2), allLikes.getInt(3), allLikes.getInt(4));
+                Like newLike = new Like(allLikes.getInt(1), allLikes.getInt(2), allLikes.getInt(3), allLikes.getInt(4), allLikes.getInt(5));
 
                 relevantLikes.add(newLike);
             }

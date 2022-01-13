@@ -22,7 +22,7 @@ public class dislikeRepository {
             registerDislikeOnAVideo.setInt(1, videoId);
             ResultSet allDislikes = registerDislikeOnAVideo.executeQuery();
             while (allDislikes.next()) {
-                Dislike newDislike = new Dislike(allDislikes.getInt(1), allDislikes.getInt(2), allDislikes.getInt(3), allDislikes.getInt(4));
+                Dislike newDislike = new Dislike(allDislikes.getInt(1), allDislikes.getInt(2), allDislikes.getInt(3), allDislikes.getInt(4), allDislikes.getInt(5));
                 relevantDislikes.add(newDislike);
             }
 
@@ -33,7 +33,7 @@ public class dislikeRepository {
         return relevantDislikes;
     }
 
-    public void registerDislikeOnVideo(Integer userId, Integer videoId, Integer commentId) {
+    public void registerDislikeOnVideo(Integer relatesToVideoId, Integer userId, Integer videoId, Integer commentId) {
 
         try {
             con = DriverManager.getConnection(
@@ -49,10 +49,11 @@ public class dislikeRepository {
 
             ResultSet foundVideo = checkVideo.executeQuery();
             if (!foundVideo.next()) {
-                PreparedStatement registerLikeOnAVideo = con.prepareStatement("INSERT IGNORE INTO dislikes (dislikedByUserId, dislikedVideoId, dislikedCommentId) VALUES (?, ?, ?)");
-                registerLikeOnAVideo.setInt(1, userId);
-                registerLikeOnAVideo.setInt(2, videoId);
-                registerLikeOnAVideo.setInt(3, commentId);
+                PreparedStatement registerLikeOnAVideo = con.prepareStatement("INSERT IGNORE INTO dislikes (relatesToVideoId, dislikedByUserId, dislikedVideoId, dislikedCommentId) VALUES (?, ?, ?, ?)");
+                registerLikeOnAVideo.setInt(1, relatesToVideoId);
+                registerLikeOnAVideo.setInt(2, userId);
+                registerLikeOnAVideo.setInt(3, videoId);
+                registerLikeOnAVideo.setInt(4, commentId);
                 registerLikeOnAVideo.executeUpdate();
             }
 
@@ -76,7 +77,7 @@ public class dislikeRepository {
             registerDislikeOnAVideo.setInt(1, commentId);
             ResultSet allDislikes = registerDislikeOnAVideo.executeQuery();
             while (allDislikes.next()) {
-                Dislike newDislike = new Dislike(allDislikes.getInt(1), allDislikes.getInt(2), allDislikes.getInt(3), allDislikes.getInt(4));
+                Dislike newDislike = new Dislike(allDislikes.getInt(1), allDislikes.getInt(2), allDislikes.getInt(3), allDislikes.getInt(4), allDislikes.getInt(5));
                 relevantDislikes.add(newDislike);
             }
 
