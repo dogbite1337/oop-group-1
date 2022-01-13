@@ -31,7 +31,20 @@ export default {
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    async updateVideo() {
+      let video = {
+        videoId: 1,
+        videoURL: "https://www.youtube.com/watch?v=axsnM1kH99c",
+        title: "hello",
+        description: "No u"
+      };
+      let res = await fetch('/api/updateVideo', {
+        method: 'POST',
+        body: JSON.stringify(video),
+      });
+    }
+  },
 };
 </script>
 

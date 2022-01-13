@@ -7,7 +7,7 @@ public class DislikeHandler {
     private final Express app;
     private final com.company.Repositories.dislikeRepository dislikeRepository;
 
-    public DislikeHandler(Express app, dislikeRepository dislikeRepository){
+    public DislikeHandler(Express app, dislikeRepository dislikeRepository) {
         this.app = app;
         this.dislikeRepository = dislikeRepository;
         initDislikeHandler();
@@ -24,7 +24,7 @@ public class DislikeHandler {
         });
 
         app.get("/rest/getDislikesForComment", (req, res) -> {
-           res.json(dislikeRepository.getDislikesForComment(Integer.parseInt(req.query("commentId"))));
+            res.json(dislikeRepository.getDislikesForComment(Integer.parseInt(req.query("commentId"))));
         });
 
     }

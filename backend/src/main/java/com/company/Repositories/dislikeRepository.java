@@ -1,6 +1,7 @@
 package com.company.Repositories;
 
 import com.company.Entities.Dislike;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -11,7 +12,7 @@ public class dislikeRepository {
         ArrayList<Dislike> relevantDislikes = new ArrayList<Dislike>();
         try {
             con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/kittykitty","root","root");
+                    "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -20,24 +21,23 @@ public class dislikeRepository {
             PreparedStatement registerDislikeOnAVideo = con.prepareStatement("SELECT * FROM dislikes WHERE dislikedVideoId = ?");
             registerDislikeOnAVideo.setInt(1, videoId);
             ResultSet allDislikes = registerDislikeOnAVideo.executeQuery();
-            while(allDislikes.next()){
+            while (allDislikes.next()) {
                 Dislike newDislike = new Dislike(allDislikes.getInt(1), allDislikes.getInt(2), allDislikes.getInt(3), allDislikes.getInt(4));
                 relevantDislikes.add(newDislike);
             }
 
             con.close();
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return relevantDislikes;
     }
 
-    public void registerDislikeOnVideo(Integer userId, Integer videoId, Integer commentId){
+    public void registerDislikeOnVideo(Integer userId, Integer videoId, Integer commentId) {
 
         try {
             con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/kittykitty","root","root");
+                    "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -48,7 +48,7 @@ public class dislikeRepository {
             checkVideo.setInt(2, videoId);
 
             ResultSet foundVideo = checkVideo.executeQuery();
-            if(!foundVideo.next()){
+            if (!foundVideo.next()) {
                 PreparedStatement registerLikeOnAVideo = con.prepareStatement("INSERT IGNORE INTO dislikes (dislikedByUserId, dislikedVideoId, dislikedCommentId) VALUES (?, ?, ?)");
                 registerLikeOnAVideo.setInt(1, userId);
                 registerLikeOnAVideo.setInt(2, videoId);
@@ -57,17 +57,16 @@ public class dislikeRepository {
             }
 
             con.close();
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public ArrayList<Dislike> getDislikesForComment(Integer commentId){
+    public ArrayList<Dislike> getDislikesForComment(Integer commentId) {
         ArrayList<Dislike> relevantDislikes = new ArrayList<Dislike>();
         try {
             con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/kittykitty","root","root");
+                    "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -76,14 +75,13 @@ public class dislikeRepository {
             PreparedStatement registerDislikeOnAVideo = con.prepareStatement("SELECT * FROM dislikes WHERE dislikedCommentId = ?");
             registerDislikeOnAVideo.setInt(1, commentId);
             ResultSet allDislikes = registerDislikeOnAVideo.executeQuery();
-            while(allDislikes.next()){
+            while (allDislikes.next()) {
                 Dislike newDislike = new Dislike(allDislikes.getInt(1), allDislikes.getInt(2), allDislikes.getInt(3), allDislikes.getInt(4));
                 relevantDislikes.add(newDislike);
             }
 
             con.close();
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return relevantDislikes;

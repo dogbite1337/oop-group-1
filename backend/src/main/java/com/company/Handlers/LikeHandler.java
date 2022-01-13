@@ -7,7 +7,7 @@ public class LikeHandler {
     private final Express app;
     private final com.company.Repositories.likeRepository likeRepository;
 
-    public LikeHandler(Express app, likeRepository likeRepository){
+    public LikeHandler(Express app, likeRepository likeRepository) {
         this.app = app;
         this.likeRepository = likeRepository;
         initLikeHandler();

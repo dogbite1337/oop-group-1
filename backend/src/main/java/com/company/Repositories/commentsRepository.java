@@ -1,14 +1,15 @@
 package com.company.Repositories;
 
 import com.company.Entities.Comment;
+
 import java.sql.*;
 import java.util.ArrayList;
 
 public class commentsRepository {
     Connection con;
 
-    public Comment dislikeComment(Integer commentId, Integer userId){
-        Comment newComment = new Comment(0,0,"","",0,0,0,Long.valueOf("0"));
+    public Comment dislikeComment(Integer commentId, Integer userId) {
+        Comment newComment = new Comment(0, 0, "", "", 0, 0, 0, Long.valueOf("0"));
 
         try {
             con = DriverManager.getConnection(
@@ -19,11 +20,11 @@ public class commentsRepository {
 
         try {
             PreparedStatement dislikedComment = con.prepareStatement("SELECT * FROM comments WHERE commentId = ?");
-            dislikedComment.setInt(1,commentId);
+            dislikedComment.setInt(1, commentId);
             ResultSet rs = dislikedComment.executeQuery();
 
-            while(rs.next()) {
-                newComment = new Comment(rs.getInt(1), rs.getInt(2), rs.getString(3) , rs.getString(4) ,rs.getInt(5),rs.getInt(6), rs.getInt(7), rs.getLong(8));
+            while (rs.next()) {
+                newComment = new Comment(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getLong(8));
             }
 
             PreparedStatement checkForDislikedComment = con.prepareStatement("SELECT * FROM dislikes WHERE dislikedCommentId = ? AND dislikedByUserId = ?");
@@ -31,7 +32,7 @@ public class commentsRepository {
             checkForDislikedComment.setInt(2, userId);
             ResultSet foundDislikedComments = checkForDislikedComment.executeQuery();
 
-            if(foundDislikedComments.next()){
+            if (foundDislikedComments.next()) {
                 con.close();
                 return newComment;
             }
@@ -43,7 +44,7 @@ public class commentsRepository {
             int resultSetFromLiking = dislikeComment.executeUpdate();
 
             PreparedStatement insertDislike = con.prepareStatement("INSERT INTO dislikes (dislikedByUserId, dislikedVideoId, dislikedCommentId) VALUES (?, ?, ?)");
-            insertDislike.setInt(1,userId);
+            insertDislike.setInt(1, userId);
             insertDislike.setInt(2, 0);
             insertDislike.setInt(3, commentId);
             int resultFromDisliking = insertDislike.executeUpdate();
@@ -68,15 +69,15 @@ public class commentsRepository {
 
         try {
             PreparedStatement removeComment = con.prepareStatement("DELETE FROM comments WHERE (commentId = ?) OR (responseToCommentId = ?)");
-            removeComment.setInt(1,commentId);
+            removeComment.setInt(1, commentId);
             removeComment.setInt(2, commentId);
             int rs = removeComment.executeUpdate();
 
 
             PreparedStatement getRemainingComments = con.prepareStatement("SELECT * FROM comments WHERE relatesToVideoId = ?");
-            getRemainingComments.setInt(1,videoId);
+            getRemainingComments.setInt(1, videoId);
             ResultSet remainingCommentsInDB = getRemainingComments.executeQuery();
-            while(remainingCommentsInDB.next()){
+            while (remainingCommentsInDB.next()) {
                 Comment newComment = new Comment(remainingCommentsInDB.getInt(1), remainingCommentsInDB.getInt(2),
                         remainingCommentsInDB.getString(3), remainingCommentsInDB.getString(4),
                         remainingCommentsInDB.getInt(5), remainingCommentsInDB.getInt(6),
@@ -90,8 +91,8 @@ public class commentsRepository {
         return remainingComments;
     }
 
-    public Comment likeComment(Integer commentId){
-        Comment newComment = new Comment(0,0,"","",0,0,0,Long.valueOf("0"));
+    public Comment likeComment(Integer commentId) {
+        Comment newComment = new Comment(0, 0, "", "", 0, 0, 0, Long.valueOf("0"));
 
         try {
             con = DriverManager.getConnection(
@@ -102,12 +103,12 @@ public class commentsRepository {
 
         try {
             PreparedStatement likedComment = con.prepareStatement("SELECT * FROM comments WHERE commentId = ?");
-            likedComment.setInt(1,commentId);
+            likedComment.setInt(1, commentId);
             ResultSet rs = likedComment.executeQuery();
 
 
-            while(rs.next()) {
-                newComment = new Comment(rs.getInt(1), rs.getInt(2), rs.getString(3) , rs.getString(4) ,rs.getInt(5),rs.getInt(6), rs.getInt(7), rs.getLong(8));
+            while (rs.next()) {
+                newComment = new Comment(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getLong(8));
             }
 
 
@@ -115,7 +116,6 @@ public class commentsRepository {
             likeComment.setInt(1, newComment.getLikes() + 1);
             likeComment.setInt(2, newComment.getCommentId());
             int resultSetFromLiking = likeComment.executeUpdate();
-
 
 
             con.close();
@@ -127,7 +127,7 @@ public class commentsRepository {
     }
 
     public ArrayList<Comment> getRepliesForComment(Integer commentId) {
-        ArrayList<Comment> relevantReplies= new ArrayList<Comment>();
+        ArrayList<Comment> relevantReplies = new ArrayList<Comment>();
         try {
             con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
@@ -140,8 +140,8 @@ public class commentsRepository {
             getAllReplies.setInt(1, commentId);
             ResultSet rs = getAllReplies.executeQuery();
 
-            while(rs.next()) {
-                Comment newComment = new Comment(rs.getInt(1), rs.getInt(2), rs.getString(3) , rs.getString(4) ,rs.getInt(5),rs.getInt(6), rs.getInt(7), rs.getLong(8));
+            while (rs.next()) {
+                Comment newComment = new Comment(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getLong(8));
                 relevantReplies.add(newComment);
             }
 
@@ -167,8 +167,8 @@ public class commentsRepository {
             getAllComments.setInt(1, videoId);
             ResultSet rs = getAllComments.executeQuery();
 
-            while(rs.next()) {
-                Comment newComment = new Comment(rs.getInt(1), rs.getInt(2), rs.getString(3) , rs.getString(4) ,rs.getInt(5),rs.getInt(6), rs.getInt(7), rs.getLong(8));
+            while (rs.next()) {
+                Comment newComment = new Comment(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getLong(8));
                 relevantComments.add(newComment);
             }
 
@@ -181,7 +181,7 @@ public class commentsRepository {
     }
 
     public Comment postNewComment(Integer relatesToVideoId, String postedByUsername, String content, Integer responseToCommentId, Long timeOfPosting) {
-        Comment newComment = new Comment(0, relatesToVideoId , postedByUsername , content ,0,0, responseToCommentId, timeOfPosting);
+        Comment newComment = new Comment(0, relatesToVideoId, postedByUsername, content, 0, 0, responseToCommentId, timeOfPosting);
         try {
             con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
@@ -200,7 +200,7 @@ public class commentsRepository {
 
             try (ResultSet generatedKeys = postComment.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                   newComment.setCommentId(generatedKeys.getInt(1));
+                    newComment.setCommentId(generatedKeys.getInt(1));
                 }
             }
 

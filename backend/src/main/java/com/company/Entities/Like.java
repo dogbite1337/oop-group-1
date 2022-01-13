@@ -3,7 +3,7 @@ package com.company.Entities;
 public class Like {
     private Integer likeId, likedByUserId, likedVideoId, likedCommentId;
 
-    public Like(Integer likeId, Integer likedByUserId, Integer likedVideoId, Integer likedCommentId){
+    public Like(Integer likeId, Integer likedByUserId, Integer likedVideoId, Integer likedCommentId) {
         this.likeId = likeId;
         this.likedByUserId = likedByUserId;
         this.likedVideoId = likedVideoId;

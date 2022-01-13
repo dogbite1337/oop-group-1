@@ -3,6 +3,13 @@ package com.company.Entities;
 public class Dislike {
     private Integer dislikeId, dislikedByUserId, dislikedVideoId, dislikedCommentId;
 
+    public Dislike(Integer dislikeId, Integer dislikedByUserId, Integer dislikedVideoId, Integer dislikedCommentId) {
+        this.dislikeId = dislikeId;
+        this.dislikedByUserId = dislikedByUserId;
+        this.dislikedVideoId = dislikedVideoId;
+        this.dislikedCommentId = dislikedCommentId;
+    }
+
     @Override
     public String toString() {
         return "Dislike{" +
@@ -42,13 +49,6 @@ public class Dislike {
     }
 
     public void setDislikedCommentId(Integer dislikedCommentId) {
-        this.dislikedCommentId = dislikedCommentId;
-    }
-
-    public Dislike(Integer dislikeId, Integer dislikedByUserId, Integer dislikedVideoId, Integer dislikedCommentId){
-        this.dislikeId = dislikeId;
-        this.dislikedByUserId = dislikedByUserId;
-        this.dislikedVideoId = dislikedVideoId;
         this.dislikedCommentId = dislikedCommentId;
     }
 
