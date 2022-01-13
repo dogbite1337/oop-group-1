@@ -9,19 +9,17 @@
     </router-link>
     <div class="SpaceBlock" />
     <div class="FrameGrid">
-      <div />
       <div class="iFrameDiv">
         <iframe
           id="existing-iframe-example"
           class="PlayerDiv"
           type="text/html"
-          :width="width"
+          width="100%"
           :height="height"
           :src="video.videoURL"
           frameborder="0"
         ></iframe>
       </div>
-      <div />
     </div>
     <div class="someOther" />
     <div class="UpperSection">
@@ -207,7 +205,6 @@ export default {
       User: "",
       isOnVideosPage: false,
       showWatchNowInstead: false,
-      width: window.screen.width / 2,
       height: window.screen.height / 2,
       showCommentsSection: false,
       showDescriptionSection: true,
@@ -423,13 +420,9 @@ export default {
       this.spacedDislikes = this.video.dislikes;
     },
     async actOnResize() {
-      this.width = window.screen.width / 2;
       this.height = window.screen.height / 2;
       if (this.height <= 360) {
         this.height = 360;
-      }
-      if (this.width <= 280) {
-        this.width = 280;
       }
     },
     // This is a rudimentary view count method. I spent a lot of time trying to get the
@@ -705,10 +698,7 @@ export default {
   font-size: 10px;
   padding-bottom: 10px;
 }
-.FrameGrid {
-  display: grid;
-  grid-template-columns: auto max-content auto;
-}
+
 .iFrameDiv {
   display: block;
   min-width: 280px;
