@@ -8,9 +8,13 @@
   </div>
   <div class="SearchAndLoginDiv">
     <div class="SpaceDiv" />
-    <img class="CatInHeader" src="../projectImages/Cat no background.png" @click="playMe"/>
+    <img
+      class="CatInHeader"
+      src="../projectImages/Cat no background.png"
+      @click="playMe"
+    />
     <audio ref="meow" src="src/projectImages/meowSound.mp3"></audio>
-    <div class="SpaceDiv2" />
+    <div class="SpaceDiv2 SpaceDiv" />
     <div class="searchDiv">
       <router-link class="SearchLink" :to="{ path: '/Search' }">
         <img
@@ -39,11 +43,11 @@
       @click="toggleProfileDropdown"
       :src="profilePic"
     />
-    <div></div>
-    <div></div>
-    <div></div>
+    <div class="SpaceDiv" />
+    <div class="SpaceDiv" />
+    <div class="SpaceDiv" />
     <div v-if="profileDropdown" class="profile-dropdown">
-      <ul>
+      <ul class="UlMenu">
         <li @click="uploadNavigation">Upload Video</li>
         <li @click="logout">Logout</li>
       </ul>
@@ -81,7 +85,7 @@ export default {
   },
 
   methods: {
-    playMe(){
+    playMe() {
       this.$refs.meow.play();
     },
 
@@ -235,7 +239,15 @@ export default {
   margin-right: auto;
   padding-bottom: 10px;
 }
-
+.UlMenu{
+  height: max-content;
+  width: 100vw;
+  z-index: 5;
+  color: white;
+  position: absolute;
+  background-color: transparent;
+  left: 0px;
+}
 .LoginButton {
   border-radius: 30px;
   width: 40px;
@@ -275,5 +287,30 @@ li {
   color: white;
   font-family: 'Roboto', sans-serif;
   margin-top: 10px;
+}
+.profile-dropdown{
+  height: max-content;
+  padding-top: 45px;
+  padding-bottom: 60px;
+}
+@media screen and (max-width: 300px) {
+  .SearchAndLoginDiv {
+    grid-template-columns: 5px 15px 10px 199px 1px 50px 1px 1px 1px 1px 10px;
+  }
+}
+@media screen and (min-width: 301px) {
+  .SearchAndLoginDiv {
+    grid-template-columns: 5px 15px 10px 210px auto 50px 1px 1px 1px 1px 10px;
+  }
+}
+@media screen and (min-width: 335px) {
+  .SearchAndLoginDiv {
+    grid-template-columns: 5px 15px 10px 230px auto 50px 1px 1px 1px 1px 10px;
+  }
+}
+@media screen and (min-width: 370px) {
+  .SearchAndLoginDiv {
+    grid-template-columns: 5px 15px 10px max-content auto 50px 1px 1px 1px 1px 10px;
+  }
 }
 </style>

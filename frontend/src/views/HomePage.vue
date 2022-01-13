@@ -2,10 +2,8 @@
   <div class="MainDiv">
     <Header />
     <div class="NoLineDiv" />
-    <BannerSlider/>
-    <div
-      class="CardsContainer"
-    >
+    <BannerSlider />
+    <div class="CardsContainer">
       <VideoCard
         v-for="(videoItem, index) of relevantVideos"
         :key="index"
@@ -288,7 +286,6 @@ export default {
   margin-top: -57.5px;
 }
 .EmptyDiv {
-  background-color: red;
   width: 100vw;
 }
 .clearHistoryDiv {
@@ -309,7 +306,6 @@ export default {
 .thirdVideo {
   width: 115px;
   height: 93px;
-  background-color: red;
 }
 .videoTitleP {
   background-color: black;
@@ -504,7 +500,6 @@ export default {
 }
 .sliderBackground {
   display: block;
-  width: calc(100% - 16px);
   max-width: 575px;
   margin-left: auto;
   margin-right: auto;
@@ -735,6 +730,11 @@ export default {
       0px 4px 4px rgba(0, 0, 0, 0.25);
     z-index: 3;
     position: absolute;
+  }
+}
+@media screen and (max-width: 400px) {
+  .videoBox {
+    width: 100vw;
   }
 }
 </style>

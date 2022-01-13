@@ -1,11 +1,7 @@
 package com.company.Repositories;
 
-import com.company.DTOs.UserWithoutPassword;
 import com.company.Entities.SearchHistory;
 import com.company.Entities.Video;
-import com.company.utilities.Encrypter;
-import io.netty.util.internal.IntegerHolder;
-
 import java.sql.*;
 import java.util.ArrayList;
 

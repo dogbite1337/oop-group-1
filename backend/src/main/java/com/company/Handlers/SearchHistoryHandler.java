@@ -1,12 +1,9 @@
 package com.company.Handlers;
 
 import com.company.Entities.SearchHistory;
-import com.company.Repositories.searchHistoryRepository;
 import com.company.Services.SearchHistoryLogic;
 import express.Express;
-
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,10 +15,10 @@ public class SearchHistoryHandler {
     public SearchHistoryHandler(Express app, SearchHistoryLogic searchHistoryLogic){
         this.app = app;
         this.searchHistoryLogic = searchHistoryLogic;
-        initSearchHistoryRepository();
+        initSearchHistoryHandler();
     }
 
-    private void initSearchHistoryRepository() {
+    private void initSearchHistoryHandler() {
         app.post("/api/registerHistory", (req, res) -> {
             try {
                 Date date = new Date();

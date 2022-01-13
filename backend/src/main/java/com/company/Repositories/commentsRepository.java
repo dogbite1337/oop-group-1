@@ -1,7 +1,6 @@
 package com.company.Repositories;
 
 import com.company.Entities.Comment;
-import com.company.utilities.Encrypter;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -42,6 +41,39 @@ public class commentsRepository {
         }
         newComment.setDislikes(newComment.getDislikes() + 1);
         return newComment;
+    }
+
+    public ArrayList<Comment> removeComment(Integer commentId, Integer videoId) {
+        ArrayList<Comment> remainingComments = new ArrayList<Comment>();
+        try {
+            con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            PreparedStatement removeComment = con.prepareStatement("DELETE FROM comments WHERE (commentId = ?) OR (responseToCommentId = ?)");
+            removeComment.setInt(1,commentId);
+            removeComment.setInt(2, commentId);
+            int rs = removeComment.executeUpdate();
+
+
+            PreparedStatement getRemainingComments = con.prepareStatement("SELECT * FROM comments WHERE relatesToVideoId = ?");
+            getRemainingComments.setInt(1,videoId);
+            ResultSet remainingCommentsInDB = getRemainingComments.executeQuery();
+            while(remainingCommentsInDB.next()){
+                Comment newComment = new Comment(remainingCommentsInDB.getInt(1), remainingCommentsInDB.getInt(2),
+                        remainingCommentsInDB.getString(3), remainingCommentsInDB.getString(4),
+                        remainingCommentsInDB.getInt(5), remainingCommentsInDB.getInt(6),
+                        remainingCommentsInDB.getInt(7), remainingCommentsInDB.getLong(8));
+                remainingComments.add(newComment);
+            }
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return remainingComments;
     }
 
     public Comment likeComment(Integer commentId){

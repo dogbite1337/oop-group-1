@@ -15,7 +15,19 @@
       </div>
       <div class="SpaceDiv" />
     </div>
-    <div class="CommentDiv">{{ comment.content }}</div>
+    <div class="CommentDiv">
+      <div class="commentGrid">
+        {{ comment.content }}
+        <div v-if="activeUser" class="trashIconDiv">
+          <img
+            v-if="activeUser.username == comment.postedByUsername"
+            @click="removeComment"
+            class="trashCanIcon"
+            src="../projectImages/Trashcan.png"
+          />
+        </div>
+      </div>
+    </div>
   </div>
   <div v-if="comment && !isAReply" class="StatsDiv">
     <div class="SpaceDiv" />
@@ -73,9 +85,9 @@
   </div>
   <div v-if="expandedReply" class="ReplyOpenDiv">
     <div class="SpaceBlock" />
-    <div class="Test">
+    <div v-if="activeUser" class="replyOpenGrid">
       <div class="SpaceBlock" />
-      <img class="imgInReply" :src="User.profileURL" />
+      <img class="imgInReply" :src="activeUser.profileURL" />
       <div class="SpaceBlock" />
       <div class="replyInputDiv">
         <div class="SpaceBlock" />
@@ -116,10 +128,10 @@ export default {
   components: {
     CommentReply,
   },
-  emits: ['updateReplies', 'postedAReply'],
-  props: ['comment', 'replies', 'commenters'],
+  emits: ['updateReplies', 'removedAReply'],
+  props: ['activeId', 'comment', 'replies', 'commenters'],
   name: 'PostedComment',
-  mounted() {},
+
   created() {},
   data() {
     return {
@@ -130,14 +142,19 @@ export default {
       isAReply: this.comment.responseToCommentId == -1 ? false : true,
       isANumberInput: isNaN(this.comment.timeOfPosting),
       showComments: false,
+      isActive: this.activeId == this.comment.commentId,
+      activeUser: this.$store.getters.getCurrentUser,
     };
   },
   methods: {
     async showReplies() {
-      this.$emit('updateReplies', this.comment.commentId);
-      this.showComments = true;
+      if (this.isActive || this.activeId == 0) {
+        this.$emit('updateReplies', this.comment.commentId);
+        this.showComments = true;
+      }
     },
     hideReplies() {
+      this.$emit('updateReplies', 0);
       this.showComments = false;
     },
     convertDateObjectToString(dateObject) {
@@ -162,11 +179,31 @@ export default {
       }
       return newDate;
     },
+    async removeComment() {
+      let res = await fetch(
+        '/api/removeComment?' +
+          new URLSearchParams({
+            commentId: this.comment.commentId,
+            videoId: this.comment.relatesToVideoId,
+          }),
+        {
+          method: 'DELETE',
+        }
+      );
+
+      let response = await res.json();
+      this.$emit('removedAReply', response);
+    },
     async postReply() {
+      let currentUser = new User();
+      currentUser = Object.assign(
+        currentUser,
+        this.$store.getters.getCurrentUser
+      );
       let myReply = new Comment(
         0,
         this.comment.relatesToVideoId,
-        this.User.username,
+        currentUser.username,
         this.wantedReply,
         0,
         0,
@@ -179,8 +216,9 @@ export default {
       });
 
       let response = await res.json();
-      let newResponse = new Comment(0, 0, '', '', 0, 0, 0, 0);
+      let newResponse = new Comment();
       newResponse = Object.assign(newResponse, response);
+      this.commenters.push(currentUser);
       this.replies.push(newResponse);
       let minsAgo = (Date.now() - new Date(newResponse.timeOfPosting)) / 60000;
       if (minsAgo < 1.0) {
@@ -248,35 +286,44 @@ export default {
       }
     },
     async like() {
-      let likedCommentRes = await fetch(
-        '/api/likeComment?' +
-          new URLSearchParams({
-            commentId: this.comment.commentId,
-          }),
-        {
-          method: 'POST',
-          body: JSON.stringify(this.comment),
-        }
-      );
-      let likedCommentResponse = await likedCommentRes.json();
-      this.comment.likes = likedCommentResponse.likes;
+      if (this.$store.getters.getCurrentUser) {
+        let likedCommentRes = await fetch(
+          '/api/likeComment?' +
+            new URLSearchParams({
+              commentId: this.comment.commentId,
+            }),
+          {
+            method: 'POST',
+            body: JSON.stringify(this.comment),
+          }
+        );
+        let likedCommentResponse = await likedCommentRes.json();
+        this.comment.likes = likedCommentResponse.likes;
+      } else {
+        alert('You have to log in to like Comments!');
+      }
     },
     async dislike() {
-      let dislikedCommentRes = await fetch(
-        '/api/dislikeComment?' +
-          new URLSearchParams({
-            commentId: this.comment.commentId,
-          }),
-        {
-          method: 'POST',
-          body: JSON.stringify(this.comment),
-        }
-      );
-      let dislikedCommentResponse = await dislikedCommentRes.json();
-      this.comment.dislikes = dislikedCommentResponse.dislikes;
+      if (this.$store.getters.getCurrentUser) {
+        let dislikedCommentRes = await fetch(
+          '/api/dislikeComment?' +
+            new URLSearchParams({
+              commentId: this.comment.commentId,
+            }),
+          {
+            method: 'POST',
+            body: JSON.stringify(this.comment),
+          }
+        );
+        let dislikedCommentResponse = await dislikedCommentRes.json();
+        this.comment.dislikes = dislikedCommentResponse.dislikes;
+      } else {
+        alert('You have to log in to dislike Comments!');
+      }
     },
   },
   async mounted() {
+    this.User = this.$store.getters.getCurrentUser;
     let commenterRes = await fetch(
       '/rest/getUserByUsername?' +
         new URLSearchParams({
@@ -361,6 +408,14 @@ export default {
   padding-right: 3px;
 }
 
+.trashCanIcon {
+  height: 30px;
+  width: 30px;
+  position: relative;
+  top: -15px;
+  right: 0px;
+}
+
 .imgInReply {
   height: 40px;
   width: 40px;
@@ -368,7 +423,7 @@ export default {
   position: relative;
   left: 20px;
 }
-.Test {
+.replyOpenGrid {
   display: grid;
   margin-left: -40px;
   grid-template-columns: 0px 0px 1px max-content auto;
@@ -410,6 +465,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
   background-color: black;
+  padding-bottom: 20px;
 }
 .EndBlock {
   width: 30px;
@@ -449,6 +505,10 @@ export default {
   margin-left: auto;
   margin-right: auto;
   padding-bottom: 10px;
+}
+.commentGrid {
+  display: grid;
+  grid-template-columns: auto 50px;
 }
 .yourReplyDiv {
   position: relative;
@@ -557,7 +617,7 @@ export default {
 }
 
 @media screen and (max-width: 450px) {
-  .Test {
+  .replyOpenGrid {
     width: max-content;
     padding-right: 20px;
     margin-left: auto;

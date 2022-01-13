@@ -1,30 +1,31 @@
 <template>
-    <MatchedUsers v-if="matchedUserList.length> 0" :matchedUserList = matchedUserList />
-    <MatchedVideos v-if="matchedVideoList.length > 0" :matchedVideoList = matchedVideoList />
+  <MatchedUsers
+    v-if="matchedUserList.length > 0"
+    :matchedUserList="matchedUserList"
+  />
+  <MatchedVideos
+    v-if="matchedVideoList.length > 0"
+    :matchedVideoList="matchedVideoList"
+  />
 </template>
 <script>
-import MatchedUsers from "./MatchedUsers.vue"
-import MatchedVideos from "./MatchedVideos.vue"
+import MatchedUsers from './MatchedUsers.vue';
+import MatchedVideos from './MatchedVideos.vue';
 
 export default {
-    props:['matchedVideoList', 'matchedUserList'],
-    
-    components:{
-        MatchedUsers,
-        MatchedVideos
-    },
+  props: ['matchedVideoList', 'matchedUserList'],
 
-    mounted(){
-    },
+  components: {
+    MatchedUsers,
+    MatchedVideos,
+  },
 
-    data(){
-        return{
+  mounted() {},
 
-        }
-    }
-}
+  data() {
+    return {};
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

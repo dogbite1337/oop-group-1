@@ -3,11 +3,11 @@ import { createRouter, createWebHistory } from 'vue-router';
 // import views
 import HomePage from './views/HomePage.vue';
 import LoginPage from './views/LoginPage.vue';
-import RegisterPage from './views/RegisterPage.vue'
-import UploadVideoPage from './views/UploadVideoPage.vue'
-import VideoPage from './views/VideoPage.vue'
-import SearchPage from './views/SearchPage.vue'
-import SearchResultPage from './views/SearchResultPage.vue'
+import RegisterPage from './views/RegisterPage.vue';
+import UploadVideoPage from './views/UploadVideoPage.vue';
+import VideoPage from './views/VideoPage.vue';
+import SearchPage from './views/SearchPage.vue';
+import SearchResultPage from './views/SearchResultPage.vue';
 
 export default createRouter({
   history: createWebHistory(),
@@ -30,15 +30,15 @@ export default createRouter({
     },
     {
       path: '/VideoPage/:id',
-      component: VideoPage
+      component: VideoPage,
     },
     {
       path: '/Search',
-      component: SearchPage
+      component: SearchPage,
     },
     {
       path: '/SearchResult',
-      component: SearchResultPage
-    }
+      component: SearchResultPage,
+    },
   ],
 });

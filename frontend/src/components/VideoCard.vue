@@ -11,6 +11,7 @@
           '/default.jpg'
         "
       />
+      <div class="lowerDiv">
       <div class="titleDiv">
         <p class="titleText">
           {{
@@ -26,6 +27,7 @@
           {{ video.postedByUsername }}
         </div>
       </div>
+    </div>
     </div>
   </router-link>
 </template>
@@ -111,5 +113,22 @@ export default {
   line-height: 12px;
   margin-top: 2px;
   padding-top: 1.5px;
+}
+@media screen and (max-width: 400px){
+  .CardBox {
+    max-width: 100vw;
+    max-height: 600px;
+    height: max-content;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+  }
+  .ImageBox{
+    height: 300px;
+  }
+  .lowerDiv{
+    position: relative;
+  }
 }
 </style>

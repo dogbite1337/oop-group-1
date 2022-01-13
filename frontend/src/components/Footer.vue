@@ -15,12 +15,12 @@
     </div>
     <div class="SpaceDiv" />
     <!-- <router-link :to="{ path: '/MyProfile' }"> -->
-      <div class="HomeDiv">
-        <img class="ProfileIcon" src="../projectImages/Dark_User.png" />
-        <router-link :to="{ path: '/' }">
-          <div class="ProfileText">Profile</div>
-        </router-link>
-      </div>
+    <div class="HomeDiv">
+      <img class="ProfileIcon" src="../projectImages/Dark_User.png" />
+      <router-link :to="{ path: '/' }">
+        <div class="ProfileText">Profile</div>
+      </router-link>
+    </div>
     <!-- </router-link> -->
     <div class="SpaceDiv" />
   </div>
