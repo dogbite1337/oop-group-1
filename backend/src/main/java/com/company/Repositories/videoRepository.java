@@ -335,4 +335,25 @@ public class videoRepository {
         pStatement.executeUpdate();
         con.close();
     }
+
+    public ArrayList<Video> getNextEightVideos(Integer lengthOfCurrentVideoList) throws SQLException {
+        try {
+            con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/kittykitty","root","root");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        ArrayList<Video> videosWillBeLoad = new ArrayList<>();
+        PreparedStatement nextEightVideos = con.prepareStatement("SELECT videoId, title, postedByUsername, videoURL FROM videos LIMIT ?, 8");
+        nextEightVideos.setInt(1, lengthOfCurrentVideoList);
+        ResultSet rs = nextEightVideos.executeQuery();
+
+        while(rs.next()){
+            videosWillBeLoad.add(new Video(rs.getInt("videoId"),rs.getString("title"),rs.getString("postedByUsername"),rs.getString("videoURL")));
+        }
+
+        con.close();
+        return videosWillBeLoad;
+
+    }
 }

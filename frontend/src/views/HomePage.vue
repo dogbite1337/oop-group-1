@@ -133,37 +133,43 @@ export default {
     window.addEventListener('resize', this.recalculateGrid);
 
     this.$nextTick(function () {
-      // Intersection
-      let videoBoxes = document.querySelectorAll(".videoBox")
-      // let videoBoxes = this.$refs.videoBox;
-      // console.log(this.relevantVideos)
-      console.log(videoBoxes.length)
-      // console.log(videoBoxes[0])
+      // Intersection Yang test
+      // let videoBoxes = document.querySelectorAll(".videoBox")
+      // console.log(videoBoxes)
+      // // console.log(videoBoxes[0])
 
-      let observer = new IntersectionObserver(entries =>{
-        console.log(entries)
-        entries.forEach(entry =>{
-          // console.log("showed")
-          // console.log(entry)
-          // entry.target.classList.toggle("show", entry.isIntersecting)
-        })
-      },{
-        threshold: 1,
-      })
+      // // first pixel shown, or last pixel gone, because default threshold is set by 0
+      // let observer = new IntersectionObserver(entries =>{
+      //   entries.forEach(entry =>{
+      //     let showed = entry.isIntersecting ? "Show" : "Hide"
+      //     console.log(showed)
+      //     // console.log("showed")
+      //     // console.log(entry)
+      //     // entry.target.classList.toggle("show", entry.isIntersecting)
+      //   })
+      // },{
+        
+      // })
 
-      observer.observe(videoBoxes[0])
+      // // observer.observe(videoBoxes)
 
       // videoBoxes.forEach(videoBox =>{
       //   observer.observe(videoBox)
       // })
 
-      // let lastVideoObserver = new IntersectionObserver(entries =>{
-      //   let lastVideo = entries[0]
-      //   if(!lastVideo.isIntersecting) return
-      //   this.loadMoreVideos()
-      // })
+      // here i am trying to only observer the last element of that class
+      let lastVideoObserver = new IntersectionObserver(entries =>{
+        let lastVideo = entries[0]
+        if(lastVideo.isIntersecting) {
+          console.log("we reached the last video, should load more here")
+          this.loadMoreVideos()
+          return;}
+        lastVideoObserver.unobserve(lastVideo.target)
+        lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
+        // this.loadMoreVideos()
+      })
 
-      // lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
+      lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
   })
 
     
@@ -172,6 +178,27 @@ export default {
     window.removeEventListener('resize', this.recalculateGrid);
   },
   methods: {
+    async loadMoreVideos(){
+      let newlyLoadedVideos;
+      let numberOfCurrentShownVideos = this.relevantVideos.length;
+      console.log("Current shown videos before fetching: " + numberOfCurrentShownVideos)
+      console.log(await this.$store.dispatch("fetchEightMoreVideos", numberOfCurrentShownVideos))
+      newlyLoadedVideos = await this.fetchEightMoreVideosFromDB(numberOfCurrentShownVideos);
+      this.$nextTick(function(){
+          if(newlyLoadedVideos.length != 0){
+          newlyLoadedVideos.forEach(newVideo => {
+          this.relevantVideos.push(newVideo)
+        });
+      }
+      numberOfCurrentShownVideos = this.relevantVideos.length;
+      console.log("Current shown videos after fetching: " + numberOfCurrentShownVideos)
+      })
+    },
+
+    async fetchEightMoreVideosFromDB(numberOfCurrentShownVideos){
+      return await this.$store.dispatch("fetchEightMoreVideos", numberOfCurrentShownVideos)
+    },
+
     getGridDimensions() {
       let base = '';
       for (let i = 0; i < Math.floor(window.screen.width / 200); i++) {
