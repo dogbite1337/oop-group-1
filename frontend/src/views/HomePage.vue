@@ -158,6 +158,32 @@ export default {
       // })
 
       // here i am trying to only observer the last element of that class
+      // let lastVideoObserver = new IntersectionObserver(entries =>{
+      //   let lastVideo = entries[0]
+      //   if(lastVideo.isIntersecting) {
+      //     console.log("we reached the last video, should load more here")
+      //     this.loadMoreVideos()
+      //     return;}
+      //   lastVideoObserver.unobserve(lastVideo.target)
+      //   lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
+      //   // this.loadMoreVideos()
+      // })
+
+      // lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
+
+      // console.log(document.getElementsByClassName("videoBox").length)
+      // if(document.getElementsByClassName("videoBox").length>0)
+      // lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
+
+     
+        // output: 0
+        // console.log(document.getElementsByClassName("videoBox").length)
+        // lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
+        // lastVideoObserver.observe(document.querySelector(".emptyDiv"))
+  })
+  },
+  updated(){
+    // here i am trying to only observer the last element of that class
       let lastVideoObserver = new IntersectionObserver(entries =>{
         let lastVideo = entries[0]
         if(lastVideo.isIntersecting) {
@@ -170,9 +196,6 @@ export default {
       })
 
       lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
-  })
-
-    
   },
   unmounted() {
     window.removeEventListener('resize', this.recalculateGrid);

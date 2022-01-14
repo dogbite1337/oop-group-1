@@ -78,10 +78,11 @@ public class VideoHandler {
 
         app.get("/rest/getEightNewVideos",(req,res) ->{
             try {
-                System.out.println("runned");
+//                System.out.println("runned");
                 res.json(videoRepository.getNextEightVideos(Integer.parseInt(req.query("lengthOfCurrentVideoList"))));
             } catch (SQLException e) {
-                e.printStackTrace();
+//                e.printStackTrace();
+                System.out.println("error");
             }
         });
     }
