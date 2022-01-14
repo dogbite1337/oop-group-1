@@ -317,6 +317,7 @@ export default {
         let registerlikedCommentRes = await fetch(
           '/api/registerLikeOnComment?' +
             new URLSearchParams({
+              relatesToVideoId: this.$route.params.id,
               userId: this.$store.getters.getCurrentUser.userId,
               videoId: 0,
               commentId: this.comment.commentId,
@@ -337,6 +338,7 @@ export default {
         let dislikedCommentRes = await fetch(
           '/api/dislikeComment?' +
             new URLSearchParams({
+              relatesToVideoId: this.$route.params.id,
               commentId: this.comment.commentId,
               userId: this.$store.getters.getCurrentUser.userId,
             }),

@@ -8,7 +8,7 @@ public class CommentsHandler {
     private final Express app;
     private final com.company.Repositories.commentsRepository commentsRepository;
 
-    public CommentsHandler(Express app, commentsRepository commentsRepository){
+    public CommentsHandler(Express app, commentsRepository commentsRepository) {
         this.app = app;
         this.commentsRepository = commentsRepository;
         initCommentsHandler();
@@ -31,11 +31,11 @@ public class CommentsHandler {
         });
 
         app.post("/api/likeComment", (req, res) -> {
-           res.json(commentsRepository.likeComment(Integer.parseInt(req.query("commentId"))));
+            res.json(commentsRepository.likeComment(Integer.parseInt(req.query("commentId"))));
         });
 
         app.post("/api/dislikeComment", (req, res) -> {
-            res.json(commentsRepository.dislikeComment(Integer.parseInt(req.query("commentId")), Integer.parseInt(req.query("userId"))));
+            res.json(commentsRepository.dislikeComment(Integer.parseInt(req.query("relatesToVideoId")), Integer.parseInt(req.query("commentId")), Integer.parseInt(req.query("userId"))));
         });
 
         app.get("/rest/getCommentsForVideoId", (req, res) -> {

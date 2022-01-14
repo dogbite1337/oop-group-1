@@ -5,6 +5,17 @@ public class Comment {
     String postedByUsername, content;
     Long timeOfPosting;
 
+    public Comment(Integer commentId, Integer relatesToVideoId, String postedByUsername, String content, Integer likes, Integer dislikes, Integer responseToCommentId, Long timeOfPosting) {
+        this.commentId = commentId;
+        this.relatesToVideoId = relatesToVideoId;
+        this.postedByUsername = postedByUsername;
+        this.content = content;
+        this.likes = likes;
+        this.dislikes = dislikes;
+        this.responseToCommentId = responseToCommentId;
+        this.timeOfPosting = timeOfPosting;
+    }
+
     public Integer getCommentId() {
         return commentId;
     }
@@ -61,7 +72,6 @@ public class Comment {
         this.content = content;
     }
 
-
     public Long getTimeOfPosting() {
         return timeOfPosting;
     }
@@ -82,16 +92,5 @@ public class Comment {
                 ", content='" + content + '\'' +
                 ", timeOfPosting=" + timeOfPosting +
                 '}';
-    }
-
-    public Comment(Integer commentId, Integer relatesToVideoId, String postedByUsername, String content, Integer likes, Integer dislikes, Integer responseToCommentId, Long timeOfPosting) {
-        this.commentId = commentId;
-        this.relatesToVideoId = relatesToVideoId;
-        this.postedByUsername = postedByUsername;
-        this.content = content;
-        this.likes = likes;
-        this.dislikes = dislikes;
-        this.responseToCommentId = responseToCommentId;
-        this.timeOfPosting = timeOfPosting;
     }
 }

@@ -7,7 +7,7 @@ public class DislikeHandler {
     private final Express app;
     private final com.company.Repositories.dislikeRepository dislikeRepository;
 
-    public DislikeHandler(Express app, dislikeRepository dislikeRepository){
+    public DislikeHandler(Express app, dislikeRepository dislikeRepository) {
         this.app = app;
         this.dislikeRepository = dislikeRepository;
         initDislikeHandler();
@@ -15,7 +15,7 @@ public class DislikeHandler {
 
     private void initDislikeHandler() {
         app.post("/api/registerDislikeOnVideo", (req, res) -> {
-            dislikeRepository.registerDislikeOnVideo(Integer.parseInt(req.body().get("userId").toString()), Integer.parseInt(req.body().get("videoId").toString()), Integer.parseInt(req.body().get("commentId").toString()));
+            dislikeRepository.registerDislikeOnVideo(Integer.parseInt(req.body().get("relatesToVideoId").toString()), Integer.parseInt(req.body().get("userId").toString()), Integer.parseInt(req.body().get("videoId").toString()), Integer.parseInt(req.body().get("commentId").toString()));
             res.json(0);
         });
 
@@ -24,7 +24,7 @@ public class DislikeHandler {
         });
 
         app.get("/rest/getDislikesForComment", (req, res) -> {
-           res.json(dislikeRepository.getDislikesForComment(Integer.parseInt(req.query("commentId"))));
+            res.json(dislikeRepository.getDislikesForComment(Integer.parseInt(req.query("commentId"))));
         });
 
     }

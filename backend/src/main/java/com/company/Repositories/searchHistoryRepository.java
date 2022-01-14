@@ -2,6 +2,7 @@ package com.company.Repositories;
 
 import com.company.Entities.SearchHistory;
 import com.company.Entities.Video;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -13,24 +14,23 @@ public class searchHistoryRepository {
 
         ArrayList<SearchHistory> searchHistories = findHistoryListByUserId(newSearchHistory.getUserId());
 
-        if(searchHistories.size() >= 6){
+        if (searchHistories.size() >= 6) {
             removeExceededHistoryByUserId(newSearchHistory.getUserId(), searchHistories.get(4).getHistoryId());
         }
 
         try {
             try {
                 con = DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/kittykitty","root","root");
+                        "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-                PreparedStatement registerSearchHistory = con.prepareStatement("INSERT INTO searchHistories (userId, keyWord, time) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-                registerSearchHistory.setInt(1, newSearchHistory.getUserId());
-                registerSearchHistory.setString(2, newSearchHistory.getKeyWord());
-                registerSearchHistory.setString(3, newSearchHistory.getTime());
-                registerSearchHistory.executeUpdate();
-            }
-        catch (SQLException ex) {
+            PreparedStatement registerSearchHistory = con.prepareStatement("INSERT INTO searchHistories (userId, keyWord, time) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            registerSearchHistory.setInt(1, newSearchHistory.getUserId());
+            registerSearchHistory.setString(2, newSearchHistory.getKeyWord());
+            registerSearchHistory.setString(3, newSearchHistory.getTime());
+            registerSearchHistory.executeUpdate();
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
@@ -42,7 +42,7 @@ public class searchHistoryRepository {
         try {
             try {
                 con = DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/kittykitty","root","root");
+                        "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -51,12 +51,11 @@ public class searchHistoryRepository {
             String query = "Select * from searchhistories Where userId = " + userId + " ORDER BY historyId DESC LIMIT 6;";
             ResultSet result = searchHistoryList.executeQuery(query);
 
-            while(result.next()){
+            while (result.next()) {
                 SearchHistory searchHistory = new SearchHistory(result.getInt("userId"), result.getString("keyWord"), result.getString("time"), result.getInt("historyId"));
                 historyListOfUserDescendingByTime.add(searchHistory);
             }
-        }
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
@@ -69,7 +68,7 @@ public class searchHistoryRepository {
         try {
             try {
                 con = DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/kittykitty","root","root");
+                        "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -78,9 +77,7 @@ public class searchHistoryRepository {
             deleteSearchHistory.setInt(1, userId);
             deleteSearchHistory.setInt(2, historyId);
             deleteSearchHistory.executeUpdate();
-        }
-
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
@@ -91,7 +88,7 @@ public class searchHistoryRepository {
         try {
             try {
                 con = DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/kittykitty","root","root");
+                        "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -99,9 +96,7 @@ public class searchHistoryRepository {
             PreparedStatement deleteSearchHistory = con.prepareStatement("Delete from searchhistories Where userId = ?", Statement.RETURN_GENERATED_KEYS);
             deleteSearchHistory.setInt(1, userId);
             deleteSearchHistory.executeUpdate();
-        }
-
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
@@ -110,10 +105,10 @@ public class searchHistoryRepository {
 
     public ArrayList<String> getTrendingSearch() throws SQLException {
         ArrayList<String> trendingHistoryList = new ArrayList<>();
-        try{
+        try {
             try {
                 con = DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/kittykitty","root","root");
+                        "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -123,13 +118,12 @@ public class searchHistoryRepository {
             String query = "SELECT keyword, COUNT(historyId) FROM searchhistories GROUP BY keyword ORDER BY COUNT(historyId) DESC LIMIT 10;";
             ResultSet result = trendingSearchList.executeQuery(query);
 
-            while(result.next()) {
+            while (result.next()) {
                 trendingHistoryList.add(result.getString("keyword"));
             }
 
 
-        }
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
         con.close();
@@ -140,16 +134,16 @@ public class searchHistoryRepository {
         ArrayList<Video> matchedVideoList = new ArrayList<>();
         try {
             con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/kittykitty","root","root");
+                    "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         Statement trendingSearchList = con.createStatement();
-        String query = "SELECT * FROM videos WHERE LOWER(title) LIKE " + "'%" + keyword  + "%'";
+        String query = "SELECT * FROM videos WHERE LOWER(title) LIKE " + "'%" + keyword + "%'";
         ResultSet result = trendingSearchList.executeQuery(query);
 
-        while(result.next()) {
+        while (result.next()) {
             Video video =
                     new Video(result.getInt("videoId"),
                             result.getInt("userId"),
