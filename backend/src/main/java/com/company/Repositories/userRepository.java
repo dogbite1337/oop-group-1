@@ -58,6 +58,28 @@ public class userRepository {
         return registeredUser;
     }
 
+    public void updateUserInfo(String userId, String newUsername, String newPassword, String newDescription){
+        try {
+            try {
+                con = DriverManager.getConnection(
+                        "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            PreparedStatement updateVideo = con.prepareStatement("UPDATE users SET username = ?, password = ?, description = ? WHERE userId = ?");
+            updateVideo.setString(1, newUsername);
+            updateVideo.setString(2, newPassword);
+            updateVideo.setString(3, newDescription);
+            updateVideo.setInt(4, Integer.parseInt(userId));
+            updateVideo.executeUpdate();
+
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
     public HashMap<Integer, String> getAllUsernamesById(ArrayList<Integer> userIDs) {
         HashMap<Integer, String> foundUsers = new HashMap<Integer, String>();
         try {

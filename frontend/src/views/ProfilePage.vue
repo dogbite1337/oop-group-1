@@ -55,10 +55,7 @@
       </div>
       <div class="SpaceBlock" />
     </div>
-    <div
-      v-if="chosenProfileInfo && currentUser"
-      class="ProfileInfoSection"
-    >
+    <div v-if="chosenProfileInfo && currentUser" class="ProfileInfoSection">
       <div class="SubscribersGrid">
         <div class="SpaceBlock" />
         <div class="SubscribersText">Subscribers:</div>
@@ -78,25 +75,41 @@
       <div v-if="currentUser" class="InfoGrid">
         <div class="UsernameGrid">
           <div class="SpaceBlock" />
-          <div class="UsernameText">Username:</div>
+          <div v-if="!editMode" class="UsernameText">Username:</div>
+          <div v-if="editMode" class="UsernameText">New Username:</div>
           <div class="SpaceBlock" />
-          <div class="UsernameValue">{{ currentUser.username }}</div>
+          <div v-if="!editMode" class="UsernameValue">{{ currentUser.username }}</div>
+          <input v-model="wantedUsername" v-if="editMode" type="text" :placeholder="currentUser.username" class="UsernameInput">
           <div class="SpaceBlock" />
           <div class="FillerBlock" />
         </div>
         <div class="PasswordGrid">
           <div class="SpaceBlock" />
-          <div class="PasswordText">Password:</div>
+          <div v-if="!editMode" class="PasswordText">Password:</div>
+          <div v-if="editMode" class="NewPasswordText">New Password:</div>
           <div class="SpaceBlock" />
-          <div class="PasswordValue">***********</div>
+          <div v-if="!editMode" class="PasswordValue">***********</div>
+          <input v-model="wantedPassword" v-if="editMode" placeholder="New Password" class="NewPasswordInput" type="password">
           <div class="SpaceBlock" />
           <div class="FillerBlock" />
         </div>
         <div class="DescriptionGrid">
           <div class="SpaceBlock" />
-          <div class="DescriptionText">Description:</div>
+          <div v-if="!editMode" class="DescriptionText">Description:</div>
+          <div v-if="editMode" class="DescriptionText">New Description:</div>
           <div class="SpaceBlock" />
-          <div class="DescriptionValue">{{ currentUser.description }}</div>
+          <div v-if="!editMode" class="DescriptionValue">
+            {{ currentUser.description }}
+          </div>
+          <textarea
+            v-if="editMode"
+            name="yourReply"
+            class="descriptionInput"
+            rows="5"
+            cols="33"
+            :placeholder="currentUser.description"
+            v-model="wantedDescription"
+          />
           <div class="SpaceBlock" />
           <div class="FillerBlock" />
         </div>
@@ -105,7 +118,8 @@
         <div class="SpaceBlock" />
         <div class="PreviewGrid">
           <div class="previewText">Preview</div>
-          <img class="previewImage" src="../projectImages/Dark_User.png" />
+          <img v-if="!wantedImage" class="previewImage" src="../projectImages/Dark_User.png" />
+          <img v-if="wantedImage" class="previewImage" :src="wantedImage" />
         </div>
         <div class="SpaceBlock" />
         <div class="EditGrid">
@@ -113,9 +127,25 @@
             class="imageInput"
             type="text"
             placeholder="Image URL goes here"
+            v-model="wantedImage"
           />
-          <button class="uploadButton">Upload Profile Image</button>
-          <button class="editInfoButton">Edit Info</button>
+          <button
+            v-if="!editMode"
+            @click="enableEditMode"
+            class="editInfoButton"
+          >
+            Edit Info
+          </button>
+          <button
+            v-if="editMode"
+            @click="cancelEditMode"
+            class="cancelInfoButton"
+          >
+            Cancel
+          </button>
+          <button v-if="editMode" @click="saveChanges" class="saveInfoButton">
+            Save
+          </button>
         </div>
         <div class="SpaceBlock" />
       </div>
@@ -162,6 +192,11 @@ export default {
       myVideos: [],
       currentUser: null,
       currentSubs: null,
+      editMode: false,
+      wantedImage: null,
+      wantedUsername: '',
+      wantedPassword: '',
+      wantedDescription: ''
     };
   },
   async mounted() {
@@ -180,7 +215,23 @@ export default {
     );
     console.log(this.currentSubs);
   },
+  watch: {
+    wantedImage() {
+      if(this.wantedImage){
+        this.editMode = true;
+      }
+    }
+  },
   methods: {
+    cancelEditMode() {
+      this.editMode = false;
+    },
+    enableEditMode() {
+      this.editMode = true;
+    },
+    async saveChanges() {
+      this.editMode = false;
+    },
     renderSpacedNumbers(stringToPad) {
       console.log(stringToPad);
       let base = '';
@@ -201,6 +252,9 @@ export default {
       }
       console.log(spacedString);
       return spacedString;
+    },
+    uploadImage() {
+      this.editMode = true;
     },
     switchToMyProfile() {
       this.chosenProfileInfo = true;
@@ -273,6 +327,18 @@ export default {
   color: white;
   margin-top: 10px;
 }
+.saveInfoButton {
+  background-color: rgba(255, 0, 0, 0.5);
+  border: 0.7px solid rgba(0, 0, 0, 0.45);
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  color: white;
+  width: 138px;
+  height: 26px;
+  margin-top: 17px;
+  position: relative;
+  left: 50px;
+}
 .editInfoButton {
   background-color: rgba(255, 0, 0, 0.5);
   border: 0.7px solid rgba(0, 0, 0, 0.45);
@@ -287,6 +353,12 @@ export default {
   width: 232px;
   padding-left: 12px;
   height: 18px;
+  position: relative;
+  top: 30px;
+}
+.descriptionInput {
+  width: 170px;
+  margin-left: -35px;
 }
 .previewText {
   color: white;
@@ -298,6 +370,7 @@ export default {
   width: 85px;
   height: 85px;
   margin-right: 8px;
+  border-radius: 100px;
 }
 .HomeLink {
   text-decoration: none;
@@ -330,7 +403,14 @@ export default {
   border-bottom: solid 1px white;
   padding-bottom: 16px;
 }
-
+.cancelInfoButton{
+  margin-top: 46px;
+  width: 136px;
+  position: relative;
+  left: -3px;
+  margin-left: auto;
+  margin-right: auto;
+}
 .UsernameGrid {
   color: white;
   display: grid;
@@ -345,6 +425,15 @@ export default {
 }
 .BackgroundDiv > * {
   overflow-y: hidden;
+}
+.UsernameInput {
+  padding-left: 5px;
+  margin-top: 8px;
+  margin-left: -40px;
+}
+.NewPasswordInput{
+  padding-left: 5px;
+  margin-left: -39px;
 }
 .VideosText {
   width: 100px;
@@ -397,6 +486,9 @@ export default {
   font-size: 18px;
   line-height: 21px;
   margin-top: 18px;
+}
+.descriptionInput {
+  padding-left: 5px;
 }
 .imageDiv {
   width: 140px;
@@ -454,7 +546,8 @@ export default {
   width: 300px;
 }
 .InfoGrid {
-  height: 188px;
+  min-height: 188px;
+  height: max-content;
   background-color: #2d2c2c;
   width: 80vw;
   max-width: 900px;
