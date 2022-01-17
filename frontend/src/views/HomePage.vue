@@ -129,6 +129,7 @@ export default {
       lastVideoObserver: null,
     };
   },
+
   async mounted() {
     document.getElementsByClassName('CardsContainer')[0].style =
       'grid-template-columns: ' + this.getGridDimensions() + ';';
@@ -139,12 +140,14 @@ export default {
     // here i am trying to only observer the last element of that class
        this.lastVideoObserver = new IntersectionObserver(entries =>{
         let lastVideo = entries[0]
-        if(lastVideo.isIntersecting) {
-          this.loadMoreVideos()
+        if(!lastVideo.isIntersecting) {
+          // this.loadMoreVideos()
           return;}
-        this.lastVideoObserver.unobserve(lastVideo.target)
-        this.lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
-      },{rootMargin: "150px"}
+
+          this.loadMoreVideos()
+          this.lastVideoObserver.unobserve(lastVideo.target)
+          this.lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
+      },{rootMargin: "100px"}
       )
 
       this.lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
@@ -159,8 +162,8 @@ export default {
     async loadMoreVideos(){
       let newlyLoadedVideos;
       let numberOfCurrentShownVideos = this.relevantVideos.length;
-      console.log("Current shown videos before fetching: " + numberOfCurrentShownVideos)
-      console.log(await this.$store.dispatch("fetchEightMoreVideos", numberOfCurrentShownVideos))
+      // console.log("Current shown videos before fetching: " + numberOfCurrentShownVideos)
+      // console.log(await this.$store.dispatch("fetchEightMoreVideos", numberOfCurrentShownVideos))
       newlyLoadedVideos = await this.fetchEightMoreVideosFromDB(numberOfCurrentShownVideos);
       this.$nextTick(function(){
           if(newlyLoadedVideos.length != 0){
@@ -169,8 +172,9 @@ export default {
         });
       }
       numberOfCurrentShownVideos = this.relevantVideos.length;
-      console.log("Current shown videos after fetching: " + numberOfCurrentShownVideos)
+      // console.log("Current shown videos after fetching: " + numberOfCurrentShownVideos)
       })
+      // console.log("loaded more video")
     },
 
     async fetchEightMoreVideosFromDB(numberOfCurrentShownVideos){
