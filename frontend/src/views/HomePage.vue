@@ -44,8 +44,9 @@ export default {
     // if (allVideos.length > 8) {
     //   allVideos = allVideos.slice(allVideos.length - 8, allVideos.length);
     // }
-
-    let allVideos = this.loadMoreVideos();
+    await this.loadMoreVideos();
+    let allVideos = this.relevantVideos;
+    console.log(allVideos)
 
 
     this.$store.dispatch('cacheFirstEightVideos', allVideos);
