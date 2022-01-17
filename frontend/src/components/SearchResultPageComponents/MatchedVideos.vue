@@ -49,6 +49,9 @@ export default {
     if(this.$store.getters.getMatchedVideoList.length > 6){
       this.matchedVideos = await this.$store.getters.getMatchedVideoList.slice(0,6)
     }
+    else{
+      this.matchedVideos = await this.$store.getters.getMatchedVideoList
+    }
   },
 
   updated(){
@@ -57,10 +60,10 @@ export default {
     // Problem: unobserve had no effect, Observer instead listens to both div
       this.lastVideoObserverSearchResult = new IntersectionObserver(entries =>{
         let lastVideo = entries[0]
-        if(lastVideo.isIntersecting) {
+        if(!lastVideo.isIntersecting) {
           // console.log(lastVideo.target)
-          this.loadMoreVideos()
           return;}
+        this.loadMoreVideos()
         this.lastVideoObserverSearchResult.unobserve(lastVideo.target);
         // Since neither of these worked, i set a switch for temp fix
         // this.lastVideoObserverSearchResult.disconnect();
@@ -90,7 +93,7 @@ export default {
         this.matchedVideos = fullMatchedList.slice(0, lengthOfCurrentShowedVideos+6)
       }
 
-      console.log("loaded more videos")
+      // console.log("loaded more videos")
     },
 
     goToVideoPage(video) {
