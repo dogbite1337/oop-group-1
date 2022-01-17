@@ -178,9 +178,11 @@
     </div>
     <div v-if="chosenSubscribers" class="mySubscribersSection">
       <SubscriptionToUser
-        v-for="(videoItem, index) of myVideos"
+        v-for="(subbedTo, index) of peopleSubscribedTo"
+        :subbedTo="subbedTo"
         :key="index"
         class="videoBox"
+        @unsubscribe="unsubscribe"
       />
     </div>
     <Footer class="footerDiv" />
@@ -194,6 +196,7 @@ import Video from '../jsClasses/general/Video';
 import SubscriptionToUser from '../components/SubscriptionToUser.vue';
 
 export default {
+  emits: ['unsubscribe'],
   name: 'ProfilePage',
   components: {
     Footer,
@@ -213,6 +216,7 @@ export default {
       wantedUsername: '',
       wantedPassword: '',
       wantedDescription: '',
+      peopleSubscribedTo: [],
     };
   },
   async mounted() {
@@ -229,6 +233,19 @@ export default {
     this.currentSubs = this.renderSpacedNumbers(
       foundUser.subscribers.toString()
     );
+
+    let subsRes = await fetch(
+      '/rest/getSubscribersForId?' +
+        new URLSearchParams({
+          userId: this.currentUser.userId,
+        })
+    );
+    let subscribersResponse = await subsRes.json();
+    for (let i = 0; i < subscribersResponse.length; i++) {
+      let subbedUser = new User(0, '', '', '', 0, 0);
+      subbedUser = Object.assign(subbedUser, subscribersResponse[i]);
+      this.peopleSubscribedTo.push(subbedUser);
+    }
   },
   watch: {
     wantedImage() {
@@ -238,6 +255,28 @@ export default {
     },
   },
   methods: {
+    async unsubscribe(e) {
+      let newList = [];
+      let userToRemove;
+      for (let i = 0; i < this.peopleSubscribedTo.length; i++) {
+        if (this.peopleSubscribedTo[i].userId != e.userId) {
+          newList.push(this.peopleSubscribedTo[i]);
+        } else {
+          userToRemove = this.peopleSubscribedTo[i];
+        }
+      }
+      this.peopleSubscribedTo = newList;
+      let unsubscribeRes = await fetch(
+        '/api/unsubscribe?' +
+          new URLSearchParams({
+            targetId: userToRemove.userId,
+            userId: this.currentUser.userId,
+          }),
+        {
+          method: 'DELETE',
+        }
+      );
+    },
     cancelEditMode() {
       this.editMode = false;
     },
