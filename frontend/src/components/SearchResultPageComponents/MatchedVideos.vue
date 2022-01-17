@@ -1,5 +1,5 @@
 <template>
-  <div v-for="video of matchedVideoList" :key="video" class="videoCard">
+  <div v-for="video of matchedVideos" :key="video" class="videoCard">
     <div class="thumbnail">
       <img
         @click="goToVideoPage(video)"
@@ -35,17 +35,64 @@
 
 <script>
 export default {
-  props: ['matchedVideoList'],
 
   data() {
     return {
       keyword: this.$store.getters.getKeyWord,
+      lastVideoObserverSearchResult: null,
+      matchedVideos: [],
+      stopObserver: false,
     };
   },
 
-  created() {},
+  async mounted() {
+    if(this.$store.getters.getMatchedVideoList.length > 6){
+      this.matchedVideos = await this.$store.getters.getMatchedVideoList.slice(0,6)
+    }
+  },
+
+  updated(){
+    // upon start, show 6 videos, and then when the last video DIV is showing, loadMoreVideos
+    // however, unobserve should have stopped this from observing the earlier "last div" and observe on the new last div
+    // Problem: unobserve had no effect, Observer instead listens to both div
+      this.lastVideoObserverSearchResult = new IntersectionObserver(entries =>{
+        let lastVideo = entries[0]
+        if(lastVideo.isIntersecting) {
+          // console.log(lastVideo.target)
+          this.loadMoreVideos()
+          return;}
+        this.lastVideoObserverSearchResult.unobserve(lastVideo.target);
+        // Since neither of these worked, i set a switch for temp fix
+        // this.lastVideoObserverSearchResult.disconnect();
+        // IntersectionObserver.disconnect();
+        if(!this.stopObserver) 
+        this.lastVideoObserverSearchResult.observe(document.querySelector(".videoCard:last-child"))
+      },{rootMargin: "50px"}
+      )
+
+      this.lastVideoObserverSearchResult.observe(document.querySelector(".videoCard:last-child"))
+  },
+
+  unmounted(){
+    this.stopObserver = true;
+  },
 
   methods: {
+    async loadMoreVideos(){
+      let lengthOfCurrentShowedVideos = this.matchedVideos.length
+      let fullMatchedList = await this.$store.getters.getMatchedVideoList;
+
+      if(lengthOfCurrentShowedVideos + 6 > fullMatchedList.length){
+        this.matchedVideos = fullMatchedList
+      }
+      else{
+        console.log(fullMatchedList.slice(0, lengthOfCurrentShowedVideos+6))
+        this.matchedVideos = fullMatchedList.slice(0, lengthOfCurrentShowedVideos+6)
+      }
+
+      console.log("loaded more videos")
+    },
+
     goToVideoPage(video) {
       this.$router.push('/VideoPage/' + video.videoId);
     },
