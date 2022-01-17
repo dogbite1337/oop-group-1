@@ -11,7 +11,7 @@ public class UserHandler {
     private final userRepository userRepository;
     private final Validator loginValidator;
 
-    public UserHandler(Express app, userRepository userRepository){
+    public UserHandler(Express app, userRepository userRepository) {
         this.app = app;
         this.userRepository = userRepository;
         this.loginValidator = new Validator();
@@ -57,10 +57,10 @@ public class UserHandler {
         });
 
         app.get("/rest/getUserByUsername", (req, res) -> {
-           res.json(userRepository.getUserByUsername(req.query("providedUsername")));
+            res.json(userRepository.getUserByUsername(req.query("providedUsername")));
         });
 
-        app.get("/rest/getMatchedUserList", (req,res) ->{
+        app.get("/rest/getMatchedUserList", (req, res) -> {
             res.json(userRepository.getMatchedUserList(req.query("keyword")));
         });
     }

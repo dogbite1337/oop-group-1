@@ -9,8 +9,32 @@ public class User {
     private ArrayList<SearchHistory> userSearchHistories = new ArrayList<SearchHistory>();
 
 
+    public User(Integer userId, String username, String password, String description, String profileURL, Integer subscribers, Integer videosPosted) {
+        this.userId = userId;
+        this.username = username;
+        this.password = password;
+        this.description = description;
+        this.profileURL = profileURL;
+        this.subscribers = subscribers;
+        this.videosPosted = videosPosted;
+    }
+
+    public User(Integer userId, String username, String description, String profileURL, Integer subscribers, Integer videosPosted, ArrayList<Video> userVideos) {
+        this.userId = userId;
+        this.username = username;
+        this.description = description;
+        this.profileURL = profileURL;
+        this.subscribers = subscribers;
+        this.videosPosted = videosPosted;
+        this.userVideos = userVideos;
+    }
+
     public Integer getUserId() {
         return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public ArrayList<Video> getUserVideos() {
@@ -19,10 +43,6 @@ public class User {
 
     public void setUserVideos(ArrayList<Video> userVideos) {
         this.userVideos = userVideos;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
     }
 
     public String getUsername() {
@@ -56,7 +76,6 @@ public class User {
     public void setProfileURL(String profileURL) {
         this.profileURL = profileURL;
     }
-
 
     public Integer getVideosPosted() {
         return videosPosted;
@@ -95,25 +114,5 @@ public class User {
                 ", userVideos=" + userVideos + '\'' +
                 ", userSearchHistories=" + userSearchHistories + '\'' +
                 '}';
-    }
-
-    public User(Integer userId, String username, String password, String description, String profileURL, Integer subscribers, Integer videosPosted){
-        this.userId = userId;
-        this.username = username;
-        this.password = password;
-        this.description = description;
-        this.profileURL = profileURL;
-        this.subscribers = subscribers;
-        this.videosPosted = videosPosted;
-    }
-
-    public User(Integer userId, String username, String description, String profileURL, Integer subscribers, Integer videosPosted, ArrayList<Video> userVideos){
-        this.userId = userId;
-        this.username = username;
-        this.description = description;
-        this.profileURL = profileURL;
-        this.subscribers = subscribers;
-        this.videosPosted = videosPosted;
-        this.userVideos = userVideos;
     }
 }

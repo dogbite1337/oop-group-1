@@ -5,6 +5,15 @@ public class UserWithoutPassword {
     private String username, description, profileURL;
 
 
+    public UserWithoutPassword(Integer userId, String username, String description, String profileURL, Integer videosPosted, Integer subscribers) {
+        this.userId = userId;
+        this.username = username;
+        this.description = description;
+        this.profileURL = profileURL;
+        this.subscribers = subscribers;
+        this.videosPosted = videosPosted;
+    }
+
     public Integer getUserId() {
         return userId;
     }
@@ -63,15 +72,6 @@ public class UserWithoutPassword {
                 ", description='" + description + '\'' +
                 ", profileURL='" + profileURL + '\'' +
                 '}';
-    }
-
-    public UserWithoutPassword(Integer userId, String username, String description, String profileURL, Integer videosPosted, Integer subscribers){
-        this.userId = userId;
-        this.username = username;
-        this.description = description;
-        this.profileURL = profileURL;
-        this.subscribers = subscribers;
-        this.videosPosted = videosPosted;
     }
 
 

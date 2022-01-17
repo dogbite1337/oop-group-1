@@ -1,7 +1,6 @@
 package com.company;
 
 import com.company.Handlers.*;
-import com.company.Entities.SearchHistory;
 import com.company.Repositories.*;
 import com.company.Services.SearchHistoryLogic;
 import express.Express;

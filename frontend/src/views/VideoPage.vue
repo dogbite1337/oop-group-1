@@ -483,6 +483,7 @@ export default {
         let likedVideoResponse = await likedVideoRes.json();
 
         let likeObject = {
+          relatesToVideoId: this.$route.params.id,
           userId: this.$store.getters.getCurrentUser.userId,
           videoId: this.video.videoId,
           commentId: -1,
@@ -502,6 +503,7 @@ export default {
     async dislikeVideo() {
       if (this.$store.getters.getCurrentUser && !this.dislikedVideoAlready) {
         let relevantInfo = {
+          relatesToVideoId: this.$route.params.id,
           userId: this.$store.getters.getCurrentUser.userId,
           videoId: this.video.videoId,
           dislikes: this.video.dislikes,
@@ -513,6 +515,7 @@ export default {
         let dislikedVideoResponse = await dislikedVideoRes.json();
 
         let dislikeObject = {
+          relatesToVideoId: this.$route.params.id,
           userId: this.$store.getters.getCurrentUser.userId,
           videoId: this.video.videoId,
           commentId: -1,
