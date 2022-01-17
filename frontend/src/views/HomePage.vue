@@ -37,13 +37,15 @@ export default {
     BannerSlider,
   },
   async created() {
-    let allVideos = await this.getVideosForCurrentPage();
+    // let allVideos = await this.getVideosForCurrentPage();
 
     // Yang new code
-    allVideos = await this.getAllVideos();
-    if (allVideos.length > 8) {
-      allVideos = allVideos.slice(allVideos.length - 8, allVideos.length);
-    }
+    // let allVideos = await this.getAllVideos();
+    // if (allVideos.length > 8) {
+    //   allVideos = allVideos.slice(allVideos.length - 8, allVideos.length);
+    // }
+
+    let allVideos = this.loadMoreVideos();
 
 
     this.$store.dispatch('cacheFirstEightVideos', allVideos);
@@ -124,6 +126,7 @@ export default {
       relevantVideos: this.$store.getters.getSearchResults
         ? this.$store.getters.getSearchResults
         : [],
+      lastVideoObserver: null,
     };
   },
   async mounted() {
@@ -131,75 +134,27 @@ export default {
       'grid-template-columns: ' + this.getGridDimensions() + ';';
 
     window.addEventListener('resize', this.recalculateGrid);
-
-    this.$nextTick(function () {
-      // Intersection Yang test
-      // let videoBoxes = document.querySelectorAll(".videoBox")
-      // console.log(videoBoxes)
-      // // console.log(videoBoxes[0])
-
-      // // first pixel shown, or last pixel gone, because default threshold is set by 0
-      // let observer = new IntersectionObserver(entries =>{
-      //   entries.forEach(entry =>{
-      //     let showed = entry.isIntersecting ? "Show" : "Hide"
-      //     console.log(showed)
-      //     // console.log("showed")
-      //     // console.log(entry)
-      //     // entry.target.classList.toggle("show", entry.isIntersecting)
-      //   })
-      // },{
-        
-      // })
-
-      // // observer.observe(videoBoxes)
-
-      // videoBoxes.forEach(videoBox =>{
-      //   observer.observe(videoBox)
-      // })
-
-      // here i am trying to only observer the last element of that class
-      // let lastVideoObserver = new IntersectionObserver(entries =>{
-      //   let lastVideo = entries[0]
-      //   if(lastVideo.isIntersecting) {
-      //     console.log("we reached the last video, should load more here")
-      //     this.loadMoreVideos()
-      //     return;}
-      //   lastVideoObserver.unobserve(lastVideo.target)
-      //   lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
-      //   // this.loadMoreVideos()
-      // })
-
-      // lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
-
-      // console.log(document.getElementsByClassName("videoBox").length)
-      // if(document.getElementsByClassName("videoBox").length>0)
-      // lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
-
-     
-        // output: 0
-        // console.log(document.getElementsByClassName("videoBox").length)
-        // lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
-        // lastVideoObserver.observe(document.querySelector(".emptyDiv"))
-  })
   },
   updated(){
     // here i am trying to only observer the last element of that class
-      let lastVideoObserver = new IntersectionObserver(entries =>{
+       this.lastVideoObserver = new IntersectionObserver(entries =>{
         let lastVideo = entries[0]
         if(lastVideo.isIntersecting) {
-          console.log("we reached the last video, should load more here")
           this.loadMoreVideos()
           return;}
-        lastVideoObserver.unobserve(lastVideo.target)
-        lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
-        // this.loadMoreVideos()
-      })
+        this.lastVideoObserver.unobserve(lastVideo.target)
+        this.lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
+      },{rootMargin: "150px"}
+      )
 
-      lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
+      this.lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
+
   },
   unmounted() {
+    this.lastVideoObserver.disconnect();
     window.removeEventListener('resize', this.recalculateGrid);
   },
+  
   methods: {
     async loadMoreVideos(){
       let newlyLoadedVideos;
@@ -244,29 +199,31 @@ export default {
       this.showResultsPage = true;
       this.showSearchPage = false;
     },
+
     // expandSearchHistory() {
     //   this.expandedSearchHistory = true;
     // },
     // closeSearchHistory() {
     //   this.expandedSearchHistory = false;
     // },
-    async getVideosForCurrentPage() {
-      if (this.currentPage == 1 && this.$store.getters.getEightFirstVideos) {
-        return this.$store.getters.getEightFirstVideos;
-      }
-      if (!this.currentPage) {
-        this.currentPage = 1;
-      }
-      let res = await fetch(
-        '/rest/getVideosForCurrentPage?' +
-          new URLSearchParams({
-            currentPage: this.currentPage,
-          })
-      );
 
-      let response = await res.json();
-      return response;
-    },
+    // async getVideosForCurrentPage() {
+    //   if (this.currentPage == 1 && this.$store.getters.getEightFirstVideos) {
+    //     return this.$store.getters.getEightFirstVideos;
+    //   }
+    //   if (!this.currentPage) {
+    //     this.currentPage = 1;
+    //   }
+    //   let res = await fetch(
+    //     '/rest/getVideosForCurrentPage?' +
+    //       new URLSearchParams({
+    //         currentPage: this.currentPage,
+    //       })
+    //   );
+
+    //   let response = await res.json();
+    //   return response;
+    // },
     async getAllVideos() {
       let res = await fetch('/rest/getAllVideos');
 
