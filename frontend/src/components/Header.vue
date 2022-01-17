@@ -47,7 +47,7 @@
     <div class="SpaceDiv" />
     <div class="SpaceDiv" />
     <div v-if="profileDropdown" class="profile-dropdown">
-      <ul class="UlMenu">
+      <ul v-if="$store.getters.getCurrentUser" class="UlMenu">
         <router-link
           :to="{ path: '/Profile/' + $store.getters.getCurrentUser.username }"
         >

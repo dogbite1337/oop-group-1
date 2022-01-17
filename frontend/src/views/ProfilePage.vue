@@ -78,8 +78,16 @@
           <div v-if="!editMode" class="UsernameText">Username:</div>
           <div v-if="editMode" class="UsernameText">New Username:</div>
           <div class="SpaceBlock" />
-          <div v-if="!editMode" class="UsernameValue">{{ currentUser.username }}</div>
-          <input v-model="wantedUsername" v-if="editMode" type="text" :placeholder="currentUser.username" class="UsernameInput">
+          <div v-if="!editMode" class="UsernameValue">
+            {{ currentUser.username }}
+          </div>
+          <input
+            v-model="wantedUsername"
+            v-if="editMode"
+            type="text"
+            :placeholder="currentUser.username"
+            class="UsernameInput"
+          />
           <div class="SpaceBlock" />
           <div class="FillerBlock" />
         </div>
@@ -89,7 +97,13 @@
           <div v-if="editMode" class="NewPasswordText">New Password:</div>
           <div class="SpaceBlock" />
           <div v-if="!editMode" class="PasswordValue">***********</div>
-          <input v-model="wantedPassword" v-if="editMode" placeholder="New Password" class="NewPasswordInput" type="password">
+          <input
+            v-model="wantedPassword"
+            v-if="editMode"
+            placeholder="New Password"
+            class="NewPasswordInput"
+            type="password"
+          />
           <div class="SpaceBlock" />
           <div class="FillerBlock" />
         </div>
@@ -118,7 +132,11 @@
         <div class="SpaceBlock" />
         <div class="PreviewGrid">
           <div class="previewText">Preview</div>
-          <img v-if="!wantedImage" class="previewImage" src="../projectImages/Dark_User.png" />
+          <img
+            v-if="!wantedImage"
+            class="previewImage"
+            src="../projectImages/Dark_User.png"
+          />
           <img v-if="wantedImage" class="previewImage" :src="wantedImage" />
         </div>
         <div class="SpaceBlock" />
@@ -196,7 +214,7 @@ export default {
       wantedImage: null,
       wantedUsername: '',
       wantedPassword: '',
-      wantedDescription: ''
+      wantedDescription: '',
     };
   },
   async mounted() {
@@ -213,14 +231,13 @@ export default {
     this.currentSubs = this.renderSpacedNumbers(
       foundUser.subscribers.toString()
     );
-    console.log(this.currentSubs);
   },
   watch: {
     wantedImage() {
-      if(this.wantedImage){
+      if (this.wantedImage) {
         this.editMode = true;
       }
-    }
+    },
   },
   methods: {
     cancelEditMode() {
@@ -231,9 +248,44 @@ export default {
     },
     async saveChanges() {
       this.editMode = false;
+      let newInfo = {
+        userId: this.currentUser.userId,
+        username:
+          this.wantedUsername.length > 0
+            ? this.wantedUsername
+            : this.currentUser.username,
+        password: this.wantedPassword,
+        description:
+          this.wantedDescription.length > 0
+            ? this.wantedDescription
+            : this.currentUser.description,
+        profileURL: this.wantedImage
+          ? this.wantedImage
+          : this.currentUser.profileURL,
+      };
+
+      let res = await fetch('/api/updateUser', {
+        method: 'POST',
+        body: JSON.stringify(newInfo),
+      });
+
+      this.currentUser.username =
+        this.wantedUsername.length > 0
+          ? this.wantedUsername
+          : this.currentUser.username;
+      this.currentUser.description =
+        this.wantedDescription.length > 0
+          ? this.wantedDescription
+          : this.currentUser.description;
+      this.currentUser.profileURL = this.wantedImage
+        ? this.wantedImage
+        : this.currentUser.profileURL;
+
+      this.wantedUsername = '';
+      this.wantedDescription = '';
+      this.wantedImage = null;
     },
     renderSpacedNumbers(stringToPad) {
-      console.log(stringToPad);
       let base = '';
       let startFrom = stringToPad % 1000;
       let spacedString = '';
@@ -250,7 +302,6 @@ export default {
         }
         spacedString = base;
       }
-      console.log(spacedString);
       return spacedString;
     },
     uploadImage() {
@@ -276,10 +327,8 @@ export default {
       for (let i = 0; i < videoResponse.length; i++) {
         let newVideo = new Video();
         let assignedVideo = Object.assign(newVideo, videoResponse[i]);
-        console.log(assignedVideo);
         this.myVideos.push(assignedVideo);
       }
-      console.log(videoResponse);
     },
     switchToMySubscribers() {
       this.chosenProfileInfo = false;
@@ -403,7 +452,7 @@ export default {
   border-bottom: solid 1px white;
   padding-bottom: 16px;
 }
-.cancelInfoButton{
+.cancelInfoButton {
   margin-top: 46px;
   width: 136px;
   position: relative;
@@ -421,7 +470,7 @@ export default {
 .BackgroundDiv {
   background-color: black;
   width: calc(100vw + 19px);
-  overflow-y: hidden;
+  height: 100vh;
 }
 .BackgroundDiv > * {
   overflow-y: hidden;
@@ -431,7 +480,7 @@ export default {
   margin-top: 8px;
   margin-left: -40px;
 }
-.NewPasswordInput{
+.NewPasswordInput {
   padding-left: 5px;
   margin-left: -39px;
 }
