@@ -205,8 +205,6 @@ export default {
       chosenProfileInfo: true,
       chosenMyVideos: false,
       chosenSubscribers: false,
-      currentY: window.screenY,
-      currentScroll: window.scrollY,
       myVideos: [],
       currentUser: null,
       currentSubs: null,
