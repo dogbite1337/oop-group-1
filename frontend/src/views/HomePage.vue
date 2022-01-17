@@ -46,7 +46,6 @@ export default {
     // }
     await this.loadMoreVideos();
     let allVideos = this.relevantVideos;
-    console.log(allVideos)
 
 
     this.$store.dispatch('cacheFirstEightVideos', allVideos);
