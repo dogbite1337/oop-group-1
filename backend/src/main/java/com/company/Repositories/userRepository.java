@@ -58,6 +58,61 @@ public class userRepository {
         return registeredUser;
     }
 
+    public void updateUserInfo(Integer userId, String newUsername, String newPassword, String newDescription, String profileURL) {
+        try {
+            try {
+                con = DriverManager.getConnection(
+                        "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if(newPassword.length() > 0){
+                PreparedStatement updateVideo = con.prepareStatement("UPDATE users SET username = ?, password = ?, description = ?, profileURL = ? WHERE userId = ?");
+                updateVideo.setString(1, newUsername);
+                updateVideo.setString(2, Encrypter.hash(newPassword));
+                updateVideo.setString(3, newDescription);
+                updateVideo.setString(4, profileURL);
+                updateVideo.setInt(5, userId);
+                updateVideo.executeUpdate();
+            }
+            else {
+                PreparedStatement updateVideo = con.prepareStatement("UPDATE users SET username = ?, description = ?, profileURL = ? WHERE userId = ?");
+                updateVideo.setString(1, newUsername);
+                updateVideo.setString(2, newDescription);
+                updateVideo.setString(3, profileURL);
+                updateVideo.setInt(4, userId);
+                updateVideo.executeUpdate();
+            }
+
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public void updateUserInfoWithNewPW(Integer userId, String newUsername, String newPassword, String newDescription, String profileURL) {
+        try {
+            try {
+                con = DriverManager.getConnection(
+                        "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            newPassword = Encrypter.hash(newPassword);
+            PreparedStatement updateVideo = con.prepareStatement("UPDATE users SET username = ?, password = ?, description = ?, profileURL = ? WHERE userId = ?");
+            updateVideo.setString(1, newUsername);
+            updateVideo.setString(2, newPassword);
+            updateVideo.setString(3, newDescription);
+            updateVideo.setString(4, profileURL);
+            updateVideo.setInt(5, userId);
+            updateVideo.executeUpdate();
+
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
     public HashMap<Integer, String> getAllUsernamesById(ArrayList<Integer> userIDs) {
         HashMap<Integer, String> foundUsers = new HashMap<Integer, String>();
         try {

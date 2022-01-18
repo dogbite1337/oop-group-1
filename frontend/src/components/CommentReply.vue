@@ -139,13 +139,11 @@ export default {
           }
         );
         this.likedReplyAlready = true;
-      }
-      else{
-        alert("You have to be logged in to like a Reply!")
+      } else {
+        alert('You have to be logged in to like a Reply!');
       }
     },
     async dislike() {
-      console.log(this.$route.params.id);
       if (this.$store.getters.getCurrentUser) {
         let dislikedCommentRes = await fetch(
           '/api/dislikeComment?' +

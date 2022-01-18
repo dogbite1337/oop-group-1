@@ -33,6 +33,12 @@ public class UserHandler {
             res.json(user);
         });
 
+
+        app.post("/api/updateUser", (req, res) -> {
+           userRepository.updateUserInfo(Integer.parseInt(req.body().get("userId").toString()), req.body().get("username").toString(), req.body().get("password").toString(), req.body().get("description").toString(),  req.body().get("profileURL").toString());
+        });
+
+
         // register user
         app.post("/api/register", (req, res) -> {
             UserWithoutPassword user = userRepository.registerNewUser((String) req.body().get("providedUserName"), (String) req.body().get("providedPassword"), (String) req.body().get("providedDescription"), (String) req.body().get("providedProfileURL"), 0, 0);

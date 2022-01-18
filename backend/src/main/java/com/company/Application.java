@@ -18,5 +18,6 @@ public class Application {
         new SearchHistoryHandler(app, new SearchHistoryLogic(new searchHistoryRepository()));
         new LikeHandler(app, new likeRepository());
         new DislikeHandler(app, new dislikeRepository());
+        new SubscriberHandler(app, new subscriberRepository());
     }
 }

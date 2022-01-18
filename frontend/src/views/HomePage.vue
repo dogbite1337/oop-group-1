@@ -346,8 +346,8 @@ export default {
   display: grid;
   grid-template-rows: 5vh auto;
   background-color: black;
-  position: sticky;
-  top: 100vh;
+  position: fixed;
+  top: calc(100vh - 65px);
   width: 100vw;
 }
 
@@ -445,7 +445,7 @@ export default {
   width: max-content;
   margin-left: auto;
   margin-right: auto;
-  padding-bottom: 20px;
+  padding-bottom: 65px;
 }
 
 .SorryText {

@@ -47,7 +47,12 @@
     <div class="SpaceDiv" />
     <div class="SpaceDiv" />
     <div v-if="profileDropdown" class="profile-dropdown">
-      <ul class="UlMenu">
+      <ul v-if="$store.getters.getCurrentUser" class="UlMenu">
+        <router-link
+          :to="{ path: '/Profile/' + $store.getters.getCurrentUser.username }"
+        >
+          <li>My Profile</li>
+        </router-link>
         <li @click="uploadNavigation">Upload Video</li>
         <li @click="logout">Logout</li>
       </ul>
@@ -237,7 +242,7 @@ export default {
   max-width: max-content;
   margin-left: auto;
   margin-right: auto;
-  padding-bottom: 10px;
+  padding-bottom: 40px;
 }
 .UlMenu {
   height: max-content;

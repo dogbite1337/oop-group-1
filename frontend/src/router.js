@@ -8,6 +8,7 @@ import UploadVideoPage from './views/UploadVideoPage.vue';
 import VideoPage from './views/VideoPage.vue';
 import SearchPage from './views/SearchPage.vue';
 import SearchResultPage from './views/SearchResultPage.vue';
+import ProfilePage from './views/ProfilePage.vue';
 
 export default createRouter({
   history: createWebHistory(),
@@ -40,5 +41,9 @@ export default createRouter({
       path: '/SearchResult',
       component: SearchResultPage,
     },
+    {
+      path: '/Profile/:username',
+      component: ProfilePage
+    }
   ],
 });
