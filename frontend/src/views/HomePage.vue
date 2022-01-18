@@ -259,6 +259,7 @@ export default {
 
 .MainDiv {
   background-color: #131313;
+  height: inherit;
 }
 .test {
   width: 200px;
@@ -394,14 +395,12 @@ export default {
   position: relative;
   top: -1.5px;
 }
-.footerDiv {
+/* .footerDiv {
   display: grid;
   grid-template-rows: 5vh auto;
   background-color: black;
   position: sticky;
-  top: 100vh;
-  width: 100vw;
-}
+} */
 
 /* .clearHistoryButton{
   width: 97px;

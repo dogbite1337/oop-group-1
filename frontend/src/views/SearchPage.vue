@@ -169,9 +169,14 @@ export default {
   background-color: #131313;
 }
 
+.IconDiv{
+  position: absolute;
+  width: -webkit-fill-available;
+}
+
 .searchPage {
   color: white;
-  height: 74vh;
+  height: 75.3vh;
 }
 
 .searchPageButtonsContainer {

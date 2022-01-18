@@ -33,5 +33,6 @@ export default {
 .BackDrop {
   height: 100vh; /* temp */
   background-color: #131313;
+  overflow-y: scroll;
 }
 </style>

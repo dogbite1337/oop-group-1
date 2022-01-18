@@ -64,7 +64,11 @@ export default {
 
 <style scoped>
 .mainContainer {
-  height: 80vh;
+  height: inherit;
   overflow: scroll;
+}
+
+.BackDrop {
+  height: 0;
 }
 </style>
