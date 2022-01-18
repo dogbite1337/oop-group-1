@@ -33,46 +33,25 @@ export default {
       matchedUserList: [],
     };
   },
-
-  watch:{
-    keyword(newList) {
-      console.log(newList)
-      console.log("saved")
-      localStorage.setItem('orginalVideosList', JSON.stringify(newList));
-    }
-  },
   
   async created() {
 
     if(this.$store.getters.getKeyWord){
-       let keyword = this.$store.getters.getKeyWord;
+      let keyword = this.$store.getters.getKeyWord;
       this.matchedVideoList = await this.$store.dispatch(
       'getMatchedVideoList',
       keyword
     );
-    console.log(this.matchedVideoList)
+      localStorage.setItem('orginalVideosList', JSON.stringify(this.matchedVideoList));
+      localStorage.setItem('searchKey', keyword);
+      console.log("saved storeage")
     }
     else{
       let list;
       list = await JSON.parse(localStorage.orginalVideosList)
       this.matchedVideoList = list
       console.log("loaded from storeage")
-      console.log(this.matchedVideoList)
     }
-
-    // if(this.matchedVideoList){
-    //   if(localStorage.orginalVideosList){
-    //   let list;
-    //   list = await JSON.parse(localStorage.orginalVideosList)
-    //   // list = JSON.parse(localStorage.orginalVideoList)
-
-    //   this.matchedVideoList = list
-    //   console.log("loaded from storeage")
-    //   console.log(this.matchedVideoList)
-    // }
-    // }
-
-    
 
     await this.storeMatchedVideoList(this.matchedVideoList);
 

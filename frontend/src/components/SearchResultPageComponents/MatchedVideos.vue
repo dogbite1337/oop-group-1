@@ -47,6 +47,10 @@ export default {
   },
 
   async mounted() {
+    if(!this.$store.getters.getKeyWord){
+      console.log("loaded keyword")
+      this.keyword = await localStorage.searchKey
+    }
 
     if(await this.$store.getters.getMatchedVideoList.length > 6){
       this.matchedVideos = await this.$store.getters.getMatchedVideoList.slice(0,6)
