@@ -52,6 +52,8 @@ export default {
       'getMatchedUserList',
       keyword
     );
+
+    this.$store.dispatch("setKeyWord", "");
   },
 
   methods:{
