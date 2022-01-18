@@ -11,12 +11,13 @@
       />
     </div>
     <div class="textInfo">
-      <div class="title">
-        <a class="titleText" :href="'/VideoPage/' + video.videoId">
+      <div class="titleText">
           {{ displayTitleBeforeKey(video.title) }}
           <p class="keyword">{{ displayKeyWord(video.title) }}</p>
           {{ displayTitleAfterKey(video.title) }}
-        </a>
+        <!-- <a class="titleText" :href="'/VideoPage/' + video.videoId">
+          {{ video.title }}
+        </a> -->
         <!-- <p>{{video.title}}</p> -->
       </div>
       <div class="otherInfo">
@@ -55,6 +56,13 @@ export default {
   },
 
   updated(){
+
+    // let htmlElement = document.querySelectorAll(".titleText");
+    // htmlElement.forEach(element => {
+    //   console.log(element.innerHTML)
+    //   element.innerHTML = element.innerHTML.replace(this.keyword, '<span style="color: red;">' + this.keyword + '</span>')
+    // });
+
     // upon start, show 6 videos, and then when the last video DIV is showing, loadMoreVideos
     // however, unobserve should have stopped this from observing the earlier "last div" and observe on the new last div
     // Problem: unobserve had no effect, Observer instead listens to both div
@@ -99,6 +107,7 @@ export default {
     goToVideoPage(video) {
       this.$router.push('/VideoPage/' + video.videoId);
     },
+
     displayTitleBeforeKey(orginalTitle) {
       let index = orginalTitle
         .toLowerCase()
@@ -133,6 +142,7 @@ p {
 
 .titleText .keyword {
   color: rgb(255, 99, 99);
+  font-size: inherit;
 }
 
 .titleText {
@@ -140,10 +150,10 @@ p {
   color: white;
 }
 
-.title p {
+/* .title p {
   color: white;
   font-size: medium;
-}
+} */
 
 .videoCard {
   display: grid;
