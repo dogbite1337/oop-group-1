@@ -169,7 +169,9 @@ export default {
       this.$nextTick(function(){
           if(newlyLoadedVideos.length != 0){
           newlyLoadedVideos.forEach(newVideo => {
-          this.relevantVideos.push(newVideo)
+            if(!this.relevantVideos.some(data => data.videoId === newVideo.videoId)){
+              this.relevantVideos.push(newVideo)
+            }
         });
       }
       // numberOfCurrentShownVideos = this.relevantVideos.length;
