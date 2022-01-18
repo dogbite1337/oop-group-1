@@ -132,7 +132,6 @@ export default {
         this.searchHistory.unshift(obj);
 
         await this.$store.dispatch('cacheSearchHistory', this.searchHistory);
-        console.log(this.searchHistory);
         this.$router.push('/SearchResult');
       }
     },

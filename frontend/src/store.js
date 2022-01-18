@@ -12,6 +12,7 @@ export default createStore({
     relatedVideoId: null,
     mySearchHistoryList: [],
     keyWord: '',
+    matchedVideoList: [],
   },
   mutations: {
     setUser(state, user) {
@@ -51,6 +52,9 @@ export default createStore({
     setKeyWord(state, keyWord) {
       state.keyWord = keyWord;
     },
+    setMatchedVideoList(state, list){
+      state.matchedVideoList = list;
+    }
   },
   getters: {
     getCurrentUser: (state) => {
@@ -77,6 +81,9 @@ export default createStore({
     getKeyWord: (state) => {
       return state.keyWord;
     },
+    getMatchedVideoList: (state) =>{
+      return state.matchedVideoList;
+    }
   },
   actions: {
     async login(store, currentUser) {
@@ -147,5 +154,16 @@ export default createStore({
       );
       return res.json();
     },
+    async fetchEightMoreVideos(store, lengthOfCurrentVideoList){
+      // console.log("runned")
+      let res = await fetch('/rest/getEightNewVideos?' + new URLSearchParams({
+        lengthOfCurrentVideoList: lengthOfCurrentVideoList
+      }));
+      return res.json();
+    },
+
+    async setMatchedVideoList(store, list){
+      store.commit('setMatchedVideoList', list);
+    }
   },
 });

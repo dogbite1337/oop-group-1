@@ -387,4 +387,37 @@ public class videoRepository {
         pStatement.executeUpdate();
         con.close();
     }
+
+    public ArrayList<Video> getNextEightVideos(Integer lengthOfCurrentVideoList) throws SQLException {
+        try {
+            con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/kittykitty","root","root");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        ArrayList<Video> videosWillBeLoad = new ArrayList<>();
+        PreparedStatement nextEightVideos = con.prepareStatement("SELECT * FROM videos LIMIT ?, 8");
+        nextEightVideos.setInt(1, lengthOfCurrentVideoList);
+        ResultSet rs = nextEightVideos.executeQuery();
+
+        while(rs.next()){
+            Video newVideo = new Video(0, 0, 0, "Not found", "Not found", "Not found", 0, "", "0", "0", "0");
+            newVideo.setVideoId(rs.getInt(1));
+            newVideo.setUserId(rs.getInt(2));
+            newVideo.setUploadDate(rs.getTimestamp(3).getTime());
+            newVideo.setVideoURL(rs.getString(4));
+            newVideo.setTitle(rs.getString(5));
+            newVideo.setDescription(rs.getString(6));
+            newVideo.setViews(rs.getInt(7));
+            newVideo.setPostedByUsername(rs.getString(8));
+            newVideo.setLikes(String.valueOf(rs.getInt(9)));
+            newVideo.setDislikes(String.valueOf(rs.getInt(10)));
+            newVideo.setStars(String.valueOf(rs.getInt(11)));
+            videosWillBeLoad.add(newVideo);
+        }
+        con.close();
+//        System.out.println(videosWillBeLoad);
+        return videosWillBeLoad;
+
+    }
 }

@@ -9,6 +9,7 @@
         :key="index"
         :video="videoItem"
         class="videoBox"
+        ref="videoBox"
       />
     </div>
   </div>
@@ -36,13 +37,17 @@ export default {
     BannerSlider,
   },
   async created() {
-    let allVideos = await this.getVideosForCurrentPage();
+    // let allVideos = await this.getVideosForCurrentPage();
 
     // Yang new code
-    allVideos = await this.getAllVideos();
-    if (allVideos.length > 8) {
-      allVideos = allVideos.slice(allVideos.length - 8, allVideos.length);
-    }
+    // let allVideos = await this.getAllVideos();
+    // if (allVideos.length > 8) {
+    //   allVideos = allVideos.slice(allVideos.length - 8, allVideos.length);
+    // }
+    this.relevantVideos = [];
+    await this.loadMoreVideos();
+    let allVideos = this.relevantVideos;
+
 
     this.$store.dispatch('cacheFirstEightVideos', allVideos);
     this.relevantVideos = [];
@@ -122,18 +127,63 @@ export default {
       relevantVideos: this.$store.getters.getSearchResults
         ? this.$store.getters.getSearchResults
         : [],
+      lastVideoObserver: null,
     };
   },
-  mounted() {
+
+  async mounted() {
     document.getElementsByClassName('CardsContainer')[0].style =
       'grid-template-columns: ' + this.getGridDimensions() + ';';
 
     window.addEventListener('resize', this.recalculateGrid);
   },
+  updated(){
+    // here i am trying to only observer the last element of that class
+       this.lastVideoObserver = new IntersectionObserver(entries =>{
+        let lastVideo = entries[0]
+        if(!lastVideo.isIntersecting) {
+          // this.loadMoreVideos()
+          return;}
+
+          this.loadMoreVideos()
+          this.lastVideoObserver.unobserve(lastVideo.target)
+          this.lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
+      },{rootMargin: "100px"}
+      )
+
+      this.lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
+
+  },
   unmounted() {
+    this.lastVideoObserver.disconnect();
     window.removeEventListener('resize', this.recalculateGrid);
   },
+  
   methods: {
+    async loadMoreVideos(){
+      let newlyLoadedVideos;
+      let numberOfCurrentShownVideos = this.relevantVideos.length;
+      // console.log("Current shown videos before fetching: " + numberOfCurrentShownVideos)
+      // console.log(await this.$store.dispatch("fetchEightMoreVideos", numberOfCurrentShownVideos))
+      newlyLoadedVideos = await this.fetchEightMoreVideosFromDB(numberOfCurrentShownVideos);
+      this.$nextTick(function(){
+          if(newlyLoadedVideos.length != 0){
+          newlyLoadedVideos.forEach(newVideo => {
+            if(!this.relevantVideos.some(data => data.videoId === newVideo.videoId)){
+              this.relevantVideos.push(newVideo)
+            }
+        });
+      }
+      // numberOfCurrentShownVideos = this.relevantVideos.length;
+      // console.log("Current shown videos after fetching: " + numberOfCurrentShownVideos)
+      })
+      // console.log("loaded more video")
+    },
+
+    async fetchEightMoreVideosFromDB(numberOfCurrentShownVideos){
+      return await this.$store.dispatch("fetchEightMoreVideos", numberOfCurrentShownVideos)
+    },
+
     getGridDimensions() {
       let base = '';
       for (let i = 0; i < Math.floor(window.screen.width / 200); i++) {
@@ -156,29 +206,31 @@ export default {
       this.showResultsPage = true;
       this.showSearchPage = false;
     },
+
     // expandSearchHistory() {
     //   this.expandedSearchHistory = true;
     // },
     // closeSearchHistory() {
     //   this.expandedSearchHistory = false;
     // },
-    async getVideosForCurrentPage() {
-      if (this.currentPage == 1 && this.$store.getters.getEightFirstVideos) {
-        return this.$store.getters.getEightFirstVideos;
-      }
-      if (!this.currentPage) {
-        this.currentPage = 1;
-      }
-      let res = await fetch(
-        '/rest/getVideosForCurrentPage?' +
-          new URLSearchParams({
-            currentPage: this.currentPage,
-          })
-      );
 
-      let response = await res.json();
-      return response;
-    },
+    // async getVideosForCurrentPage() {
+    //   if (this.currentPage == 1 && this.$store.getters.getEightFirstVideos) {
+    //     return this.$store.getters.getEightFirstVideos;
+    //   }
+    //   if (!this.currentPage) {
+    //     this.currentPage = 1;
+    //   }
+    //   let res = await fetch(
+    //     '/rest/getVideosForCurrentPage?' +
+    //       new URLSearchParams({
+    //         currentPage: this.currentPage,
+    //       })
+    //   );
+
+    //   let response = await res.json();
+    //   return response;
+    // },
     async getAllVideos() {
       let res = await fetch('/rest/getAllVideos');
 
@@ -346,8 +398,8 @@ export default {
   display: grid;
   grid-template-rows: 5vh auto;
   background-color: black;
-  position: sticky;
-  top: 100vh;
+  position: fixed;
+  top: calc(100vh - 65px);
   width: 100vw;
 }
 
@@ -445,7 +497,7 @@ export default {
   width: max-content;
   margin-left: auto;
   margin-right: auto;
-  padding-bottom: 20px;
+  padding-bottom: 65px;
 }
 
 .SorryText {
