@@ -13,6 +13,7 @@ export default createStore({
     mySearchHistoryList: [],
     keyWord: '',
     matchedVideoList: [],
+    darkTheme: true,
   },
   mutations: {
     setUser(state, user) {
@@ -27,6 +28,9 @@ export default createStore({
         );
       }
       state.currentUser = user;
+    },
+    setDarkTheme(state, darkTheme) {
+      state.darkTheme = darkTheme;
     },
     setShouldResetToStartPage(state, shouldReset) {
       state.shouldResetToStartPage = shouldReset;
@@ -52,11 +56,14 @@ export default createStore({
     setKeyWord(state, keyWord) {
       state.keyWord = keyWord;
     },
-    setMatchedVideoList(state, list){
+    setMatchedVideoList(state, list) {
       state.matchedVideoList = list;
-    }
+    },
   },
   getters: {
+    getIsDarkTheme: (state) => {
+      return state.darkTheme;
+    },
     getCurrentUser: (state) => {
       return state.currentUser;
     },
@@ -81,11 +88,14 @@ export default createStore({
     getKeyWord: (state) => {
       return state.keyWord;
     },
-    getMatchedVideoList: (state) =>{
+    getMatchedVideoList: (state) => {
       return state.matchedVideoList;
-    }
+    },
   },
   actions: {
+    async setDarkTheme(store, darkTheme) {
+      store.commit('setDarkTheme', darkTheme);
+    },
     async login(store, currentUser) {
       store.commit('setUser', currentUser);
       // store.commit('setMySearchHistoryList', [])
@@ -154,15 +164,18 @@ export default createStore({
       );
       return res.json();
     },
-    async fetchEightMoreVideos(store, lengthOfCurrentVideoList){
-      let res = await fetch('/rest/getEightNewVideos?' + new URLSearchParams({
-        lengthOfCurrentVideoList: lengthOfCurrentVideoList
-      }));
+    async fetchEightMoreVideos(store, lengthOfCurrentVideoList) {
+      let res = await fetch(
+        '/rest/getEightNewVideos?' +
+          new URLSearchParams({
+            lengthOfCurrentVideoList: lengthOfCurrentVideoList,
+          })
+      );
       return res.json();
     },
 
-    async setMatchedVideoList(store, list){
+    async setMatchedVideoList(store, list) {
       store.commit('setMatchedVideoList', list);
-    }
+    },
   },
 });

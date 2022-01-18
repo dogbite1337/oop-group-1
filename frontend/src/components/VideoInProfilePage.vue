@@ -6,7 +6,54 @@
         query: video ? video.videoId : 0,
       }"
     >
-      <div @click="clickedRelatedVideo" class="relatedVideoBox">
+      <div
+        v-if="darkTheme"
+        @click="clickedRelatedVideo"
+        class="relatedVideoBox"
+      >
+        <div class="SpaceBlock" />
+        <div class="linkBox">
+          <img
+            class="videoImage"
+            :src="
+              'https://img.youtube.com/vi/' +
+              video.videoURL.substring(32, 43) +
+              '/default.jpg'
+            "
+          />
+        </div>
+        <div class="SpaceBlock" />
+        <div class="textDiv">
+          <div class="SpaceBlock" />
+          <div class="titleDiv">
+            {{ video.title }}
+          </div>
+          <div class="SpaceBlock" />
+          <div class="UploaderDiv">
+            <div class="UpDiv">UP</div>
+            <div class="SpaceBlock" />
+            <div class="UploaderTextDiv">{{ video.postedByUsername }}</div>
+          </div>
+          <div class="SpaceBlock" />
+          <div class="ViewsDiv">
+            <div class="PlayerDiv">
+              <img
+                class="PlayerImage"
+                src="../projectImages/video-player.png"
+              />
+            </div>
+            <div class="SpaceDiv" />
+            <div class="ViewsNumberDiv">{{ spacedViews }} views</div>
+          </div>
+          <div class="SpaceBlock" />
+        </div>
+        <div class="SpaceBlock" />
+      </div>
+      <div
+        v-if="!darkTheme"
+        @click="clickedRelatedVideo"
+        class="LightRelatedVideoBox"
+      >
         <div class="SpaceBlock" />
         <div class="linkBox">
           <img
@@ -49,15 +96,29 @@
     <div class="trashGrid">
       <div class="SpaceBlock" />
       <img
+        v-if="darkTheme"
         @click="editVideo"
         class="Pen"
         src="../projectImages/black_pen.png"
+      />
+      <img
+        v-if="!darkTheme"
+        @click="editVideo"
+        class="Pen"
+        src="../projectImages/light_pen.png"
       />
       <div class="SpaceBlock" />
       <img
         @click="deleteVideo"
         class="Trash"
+        v-if="darkTheme"
         src="../projectImages/Trashcan.png"
+      />
+      <img
+        @click="deleteVideo"
+        class="Trash"
+        v-if="!darkTheme"
+        src="../projectImages/Light_Trash.png"
       />
       <div class="SpaceBlock" />
     </div>
@@ -71,6 +132,15 @@ export default {
   name: 'VideoInProfilePage',
   mounted() {
     this.spacedViews = this.renderSpacedNumbers(this.video.views.toString());
+    this.$store.subscribe(async (mutation, state) => {
+      if (mutation.type == 'setDarkTheme') {
+        if (mutation.payload) {
+          this.darkTheme = true;
+        } else {
+          this.darkTheme = false;
+        }
+      }
+    });
   },
   data() {
     return {
@@ -78,6 +148,7 @@ export default {
         ? this.$store.getters.getFirstEightVideos
         : null,
       spacedViews: 0,
+      darkTheme: true,
     };
   },
   methods: {
@@ -163,6 +234,20 @@ export default {
   margin-right: auto;
 }
 
+.LightRelatedVideoBox {
+  background-color: white;
+  height: max-content;
+  display: grid;
+  grid-template-columns: auto max-content 22px max-content auto;
+  max-width: 1000px;
+  border-bottom: solid 0.5px black;
+  width: 100vw;
+  z-index: 3;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  border-top: solid 1px black;
+}
 .PlayerDiv {
   background-color: grey;
   width: 13px;
