@@ -44,6 +44,7 @@ export default {
     // if (allVideos.length > 8) {
     //   allVideos = allVideos.slice(allVideos.length - 8, allVideos.length);
     // }
+    this.relevantVideos = [];
     await this.loadMoreVideos();
     let allVideos = this.relevantVideos;
 
@@ -171,7 +172,7 @@ export default {
           this.relevantVideos.push(newVideo)
         });
       }
-      numberOfCurrentShownVideos = this.relevantVideos.length;
+      // numberOfCurrentShownVideos = this.relevantVideos.length;
       // console.log("Current shown videos after fetching: " + numberOfCurrentShownVideos)
       })
       // console.log("loaded more video")
