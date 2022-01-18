@@ -29,29 +29,52 @@ export default {
 
   data() {
     return {
-      matchedVideoList: this.$store.dispatch(
-        'getMatchedVideoList',
-        this.$store.getters.getKeyWord
-      ),
-      matchedUserList: this.$store.dispatch(
-        'getMatchedUserList',
-        this.$store.getters.getKeyWord
-      ),
+      matchedVideoList: [],
+      matchedUserList: [],
     };
   },
 
+  watch:{
+    keyword(newList) {
+      console.log(newList)
+      console.log("saved")
+      localStorage.setItem('orginalVideosList', JSON.stringify(newList));
+    }
+  },
+  
   async created() {
-    let keyword = this.$store.getters.getKeyWord;
-    this.matchedVideoList = await this.$store.dispatch(
+
+    if(this.$store.getters.getKeyWord){
+       let keyword = this.$store.getters.getKeyWord;
+      this.matchedVideoList = await this.$store.dispatch(
       'getMatchedVideoList',
       keyword
     );
-    // console.log(this.matchedVideoList)
+    console.log(this.matchedVideoList)
+    }
+    else{
+      let list;
+      list = await JSON.parse(localStorage.orginalVideosList)
+      this.matchedVideoList = list
+      console.log("loaded from storeage")
+      console.log(this.matchedVideoList)
+    }
+
+    // if(this.matchedVideoList){
+    //   if(localStorage.orginalVideosList){
+    //   let list;
+    //   list = await JSON.parse(localStorage.orginalVideosList)
+    //   // list = JSON.parse(localStorage.orginalVideoList)
+
+    //   this.matchedVideoList = list
+    //   console.log("loaded from storeage")
+    //   console.log(this.matchedVideoList)
+    // }
+    // }
+
+    
+
     await this.storeMatchedVideoList(this.matchedVideoList);
-    this.matchedUserList = await this.$store.dispatch(
-      'getMatchedUserList',
-      keyword
-    );
 
     this.$store.dispatch("setKeyWord", "");
   },

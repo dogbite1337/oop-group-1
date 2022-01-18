@@ -47,7 +47,8 @@ export default {
   },
 
   async mounted() {
-    if(this.$store.getters.getMatchedVideoList.length > 6){
+
+    if(await this.$store.getters.getMatchedVideoList.length > 6){
       this.matchedVideos = await this.$store.getters.getMatchedVideoList.slice(0,6)
     }
     else{
