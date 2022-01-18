@@ -402,8 +402,55 @@ export default {
     // See comment on method
     this.incrementViewCount(this.$route.path);
   },
+
+  updated(){
+    this.lastVideoObserverSearchResult = new IntersectionObserver(entries =>{
+        let lastVideo = entries[0]
+        if(!lastVideo.isIntersecting) {
+          return;}
+        this.loadMoreVideos()
+        this.lastVideoObserverSearchResult.unobserve(lastVideo.target);
+        if(!this.stopObserver) 
+        this.lastVideoObserverSearchResult.observe(document.querySelector(".videoBox:last-child"))
+      },{rootMargin: "25px"}
+      )
+
+      this.lastVideoObserverSearchResult.observe(document.querySelector(".videoBox:last-child"))
+  },
+
+  beforeUnmount(){
+    this.stopObserver = true;
+    this.$store.dispatch("cacheFirstEightVideos",[])
+  },
+
+
   watch: {},
   methods: {
+    async loadMoreVideos(){
+      let newlyLoadedVideos;
+      let numberOfCurrentShownVideos = this.relatedVideos.length;
+      newlyLoadedVideos = await this.fetchEightMoreVideosFromDB(numberOfCurrentShownVideos);
+      this.$nextTick(function(){
+          if(newlyLoadedVideos.length != 0){
+          newlyLoadedVideos.forEach(newVideo => {
+            // if(!this.relatedVideos.includes(newVideo)){
+            //   this.relatedVideos.push(newVideo)
+            //   console.log("does not include")
+            //   console.log(newVideo)
+            // }
+            if(!this.relatedVideos.some(data => data.videoId === newVideo.videoId) && this.video.videoId != newVideo.videoId){
+              //don't exists
+              this.relatedVideos.push(newVideo)
+            }
+        });
+        }
+      })
+    },
+
+    async fetchEightMoreVideosFromDB(numberOfCurrentShownVideos){
+      return await this.$store.dispatch("fetchEightMoreVideos", numberOfCurrentShownVideos)
+    },
+
     async updateBasedOnDelete(commentsAfterRemoval) {
       if (commentsAfterRemoval.length == 0) {
         this.relevantComments = [];
