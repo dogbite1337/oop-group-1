@@ -260,6 +260,7 @@ export default {
 .MainDiv {
   background-color: #131313;
   height: inherit;
+  overflow-y: scroll;
 }
 .test {
   width: 200px;

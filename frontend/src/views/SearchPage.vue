@@ -112,12 +112,15 @@ export default {
           });
         }
         this.$router.push('/SearchResult');
+        
       } else if (this.currentUser && boolean && searchParam) {
         console.log('loggedin but already made this search before');
         this.$router.push('/SearchResult');
+        
       } else if (!this.currentUser && boolean && searchParam) {
         console.log("didn't log in but already made this search before");
         this.$router.push('/SearchResult');
+        
       } else if (!this.currentUser && !boolean && searchParam) {
         this.searchHistory = this.$store.getters.getMySearchHistoryList;
 
@@ -133,6 +136,7 @@ export default {
 
         await this.$store.dispatch('cacheSearchHistory', this.searchHistory);
         this.$router.push('/SearchResult');
+        
       }
     },
 
