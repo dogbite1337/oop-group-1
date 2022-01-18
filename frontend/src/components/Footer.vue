@@ -14,22 +14,41 @@
       <img class="PantherImage" src="../projectImages/panther.png" />
     </div>
     <div class="SpaceDiv" />
-    <!-- <router-link :to="{ path: '/MyProfile' }"> -->
-    <div class="HomeDiv">
-      <img class="ProfileIcon" src="../projectImages/Dark_User.png" />
-      <router-link :to="{ path: '/' }">
-        <div class="ProfileText">Profile</div>
+    <div v-if="activeUser" class="loggedInRoute">
+      <router-link :to="{ path: '/Profile/' + activeUser }">
+        <div @click="seeIfLoggedIn" class="HomeDiv">
+          <img class="ProfileIcon" src="../projectImages/Dark_User.png" />
+          <div class="ProfileText">Profile</div>
+        </div>
       </router-link>
     </div>
-    <!-- </router-link> -->
+    <div v-if="!activeUser" class="HomeDiv">
+      <img class="ProfileIcon" src="../projectImages/Dark_User.png" />
+      <div class="ProfileText">Profile</div>
+    </div>
     <div class="SpaceDiv" />
   </div>
 </template>
 <script>
+import store from '../store';
+
 export default {
   name: 'Footer',
   data() {
-    return {};
+    return {
+      activeUser: '',
+    };
+  },
+  async mounted() {
+    this.$store.subscribe(async (mutation, state) => {
+      if (mutation.type == 'setUser') {
+        if (mutation.payload) {
+          this.activeUser = mutation.payload.username;
+        } else {
+          this.activeUser = null;
+        }
+      }
+    });
   },
   methods: {
     /* Deletes a Video and all related likes, dislikes, replies/comments */
