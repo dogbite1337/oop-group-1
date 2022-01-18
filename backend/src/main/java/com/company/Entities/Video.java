@@ -19,6 +19,13 @@ public class Video {
         this.stars = stars;
     }
 
+    public Video(Integer videoId, String title, String postedByUsername, String videoURL){
+        this.videoId = videoId;
+        this.videoURL = videoURL;
+        this.title = title;
+        this.postedByUsername = postedByUsername;
+    }
+
     public Integer getVideoId() {
         return videoId;
     }

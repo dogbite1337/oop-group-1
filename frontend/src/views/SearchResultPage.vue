@@ -46,11 +46,19 @@ export default {
       'getMatchedVideoList',
       keyword
     );
+    // console.log(this.matchedVideoList)
+    await this.storeMatchedVideoList(this.matchedVideoList);
     this.matchedUserList = await this.$store.dispatch(
       'getMatchedUserList',
       keyword
     );
   },
+
+  methods:{
+    async storeMatchedVideoList(matchedVideoList){
+      await this.$store.dispatch("setMatchedVideoList", matchedVideoList)
+    }
+  }
 };
 </script>
 

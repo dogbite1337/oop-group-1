@@ -5,7 +5,6 @@
   />
   <MatchedVideos
     v-if="matchedVideoList.length > 0"
-    :matchedVideoList="matchedVideoList"
   />
 </template>
 <script>
@@ -19,8 +18,6 @@ export default {
     MatchedUsers,
     MatchedVideos,
   },
-
-  mounted() {},
 
   data() {
     return {};
