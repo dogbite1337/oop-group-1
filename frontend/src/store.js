@@ -155,7 +155,6 @@ export default createStore({
       return res.json();
     },
     async fetchEightMoreVideos(store, lengthOfCurrentVideoList){
-      // console.log("runned")
       let res = await fetch('/rest/getEightNewVideos?' + new URLSearchParams({
         lengthOfCurrentVideoList: lengthOfCurrentVideoList
       }));

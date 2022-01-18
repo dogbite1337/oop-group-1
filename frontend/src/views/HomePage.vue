@@ -48,7 +48,6 @@ export default {
     await this.loadMoreVideos();
     let allVideos = this.relevantVideos;
 
-
     this.$store.dispatch('cacheFirstEightVideos', allVideos);
     this.relevantVideos = [];
     for (let i = allVideos.length; i > 0; i--) {
@@ -137,51 +136,61 @@ export default {
 
     window.addEventListener('resize', this.recalculateGrid);
   },
-  updated(){
+  updated() {
     // here i am trying to only observer the last element of that class
-       this.lastVideoObserver = new IntersectionObserver(entries =>{
-        let lastVideo = entries[0]
-        if(!lastVideo.isIntersecting) {
+    this.lastVideoObserver = new IntersectionObserver(
+      (entries) => {
+        let lastVideo = entries[0];
+        if (!lastVideo.isIntersecting) {
           // this.loadMoreVideos()
-          return;}
+          return;
+        }
 
-          this.loadMoreVideos()
-          this.lastVideoObserver.unobserve(lastVideo.target)
-          this.lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
-      },{rootMargin: "100px"}
-      )
+        this.loadMoreVideos();
+        this.lastVideoObserver.unobserve(lastVideo.target);
+        this.lastVideoObserver.observe(
+          document.querySelector('.videoBox:last-child')
+        );
+      },
+      { rootMargin: '100px' }
+    );
 
-      this.lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
-
+    this.lastVideoObserver.observe(
+      document.querySelector('.videoBox:last-child')
+    );
   },
   unmounted() {
     this.lastVideoObserver.disconnect();
     window.removeEventListener('resize', this.recalculateGrid);
   },
-  
+
   methods: {
-    async loadMoreVideos(){
+    async loadMoreVideos() {
       let newlyLoadedVideos;
       let numberOfCurrentShownVideos = this.relevantVideos.length;
-      // console.log("Current shown videos before fetching: " + numberOfCurrentShownVideos)
-      // console.log(await this.$store.dispatch("fetchEightMoreVideos", numberOfCurrentShownVideos))
-      newlyLoadedVideos = await this.fetchEightMoreVideosFromDB(numberOfCurrentShownVideos);
-      this.$nextTick(function(){
-          if(newlyLoadedVideos.length != 0){
-          newlyLoadedVideos.forEach(newVideo => {
-            if(!this.relevantVideos.some(data => data.videoId === newVideo.videoId)){
-              this.relevantVideos.push(newVideo)
+      newlyLoadedVideos = await this.fetchEightMoreVideosFromDB(
+        numberOfCurrentShownVideos
+      );
+      this.$nextTick(function () {
+        if (newlyLoadedVideos.length != 0) {
+          newlyLoadedVideos.forEach((newVideo) => {
+            if (
+              !this.relevantVideos.some(
+                (data) => data.videoId === newVideo.videoId
+              )
+            ) {
+              this.relevantVideos.push(newVideo);
             }
-        });
-      }
-      // numberOfCurrentShownVideos = this.relevantVideos.length;
-      // console.log("Current shown videos after fetching: " + numberOfCurrentShownVideos)
-      })
-      // console.log("loaded more video")
+          });
+        }
+      });
     },
 
-    async fetchEightMoreVideosFromDB(numberOfCurrentShownVideos){
-      return await this.$store.dispatch("fetchEightMoreVideos", numberOfCurrentShownVideos)
+    async fetchEightMoreVideosFromDB(numberOfCurrentShownVideos) {
+      return await this.$store.dispatch(
+        'fetchEightMoreVideos',
+        numberOfCurrentShownVideos
+      );
     },
 
     getGridDimensions() {

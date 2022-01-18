@@ -169,12 +169,65 @@
       </div>
     </div>
     <div v-if="chosenMyVideos" class="myVideosSection">
-      <RelatedVideo
+      <VideoInProfilePage
         v-for="(videoItem, index) of myVideos"
         :key="index"
         :video="videoItem"
+        @deletedVideo="showDeleteDialog"
+        @editVideo="showEditDialog"
         class="videoBox"
       />
+      <div v-if="deleteVideoDialog" class="deleteDialog">
+        Are you sure that you want to delete this video?
+        <button @click="deleteAndUpdate" class="deleteVideoButton" value="Yes">
+          Yes
+        </button>
+        <button
+          @click="cancelDelete"
+          class="cancelDeleteVideoButton"
+          value="No"
+        >
+          No
+        </button>
+      </div>
+      <div class="editDialogDiv">
+        <div v-if="editDialog" class="editDialog">
+          <div class="titleInputGrid">
+            <div class="SpaceBlock" />
+            <div class="titleLabel">Title:</div>
+            <div class="SpaceBlock" />
+            <input
+              class="newTitleInput"
+              v-model="newTitle"
+              placeholder="New Title"
+              type="text"
+            />
+            <div class="SpaceBlock" />
+            <div @click="closeEditDialog" class="XButton">X</div>
+            <div class="SpaceBlock" />
+          </div>
+          <div class="descriptionInputGrid">
+            <div class="SpaceBlock" />
+            <div class="DescriptionLabel">Description:</div>
+            <div class="SpaceBlock" />
+            <textarea
+              class="newDescriptionInput"
+              rows="7"
+              cols="33"
+              placeholder="New Text"
+              v-model="newDescription"
+            />
+            <div class="SpaceBlock" />
+          </div>
+          <button
+            @click="editVideo"
+            class="saveNewDescriptionButton"
+            value="Save"
+          >
+            Save
+          </button>
+        </div>
+      </div>
     </div>
     <div v-if="chosenSubscribers" class="mySubscribersSection">
       <SubscriptionToUser
@@ -191,7 +244,7 @@
 <script>
 import User from '../jsClasses/general/User';
 import Footer from '../components/Footer.vue';
-import RelatedVideo from '../components/RelatedVideo.vue';
+import VideoInProfilePage from '../components/VideoInProfilePage.vue';
 import Video from '../jsClasses/general/Video';
 import SubscriptionToUser from '../components/SubscriptionToUser.vue';
 
@@ -200,8 +253,8 @@ export default {
   name: 'ProfilePage',
   components: {
     Footer,
-    RelatedVideo,
     SubscriptionToUser,
+    VideoInProfilePage,
   },
   data() {
     return {
@@ -217,6 +270,15 @@ export default {
       wantedPassword: '',
       wantedDescription: '',
       peopleSubscribedTo: [],
+      deleteVideoDialog: false,
+      idToDelete: 0,
+      idToUpdate: 0,
+      editDialog: false,
+      newTitle: '',
+      newDescription: '',
+      newURL: '',
+      oldTitle: '',
+      oldDescription: '',
     };
   },
   async mounted() {
@@ -255,6 +317,60 @@ export default {
     },
   },
   methods: {
+    closeEditDialog() {
+      this.editDialog = false;
+      this.idToUpdate = 0;
+    },
+    showEditDialog(videoToEdit) {
+      this.editDialog = true;
+      this.idToUpdate = videoToEdit.videoId;
+      this.newURL = videoToEdit.videoURL;
+      this.oldTitle = videoToEdit.title;
+      this.oldDescription = videoToEdit.description;
+    },
+    cancelDelete() {
+      this.deleteVideoDialog = false;
+      this.idToDelete = 0;
+    },
+    /* Deletes a Video and all related likes, dislikes, replies/comments */
+    /* Updates a Videos URL, title, description */
+    showDeleteDialog(idToDelete) {
+      this.deleteVideoDialog = true;
+      this.idToDelete = idToDelete;
+    },
+    async deleteAndUpdate() {
+      let deleteVideoRes = await fetch(
+        '/api/deleteVideo?' +
+          new URLSearchParams({
+            videoId: this.idToDelete,
+          }),
+        {
+          method: 'DELETE',
+        }
+      );
+      this.switchToMyVideos();
+      this.deleteVideoDialog = false;
+      this.idToDelete = 0;
+    },
+    async editVideo() {
+      let video = {
+        videoId: this.idToUpdate,
+        videoURL: this.newURL,
+        title: this.newTitle == '' ? this.oldTitle : this.newTitle,
+        description:
+          this.newDescription == '' ? this.oldDescription : this.newDescription,
+      };
+      let res = await fetch('/api/updateVideo', {
+        method: 'POST',
+        body: JSON.stringify(video),
+      });
+      this.newTitle = '';
+      this.newDescription = '';
+      this.newURL = '';
+      this.idToUpdate = 0;
+      this.editDialog = false;
+      this.switchToMyVideos();
+    },
     async unsubscribe(e) {
       let newList = [];
       let userToRemove;
@@ -380,12 +496,97 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto:wght@300;400&display=swap');
 
+.XButton {
+  color: white;
+  font-size: 25px;
+  margin-top: 5px;
+}
+.saveNewDescriptionButton {
+  display: block;
+  width: 138px;
+  height: 26px;
+  color: white;
+  background-color: rgba(255, 0, 0, 0.5);
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+}
+.newTitleInput {
+  background-color: #2d2c2c;
+  color: white;
+  margin-left: 78px;
+  margin-top: 20px;
+  height: 18px;
+  font-size: 18px;
+  width: 170px;
+}
+.DescriptionLabel {
+  color: white;
+  font-size: 18px;
+}
+.newDescriptionInput {
+  background-color: #2d2c2c;
+  color: white;
+  font-size: 18px;
+  width: 170px;
+  padding-left: 5px;
+}
+.editDialog {
+  width: 344px;
+  height: 269px;
+  background-color: #2d2c2c;
+  z-index: 10;
+  display: block;
+  position: absolute;
+  top: 290px;
+}
+.descriptionInputGrid {
+  display: grid;
+  grid-template-columns: 24px max-content 17px max-content auto;
+  margin-top: 14px;
+}
+.titleLabel {
+  color: white;
+  margin-top: 18px;
+  font-size: 18px;
+}
 * {
   overflow-x: hidden;
   max-width: 100vw;
 }
 .EditGrid {
   display: grid;
+}
+.titleInputGrid {
+  display: grid;
+  grid-template-columns: 23px max-content 2px auto 5px max-content 8px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid white;
+}
+.deleteDialog {
+  display: block;
+  width: 280px;
+  padding-left: 38px;
+  padding-right: 38px;
+  padding-top: 30px;
+  height: 125px;
+  background-color: #2d2c2c;
+  margin-left: auto;
+  margin-right: auto;
+  color: white;
+  margin-top: -125px;
+  position: relative;
+  z-index: 10;
+}
+.TrashCanIcon {
+  height: 30px;
+  width: 30px;
+}
+.editDialogDiv {
+  width: 344px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 .BigGrid {
   display: grid;
@@ -395,6 +596,36 @@ export default {
   max-width: 100vw;
   overflow-x: hidden;
   max-height: max-content;
+}
+.trashGrid {
+  display: grid;
+  grid-template-rows: 100px;
+  justify-content: right;
+  width: 400px;
+  background-color: transparent;
+  z-index: 5;
+  position: relative;
+  top: -135px;
+}
+.cancelDeleteVideoButton {
+  width: 138px;
+  height: 26px;
+  color: white;
+  background-color: #2d2c2c;
+  border: solid 1px white;
+  position: relative;
+  left: 160px;
+  top: 19px;
+}
+
+.deleteVideoButton {
+  width: 138px;
+  height: 26px;
+  color: white;
+  background-color: rgba(255, 0, 0, 0.5);
+  position: relative;
+  left: -80px;
+  top: 45px;
 }
 .UploadGrid {
   display: grid;
