@@ -2,7 +2,7 @@
   <div class="MainDiv">
     <Header @update="register" />
     <div class="searchPage">
-      <TrendLink />
+      <TrendLink @addTrendingSearch="addTrendingSearch($event)"/>
       <ExpandableSearchHistory />
       <div class="searchPageButtonsContainer">
         <button @click="register" type="button">Search</button>
@@ -19,7 +19,7 @@ import ExpandableSearchHistory from '../components/ExpandableSearchHistory.vue';
 import Footer from '../components/Footer.vue';
 
 export default {
-  emits: ['update'],
+  emits: ['update','addTrendingSearch'],
   data() {
     return {
       searchHistory: [],
@@ -66,13 +66,15 @@ export default {
   beforeUnmount() {},
 
   methods: {
-    async register() {
-      if(this.$store.getters.getMySearchHistoryList != null){
-        this.searchHistory = this.$store.getters.getMySearchHistoryList;
-      }else if(localStorage.searchHistorList){
-        this.searchHistory = await JSON.parse(localStorage.searchHistoryList)
-      }
+    async addTrendingSearch(keyword){
+      await this.$store.dispatch('setKeyWord', keyword)
+      console.log("runned emit")
+      console.log(this.$store.getters.getKeyWord)
+      this.register()
+    },
 
+    async register() {
+      let searchParam = await this.$store.getters.getKeyWord;
       if (this.currentUser) {
         let detailedSearchList = await this.$store.dispatch(
           'getSearchHistories',
@@ -85,17 +87,25 @@ export default {
             this.searchHistory.push(element);
           });
         }
+      }else{
+        if(this.$store.getters.getMySearchHistoryList != null){
+          this.searchHistory = this.$store.getters.getMySearchHistoryList;
+        }
+        else if(localStorage.searchHistorList){
+          this.searchHistory = await JSON.parse(localStorage.searchHistoryList)
+        }
       }
 
-      let searchParam = this.$store.getters.getKeyWord;
+      console.log(searchParam)
       let boolean = await this.checkIfListContainsKey(
         this.searchHistory,
         searchParam
       );
       if (this.currentUser && !boolean && searchParam) {
+        console.log("searchPage1")
         let obj = {
           userId: this.currentUser.userId,
-          keyWord: this.$store.getters.getKeyWord,
+          keyWord: searchParam,
         };
 
         let res = await fetch('/api/registerHistory', {
@@ -118,12 +128,15 @@ export default {
         this.$router.push('/SearchResult');
         
       } else if (this.currentUser && boolean && searchParam) {
+        console.log("searchPage2")
         this.$router.push('/SearchResult');
         
       } else if (!this.currentUser && boolean && searchParam) {
+        console.log("searchPage3")
         this.$router.push('/SearchResult');
         
       } else if (!this.currentUser && !boolean && searchParam) {
+        console.log("searchPage4")
         if(this.$store.getters.getMySearchHistoryList != null){
           this.searchHistory = this.$store.getters.getMySearchHistoryList;
         }else if(localStorage.searchHistoryList){

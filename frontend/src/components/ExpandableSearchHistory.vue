@@ -43,7 +43,6 @@ export default {
   data() {
     return {
       btnClicked: false,
-      // getting from state atm, change to fetch from DB when search page shown
       mySearchHistoryList: [],
     };
   },
@@ -90,10 +89,12 @@ export default {
         boolean = true;
         return;
       }
+      
       if (
         mutation.type == 'setMySearchHistoryList' &&
         this.$store.getters.getCurrentUser
       ) {
+
         this.mySearchHistoryList = await this.$store.dispatch(
           'getSearchHistories',
           this.$store.getters.getCurrentUser.userId
