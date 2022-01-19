@@ -44,13 +44,11 @@ export default {
     );
       localStorage.setItem('orginalVideosList', JSON.stringify(this.matchedVideoList));
       localStorage.setItem('searchKey', keyword);
-      console.log("saved storeage")
     }
     else{
       let list;
       list = await JSON.parse(localStorage.orginalVideosList)
       this.matchedVideoList = list
-      console.log("loaded from storeage")
     }
 
     await this.storeMatchedVideoList(this.matchedVideoList);

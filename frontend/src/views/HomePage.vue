@@ -163,8 +163,6 @@ export default {
     async loadMoreVideos(){
       let newlyLoadedVideos;
       let numberOfCurrentShownVideos = this.relevantVideos.length;
-      // console.log("Current shown videos before fetching: " + numberOfCurrentShownVideos)
-      // console.log(await this.$store.dispatch("fetchEightMoreVideos", numberOfCurrentShownVideos))
       newlyLoadedVideos = await this.fetchEightMoreVideosFromDB(numberOfCurrentShownVideos);
       this.$nextTick(function(){
           if(newlyLoadedVideos.length != 0){
@@ -174,10 +172,7 @@ export default {
             }
         });
       }
-      // numberOfCurrentShownVideos = this.relevantVideos.length;
-      // console.log("Current shown videos after fetching: " + numberOfCurrentShownVideos)
       })
-      // console.log("loaded more video")
     },
 
     async fetchEightMoreVideosFromDB(numberOfCurrentShownVideos){

@@ -48,7 +48,6 @@ export default {
 
   async mounted() {
     if(!this.$store.getters.getKeyWord){
-      console.log("loaded keyword")
       this.keyword = await localStorage.searchKey
     }
 
@@ -61,20 +60,9 @@ export default {
   },
 
   updated(){
-
-    // let htmlElement = document.querySelectorAll(".titleText");
-    // htmlElement.forEach(element => {
-    //   console.log(element.innerHTML)
-    //   element.innerHTML = element.innerHTML.replace(this.keyword, '<span style="color: red;">' + this.keyword + '</span>')
-    // });
-
-    // upon start, show 6 videos, and then when the last video DIV is showing, loadMoreVideos
-    // however, unobserve should have stopped this from observing the earlier "last div" and observe on the new last div
-    // Problem: unobserve had no effect, Observer instead listens to both div
       this.lastVideoObserverSearchResult = new IntersectionObserver(entries =>{
         let lastVideo = entries[0]
         if(!lastVideo.isIntersecting) {
-          // console.log(lastVideo.target)
           return;}
         this.loadMoreVideos()
         this.lastVideoObserverSearchResult.unobserve(lastVideo.target);
@@ -102,11 +90,8 @@ export default {
         this.matchedVideos = fullMatchedList
       }
       else{
-        console.log(fullMatchedList.slice(0, lengthOfCurrentShowedVideos+6))
         this.matchedVideos = fullMatchedList.slice(0, lengthOfCurrentShowedVideos+6)
       }
-
-      // console.log("loaded more videos")
     },
 
     goToVideoPage(video) {

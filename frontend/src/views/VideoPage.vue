@@ -399,11 +399,6 @@ export default {
       this.$nextTick(function(){
           if(newlyLoadedVideos.length != 0){
           newlyLoadedVideos.forEach(newVideo => {
-            // if(!this.relatedVideos.includes(newVideo)){
-            //   this.relatedVideos.push(newVideo)
-            //   console.log("does not include")
-            //   console.log(newVideo)
-            // }
             if(!this.relatedVideos.some(data => data.videoId === newVideo.videoId) && this.video.videoId != newVideo.videoId){
               //don't exists
               this.relatedVideos.push(newVideo)

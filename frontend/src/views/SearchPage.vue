@@ -56,7 +56,6 @@ export default {
             });
           }
         } else {
-          console.log('user is not logged in');
           this.searchHistory = this.$store.getters.getMySearchHistoryList;
         }
         boolean = true;
@@ -68,7 +67,12 @@ export default {
 
   methods: {
     async register() {
-      this.searchHistory = this.$store.getters.getMySearchHistoryList;
+      if(this.$store.getters.getMySearchHistoryList != null){
+        this.searchHistory = this.$store.getters.getMySearchHistoryList;
+      }else if(localStorage.searchHistorList){
+        this.searchHistory = await JSON.parse(localStorage.searchHistoryList)
+      }
+
       if (this.currentUser) {
         let detailedSearchList = await this.$store.dispatch(
           'getSearchHistories',
@@ -114,15 +118,17 @@ export default {
         this.$router.push('/SearchResult');
         
       } else if (this.currentUser && boolean && searchParam) {
-        console.log('loggedin but already made this search before');
         this.$router.push('/SearchResult');
         
       } else if (!this.currentUser && boolean && searchParam) {
-        console.log("didn't log in but already made this search before");
         this.$router.push('/SearchResult');
         
       } else if (!this.currentUser && !boolean && searchParam) {
-        this.searchHistory = this.$store.getters.getMySearchHistoryList;
+        if(this.$store.getters.getMySearchHistoryList != null){
+          this.searchHistory = this.$store.getters.getMySearchHistoryList;
+        }else if(localStorage.searchHistoryList){
+          this.searchHistory = await JSON.parse(localStorage.searchHistoryList)
+        }
 
         if (this.searchHistory.length > 5) {
           this.searchHistory.splice(this.searchHistory.length - 1, 1);
@@ -150,8 +156,7 @@ export default {
 
     async checkIfListContainsKey(list, keyword) {
       let boolean = false;
-      if (list.length == 0) {
-        console.log('returned');
+      if (list == null) {
         return boolean;
       }
 
