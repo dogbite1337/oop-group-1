@@ -50,6 +50,7 @@ export default {
 
 
     this.$store.dispatch('cacheFirstEightVideos', allVideos);
+    localStorage.setItem('relatedVideos', JSON.stringify(allVideos));
     this.relevantVideos = [];
     for (let i = allVideos.length; i > 0; i--) {
       let video = new Video();

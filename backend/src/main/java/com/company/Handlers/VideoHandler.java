@@ -93,6 +93,7 @@ public class VideoHandler {
         app.get("/rest/getEightNewVideos",(req,res) ->{
             try {
 //                System.out.println("runned");
+                System.out.println(Integer.parseInt(req.query("lengthOfCurrentVideoList")));
                 res.json(videoRepository.getNextEightVideos(Integer.parseInt(req.query("lengthOfCurrentVideoList"))));
             } catch (SQLException e) {
 //                e.printStackTrace();

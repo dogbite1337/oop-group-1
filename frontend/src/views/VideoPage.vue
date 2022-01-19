@@ -167,12 +167,14 @@
         @updateReplies="updateReplies"
       />
     </div>
-    <RelatedVideo
-      v-for="(videoItem, index) of relatedVideos"
-      :key="index"
-      :video="videoItem"
-      class="videoBox"
-    />
+    <!-- <div class="relatedVideosContainer" v-if="startRenderingtrue"> -->
+      <RelatedVideo
+        v-for="(videoItem, index) of relatedVideos"
+        :key="index"
+        :video="videoItem"
+        class="videoBox"
+      />
+    <!-- </div> -->
   </div>
 </template>
 <script>
@@ -198,9 +200,7 @@ export default {
   data() {
     return {
       amountOfComments: 0,
-      relatedVideos: this.$store.getters.getEightFirstVideos
-        ? this.$store.getters.getEightFirstVideos
-        : undefined,
+      relatedVideos: [],
       video: '',
       activeId: 0,
       spacedViews: 0,
@@ -223,6 +223,15 @@ export default {
       dislikedVideoAlready: false,
     };
   },
+
+  // async beforeCreate(){
+  //   this.relatedVideos = [];
+  //   let list = await this.$store.dispatch('fetchEightMoreVideos', 0);
+  //   console.log(list);
+  //   console.log("loaded from storage")
+  //   this.relatedVideos = list;
+  // },
+
   async created() {
     this.$store.subscribe(async (mutation, state) => {
       if (mutation.type == 'setRelatedVideoId') {
@@ -230,11 +239,15 @@ export default {
       }
     });
   },
+
   async mounted() {
     this.loadRelevantInformation();
     this.actOnResize();
     this.isOnVideosPage = true;
     window.scrollTo(0, 0);
+
+    this.relatedVideos = [];
+    this.relatedVideos = await this.$store.dispatch('fetchEightMoreVideos', 0);
 
     let fixedList = [];
     if (this.relatedVideos) {
@@ -245,6 +258,8 @@ export default {
       }
       this.relatedVideos = fixedList;
     }
+    console.log("fixedList")
+    console.log(this.relatedVideos)
 
     let likesRes = await fetch(
       '/rest/getLikesForVideo?' +
@@ -370,7 +385,10 @@ export default {
   },
 
   updated(){
-    this.lastVideoObserverSearchResult = new IntersectionObserver(entries =>{
+    this.$nextTick(function () {
+    // Code that will run only after the
+    // entire view has been re-rendered
+        this.lastVideoObserverSearchResult = new IntersectionObserver(entries =>{
         let lastVideo = entries[0]
         if(!lastVideo.isIntersecting) {
           return;}
@@ -382,6 +400,7 @@ export default {
       )
 
       this.lastVideoObserverSearchResult.observe(document.querySelector(".videoBox:last-child"))
+    })
   },
 
   beforeUnmount(){
