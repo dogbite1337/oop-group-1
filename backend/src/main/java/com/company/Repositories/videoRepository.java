@@ -398,16 +398,14 @@ public class videoRepository {
         ArrayList<Video> videosWillBeLoad = new ArrayList<>();
         PreparedStatement nextEightVideos = con.prepareStatement("SELECT * FROM videos LIMIT ?, 8");
         nextEightVideos.setInt(1, lengthOfCurrentVideoList);
-        System.out.println("query");
         ResultSet rs = nextEightVideos.executeQuery();
 
         while(rs.next()){
             Video newVideo = new Video(0, 0, 0, "Not found", "Not found", "Not found", 0, "", "0", "0", "0");
             newVideo.setVideoId(rs.getInt("videoId"));
             newVideo.setUserId(rs.getInt("userId"));
-            Long tempLong = Long.parseLong(String.valueOf((rs.getTimestamp("uploadDate").getTime())));
+            long tempLong = Long.parseLong(String.valueOf((rs.getTimestamp("uploadDate").getTime())));
             newVideo.setUploadDate(tempLong);
-            System.out.println(rs.getString("videoURL"));
             newVideo.setVideoURL(rs.getString("videoURL"));
             newVideo.setTitle(rs.getString("title"));
             newVideo.setDescription(rs.getString("description"));

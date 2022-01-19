@@ -66,19 +66,16 @@ export default {
           return;}
         this.loadMoreVideos()
         this.lastVideoObserverSearchResult.unobserve(lastVideo.target);
-        // Since neither of these worked, i set a switch for temp fix
-        // this.lastVideoObserverSearchResult.disconnect();
-        // IntersectionObserver.disconnect();
         if(!this.stopObserver) 
         this.lastVideoObserverSearchResult.observe(document.querySelector(".videoCard:last-child"))
       },{rootMargin: "50px"}
       )
-
       this.lastVideoObserverSearchResult.observe(document.querySelector(".videoCard:last-child"))
   },
 
   unmounted(){
     this.stopObserver = true;
+    // this.lastVideoObserverSearchResult.disconnect();
   },
 
   methods: {
@@ -133,11 +130,14 @@ p {
 .titleText .keyword {
   color: rgb(255, 99, 99);
   font-size: inherit;
+  display: inline;
+  margin: 0 -5px;
 }
 
 .titleText {
   display: flex;
   color: white;
+  display: inline;
 }
 
 /* .title p {

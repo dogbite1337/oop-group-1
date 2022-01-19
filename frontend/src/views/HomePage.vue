@@ -151,9 +151,7 @@ export default {
           this.lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
       },{rootMargin: "100px"}
       )
-
       this.lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
-
   },
   unmounted() {
     this.lastVideoObserver.disconnect();
