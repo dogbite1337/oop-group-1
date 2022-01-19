@@ -405,7 +405,7 @@ public class videoRepository {
             Video newVideo = new Video(0, 0, 0, "Not found", "Not found", "Not found", 0, "", "0", "0", "0");
             newVideo.setVideoId(rs.getInt("videoId"));
             newVideo.setUserId(rs.getInt("userId"));
-            Long tempLong = rs.getTimestamp("uploadDate").getTime();
+            Long tempLong = Long.parseLong(String.valueOf((rs.getTimestamp("uploadDate").getTime())));
             newVideo.setUploadDate(tempLong);
             System.out.println(rs.getString("videoURL"));
             newVideo.setVideoURL(rs.getString("videoURL"));
