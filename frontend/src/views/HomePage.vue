@@ -49,7 +49,7 @@ export default {
     let allVideos = this.relevantVideos;
 
 
-    this.$store.dispatch('cacheFirstEightVideos', allVideos);
+    // this.$store.dispatch('cacheFirstEightVideos', allVideos);
     localStorage.setItem('relatedVideos', JSON.stringify(allVideos));
     this.relevantVideos = [];
     for (let i = allVideos.length; i > 0; i--) {

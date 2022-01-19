@@ -247,7 +247,9 @@ export default {
     window.scrollTo(0, 0);
 
     this.relatedVideos = [];
-    this.relatedVideos = await this.$store.dispatch('fetchEightMoreVideos', 0);
+    // this.relatedVideos = await this.$store.dispatch('fetchEightMoreVideos', 0);
+    this.relatedVideos = await JSON.parse(localStorage.relatedVideos)
+    // console.log(this.relatedVideos)
 
     let fixedList = [];
     if (this.relatedVideos) {
@@ -258,8 +260,6 @@ export default {
       }
       this.relatedVideos = fixedList;
     }
-    console.log("fixedList")
-    console.log(this.relatedVideos)
 
     let likesRes = await fetch(
       '/rest/getLikesForVideo?' +
