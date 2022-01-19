@@ -68,8 +68,6 @@ export default {
   methods: {
     async addTrendingSearch(keyword){
       await this.$store.dispatch('setKeyWord', keyword)
-      console.log("runned emit")
-      console.log(this.$store.getters.getKeyWord)
       this.register()
     },
 
@@ -95,14 +93,11 @@ export default {
           this.searchHistory = await JSON.parse(localStorage.searchHistoryList)
         }
       }
-
-      console.log(searchParam)
       let boolean = await this.checkIfListContainsKey(
         this.searchHistory,
         searchParam
       );
       if (this.currentUser && !boolean && searchParam) {
-        console.log("searchPage1")
         let obj = {
           userId: this.currentUser.userId,
           keyWord: searchParam,
@@ -128,15 +123,12 @@ export default {
         this.$router.push('/SearchResult');
         
       } else if (this.currentUser && boolean && searchParam) {
-        console.log("searchPage2")
         this.$router.push('/SearchResult');
         
       } else if (!this.currentUser && boolean && searchParam) {
-        console.log("searchPage3")
         this.$router.push('/SearchResult');
         
       } else if (!this.currentUser && !boolean && searchParam) {
-        console.log("searchPage4")
         if(this.$store.getters.getMySearchHistoryList != null){
           this.searchHistory = this.$store.getters.getMySearchHistoryList;
         }else if(localStorage.searchHistoryList){

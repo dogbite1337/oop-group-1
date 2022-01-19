@@ -392,25 +392,6 @@ export default {
     })
   },
 
-  updated(){
-    // this.$nextTick(function () {
-    // // Code that will run only after the
-    // // entire view has been re-rendered
-    //     this.lastVideoObserverSearchResult = new IntersectionObserver(entries =>{
-    //     let lastVideo = entries[0]
-    //     if(!lastVideo.isIntersecting) {
-    //       return;}
-    //     this.loadMoreVideos()
-    //     this.lastVideoObserverSearchResult.unobserve(lastVideo.target);
-    //     if(!this.stopObserver) 
-    //     this.lastVideoObserverSearchResult.observe(document.querySelector(".videoBox:last-child"))
-    //   },{rootMargin: "25px"}
-    //   )
-
-    //   this.lastVideoObserverSearchResult.observe(document.querySelector(".videoBox:last-child"))
-    // })
-  },
-
   beforeUnmount(){
     this.stopObserver = true;
     this.$store.dispatch("cacheFirstEightVideos",[])
