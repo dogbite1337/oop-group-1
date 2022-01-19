@@ -224,14 +224,6 @@ export default {
     };
   },
 
-  // async beforeCreate(){
-  //   this.relatedVideos = [];
-  //   let list = await this.$store.dispatch('fetchEightMoreVideos', 0);
-  //   console.log(list);
-  //   console.log("loaded from storage")
-  //   this.relatedVideos = list;
-  // },
-
   async created() {
     this.$store.subscribe(async (mutation, state) => {
       if (mutation.type == 'setRelatedVideoId') {
@@ -249,7 +241,6 @@ export default {
     this.relatedVideos = [];
     // this.relatedVideos = await this.$store.dispatch('fetchEightMoreVideos', 0);
     this.relatedVideos = await JSON.parse(localStorage.relatedVideos)
-    // console.log(this.relatedVideos)
 
     let fixedList = [];
     if (this.relatedVideos) {

@@ -145,7 +145,6 @@ export default {
       }
     },
     async dislike() {
-      console.log(this.$route.params.id);
       if (this.$store.getters.getCurrentUser) {
         let dislikedCommentRes = await fetch(
           '/api/dislikeComment?' +
