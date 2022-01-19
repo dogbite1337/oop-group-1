@@ -13,7 +13,7 @@ export default createStore({
     mySearchHistoryList: [],
     keyWord: '',
     matchedVideoList: [],
-    darkTheme: true,
+    darkTheme: false,
   },
   mutations: {
     setUser(state, user) {
