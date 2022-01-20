@@ -6,7 +6,16 @@
       <ExpandableSearchHistory />
       <div class="searchPageButtonsContainer">
         <button @click="register" type="button">Search</button>
-        <button @click="clearHistory" type="button">Clear History</button>
+        <button @click="showConfirmModal" type="button">Clear History</button>
+      </div>
+    </div>
+    <div class="confirmModalBackGround" v-if="showConfirmWindow">
+      <div class="confirmModalContainer">
+        <p>Are you sure you want to reset search history? This action can not be un done</p>
+        <div class="confirmBtnContainer">
+          <button class="confirmBtn" type="button" @click="clearHistory">Yes</button>
+          <button class="confirmBtn" type="button" @click="showConfirmWindow=false">No</button>
+        </div>
       </div>
     </div>
     <Footer />
@@ -24,6 +33,7 @@ export default {
     return {
       searchHistory: [],
       currentUser: null,
+      showConfirmWindow: false,
     };
   },
 
@@ -151,12 +161,18 @@ export default {
       }
     },
 
+    showConfirmModal(){
+      this.showConfirmWindow = true;
+    },
+
     async clearHistory() {
+      
       this.searchHistory = [];
       await this.$store.dispatch('cacheSearchHistory', this.searchHistory);
       if (this.currentUser) {
         await this.$store.dispatch('clearHistory', this.currentUser.userId);
       }
+      this.showConfirmWindow = false;
     },
 
     async checkIfListContainsKey(list, keyword) {
@@ -205,4 +221,49 @@ export default {
   margin: 20px;
   height: 5vh;
 }
+
+.confirmModalBackGround{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 98;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.confirmModalContainer{
+    position: relative;
+    margin: 0 auto;
+    top: 40%;
+    width: 100%;
+    max-width: 80vw;
+    background-color: #595959;
+    border-radius: 10px;
+    text-align: center;
+    padding: 2rem;
+    z-index: 99;
+}
+
+.confirmModalContainer p{
+  color: white;
+  font-size: larger;
+}
+
+.confirmBtnContainer{
+  display: flex;
+  place-content: space-evenly;
+  margin-top: 2rem;
+}
+
+.confirmBtn{
+  width: 6rem;
+  padding: 0.5rem;
+  font-size: large;
+  background-color: #595959;
+  border: solid 1px white;
+  color: white;
+}
+
+
 </style>
