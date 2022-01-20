@@ -7,51 +7,52 @@
         <div class="SpaceDiv" />
       </div>
     </router-link>
-    <div class="test" />
+    <div class="SpaceBlock" />
     <div class="FrameGrid">
-      <div />
       <div class="iFrameDiv">
         <iframe
           id="existing-iframe-example"
           class="PlayerDiv"
           type="text/html"
-          :width="width"
+          width="100%"
           :height="height"
           :src="video.videoURL"
           frameborder="0"
         ></iframe>
       </div>
-      <div />
     </div>
     <div class="someOther" />
     <div class="UpperSection">
       <div v-if="!showWatchNowInstead" class="descriptionAndCommentsDiv">
         <div class="SpaceDiv" />
         <div class="middleDiv">
-          <div v-if="!showDescriptionTab" class="notChosenDescriptionDiv">
+          <div v-if="!showDescriptionSection" class="notChosenDescriptionDiv">
             Description
           </div>
-          <div v-if="showDescriptionTab" class="ChosenDescriptionDiv">
+          <div v-if="showDescriptionSection" class="ChosenDescriptionDiv">
             Description
             <div class="LineDiv" />
           </div>
           <div class="SpaceDiv" />
-          <div class="commentsDiv">Comments({{ amountOfComments }})</div>
+          <div v-if="showDescriptionSection" class="notChosenCommentsDiv">
+            Comments({{ amountOfComments }})
+          </div>
+          <div v-if="!showDescriptionSection" class="ChosenCommentsDiv">
+            Comments({{ amountOfComments }})
+            <div class="LineDiv" />
+          </div>
         </div>
         <div class="SpaceDiv" />
       </div>
       <div v-if="!showWatchNowInstead" class="UploaderDiv">
         <div class="SpaceDiv" />
         <div class="square1 square">
-          <img
-            class="uploaderProfileDiv"
-            src="../projectImages/xQcBanned.png"
-          />
+          <img class="uploaderProfileDiv" :src="Uploader.profileURL" />
         </div>
         <div class="SpaceDiv" />
         <div class="square2 square">
           <div class="usernameDiv">
-            {{ User.username }}
+            {{ Uploader.username }}
           </div>
           <div class="subsDiv">Subscribers: {{ spacedSubs }}</div>
         </div>
@@ -60,9 +61,24 @@
           <div class="videosDiv">Videos: {{ spacedVideos }}</div>
         </div>
         <div class="SpaceDiv" />
-        <div class="square4 square">
-          <div class="subButtonDiv">
-            <button class="subButton" value="Subscribe">+ Subscribe</button>
+        <div v-if="loggedInUser" class="square4 square">
+          <div v-if="loggedInUser.userId != video.userId" class="subButtonDiv">
+            <button
+              v-if="!subscribedAlready"
+              @click="subscribe"
+              class="subButton"
+              value="Subscribe"
+            >
+              + Subscribe
+            </button>
+            <button
+              v-if="subscribedAlready"
+              @click="unsubscribe"
+              class="subButton"
+              value="Unsubscribe"
+            >
+              - Unsubscribe
+            </button>
           </div>
         </div>
         <div class="SpaceDiv" />
@@ -89,12 +105,25 @@
       <div v-if="!showWatchNowInstead" class="likesAndDislikesNumberDiv">
         <div class="SpaceDiv" />
         <div class="likesNumberDiv">
-          <img src="../projectImages/like_black_background.png" />
+          <img
+            v-if="!likedVideoAlready"
+            @click="likeVideo"
+            src="../projectImages/like_black_background.png"
+          />
+          <img v-if="likedVideoAlready" src="../projectImages/blue_like.png" />
           <div class="likesDiv">{{ spacedLikes }}</div>
         </div>
         <div class="SpaceDiv" />
         <div class="dislikesNumberDiv">
-          <img src="../projectImages/dislike_black_background.png" />
+          <img
+            v-if="!dislikedVideoAlready"
+            @click="dislikeVideo"
+            src="../projectImages/dislike_black_background.png"
+          />
+          <img
+            v-if="dislikedVideoAlready"
+            src="../projectImages/blue_dislike.png"
+          />
           <div class="thumbsDownDiv">{{ spacedDislikes }}</div>
         </div>
         <div class="SpaceDiv" />
@@ -133,50 +162,85 @@
         <div class="SpaceDiv" />
       </div>
     </div>
-    <RelatedVideo
-      v-for="(videoItem, index) of relatedVideos"
-      :key="index"
-      :video="videoItem"
-      class="videoBox"
+    <CommentInput
+      class="postingCommentDiv"
+      @postedComment="updateComments"
+      :videoId="video.videoId"
+      v-if="showCommentsSection"
     />
+    <div class="postedCommentsDiv" v-if="showCommentsSection">
+      <PostedComment
+        v-for="(commentItem, index) of relevantComments"
+        :key="index"
+        :comment="commentItem"
+        :replies="currentReplies"
+        :commenters="currentCommenters"
+        :activeId="activeId"
+        class="commentBox"
+        @removedAReply="updateBasedOnDelete"
+        @postedAReply="updateCommentSection"
+        @updateReplies="updateReplies"
+      />
+    </div>
+    <!-- <div class="relatedVideosContainer" v-if="startRenderingtrue"> -->
+      <RelatedVideo
+        v-for="(videoItem, index) of relatedVideos"
+        :key="index"
+        :video="videoItem"
+        class="videoBox"
+      />
+    <!-- </div> -->
   </div>
 </template>
 <script>
 import User from '../jsClasses/general/User';
 import Video from '../jsClasses/general/Video';
+import Comment from '../jsClasses/general/Comment';
 import Footer from '../components/Footer.vue';
 import RelatedVideo from '../components/RelatedVideo.vue';
+import CommentInput from '../components/CommentInput.vue';
+import PostedComment from '../components/PostedComment.vue';
 import store from '../store';
 
 // 770/430 width - 1:1
 export default {
   name: 'VideoPage',
+  emits: ['updateReplies', 'postedAReply', 'postedComment'],
   components: {
     RelatedVideo,
+    CommentInput,
+    PostedComment,
     Footer,
   },
   data() {
     return {
-      showCommentsSection: false,
-      showDescriptionTab: true,
-      amountOfComments: 52,
-      relatedVideos: this.$store.getters.getEightFirstVideos
-        ? this.$store.getters.getEightFirstVideos
-        : undefined,
+      amountOfComments: 0,
+      relatedVideos: [],
+      loggedInUser: this.$store.getters.getCurrentUser,
       video: '',
+      activeId: 0,
       spacedViews: 0,
       spacedLikes: 0,
       spacedDislikes: 0,
       spacedStars: 0,
       spacedSubs: 0,
       spacedVideos: 0,
-      User: '',
+      Uploader: '',
       isOnVideosPage: false,
       showWatchNowInstead: false,
-      width: window.screen.width / 2,
       height: window.screen.height / 2,
+      showCommentsSection: false,
+      showDescriptionSection: true,
+      relevantComments: [],
+      timestampOfComments: [],
+      currentReplies: [],
+      currentCommenters: [],
+      likedVideoAlready: false,
+      dislikedVideoAlready: false,
+      subscribedAlready: false,
     };
   },
+
   async created() {
     this.$store.subscribe(async (mutation, state) => {
       if (mutation.type == 'setRelatedVideoId') {
@@ -184,30 +248,445 @@ export default {
       }
     });
   },
+
   async mounted() {
     this.loadRelevantInformation();
+    this.actOnResize();
     this.isOnVideosPage = true;
     window.scrollTo(0, 0);
+
+    this.relatedVideos = [];
+    // this.relatedVideos = await this.$store.dispatch('fetchEightMoreVideos', 0);
+    this.relatedVideos = await JSON.parse(localStorage.relatedVideos)
+
+    let fixedList = [];
+    if (this.relatedVideos) {
+      for (let i = 0; i < this.relatedVideos.length; i++) {
+        if (this.relatedVideos[i].videoId != this.$route.params.id) {
+          fixedList.push(this.relatedVideos[i]);
+        }
+      }
+      this.relatedVideos = fixedList;
+    }
+
+    let likesRes = await fetch(
+      '/rest/getLikesForVideo?' +
+        new URLSearchParams({
+          videoId: this.$route.params.id,
+        })
+    );
+    let likesResponse = await likesRes.json();
+    for (let i = 0; i < likesResponse.length; i++) {
+      if (this.$store.getters.getCurrentUser) {
+        if (
+          likesResponse[i].likedByUserId ==
+          this.$store.getters.getCurrentUser.userId
+        ) {
+          this.likedVideoAlready = true;
+        }
+      }
+    }
+
+    let dislikesRes = await fetch(
+      '/rest/getDislikesForVideo?' +
+        new URLSearchParams({
+          videoId: this.$route.params.id,
+        })
+    );
+    let dislikesResponse = await dislikesRes.json();
+    for (let i = 0; i < dislikesResponse.length; i++) {
+      if (this.$store.getters.getCurrentUser) {
+        if (
+          dislikesResponse[i].dislikedByUserId ==
+          this.$store.getters.getCurrentUser.userId
+        ) {
+          this.dislikedVideoAlready = true;
+        }
+      }
+    }
+
+    let commentsRes = await fetch(
+      '/rest/getCommentsForVideoId?' +
+        new URLSearchParams({
+          videoId: this.$route.params.id,
+        })
+    );
+
+    if (this.loggedInUser) {
+      let subsRes = await fetch(
+        '/rest/getSubscribersForId?' +
+          new URLSearchParams({
+            userId: this.loggedInUser.userId,
+          })
+      );
+      let subsResponse = await subsRes.json();
+
+      for (let i = 0; i < subsResponse.length; i++) {
+        if (subsResponse[i].userId == this.video.userId) {
+          this.subscribedAlready = true;
+        }
+      }
+    }
+
+    // full width on mobile view on cards
+    let commentsResponse = await commentsRes.json();
+    this.amountOfComments = commentsResponse.length;
+    for (let i = 0; i < commentsResponse.length; i++) {
+      let newComment = new Comment(0, 0, '', '', 0, 0, 0, 0);
+      newComment = Object.assign(newComment, commentsResponse[i]);
+      newComment.timeOfPosting = this.convertDateObjectToString(
+        new Date(commentsResponse[i].timeOfPosting)
+      );
+      this.relevantComments.push(newComment);
+      let minsAgo =
+        (Date.now() - new Date(commentsResponse[i].timeOfPosting)) / 60000;
+      if (minsAgo < 1.0) {
+        this.timestampOfComments.push('Less than a minute ago');
+      } else if (minsAgo >= 1.0 && minsAgo <= 59) {
+        this.timestampOfComments.push(
+          'About ' +
+            Math.floor(minsAgo) +
+            ' minute' +
+            (minsAgo >= 2.0 ? 's ' : ' ') +
+            'ago'
+        );
+      } else if (minsAgo >= 60 && minsAgo <= 1440) {
+        this.timestampOfComments.push(
+          'About ' +
+            Math.floor(minsAgo / 60) +
+            ' hour' +
+            (minsAgo / 60 >= 2.0 ? 's ' : ' ') +
+            'ago'
+        );
+      } else if (minsAgo >= 1441 && minsAgo <= 10080) {
+        this.timestampOfComments.push(
+          'About ' +
+            Math.floor(minsAgo / 60 / 24) +
+            ' day' +
+            (Math.floor(minsAgo / 60 / 24) >= 2.0 ? 's ' : ' ') +
+            'ago'
+        );
+      } else if (minsAgo >= 10081 && minsAgo <= 40324) {
+        this.timestampOfComments.push(
+          Math.floor(minsAgo / 60 / 24 / 7) +
+            ' week' +
+            (Math.floor(minsAgo / 60 / 24 / 7) >= 2.0 ? 's ' : ' ') +
+            'ago'
+        );
+      } else if (minsAgo >= 40325 && minsAgo <= 80648) {
+        this.timestampOfComments.push(
+          'About ' +
+            Math.floor(minsAgo / 60 / 24 / 7 / 30) +
+            ' month' +
+            (Math.floor(minsAgo / 60 / 24 / 7 / 30) >= 2.0 ? 's ' : ' ') +
+            'ago'
+        );
+      } else {
+        if (Math.floor(minsAgo / 60 / 24 / 7 / 30) > 12) {
+          this.timestampOfComments.push(
+            'About ' +
+              Math.floor(minsAgo / 60 / 24 / 7 / 30 / 12) +
+              ' years ago'
+          );
+        } else {
+          this.timestampOfComments.push(
+            'About ' + Math.floor(minsAgo / 60 / 24 / 7 / 30) + ' months ago'
+          );
+        }
+      }
+    }
+
     document.addEventListener('scroll', () => {
       if (window.scrollY >= 368) {
-        this.showWatchNowInstead = true;
+        this.showWatchNowInstead = false;
       } else {
         this.showWatchNowInstead = false;
       }
     });
     window.addEventListener('resize', this.actOnResize);
+
+    // See comment on method
+    this.incrementViewCount(this.$route.path);
+
+    this.$nextTick(function () {
+    // Code that will run only after the
+    // entire view has been re-rendered
+        this.lastVideoObserverSearchResult = new IntersectionObserver(entries =>{
+        let lastVideo = entries[0]
+        if(!lastVideo.isIntersecting) {
+          return;}
+        this.loadMoreVideos()
+        this.lastVideoObserverSearchResult.unobserve(lastVideo.target);
+        if (!this.stopObserver)
+          this.lastVideoObserverSearchResult.observe(
+            document.querySelector('.videoBox:last-child')
+          );
+      },
+      { rootMargin: '25px' }
+    );
+
+      this.lastVideoObserverSearchResult.observe(document.querySelector(".videoBox:last-child"))
+    })
   },
+
+  beforeUnmount() {
+    this.stopObserver = true;
+    this.$store.dispatch('cacheFirstEightVideos', []);
+  },
+
   watch: {},
   methods: {
+    async loadMoreVideos() {
+      let newlyLoadedVideos;
+      let numberOfCurrentShownVideos = this.relatedVideos.length;
+      newlyLoadedVideos = await this.fetchEightMoreVideosFromDB(numberOfCurrentShownVideos);
+      this.$nextTick(function(){
+          if(newlyLoadedVideos.length != 0){
+          newlyLoadedVideos.forEach(newVideo => {
+            if(!this.relatedVideos.some(data => data.videoId === newVideo.videoId) && this.video.videoId != newVideo.videoId){
+              //don't exists
+              this.relatedVideos.push(newVideo);
+            }
+          });
+        }
+      });
+    },
+
+    async fetchEightMoreVideosFromDB(numberOfCurrentShownVideos) {
+      return await this.$store.dispatch(
+        'fetchEightMoreVideos',
+        numberOfCurrentShownVideos
+      );
+    },
+
+    async updateBasedOnDelete(commentsAfterRemoval) {
+      if (commentsAfterRemoval.length == 0) {
+        this.relevantComments = [];
+      } else {
+        this.relevantComments = [];
+        for (let i = 0; i < commentsAfterRemoval.length; i++) {
+          if (commentsAfterRemoval[i].responseToCommentId == -1) {
+            let newComment = new Comment(0, 0, '', '', 0, 0, 0, 0);
+            newComment = Object.assign(newComment, commentsAfterRemoval[i]);
+            newComment.timeOfPosting = this.convertDateObjectToString(
+              new Date(commentsAfterRemoval[i].timeOfPosting)
+            );
+            this.relevantComments.push(newComment);
+          }
+        }
+      }
+      this.amountOfComments = this.relevantComments.length;
+      this.activeId = 0;
+    },
+    async updateReplies(commentId) {
+      this.activeId = commentId;
+      this.currentReplies = [];
+      this.currentCommenters = [];
+      let res = await fetch(
+        '/rest/getRepliesToComment?' +
+          new URLSearchParams({
+            commentId: commentId,
+          }),
+        {
+          method: 'GET',
+        }
+      );
+      let response = await res.json();
+
+      for (let i = 0; i < response.length; i++) {
+        this.currentReplies.push(
+          new Comment(
+            response[i].commentId,
+            response[i].relatesToVideoId,
+            response[i].postedByUsername,
+            response[i].content,
+            response[i].likes,
+            response[i].dislikes,
+            response[i].responseToCommentId,
+            response[i].timeOfPosting
+          )
+        );
+        let uploaderRes = await fetch(
+          '/rest/getUserByUsername?' +
+            new URLSearchParams({
+              providedUsername: response[i].postedByUsername,
+            })
+        );
+        let userResponse = await uploaderRes.json();
+        let myUser = new User(
+          userResponse.userId,
+          userResponse.username,
+          userResponse.description,
+          userResponse.profileURL,
+          userResponse.subscribers,
+          userResponse.videosPosted
+        );
+        this.currentCommenters.push(myUser);
+      }
+      this.amountOfComments =
+        this.currentReplies.length + this.relevantComments.length;
+    },
+    async updateCommentSection() {},
+    updateComments(postedComment) {
+      let newComment = new Comment();
+      newComment = Object.assign(newComment, postedComment);
+      newComment.timeOfPosting = this.convertDateObjectToString(
+        new Date(newComment.timeOfPosting)
+      );
+      this.relevantComments.push(newComment);
+      this.amountOfComments = this.relevantComments.length;
+    },
+    convertDateObjectToString(dateObject) {
+      let newDate =
+        (dateObject.getUTCDate() < 10
+          ? '0' + dateObject.getUTCDate()
+          : dateObject.getUTCDate()) +
+        ' - ' +
+        (dateObject.getUTCMonth() + 1 < 10
+          ? '0' + (dateObject.getUTCMonth() + 1)
+          : dateObject.getUTCMonth() + 1) +
+        ' - ' +
+        dateObject.getUTCFullYear();
+      newDate = newDate + ' ' + dateObject.getHours() + ':';
+
+      if (dateObject.getMinutes() < 1) {
+        newDate += '00';
+      } else if (dateObject.getMinutes() < 10) {
+        newDate += '0' + dateObject.getMinutes();
+      } else {
+        newDate += dateObject.getMinutes();
+      }
+      return newDate;
+    },
+    async unsubscribe() {
+      let myUser = this.$store.getters.getCurrentUser;
+      let uploader = this.video.userId;
+      if (myUser && uploader) {
+        let unsubscribeRes = await fetch(
+          '/api/unsubscribe?' +
+            new URLSearchParams({
+              targetId: this.video.userId,
+              userId: myUser.userId,
+            }),
+          {
+            method: 'DELETE',
+          }
+        );
+        let newAmountOfSubResponse = await unsubscribeRes.json();
+
+        this.spacedSubs = newAmountOfSubResponse;
+        this.subscribedAlready = false;
+      }
+    },
+    async subscribe() {
+      let uploader = this.Uploader;
+
+      if (uploader) {
+        let res = await fetch(
+          '/api/subscribe?' +
+            new URLSearchParams({
+              targetId: uploader.userId,
+              userId: this.loggedInUser.userId,
+            }),
+          {
+            method: 'POST',
+          }
+        );
+        let newAmountOfSubResponse = await res.json();
+
+        this.spacedSubs = newAmountOfSubResponse;
+        this.subscribedAlready = true;
+      }
+    },
+    async likeVideo() {
+      if (this.$store.getters.getCurrentUser && !this.likedVideoAlready) {
+        let relevantInfo = {
+          userId: this.$store.getters.getCurrentUser.userId,
+          videoId: this.video.videoId,
+          likes: this.video.likes,
+        };
+        let likedVideoRes = await fetch('/api/likeVideo', {
+          method: 'POST',
+          body: JSON.stringify(relevantInfo),
+        });
+        let likedVideoResponse = await likedVideoRes.json();
+
+        let likeObject = {
+          relatesToVideoId: this.$route.params.id,
+          userId: this.$store.getters.getCurrentUser.userId,
+          videoId: this.video.videoId,
+          commentId: -1,
+        };
+        let registeredLikeRes = await fetch('/api/registerLikeOnVideo', {
+          method: 'POST',
+          body: JSON.stringify(likeObject),
+        });
+
+        this.video.likes = likedVideoResponse;
+        this.spacedLikes = this.video.likes;
+        this.likedVideoAlready = true;
+      } else {
+        alert('You have to log in to like Videos!');
+      }
+    },
+    async dislikeVideo() {
+      if (this.$store.getters.getCurrentUser && !this.dislikedVideoAlready) {
+        let relevantInfo = {
+          relatesToVideoId: this.$route.params.id,
+          userId: this.$store.getters.getCurrentUser.userId,
+          videoId: this.video.videoId,
+          dislikes: this.video.dislikes,
+        };
+        let dislikedVideoRes = await fetch('/api/dislikeVideo', {
+          method: 'POST',
+          body: JSON.stringify(relevantInfo),
+        });
+        let dislikedVideoResponse = await dislikedVideoRes.json();
+
+        let dislikeObject = {
+          relatesToVideoId: this.$route.params.id,
+          userId: this.$store.getters.getCurrentUser.userId,
+          videoId: this.video.videoId,
+          commentId: -1,
+        };
+        let registeredDislikeRes = await fetch('/api/registerDislikeOnVideo', {
+          method: 'POST',
+          body: JSON.stringify(dislikeObject),
+        });
+
+        this.video.dislikes = dislikedVideoResponse;
+        this.spacedDislikes = this.video.dislikes;
+        this.dislikedVideoAlready = true;
+      } else {
+        alert('You have to log in to dislike Videos!');
+      }
+    },
     async actOnResize() {
-      this.width = window.screen.width / 2;
-      this.height = window.screen.height / 2;
-      if (this.height <= 360) {
-        this.height = 360;
+      this.width = 280;
+      this.height = 500;
+      if (window.innerWidth < 500) {
+        this.height = 400;
       }
-      if (this.width <= 280) {
-        this.width = 280;
+      if (window.innerWidth < 400) {
+        this.height = 300;
       }
+    },
+    // This is a rudimentary view count method. I spent a lot of time trying to get the
+    // YouTube API to work in order to make this more robust, but didn't have any luck.
+    // Using this for the time being
+    incrementViewCount(urlPath) {
+      setTimeout(
+        async function () {
+          // the if statement verifies (partially) that the user has been on the same page for 15 seconds
+          if (this.$route.path === urlPath) {
+            await fetch('/api/incrementViewCount', {
+              method: 'PUT',
+              body: JSON.stringify(this.video),
+            });
+          }
+        }.bind(this),
+        15000
+      );
     },
     async loadRelevantInformation(wantedUserId) {
       let videoRes = await fetch(
@@ -220,6 +699,7 @@ export default {
       let videoResponse = await videoRes.json();
 
       let emptyVideo = new Video();
+
       this.video = Object.assign(emptyVideo, videoResponse);
 
       this.video.videoURL = this.video.videoURL
@@ -241,12 +721,12 @@ export default {
       );
       let uploaderResponse = await uploaderRes.json();
       let emptyUser = new User(0, '', '', '', 0, 0);
-      this.User = Object.assign(emptyUser, uploaderResponse);
+      this.Uploader = Object.assign(emptyUser, uploaderResponse);
       this.spacedSubs = this.renderSpacedNumbers(
-        this.User.subscribers.toString()
+        this.Uploader.subscribers.toString()
       );
       this.spacedVideos = this.renderSpacedNumbers(
-        this.User.videosPosted.toString()
+        this.Uploader.videosPosted.toString()
       );
     },
     renderSpacedNumbers(stringToPad) {
@@ -254,6 +734,9 @@ export default {
       let startFrom = stringToPad % 1000;
       let spacedString = '';
       startFrom = startFrom.toString();
+      if (stringToPad.length <= 3) {
+        return parseInt(stringToPad);
+      }
 
       for (let i = 0; i < stringToPad.length; i++) {
         if (i != 0 && (i - (stringToPad.length % 3)) % 3 == 0) {
@@ -263,15 +746,16 @@ export default {
         }
         spacedString = base;
       }
-      return spacedString;
+
+      return parseInt(spacedString);
     },
     clickedMe(e) {
-      if (e.target.className == 'commentsTab') {
+      if (e.target.className == 'notChosenCommentsDiv') {
         this.showCommentsSection = true;
-        this.showDescriptionTab = false;
+        this.showDescriptionSection = false;
       }
-      if (e.target.className == 'descriptionTab') {
-        this.showDescriptionTab = true;
+      if (e.target.className == 'notChosenDescriptionDiv') {
+        this.showDescriptionSection = true;
         this.showCommentsSection = false;
       }
     },
@@ -289,10 +773,21 @@ export default {
   font-family: 'Roboto', sans-serif;
   overflow-x: hidden;
 }
+.square3 {
+  position: relative;
+  top: 13px;
+}
+.postingCommentDiv {
+  margin-bottom: 20px;
+}
 .backHomeDiv {
   position: absolute;
   margin-top: 40px;
   overflow-y: hidden;
+}
+.postedCommentsDiv {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 .watchNowPlay {
   height: 45px;
@@ -355,6 +850,7 @@ export default {
   width: 40px;
   border-radius: 30px;
   margin-top: 9.5px;
+  overflow: hidden;
 }
 
 .UploaderDiv {
@@ -366,7 +862,7 @@ export default {
 }
 .videosDiv {
   font-size: 9px;
-  margin-top: 29.5px;
+  margin-top: 16px;
   color: #939393;
 }
 .likeAndDislikeIconDiv {
@@ -391,6 +887,11 @@ export default {
   top: 2px;
   left: -3px;
 }
+.PlayerDiv {
+  width: 100vw;
+  max-width: 820px;
+}
+
 .square {
   margin-top: 1px;
   width: max-content;
@@ -458,11 +959,15 @@ export default {
 }
 .FrameGrid {
   display: grid;
-  grid-template-columns: auto max-content auto;
+  grid-template-columns: 0px auto 0px;
+  max-width: 820px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .iFrameDiv {
   display: block;
-  min-width: 280px;
+  min-width: 100vw;
+  width: 100vw;
 }
 .playButtonDiv {
   width: 13px;
@@ -537,7 +1042,9 @@ export default {
   padding-left: 5px;
   padding-bottom: 2px;
 }
-.ChosenDescriptionDiv {
+
+.ChosenDescriptionDiv,
+.ChosenCommentsDiv {
   color: #e75858;
 }
 .LineDiv {

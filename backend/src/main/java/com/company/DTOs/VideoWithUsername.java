@@ -1,6 +1,18 @@
 package com.company.DTOs;
 
 public class VideoWithUsername {
+    private Integer videoId, userId;
+    private String videoUrl, title, description, username;
+
+    public VideoWithUsername(Integer videoId, Integer userId, String videoUrl, String title, String description, String username) {
+        this.videoId = videoId;
+        this.userId = userId;
+        this.videoUrl = videoUrl;
+        this.title = title;
+        this.description = description;
+        this.username = username;
+    }
+
     public Integer getVideoId() {
         return videoId;
     }
@@ -60,18 +72,6 @@ public class VideoWithUsername {
                 ", username='" + username + '\'' +
                 '}';
     }
-
-    public VideoWithUsername(Integer videoId, Integer userId, String videoUrl, String title, String description, String username) {
-        this.videoId = videoId;
-        this.userId = userId;
-        this.videoUrl = videoUrl;
-        this.title = title;
-        this.description = description;
-        this.username = username;
-    }
-
-    private Integer videoId, userId;
-    private String videoUrl, title, description, username;
 
 
 }

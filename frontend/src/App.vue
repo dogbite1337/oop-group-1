@@ -29,9 +29,10 @@ export default {
 }
 .app-main {
   background-color: #131313;
+  height: 100vh;
 }
 .BackDrop {
-  height: 100vh;
   background-color: #131313;
+  /* overflow-y: scroll; */
 }
 </style>

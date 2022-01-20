@@ -11,19 +11,21 @@
           '/default.jpg'
         "
       />
-      <div class="titleDiv">
-        <p class="titleText">
-          {{
-            video.title.length > 24
-              ? video.title.substring(0, 24) + '...'
-              : video.title
-          }}
-        </p>
-      </div>
-      <div class="upBoxAndUsernameDiv">
-        <div class="upDiv">UP</div>
-        <div class="userNameDiv">
-          {{ video.postedByUsername }}
+      <div class="lowerDiv">
+        <div class="titleDiv">
+          <p class="titleText">
+            {{
+              video.title.length > 24
+                ? video.title.substring(0, 24) + '...'
+                : video.title
+            }}
+          </p>
+        </div>
+        <div class="upBoxAndUsernameDiv">
+          <div class="upDiv">UP</div>
+          <div class="userNameDiv">
+            {{ video.postedByUsername }}
+          </div>
         </div>
       </div>
     </div>
@@ -46,6 +48,9 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap');
 
+* {
+  text-decoration: none;
+}
 .upBoxAndUsernameDiv {
   display: grid;
   grid-template-columns: auto auto auto;
@@ -108,5 +113,22 @@ export default {
   line-height: 12px;
   margin-top: 2px;
   padding-top: 1.5px;
+}
+@media screen and (max-width: 400px) {
+  .CardBox {
+    max-width: 100vw;
+    max-height: 600px;
+    height: max-content;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+  }
+  .ImageBox {
+    height: 300px;
+  }
+  .lowerDiv {
+    position: relative;
+  }
 }
 </style>

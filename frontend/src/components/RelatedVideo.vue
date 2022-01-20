@@ -1,6 +1,5 @@
 <template>
   <router-link
-    v-if="!$store.getters.getCurrentUser"
     :to="{
       path: '/VideoPage/' + (video ? video.videoId : 0),
       query: video ? video.videoId : 0,
@@ -140,6 +139,9 @@ export default {
   height: 95px;
 }
 
+.relatedVideoBox {
+  border-top: solid 1px #939393;
+}
 .titleDiv {
   color: #ffffff;
   margin-top: 5px;

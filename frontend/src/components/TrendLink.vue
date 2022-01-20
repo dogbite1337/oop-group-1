@@ -4,8 +4,8 @@
   </div>
   <div class="trendGrid">
     <div class="itemsContainer">
-      <div v-for="(trend, index) of trends" :key="trend" class="item">
-        <p>
+      <div v-for="(trend, index) of trendingSearch" :key="trend" class="item">
+        <p @click="makeSearch(trend)">
           {{
             index +
             1 +
@@ -19,12 +19,61 @@
 </template>
 <script>
 export default {
-  props: ['trends'],
   name: 'TrendLink',
+  emits:['addTrendingSearch'],
   data() {
-    return {};
+    return {
+      trendingSearch: [],
+    };
   },
-  methods: {},
+
+  async mounted() {
+    this.trendingSearch = await this.$store.dispatch('getTrendingSearch');
+  },
+
+  methods: {
+    async makeSearch(keyWord) {
+      await this.$store.dispatch('setKeyWord', keyWord);
+
+      let obj = {
+        keyWord: keyWord
+      }
+
+      let mySearchHistoryList = [];
+
+      //if u are not logged in
+      if(!this.$store.getters.getCurrentUser){
+        if(this.$store.getters.getMySearchHistoryList!=null){
+          mySearchHistoryList = await this.$store.getters.getMySearchHistoryList;
+        }
+        else if(localStorage.searchHistoryList){
+          mySearchHistoryList = JSON.parse(localStorage.searchHistoryList);
+        }
+
+
+        if(mySearchHistoryList.length > 5 && mySearchHistoryList.some(data => (data.keyWord != obj.keyWord))) {
+          mySearchHistoryList.splice(mySearchHistoryList.length - 1, 1);
+          mySearchHistoryList.unshift(obj);
+        }
+        else if(mySearchHistoryList.length == 0 || mySearchHistoryList.some(data => (data.keyWord != obj.keyWord))){
+          mySearchHistoryList.unshift(obj);
+        }
+
+        await this.$store.dispatch('cacheSearchHistory', mySearchHistoryList)
+        localStorage.setItem('searchHistoryList', JSON.stringify(mySearchHistoryList))
+      }else{
+        //if u r user register in db
+        this.$emit('addTrendingSearch', keyWord)
+      }
+
+      
+      
+
+
+
+      this.$router.push('/SearchResult');
+    },
+  },
 };
 </script>
 
@@ -67,5 +116,8 @@ h1 {
   display: grid;
   grid-template-columns: repeat(2, 50%);
   grid-template-rows: repeat(5, 20%);
+  grid-gap: 2px;
+  justify-content: center;
+  height: 25vh;
 }
 </style>

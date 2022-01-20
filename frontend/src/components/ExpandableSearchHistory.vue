@@ -8,13 +8,13 @@
         {{ btnClicked ? 'close' : 'expand' }}
       </button>
     </div>
-    <div class="historyItemContainer" v-if="!btnClicked">
+    <div class="historyItemContainer" v-if="!btnClicked && mySearchHistoryList">
       <div
         class="historyItem"
         v-for="item of mySearchHistoryList.slice(0, 3)"
         :key="item"
       >
-        <p>
+        <p v-if="item" @click="makeSearch(item.keyWord)">
           {{
             item.keyWord.length > 12
               ? item.keyWord.substring(0, 9) + '...'
@@ -24,9 +24,9 @@
       </div>
     </div>
 
-    <div class="historyItemContainer" v-if="btnClicked">
+    <div class="historyItemContainer" v-if="btnClicked && mySearchHistoryList">
       <div class="historyItem" v-for="item of mySearchHistoryList" :key="item">
-        <p>
+        <p v-if="item" @click="makeSearch(item.keyWord)">
           {{
             item.keyWord.length > 12
               ? item.keyWord.substring(0, 9) + '...'
@@ -40,24 +40,42 @@
 <script>
 export default {
   name: 'ExpandableSearchHistory',
-  props: ['searchHistory'],
   data() {
     return {
       btnClicked: false,
-      // getting from state atm, change to fetch from DB when search page shown
       mySearchHistoryList: [],
     };
   },
+  async beforeCreate(){
+    if(this.$store.getters.getMySearchHistoryList == null && localStorage.searchHistoryList){
+      this.mySearchHistoryList = await JSON.parse(localStorage.searchHistoryList)
+    }
+  },
+
   async mounted() {
     let boolean = false;
     this.$store.subscribe(async (mutation, state) => {
       if (
-        mutation.type == 'setMySearchHistoryList' &&
-        mutation.payload.length == 0
+        (mutation.type == 'setMySearchHistoryList' ||
+          mutation.type == 'setUser') &&
+        !this.$store.getters.getCurrentUser
       ) {
-        this.mySearchHistoryList = [];
+        if(this.$store.getters.getMySearchHistoryList!=null){
+          this.mySearchHistoryList = await this.$store.getters
+          .getMySearchHistoryList;
+
+          localStorage.setItem('searchHistoryList', JSON.stringify(this.mySearchHistoryList))
+        }
         return;
       }
+
+      // if (
+      //   mutation.type == 'setMySearchHistoryList' &&
+      //   mutation.payload.length == 0
+      // ) {
+      //   this.mySearchHistoryList = [];
+      //   return;
+      // }
 
       if (
         mutation.type == 'setUser' &&
@@ -69,27 +87,29 @@ export default {
           this.$store.getters.getCurrentUser.userId
         );
         boolean = true;
+        return;
       }
+      
       if (
         mutation.type == 'setMySearchHistoryList' &&
         this.$store.getters.getCurrentUser
       ) {
+
         this.mySearchHistoryList = await this.$store.dispatch(
           'getSearchHistories',
           this.$store.getters.getCurrentUser.userId
         );
-      }
-      if (
-        mutation.type == 'setMySearchHistoryList' &&
-        !this.$store.getters.getCurrentUser
-      ) {
-        this.mySearchHistoryList = await this.$store.getters
-          .getMySearchHistoryList;
+        return;
       }
     });
   },
 
-  methods: {},
+  methods: {
+    async makeSearch(keyWord) {
+      await this.$store.dispatch('setKeyWord', keyWord);
+      this.$router.push('/SearchResult');
+    },
+  },
 };
 </script>
 

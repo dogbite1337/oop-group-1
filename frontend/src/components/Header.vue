@@ -8,8 +8,13 @@
   </div>
   <div class="SearchAndLoginDiv">
     <div class="SpaceDiv" />
-    <img class="CatInHeader" src="../projectImages/Cat no background.png" />
-    <div class="SpaceDiv2" />
+    <img
+      class="CatInHeader"
+      src="../projectImages/Cat no background.png"
+      @click="playMe"
+    />
+    <audio ref="meow" src="src/projectImages/meowSound.mp3"></audio>
+    <div class="SpaceDiv2 SpaceDiv" />
     <div class="searchDiv">
       <router-link class="SearchLink" :to="{ path: '/Search' }">
         <img
@@ -19,7 +24,7 @@
         <input
           v-on:keyup.enter="search"
           @change="setKeyWord"
-          v-on:click="searchParam = ''"
+          @click="resetKey"
           v-model="searchParam"
           class="SearchField"
           type="text"
@@ -38,11 +43,16 @@
       @click="toggleProfileDropdown"
       :src="profilePic"
     />
-    <div></div>
-    <div></div>
-    <div></div>
+    <div class="SpaceDiv" />
+    <div class="SpaceDiv" />
+    <div class="SpaceDiv" />
     <div v-if="profileDropdown" class="profile-dropdown">
-      <ul>
+      <ul v-if="$store.getters.getCurrentUser" class="UlMenu">
+        <router-link
+          :to="{ path: '/Profile/' + $store.getters.getCurrentUser.username }"
+        >
+          <li>My Profile</li>
+        </router-link>
         <li @click="uploadNavigation">Upload Video</li>
         <li @click="logout">Logout</li>
       </ul>
@@ -55,12 +65,6 @@ import store from '../store';
 export default {
   name: 'Header',
   emits: ['update'],
-  async mounted() {
-    await this.$store.dispatch('whoAmI');
-    if (this.$store.getters.getCurrentUser) {
-      this.profilePic = this.$store.getters.getCurrentUser.getProfileURL();
-    }
-  },
   data() {
     return {
       isLoggedIn: false,
@@ -71,7 +75,29 @@ export default {
       profileDropdown: false,
     };
   },
+  created() {
+    let route = this.$router.currentRoute.value.fullPath;
+    if (route == '/SearchResult') {
+      this.searchParam = this.$store.getters.getKeyWord;
+    }
+  },
+
+  async mounted() {
+    await this.$store.dispatch('whoAmI');
+    if (this.$store.getters.getCurrentUser) {
+      this.profilePic = this.$store.getters.getCurrentUser.getProfileURL();
+    }
+  },
+
   methods: {
+    playMe() {
+      this.$refs.meow.play();
+    },
+
+    fetchKeyWord() {
+      this.searchParam = '';
+    },
+
     resetToStartPage() {
       this.$store.dispatch('resetToStartPage', true);
       this.searchParam = '';
@@ -201,8 +227,12 @@ export default {
   max-width: 725px;
   margin-left: auto;
   margin-right: auto;
+  overflow-y: hidden;
 }
 
+.SeasonText {
+  overflow-y: hidden;
+}
 .SearchAndLoginDiv {
   display: grid; /* Margin, Cat, Margin, search icon, margin, Search Field, margin, Login Button, Margin */
   grid-template-columns: auto 43px auto max-content auto auto;
@@ -212,9 +242,17 @@ export default {
   max-width: max-content;
   margin-left: auto;
   margin-right: auto;
-  padding-bottom: 20px;
+  padding-bottom: 40px;
 }
-
+.UlMenu {
+  height: max-content;
+  width: 100vw;
+  z-index: 5;
+  color: white;
+  position: absolute;
+  background-color: transparent;
+  left: 0px;
+}
 .LoginButton {
   border-radius: 30px;
   width: 40px;
@@ -254,5 +292,30 @@ li {
   color: white;
   font-family: 'Roboto', sans-serif;
   margin-top: 10px;
+}
+.profile-dropdown {
+  height: max-content;
+  padding-top: 45px;
+  padding-bottom: 60px;
+}
+@media screen and (max-width: 300px) {
+  .SearchAndLoginDiv {
+    grid-template-columns: 5px 15px 10px 199px 1px 50px 1px 1px 1px 1px 10px;
+  }
+}
+@media screen and (min-width: 301px) {
+  .SearchAndLoginDiv {
+    grid-template-columns: 5px 15px 10px 210px auto 50px 1px 1px 1px 1px 10px;
+  }
+}
+@media screen and (min-width: 335px) {
+  .SearchAndLoginDiv {
+    grid-template-columns: 5px 15px 10px 230px auto 50px 1px 1px 1px 1px 10px;
+  }
+}
+@media screen and (min-width: 370px) {
+  .SearchAndLoginDiv {
+    grid-template-columns: 5px 15px 10px max-content auto 50px 1px 1px 1px 1px 10px;
+  }
 }
 </style>

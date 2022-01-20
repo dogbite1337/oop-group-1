@@ -102,11 +102,12 @@ export default {
 
 <style scoped>
 .sliderBackground {
-  display: inline;
+  display: block;
   width: calc(100% - 16px);
-  margin-left: 8px;
-  margin-right: 8px;
+  margin-left: auto;
+  margin-right: auto;
   height: 164px;
+  max-width: 575px;
 }
 
 .SlideShowDiv {
@@ -121,6 +122,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
   margin-top: -164px;
+  max-width: 575px;
 }
 
 .titleText {

@@ -11,7 +11,7 @@ public class UserHandler {
     private final userRepository userRepository;
     private final Validator loginValidator;
 
-    public UserHandler(Express app, userRepository userRepository){
+    public UserHandler(Express app, userRepository userRepository) {
         this.app = app;
         this.userRepository = userRepository;
         this.loginValidator = new Validator();
@@ -32,6 +32,12 @@ public class UserHandler {
 
             res.json(user);
         });
+
+
+        app.post("/api/updateUser", (req, res) -> {
+           userRepository.updateUserInfo(Integer.parseInt(req.body().get("userId").toString()), req.body().get("username").toString(), req.body().get("password").toString(), req.body().get("description").toString(),  req.body().get("profileURL").toString());
+        });
+
 
         // register user
         app.post("/api/register", (req, res) -> {
@@ -57,7 +63,11 @@ public class UserHandler {
         });
 
         app.get("/rest/getUserByUsername", (req, res) -> {
-           res.json(userRepository.getUserByUsername(req.query("providedUsername")));
+            res.json(userRepository.getUserByUsername(req.query("providedUsername")));
+        });
+
+        app.get("/rest/getMatchedUserList", (req, res) -> {
+            res.json(userRepository.getMatchedUserList(req.query("keyword")));
         });
     }
 }

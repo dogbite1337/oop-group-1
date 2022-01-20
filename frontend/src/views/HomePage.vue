@@ -2,147 +2,23 @@
   <div class="MainDiv">
     <Header />
     <div class="NoLineDiv" />
-    <img v-if="!searchedYet && !showSearchPage && !showResultsPage" class="sliderBackground" :src="`src\\projectImages\\${
-      decodeURI(sliderImageURls[currentSliderImageIndex]) 
-      + 
-      (gifs.includes(decodeURI(sliderImageURls[currentSliderImageIndex])) ? '.gif' : '.png')}`">
-    <img class="SorryKitty" v-if="searchedYet && searchResults.length == 0 && showResultsPage" src="src\\projectImages\\sorryKitty.gif" />
-    <div v-if="showSearchPage && !showResultsPage" class="searchPage">
-      <div class="topTrendingDiv">
-        <div/>
-        <p class="topTrendingSearches">Top 10 Trending Searches</p>
-        <div/>
-      </div>
-      <div class="trendsDiv">
-        <TrendLink :trends="topTenTrend"/>
-      </div>
-      <div class="SearchHistoryDiv">
-        <div/>
-        <p class="searchHistoryText">Search History</p>
-        <div/>
-        <button v-if="!expandedSearchHistory" @click="expandSearchHistory" class="expandButton">expand</button>
-        <button v-if="expandedSearchHistory" @click="closeSearchHistory" class="closeButton">close</button>
-        <div/>
-      </div>
-      <ExpandableSearchHistory :expandedSearchHistory="expandedSearchHistory" 
-      :values="mySearchHistory" />
-      
-    </div>
-    <div v-if="showSearchPage && !showResultsPage" class="clearHistoryDiv">
-      <button class="clearHistoryButton">Clear history</button>
-    </div>
-    <div v-if="showSearchPage && !showResultsPage" class="clearHistoryDiv">
-      <button @click="showResultsOfSearch" class="Search">Search</button>
-    </div>
-    <div v-if="!searchedYet && !showSearchPage && !showResultsPage" class="SlideShowDiv">
-      <div class="SpaceBlock" />
-      <div class="titleDiv">
-        <p class="titleText">{{sliderTitles[currentSliderImageIndex]}}</p>
-      </div>
-      <div class="SpaceBlock" />
-      <img v-if="currentSliderImageIndex == 0" class="pacManIcon" src="../projectImages/cleaned_pacman.png" />
-      <div v-if="currentSliderImageIndex > 0" @click="setSliderIndexToZero" class="FirstWhiteCircle" />
-      <div class="SpaceBlock" />
-      <img v-if="currentSliderImageIndex == 1" class="pacManIcon" src="../projectImages/cleaned_pacman.png" />
-      <div v-if="currentSliderImageIndex != 1" @click="setSliderIndexToOne" class="WhiteCircle" />
-      <div class="SpaceBlock" />
-      <img v-if="currentSliderImageIndex == 2" class="lastPacManIcon" src="../projectImages/cleaned_pacman.png" />
-      <div v-if="currentSliderImageIndex != 2" @click="setSliderIndexToTwo" class="WhiteCircle LastWhiteCircle" />
-    </div>
-          
-    <div v-if="relevantUsers.length > 0 && searchedYet && showResultsPage" class="userResultsTopDiv">
-
-      <div class="userResultsDiv">
-        <div />
-        <div class="profileImageDiv">
-          <div class="profileDivResultPage">
-            <img
-              class="profileInResultsPage"
-              src="../projectImages/xqcBanned.png"
-            />
-          </div>
-          <div class="coveringDiv" />
-          <div class="roundingDiv" />
-        </div>
-        <div />
-        <div class="SubsDiv">
-          <p class="usernameP">{{ relevantUsers[0].getUsername() }}</p>
-          <p class="subscribersP">
-            Subscribers: {{ relevantUsers[0].getSubscribers() }}
-          </p>
-        </div>
-        <div />
-        <p class="videosP">Videos: {{ relevantUsers[0].getVideosPosted() }}</p>
-        <div />
-      </div>
-    </div>
-    <div
-      v-if="searchedYet && relevantUsers.length > 0 && showResultsPage"
-      class="SubscribeDiv"
-    >
-      <button class="SubscribeButton" value="Subscribe">+ Subscribe</button>
-    </div>
-    <div
-      v-if="searchedYet && relevantUsers.length > 0 && showResultsPage"
-      class="topVideosGrid"
-    >
-      <div class="SpaceBlock" />
-      <div class="firstVideo">
-        <img class="linkVideoPic" src="../projectImages/birthdayPepe.png" />
-        <div class="VideoTitleDiv">
-          <p class="videoTitleP">Birthday presents</p>
-          <p class="uploadedP">6 hours ago</p>
-        </div>
-      </div>
-      <div class="SpaceBlock" />
-      <div class="secondVideo">
-        <img class="linkVideoPic" src="../projectImages/reallyXQC.png" />
-        <div class="VideoTitleDiv">
-          <p class="videoTitleP">I made the day for this kid</p>
-          <p class="uploadedP">12:17</p>
-        </div>
-      </div>
-      <div class="SpaceBlock" />
-      <div class="thirdVideo">
-        <img class="linkVideoPic" src="../projectImages/pepeBike.png" />
-        <div class="VideoTitleDiv">
-          <p class="videoTitleP">xQcOW</p>
-          <p class="uploadedP">11:15</p>
-        </div>
-      </div>
-      <div class="SpaceBlock" />
-    </div>
-
-    <!-- <p v-if="searchedYet && relevantUsers.length > 0 && showResultsPage" class="checkAllVideosLink">check all 10 videos ></p> -->
-    <div v-if="searchResults.length > 0 && showResultsPage">
-      <VideoResultCard
-        :video="searchResults[0]"
-        :searchQuery="lastSearchQuery"
-        v-if="searchResults[0]"
-      />
-    </div>
-    
-          <div v-if="!searchedYet && !showSearchPage && !showResultsPage" class="CardsContainer">
+    <BannerSlider />
+    <div class="CardsContainer">
       <VideoCard
         v-for="(videoItem, index) of relevantVideos"
         :key="index"
         :video="videoItem"
         class="videoBox"
+        ref="videoBox"
       />
     </div>
-    </div>
-    <div v-if="searchResults.length == 0 && searchedYet && showResultsPage" class="SorryDiv">
-      <div />
-      <div class="SorryText">No result was found</div>
-      <div />
-    </div>
-  <Footer class="footerDiv"/>
+  </div>
+  <Footer class="footerDiv" />
 </template>
 <script>
 import Header from '../components/Header.vue';
 import VideoCard from '../components/VideoCard.vue';
 import Footer from '../components/Footer.vue';
-import ExpandableSearchHistory from '../components/ExpandableSearchHistory.vue';
 import Video from '../jsClasses/general/Video';
 import TrendLink from '../components/TrendLink.vue';
 import VideoResultCard from '../components/VideoResultCard.vue';
@@ -155,15 +31,26 @@ export default {
   components: {
     Header,
     VideoCard,
-    ExpandableSearchHistory,
     VideoResultCard,
     TrendLink,
     Footer,
     BannerSlider,
   },
   async created() {
-    let allVideos = await this.getVideosForCurrentPage();
-    this.$store.dispatch('cacheFirstEightVideos', allVideos);
+    // let allVideos = await this.getVideosForCurrentPage();
+
+    // Yang new code
+    // let allVideos = await this.getAllVideos();
+    // if (allVideos.length > 8) {
+    //   allVideos = allVideos.slice(allVideos.length - 8, allVideos.length);
+    // }
+    this.relevantVideos = [];
+    await this.loadMoreVideos();
+    let allVideos = this.relevantVideos;
+
+
+    // this.$store.dispatch('cacheFirstEightVideos', allVideos);
+    localStorage.setItem('relatedVideos', JSON.stringify(allVideos));
     this.relevantVideos = [];
     for (let i = allVideos.length; i > 0; i--) {
       let video = new Video();
@@ -238,67 +125,63 @@ export default {
   data() {
     return {
       showPage: 'home',
-      // currentSliderImageIndex: 0,
-      // sliderImageURls: ['happyCats', 'smile', 'samuelCatJackson'],
-      // sliderTitles: ['Kitty Kissaten in Kyoto', 'Top 10 feel Good Animes', 'What did you call me? Meowdafaka'],
-      // gifs: ['ghosts', 'sorryKitty', 'sumo-run', 'shalsha-aizawa-falfa-aizawa', 'sleepyCat',
-      // 'WinterCold', 'samuelCatJackson', 'WinterWarm', 'smiling-cat-creepy-cat', 'cat-shooting'],
       relevantVideos: this.$store.getters.getSearchResults
         ? this.$store.getters.getSearchResults
         : [],
-      relevantUsers: [],
-      searchedYet: this.$store.getters.getSearchResults === null ? false : true,
-      showSearchPage: false,
-      expandedSearchHistory: false,
-      mySearchHistory: [
-        'John..',
-        'Why',
-        'Is the',
-        'Entire website',
-        'About',
-        'Cats..',
-      ],
-      topTenTrend: [
-        'Cats',
-        'More Cats',
-        'All cats',
-        'Cats?!',
-        'Cats.',
-        'Cats!',
-        'Why are there so many cats',
-        'John',
-        'Stop This',
-        'Madness',
-      ],
-      showResultsPage: false,
-      tempVideo: new Video(
-        7,
-        8,
-        null,
-        'test',
-        'xQc talks about the meaning of "juice"',
-        'ha',
-        5655123,
-        'xQc'
-      ),
-      searchResults: [],
-      lastSearchQuery: this.$store.getters.getLastSearchQuery
-        ? this.$store.getters.getLastSearchQuery
-        : '',
-      currentPage: 1,
-      currentWindowSize: window.screen.width,
+      lastVideoObserver: null,
     };
   },
-  mounted() {
+
+  async mounted() {
     document.getElementsByClassName('CardsContainer')[0].style =
       'grid-template-columns: ' + this.getGridDimensions() + ';';
 
     window.addEventListener('resize', this.recalculateGrid);
   },
+  updated() {
+    // here i am trying to only observer the last element of that class
+    this.lastVideoObserver = new IntersectionObserver(
+      (entries) => {
+        let lastVideo = entries[0];
+        if (!lastVideo.isIntersecting) {
+          // this.loadMoreVideos()
+          return;}
+
+          this.loadMoreVideos()
+          this.lastVideoObserver.unobserve(lastVideo.target)
+          this.lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
+      },{rootMargin: "100px"}
+      )
+      this.lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
+  },
   unmounted() {
+    this.lastVideoObserver.disconnect();
     window.removeEventListener('resize', this.recalculateGrid);
   },
+
   methods: {
+    async loadMoreVideos() {
+      let newlyLoadedVideos;
+      let numberOfCurrentShownVideos = this.relevantVideos.length;
+      newlyLoadedVideos = await this.fetchEightMoreVideosFromDB(numberOfCurrentShownVideos);
+      this.$nextTick(function(){
+          if(newlyLoadedVideos.length != 0){
+          newlyLoadedVideos.forEach(newVideo => {
+            if(!this.relevantVideos.some(data => data.videoId === newVideo.videoId)){
+              this.relevantVideos.push(newVideo)
+            }
+        });
+      }
+      })
+    },
+
+    async fetchEightMoreVideosFromDB(numberOfCurrentShownVideos) {
+      return await this.$store.dispatch(
+        'fetchEightMoreVideos',
+        numberOfCurrentShownVideos
+      );
+    },
+
     getGridDimensions() {
       let base = '';
       for (let i = 0; i < Math.floor(window.screen.width / 200); i++) {
@@ -321,29 +204,31 @@ export default {
       this.showResultsPage = true;
       this.showSearchPage = false;
     },
-    expandSearchHistory() {
-      this.expandedSearchHistory = true;
-    },
-    closeSearchHistory() {
-      this.expandedSearchHistory = false;
-    },
-    async getVideosForCurrentPage() {
-      if (this.currentPage == 1 && this.$store.getters.getEightFirstVideos) {
-        return this.$store.getters.getEightFirstVideos;
-      }
-      if (!this.currentPage) {
-        this.currentPage = 1;
-      }
-      let res = await fetch(
-        '/rest/getVideosForCurrentPage?' +
-          new URLSearchParams({
-            currentPage: this.currentPage,
-          })
-      );
 
-      let response = await res.json();
-      return response;
-    },
+    // expandSearchHistory() {
+    //   this.expandedSearchHistory = true;
+    // },
+    // closeSearchHistory() {
+    //   this.expandedSearchHistory = false;
+    // },
+
+    // async getVideosForCurrentPage() {
+    //   if (this.currentPage == 1 && this.$store.getters.getEightFirstVideos) {
+    //     return this.$store.getters.getEightFirstVideos;
+    //   }
+    //   if (!this.currentPage) {
+    //     this.currentPage = 1;
+    //   }
+    //   let res = await fetch(
+    //     '/rest/getVideosForCurrentPage?' +
+    //       new URLSearchParams({
+    //         currentPage: this.currentPage,
+    //       })
+    //   );
+
+    //   let response = await res.json();
+    //   return response;
+    // },
     async getAllVideos() {
       let res = await fetch('/rest/getAllVideos');
 
@@ -372,6 +257,8 @@ export default {
 
 .MainDiv {
   background-color: #131313;
+  height: inherit;
+  overflow-y: scroll;
 }
 .test {
   width: 200px;
@@ -451,7 +338,6 @@ export default {
   margin-top: -57.5px;
 }
 .EmptyDiv {
-  background-color: red;
   width: 100vw;
 }
 .clearHistoryDiv {
@@ -472,7 +358,6 @@ export default {
 .thirdVideo {
   width: 115px;
   height: 93px;
-  background-color: red;
 }
 .videoTitleP {
   background-color: black;
@@ -509,12 +394,16 @@ export default {
   position: relative;
   top: -1.5px;
 }
-.footerDiv {
+/* .footerDiv {
   display: grid;
   grid-template-rows: 5vh auto;
   background-color: black;
   position: sticky;
-  top: 100vh;
+} */
+
+.footerDiv {
+  position: fixed;
+  top: calc(100vh - 65px);
   width: 100vw;
 }
 
@@ -525,7 +414,7 @@ export default {
   color: black;
   border-radius: 3px;
 }
-.trendsDiv{
+.trendsDiv {
   height: 193px;
   outline: 1px solid white;
   margin-left: 19px;
@@ -536,21 +425,21 @@ export default {
   margin-right: auto;
   padding-bottom: 9px;
 }
-.searchHistoryText{
+.searchHistoryText {
   font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 18px;
   line-height: 21px;
 }
-.SorryKitty{
-  display:block;
+.SorryKitty {
+  display: block;
   width: 200px;
   height: 224px;
-  margin-left:auto;
+  margin-left: auto;
   margin-right: auto;
 }
-.SearchHistoryDiv{
+.SearchHistoryDiv {
   background-color: #131313;
   display: grid;
   grid-template-columns: 1px auto auto 72px 1px;
@@ -562,7 +451,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
-.topTrendingDiv{
+.topTrendingDiv {
   display: grid;
   grid-template-columns: 19px 168px auto;
   margin-bottom: 4px;
@@ -612,7 +501,7 @@ export default {
   width: max-content;
   margin-left: auto;
   margin-right: auto;
-  padding-bottom: 20px;
+  padding-bottom: 65px;
 }
 
 .SorryText {
@@ -667,7 +556,6 @@ export default {
 }
 .sliderBackground {
   display: block;
-  width: calc(100% - 16px);
   max-width: 575px;
   margin-left: auto;
   margin-right: auto;
@@ -1016,6 +904,11 @@ transform: scale(1.5, 1.5);
    margin-top:60px;
        margin-left:110px;
        position:fixed;
+  }
+}
+@media screen and (max-width: 400px) {
+  .videoBox {
+    width: 100vw;
   }
 }
 </style>
