@@ -120,6 +120,7 @@ export default {
     max-height: 260px;
      margin-top: 1px;
     margin-bottom: 1px;
+    
   }
   .ImageBox {
     height: 105px;
@@ -143,20 +144,55 @@ export default {
   }
 }
 
+
+@media screen and (min-width: 440px) and (max-width:560px) {
+  .CardBox {
+    max-width: 47vw;
+    max-height: 200px;
+    margin-left: auto;
+     margin-right: auto;
+    margin-top: 1px;
+    margin-bottom: 6px;
+    margin-left:5px;
+  margin-right:5px;
+  }
+  .ImageBox {
+    height: 120px;
+    width:205px;
+  }
+}
+
+
+@media screen and (min-width: 561px) and (max-width:600px) {
+  .CardBox {
+    max-width: 56vw;
+  max-height: 180px;
+    margin-left: auto;
+     margin-right: auto;
+    margin-top: 1px;
+    margin-bottom: 6px;
+    margin-left:5px;
+  margin-right:5px;
+  }
+  .ImageBox {
+    height: 110px;
+    width:270px;
+  }
+}
 @media screen and (min-width: 601px) {
   .CardBox {
-    max-width: 32vw;
+    max-width: 42vw;
     max-height: 400px;
     margin-left: auto;
      margin-right: auto;
     margin-top: 1px;
     margin-bottom: 6px;
-    margin-left:4px;
-  margin-right:4px;
+    margin-left:2px;
+  margin-right:2px;
   }
   .ImageBox {
     height: 130px;
-    width:240px;
+    width:196px;
   }
 }
 
