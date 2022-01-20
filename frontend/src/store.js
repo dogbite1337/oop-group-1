@@ -14,7 +14,7 @@ export default createStore({
     keyWord: '',
     matchedVideoList: [],
     matchedUserList: [],
-    darkTheme: true,
+    darkTheme: null,
   },
   mutations: {
     setUser(state, user) {
