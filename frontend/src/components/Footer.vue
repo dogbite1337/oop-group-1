@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       activeUser: '',
-      darkTheme: true,
+      darkTheme: false,
     };
   },
   async mounted() {
@@ -87,33 +87,7 @@ export default {
       }
     });
   },
-  methods: {
-    /* Deletes a Video and all related likes, dislikes, replies/comments */
-    async deleteVideo() {
-      let deleteVideoRes = await fetch(
-        '/api/deleteVideo?' +
-          new URLSearchParams({
-            videoId: 18,
-          }),
-        {
-          method: 'DELETE',
-        }
-      );
-    },
-    /* Updates a Videos URL, title, description */
-    async updateVideo() {
-      let video = {
-        videoId: 1,
-        videoURL: 'https://www.youtube.com/watch?v=axsnM1kH99c',
-        title: 'hello',
-        description: 'No u',
-      };
-      let res = await fetch('/api/updateVideo', {
-        method: 'POST',
-        body: JSON.stringify(video),
-      });
-    },
-  },
+  methods: {},
 };
 </script>
 
@@ -232,6 +206,8 @@ export default {
   position: absolute;
   z-index: 5;
   right: 25px;
+  padding-top: 7px;
+  padding-right: 10px;
 }
 
 .LightProfileText {
