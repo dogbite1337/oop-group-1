@@ -117,10 +117,12 @@ export default {
 @media screen and (max-width: 400px) {
   .CardBox {
     max-width: 100vw;
-    max-height: 600px;
+    max-height: 260px;
+     margin-top: 1px;
+    margin-bottom: 1px;
   }
   .ImageBox {
-    height: 300px;
+    height: 105px;
   }
 }
 
@@ -131,10 +133,13 @@ export default {
     margin-left: auto;
      margin-right: auto;
     margin-top: 1px;
-    margin-bottom: 1px;
+    margin-bottom: 5px;
+      margin-left:3px;
+  margin-right:3px;
   }
   .ImageBox {
-    height: 200px;
+    height: 100px;
+    width:190px;
   }
 }
 
@@ -145,10 +150,13 @@ export default {
     margin-left: auto;
      margin-right: auto;
     margin-top: 1px;
-    margin-bottom: 1px;
+    margin-bottom: 6px;
+    margin-left:4px;
+  margin-right:4px;
   }
   .ImageBox {
-    height: 250px;
+    height: 130px;
+    width:240px;
   }
 }
 

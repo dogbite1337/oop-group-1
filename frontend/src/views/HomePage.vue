@@ -795,7 +795,9 @@ export default {
 }
 @media screen and (max-width: 400px) {
   .videoBox {
-    width: 100vw;
+    width: 98vw;
+    
   }
+  
 }
 </style>
