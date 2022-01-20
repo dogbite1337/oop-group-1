@@ -118,17 +118,38 @@ export default {
   .CardBox {
     max-width: 100vw;
     max-height: 600px;
-    height: max-content;
-    margin-left: 0px;
-    margin-right: 0px;
-    margin-bottom: 5px;
-    margin-top: 5px;
   }
   .ImageBox {
     height: 300px;
   }
-  .lowerDiv {
-    position: relative;
+}
+
+@media screen and (min-width: 401px) {
+  .CardBox {
+    max-width: 48vw;
+    max-height: 400px;
+    margin-left: auto;
+     margin-right: auto;
+    margin-top: 1px;
+    margin-bottom: 1px;
+  }
+  .ImageBox {
+    height: 200px;
   }
 }
+
+@media screen and (min-width: 601px) {
+  .CardBox {
+    max-width: 32vw;
+    max-height: 400px;
+    margin-left: auto;
+     margin-right: auto;
+    margin-top: 1px;
+    margin-bottom: 1px;
+  }
+  .ImageBox {
+    height: 250px;
+  }
+}
+
 </style>
