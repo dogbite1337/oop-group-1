@@ -1,5 +1,5 @@
 <template>
-  <div class="MainDiv">
+  <div class="MainDiv" :class="isDarkTheme == true ? 'MainDivDarkTheme' : 'MainDivLightTheme'">
     <Header />
     <div class="NoLineDiv" />
     <BannerSlider />

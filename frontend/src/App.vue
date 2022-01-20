@@ -1,6 +1,6 @@
 <template>
-  <main class="app-main">
-    <div class="BackDrop">
+  <main class="app-main" :class="isDarkTheme == true ? 'app-mainDarkTheme' : 'app-mainLightTheme'">
+    <div class="BackDrop" :class="isDarkTheme == true ? 'BackDropDarkTheme' : 'BackDropLightTheme'" >
       <router-view />
     </div>
   </main>
@@ -15,9 +15,16 @@ export default {
     Header,
   },
   data() {
-    return {};
+    return {
+      isDarkTheme: true,
+    };
   },
-  created() {},
+  async created() {
+    this.isDarkTheme = await this.$store.getters.getIsDarkTheme
+    this.isDarkTheme = false;
+    await this.$store.dispatch('setDarkTheme', this.isDarkTheme)
+    console.log(this.isDarkTheme)
+  },
 };
 </script>
 
@@ -34,5 +41,13 @@ export default {
 .BackDrop {
   background-color: #131313;
   /* overflow-y: scroll; */
+}
+.lightTheme{
+  color: #bfbfbf;
+}
+.BackDropLightTheme,
+.app-mainLightTheme,
+.MainDivLightTheme{
+  background-color: white !important
 }
 </style>

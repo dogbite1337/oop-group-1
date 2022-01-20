@@ -1,10 +1,10 @@
 <template>
   <div class="title">
-    <h1>Top 10 Trending Searches</h1>
+    <h1 :class="isDarkTheme == true ? 'darkTheme' : 'lightTheme'">Top 10 Trending Searches</h1>
   </div>
-  <div class="trendGrid">
-    <div class="itemsContainer">
-      <div v-for="(trend, index) of trendingSearch" :key="trend" class="item">
+  <div class="trendGrid" :class="isDarkTheme == true ? 'trendGridDarkTheme' : 'trendGridLightTheme'">
+    <div class="itemsContainer" >
+      <div v-for="(trend, index) of trendingSearch" :key="trend" class="item" :class="isDarkTheme == true ? 'itemDarkTheme' : 'itemLightTheme'">
         <p @click="makeSearch(trend)">
           {{
             index +
@@ -24,10 +24,14 @@ export default {
   data() {
     return {
       trendingSearch: [],
+      isDarkTheme: true,
     };
   },
 
-  async mounted() {
+  async created() {
+    this.isDarkTheme = await this.$store.getters.getIsDarkTheme
+    console.log("trending search")
+    console.log(await this.$store.getters.getIsDarkTheme)
     this.trendingSearch = await this.$store.dispatch('getTrendingSearch');
   },
 
@@ -119,5 +123,21 @@ h1 {
   grid-gap: 2px;
   justify-content: center;
   height: 25vh;
+}
+
+.lightTheme{
+  color: #bfbfbf;
+}
+
+.trendGridLightTheme{
+  border: 1px solid black;
+}
+
+.itemLightTheme{
+  background-color: #939393;
+}
+
+.itemLightTheme p{
+  color: white;
 }
 </style>
