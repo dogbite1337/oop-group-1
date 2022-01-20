@@ -20,6 +20,7 @@
 <script>
 export default {
   name: 'TrendLink',
+  emits:['addTrendingSearch'],
   data() {
     return {
       trendingSearch: [],
@@ -33,6 +34,43 @@ export default {
   methods: {
     async makeSearch(keyWord) {
       await this.$store.dispatch('setKeyWord', keyWord);
+
+      let obj = {
+        keyWord: keyWord
+      }
+
+      let mySearchHistoryList = [];
+
+      //if u are not logged in
+      if(!this.$store.getters.getCurrentUser){
+        if(this.$store.getters.getMySearchHistoryList!=null){
+          mySearchHistoryList = await this.$store.getters.getMySearchHistoryList;
+        }
+        else if(localStorage.searchHistoryList){
+          mySearchHistoryList = JSON.parse(localStorage.searchHistoryList);
+        }
+
+
+        if(mySearchHistoryList.length > 5 && mySearchHistoryList.some(data => (data.keyWord != obj.keyWord))) {
+          mySearchHistoryList.splice(mySearchHistoryList.length - 1, 1);
+          mySearchHistoryList.unshift(obj);
+        }
+        else if(mySearchHistoryList.length == 0 || mySearchHistoryList.some(data => (data.keyWord != obj.keyWord))){
+          mySearchHistoryList.unshift(obj);
+        }
+
+        await this.$store.dispatch('cacheSearchHistory', mySearchHistoryList)
+        localStorage.setItem('searchHistoryList', JSON.stringify(mySearchHistoryList))
+      }else{
+        //if u r user register in db
+        this.$emit('addTrendingSearch', keyWord)
+      }
+
+      
+      
+
+
+
       this.$router.push('/SearchResult');
     },
   },

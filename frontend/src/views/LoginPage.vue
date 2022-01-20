@@ -3,11 +3,30 @@
     <router-link class="HomeLink" to="/">
       <div class="backHomeDiv">
         <div class="SpaceDiv" />
-        <img class="ArrowIcon" src="../projectImages/white_arrow.png" />
+        <img
+          v-if="darkTheme"
+          class="ArrowIcon"
+          src="../projectImages/white_arrow.png"
+        />
+        <img
+          v-if="!darkTheme"
+          class="LightArrowIcon"
+          src="../projectImages/light_Arrow.png"
+        />
         <div class="SpaceDiv" />
-        <p class="HomeText">Home</p>
+        <p v-if="darkTheme" class="HomeText">Home</p>
+        <p v-if="!darkTheme" class="LightHomeText">Home</p>
         <div class="SpaceDiv" />
-        <img class="catIcon" src="../projectImages/whiteCatBlackBaground.png" />
+        <img
+          v-if="darkTheme"
+          class="catIcon"
+          src="../projectImages/whiteCatBlackBaground.png"
+        />
+        <img
+          v-if="!darkTheme"
+          class="catIcon"
+          src="../projectImages/blackCatTransparentBackground.png"
+        />
         <div class="SpaceDiv" />
       </div>
     </router-link>
@@ -51,18 +70,34 @@
       </router-link>
       <div class="SpaceDiv" />
       <button
-        class="loginButton"
+        class="DarkLoginButton"
         @click="tryToLogIn"
         value="Login"
-        v-if="canLogIn"
+        v-if="canLogIn && darkTheme"
       >
         Login
       </button>
       <button
-        class="disabledLoginButton"
+        class="LightLoginButton"
+        @click="tryToLogIn"
+        value="Login"
+        v-if="canLogIn && !darkTheme"
+      >
+        Login
+      </button>
+      <button
+        class="LightDisabledLoginButton"
         disabled
         value="Login"
         v-if="!canLogIn"
+      >
+        Login
+      </button>
+      <button
+        class="DarkDisabledLoginButton"
+        disabled
+        value="Login"
+        v-if="!canLogIn && darkTheme"
       >
         Login
       </button>
@@ -75,6 +110,7 @@
 <script>
 import User from '../jsClasses/general/User';
 import Footer from '../components/Footer.vue';
+import store from '../store';
 
 export default {
   name: 'LoginPage',
@@ -87,7 +123,18 @@ export default {
       hideEyes: '',
       wantedUserName: '',
       wantedPassword: '',
+      darkTheme: this.$store.getters.getIsDarkTheme,
     };
+  },
+  mounted() {
+    if (!this.darkTheme) {
+      document.getElementsByClassName('backgroundDiv')[0].style =
+        'background-color: #F0F0F0;';
+      document.getElementsByClassName('registerButton')[0].style =
+        'border: solid 1px #B56464; color: #B56464; background-color: #F0F0F0;';
+      document.getElementsByClassName('backHomeDiv')[0].style =
+        'background-color: white;';
+    }
   },
   watch: {
     wantedUserName() {
@@ -188,7 +235,17 @@ export default {
   font-size: 18px;
   line-height: 21px;
 }
-.loginButton {
+.LightLoginButton {
+  width: 154px;
+  height: 40px;
+  outline: solid 0.7px white;
+  background: #b56464;
+  color: white;
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  line-height: 21px;
+}
+.DarlLoginButton {
   width: 154px;
   height: 40px;
   outline: solid 0.7px white;
@@ -198,10 +255,22 @@ export default {
   font-size: 18px;
   line-height: 21px;
 }
-.disabledLoginButton {
+.DarkDisabledLoginButton {
   width: 154px;
   height: 40px;
   background: rgba(45, 44, 44, 0.5);
+  border: 0.7px solid rgba(255, 255, 255, 0.45);
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  color: rgba(255, 255, 255, 0.45);
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  line-height: 21px;
+}
+.LightDisabledLoginButton {
+  width: 154px;
+  height: 40px;
+  background: rgba(181, 100, 100, 0.5);
   border: 0.7px solid rgba(255, 255, 255, 0.45);
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -281,6 +350,15 @@ export default {
   height: 25px;
   width: 28px;
 }
+.LightHomeText {
+  font-size: 24px;
+  font-weight: 500;
+  font-family: 'Roboto', sans-serif;
+  line-height: 28.13px;
+  margin-top: 18px;
+  color: black;
+  margin-bottom: 15px;
+}
 .HomeText {
   font-size: 24px;
   font-weight: 500;
@@ -297,6 +375,10 @@ export default {
   margin-bottom: 12px;
 }
 
+.LightArrowIcon {
+  margin-top: 15px;
+}
+
 @media screen and (min-width: 1000px) {
   .girlsOpenEyesDiv,
   .girlsClosedEyesDiv {
@@ -306,8 +388,10 @@ export default {
   }
 
   .registerButton,
-  .loginButton,
-  .disabledLoginButton {
+  .LightLoginButton,
+  .DarkLoginButton,
+  .LightDisabledLoginButton,
+  .DarkDisabledLoginButton {
     transform: scale(1.1);
   }
 
@@ -344,8 +428,10 @@ export default {
     width: max-content;
   }
   .registerButton,
-  .loginButton,
-  .disabledLoginButton {
+  .LightLoginButton,
+  .DarkLoginButton,
+  .LightDisabledLoginButton,
+  .DarkDisabledLoginButton {
     transform: scale(0.9);
   }
 }
@@ -360,8 +446,10 @@ export default {
     width: max-content;
   }
   .registerButton,
-  .loginButton,
-  .disabledLoginButton {
+  .LightLoginButton,
+  .DarkLoginButton,
+  .LightDisabledLoginButton,
+  .DarkDisabledLoginButton {
     transform: scale(0.8);
   }
   .inputGrid {
@@ -385,8 +473,10 @@ export default {
     width: max-content;
   }
   .registerButton,
-  .loginButton,
-  .disabledLoginButton {
+  .LightLoginButton,
+  .DarkLoginButton,
+  .LightDisabledLoginButton,
+  .DarkDisabledLoginButton {
     transform: scale(0.7);
   }
   .inputGrid {
@@ -420,8 +510,10 @@ export default {
     width: max-content;
   }
   .registerButton,
-  .loginButton,
-  .disabledLoginButton {
+  .LightLoginButton,
+  .DarkLoginButton,
+  .LightDisabledLoginButton,
+  .DarkDisabledLoginButton {
     transform: scale(0.6);
   }
   .inputGrid {

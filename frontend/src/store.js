@@ -10,10 +10,10 @@ export default createStore({
     shouldResetToStartPage: null,
     eightFirstVideos: null,
     relatedVideoId: null,
-    mySearchHistoryList: [],
+    mySearchHistoryList: null,
     keyWord: '',
     matchedVideoList: [],
-    darkTheme: true,
+    darkTheme: false,
   },
   mutations: {
     setUser(state, user) {
@@ -164,13 +164,10 @@ export default createStore({
       );
       return res.json();
     },
-    async fetchEightMoreVideos(store, lengthOfCurrentVideoList) {
-      let res = await fetch(
-        '/rest/getEightNewVideos?' +
-          new URLSearchParams({
-            lengthOfCurrentVideoList: lengthOfCurrentVideoList,
-          })
-      );
+    async fetchEightMoreVideos(store, lengthOfCurrentVideoList){
+      let res = await fetch('/rest/getEightNewVideos?' + new URLSearchParams({
+        lengthOfCurrentVideoList: lengthOfCurrentVideoList
+      }));
       return res.json();
     },
 

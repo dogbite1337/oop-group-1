@@ -29,29 +29,31 @@ export default {
 
   data() {
     return {
-      matchedVideoList: this.$store.dispatch(
-        'getMatchedVideoList',
-        this.$store.getters.getKeyWord
-      ),
-      matchedUserList: this.$store.dispatch(
-        'getMatchedUserList',
-        this.$store.getters.getKeyWord
-      ),
+      matchedVideoList: [],
+      matchedUserList: [],
     };
   },
-
+  
   async created() {
-    let keyword = this.$store.getters.getKeyWord;
-    this.matchedVideoList = await this.$store.dispatch(
+
+    if(this.$store.getters.getKeyWord){
+      let keyword = this.$store.getters.getKeyWord;
+      this.matchedVideoList = await this.$store.dispatch(
       'getMatchedVideoList',
       keyword
     );
+      localStorage.setItem('orginalVideosList', JSON.stringify(this.matchedVideoList));
+      localStorage.setItem('searchKey', keyword);
+    }
+    else{
+      let list;
+      list = await JSON.parse(localStorage.orginalVideosList)
+      this.matchedVideoList = list
+    }
 
     await this.storeMatchedVideoList(this.matchedVideoList);
-    this.matchedUserList = await this.$store.dispatch(
-      'getMatchedUserList',
-      keyword
-    );
+
+    this.$store.dispatch("setKeyWord", "");
   },
 
   methods: {
@@ -64,7 +66,11 @@ export default {
 
 <style scoped>
 .mainContainer {
-  height: 80vh;
+  height: inherit;
   overflow: scroll;
+}
+
+.BackDrop {
+  height: 0;
 }
 </style>

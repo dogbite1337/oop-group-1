@@ -46,53 +46,35 @@ export default {
   },
 
   async mounted() {
-    if (this.$store.getters.getMatchedVideoList.length > 6) {
-      this.matchedVideos = await this.$store.getters.getMatchedVideoList.slice(
-        0,
-        6
-      );
-    } else {
-      this.matchedVideos = await this.$store.getters.getMatchedVideoList;
+    if(!this.$store.getters.getKeyWord){
+      this.keyword = await localStorage.searchKey
+    }
+
+    if(await this.$store.getters.getMatchedVideoList.length > 6){
+      this.matchedVideos = await this.$store.getters.getMatchedVideoList.slice(0,6)
+    }
+    else{
+      this.matchedVideos = await this.$store.getters.getMatchedVideoList
     }
   },
 
-  updated() {
-    // let htmlElement = document.querySelectorAll(".titleText");
-    // htmlElement.forEach(element => {
-    //   console.log(element.innerHTML)
-    //   element.innerHTML = element.innerHTML.replace(this.keyword, '<span style="color: red;">' + this.keyword + '</span>')
-    // });
-
-    // upon start, show 6 videos, and then when the last video DIV is showing, loadMoreVideos
-    // however, unobserve should have stopped this from observing the earlier "last div" and observe on the new last div
-    // Problem: unobserve had no effect, Observer instead listens to both div
-    this.lastVideoObserverSearchResult = new IntersectionObserver(
-      (entries) => {
-        let lastVideo = entries[0];
-        if (!lastVideo.isIntersecting) {
-          // console.log(lastVideo.target)
-          return;
-        }
-        this.loadMoreVideos();
+  updated(){
+      this.lastVideoObserverSearchResult = new IntersectionObserver(entries =>{
+        let lastVideo = entries[0]
+        if(!lastVideo.isIntersecting) {
+          return;}
+        this.loadMoreVideos()
         this.lastVideoObserverSearchResult.unobserve(lastVideo.target);
-        // Since neither of these worked, i set a switch for temp fix
-        // this.lastVideoObserverSearchResult.disconnect();
-        // IntersectionObserver.disconnect();
-        if (!this.stopObserver)
-          this.lastVideoObserverSearchResult.observe(
-            document.querySelector('.videoCard:last-child')
-          );
-      },
-      { rootMargin: '50px' }
-    );
-
-    this.lastVideoObserverSearchResult.observe(
-      document.querySelector('.videoCard:last-child')
-    );
+        if(!this.stopObserver) 
+        this.lastVideoObserverSearchResult.observe(document.querySelector(".videoCard:last-child"))
+      },{rootMargin: "50px"}
+      )
+      this.lastVideoObserverSearchResult.observe(document.querySelector(".videoCard:last-child"))
   },
 
   unmounted() {
     this.stopObserver = true;
+    // this.lastVideoObserverSearchResult.disconnect();
   },
 
   methods: {
@@ -100,17 +82,12 @@ export default {
       let lengthOfCurrentShowedVideos = this.matchedVideos.length;
       let fullMatchedList = await this.$store.getters.getMatchedVideoList;
 
-      if (lengthOfCurrentShowedVideos + 6 > fullMatchedList.length) {
-        this.matchedVideos = fullMatchedList;
-      } else {
-        console.log(fullMatchedList.slice(0, lengthOfCurrentShowedVideos + 6));
-        this.matchedVideos = fullMatchedList.slice(
-          0,
-          lengthOfCurrentShowedVideos + 6
-        );
+      if(lengthOfCurrentShowedVideos + 6 > fullMatchedList.length){
+        this.matchedVideos = fullMatchedList
       }
-
-      // console.log("loaded more videos")
+      else{
+        this.matchedVideos = fullMatchedList.slice(0, lengthOfCurrentShowedVideos+6)
+      }
     },
 
     goToVideoPage(video) {
@@ -152,11 +129,14 @@ p {
 .titleText .keyword {
   color: rgb(255, 99, 99);
   font-size: inherit;
+  display: inline;
+  margin: 0 -5px;
 }
 
 .titleText {
   display: flex;
   color: white;
+  display: inline;
 }
 
 /* .title p {
