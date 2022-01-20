@@ -25,7 +25,7 @@
         <div class="SpaceBlock" />
         <div class="textDiv">
           <div class="SpaceBlock" />
-          <div class="titleDiv">
+          <div v-if="darkTheme" class="DarkTitleDiv">
             {{ video.title }}
           </div>
           <div class="SpaceBlock" />
@@ -68,7 +68,7 @@
         <div class="SpaceBlock" />
         <div class="textDiv">
           <div class="SpaceBlock" />
-          <div class="titleDiv">
+          <div v-if="!darkTheme" class="LightTitleDiv">
             {{ video.title }}
           </div>
           <div class="SpaceBlock" />
@@ -288,7 +288,13 @@ export default {
 .relatedVideoBox {
   border-top: solid 1px #939393;
 }
-.titleDiv {
+.LightTitleDiv {
+  color: black;
+  margin-top: 5px;
+  font-size: 12px;
+  width: 160px;
+}
+.DarkTitleDiv {
   color: #ffffff;
   margin-top: 5px;
   font-size: 12px;

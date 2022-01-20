@@ -324,6 +324,7 @@
         @unsubscribe="unsubscribe"
       />
     </div>
+    <div class="RoomBlock" />
     <Footer class="footerDiv" />
   </div>
   <div v-if="currentUser && darkTheme" class="DarkBackgroundDiv">
@@ -651,6 +652,7 @@
         @unsubscribe="unsubscribe"
       />
     </div>
+    <div class="RoomBlock" />
     <Footer class="footerDiv" />
   </div>
 </template>
@@ -932,6 +934,9 @@ export default {
   font-size: 25px;
   margin-top: 5px;
 }
+.RoomBlock{
+  height: 60px;
+}
 .saveNewDescriptionButton {
   display: block;
   width: 138px;
@@ -1182,7 +1187,8 @@ export default {
   display: grid;
   grid-template-rows: 5vh auto;
   background-color: black;
-  position: sticky;
+  position: absolute;
+  bottom: 0px;
   padding-bottom: 10px;
   width: 100%;
 }
