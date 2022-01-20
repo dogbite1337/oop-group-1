@@ -556,6 +556,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
   padding-bottom: 65px;
+  max-width: 100vw;
 }
 
 .DarkCardsContainer {

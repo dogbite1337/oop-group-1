@@ -76,7 +76,7 @@ export default {
   data() {
     return {
       thumbNail: '',
-      darkTheme: false,
+      darkTheme: this.$store.getters.getIsDarkTheme,
     };
   },
 
