@@ -182,12 +182,14 @@
         @updateReplies="updateReplies"
       />
     </div>
-    <RelatedVideo
-      v-for="(videoItem, index) of relatedVideos"
-      :key="index"
-      :video="videoItem"
-      class="videoBox"
-    />
+    <!-- <div class="relatedVideosContainer" v-if="startRenderingtrue"> -->
+      <RelatedVideo
+        v-for="(videoItem, index) of relatedVideos"
+        :key="index"
+        :video="videoItem"
+        class="videoBox"
+      />
+    <!-- </div> -->
   </div>
 </template>
 <script>
@@ -213,10 +215,8 @@ export default {
   data() {
     return {
       amountOfComments: 0,
+      relatedVideos: [],
       loggedInUser: this.$store.getters.getCurrentUser,
-      relatedVideos: this.$store.getters.getEightFirstVideos
-        ? this.$store.getters.getEightFirstVideos
-        : undefined,
       video: '',
       activeId: 0,
       spacedViews: 0,
@@ -240,6 +240,7 @@ export default {
       subscribedAlready: false,
     };
   },
+
   async created() {
     this.$store.subscribe(async (mutation, state) => {
       if (mutation.type == 'setRelatedVideoId') {
@@ -247,11 +248,16 @@ export default {
       }
     });
   },
+
   async mounted() {
     this.loadRelevantInformation();
     this.actOnResize();
     this.isOnVideosPage = true;
     window.scrollTo(0, 0);
+
+    this.relatedVideos = [];
+    // this.relatedVideos = await this.$store.dispatch('fetchEightMoreVideos', 0);
+    this.relatedVideos = await JSON.parse(localStorage.relatedVideos)
 
     let fixedList = [];
     if (this.relatedVideos) {
@@ -401,16 +407,15 @@ export default {
 
     // See comment on method
     this.incrementViewCount(this.$route.path);
-  },
 
-  updated() {
-    this.lastVideoObserverSearchResult = new IntersectionObserver(
-      (entries) => {
-        let lastVideo = entries[0];
-        if (!lastVideo.isIntersecting) {
-          return;
-        }
-        this.loadMoreVideos();
+    this.$nextTick(function () {
+    // Code that will run only after the
+    // entire view has been re-rendered
+        this.lastVideoObserverSearchResult = new IntersectionObserver(entries =>{
+        let lastVideo = entries[0]
+        if(!lastVideo.isIntersecting) {
+          return;}
+        this.loadMoreVideos()
         this.lastVideoObserverSearchResult.unobserve(lastVideo.target);
         if (!this.stopObserver)
           this.lastVideoObserverSearchResult.observe(
@@ -420,9 +425,8 @@ export default {
       { rootMargin: '25px' }
     );
 
-    this.lastVideoObserverSearchResult.observe(
-      document.querySelector('.videoBox:last-child')
-    );
+      this.lastVideoObserverSearchResult.observe(document.querySelector(".videoBox:last-child"))
+    })
   },
 
   beforeUnmount() {
@@ -435,23 +439,11 @@ export default {
     async loadMoreVideos() {
       let newlyLoadedVideos;
       let numberOfCurrentShownVideos = this.relatedVideos.length;
-      newlyLoadedVideos = await this.fetchEightMoreVideosFromDB(
-        numberOfCurrentShownVideos
-      );
-      this.$nextTick(function () {
-        if (newlyLoadedVideos.length != 0) {
-          newlyLoadedVideos.forEach((newVideo) => {
-            // if(!this.relatedVideos.includes(newVideo)){
-            //   this.relatedVideos.push(newVideo)
-            //   console.log("does not include")
-            //   console.log(newVideo)
-            // }
-            if (
-              !this.relatedVideos.some(
-                (data) => data.videoId === newVideo.videoId
-              ) &&
-              this.video.videoId != newVideo.videoId
-            ) {
+      newlyLoadedVideos = await this.fetchEightMoreVideosFromDB(numberOfCurrentShownVideos);
+      this.$nextTick(function(){
+          if(newlyLoadedVideos.length != 0){
+          newlyLoadedVideos.forEach(newVideo => {
+            if(!this.relatedVideos.some(data => data.videoId === newVideo.videoId) && this.video.videoId != newVideo.videoId){
               //don't exists
               this.relatedVideos.push(newVideo);
             }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 
 public class searchHistoryRepository {
-    Connection con;
+    Connection con, con2;
 
     public void registerSearchHistory(SearchHistory newSearchHistory) throws SQLException {
 
@@ -41,13 +41,13 @@ public class searchHistoryRepository {
         ArrayList<SearchHistory> historyListOfUserDescendingByTime = new ArrayList<SearchHistory>();
         try {
             try {
-                con = DriverManager.getConnection(
+                con2 = DriverManager.getConnection(
                         "jdbc:mysql://localhost:3306/kittykitty", "root", "root");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
 
-            Statement searchHistoryList = con.createStatement();
+            Statement searchHistoryList = con2.createStatement();
             String query = "Select * from searchhistories Where userId = " + userId + " ORDER BY historyId DESC LIMIT 6;";
             ResultSet result = searchHistoryList.executeQuery(query);
 
@@ -59,7 +59,7 @@ public class searchHistoryRepository {
             ex.printStackTrace();
         }
 
-        con.close();
+        con2.close();
         return historyListOfUserDescendingByTime;
     }
 

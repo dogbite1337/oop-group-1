@@ -48,7 +48,9 @@ export default {
     await this.loadMoreVideos();
     let allVideos = this.relevantVideos;
 
-    this.$store.dispatch('cacheFirstEightVideos', allVideos);
+
+    // this.$store.dispatch('cacheFirstEightVideos', allVideos);
+    localStorage.setItem('relatedVideos', JSON.stringify(allVideos));
     this.relevantVideos = [];
     for (let i = allVideos.length; i > 0; i--) {
       let video = new Video();
@@ -143,21 +145,14 @@ export default {
         let lastVideo = entries[0];
         if (!lastVideo.isIntersecting) {
           // this.loadMoreVideos()
-          return;
-        }
+          return;}
 
-        this.loadMoreVideos();
-        this.lastVideoObserver.unobserve(lastVideo.target);
-        this.lastVideoObserver.observe(
-          document.querySelector('.videoBox:last-child')
-        );
-      },
-      { rootMargin: '100px' }
-    );
-
-    this.lastVideoObserver.observe(
-      document.querySelector('.videoBox:last-child')
-    );
+          this.loadMoreVideos()
+          this.lastVideoObserver.unobserve(lastVideo.target)
+          this.lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
+      },{rootMargin: "100px"}
+      )
+      this.lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
   },
   unmounted() {
     this.lastVideoObserver.disconnect();
@@ -168,22 +163,16 @@ export default {
     async loadMoreVideos() {
       let newlyLoadedVideos;
       let numberOfCurrentShownVideos = this.relevantVideos.length;
-      newlyLoadedVideos = await this.fetchEightMoreVideosFromDB(
-        numberOfCurrentShownVideos
-      );
-      this.$nextTick(function () {
-        if (newlyLoadedVideos.length != 0) {
-          newlyLoadedVideos.forEach((newVideo) => {
-            if (
-              !this.relevantVideos.some(
-                (data) => data.videoId === newVideo.videoId
-              )
-            ) {
-              this.relevantVideos.push(newVideo);
+      newlyLoadedVideos = await this.fetchEightMoreVideosFromDB(numberOfCurrentShownVideos);
+      this.$nextTick(function(){
+          if(newlyLoadedVideos.length != 0){
+          newlyLoadedVideos.forEach(newVideo => {
+            if(!this.relevantVideos.some(data => data.videoId === newVideo.videoId)){
+              this.relevantVideos.push(newVideo)
             }
-          });
-        }
-      });
+        });
+      }
+      })
     },
 
     async fetchEightMoreVideosFromDB(numberOfCurrentShownVideos) {
@@ -268,6 +257,8 @@ export default {
 
 .MainDiv {
   background-color: #131313;
+  height: inherit;
+  overflow-y: scroll;
 }
 .test {
   width: 200px;
@@ -403,10 +394,14 @@ export default {
   position: relative;
   top: -1.5px;
 }
-.footerDiv {
+/* .footerDiv {
   display: grid;
   grid-template-rows: 5vh auto;
   background-color: black;
+  position: sticky;
+} */
+
+.footerDiv {
   position: fixed;
   top: calc(100vh - 65px);
   width: 100vw;
