@@ -127,7 +127,7 @@ export default {
   }
 }
 
-@media screen and (min-width: 401px) {
+@media screen and (min-width: 400px) {
   .CardBox {
     max-width: 48vw;
     max-height: 400px;
@@ -147,7 +147,7 @@ export default {
 
 @media screen and (min-width: 440px) and (max-width:560px) {
   .CardBox {
-    max-width: 47vw;
+    max-width: 48vw;
     max-height: 200px;
     margin-left: auto;
      margin-right: auto;
@@ -158,12 +158,12 @@ export default {
   }
   .ImageBox {
     height: 120px;
-    width:205px;
+    width:220px;
   }
 }
 
 
-@media screen and (min-width: 561px) and (max-width:600px) {
+@media screen and (min-width: 560px) and (max-width:600px) {
   .CardBox {
     max-width: 56vw;
   max-height: 180px;
@@ -175,7 +175,7 @@ export default {
   margin-right:5px;
   }
   .ImageBox {
-    height: 110px;
+    height: 100px;
     width:270px;
   }
 }
