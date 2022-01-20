@@ -94,7 +94,7 @@ public class VideoHandler {
             try {
                 res.json(videoRepository.getNextEightVideos(Integer.parseInt(req.query("lengthOfCurrentVideoList"))));
             } catch (SQLException e) {
-                System.out.println("error");
+                e.printStackTrace();
             }
         });
     }

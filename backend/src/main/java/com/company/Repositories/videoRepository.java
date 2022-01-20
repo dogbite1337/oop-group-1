@@ -417,7 +417,6 @@ public class videoRepository {
             videosWillBeLoad.add(newVideo);
         }
         con.close();
-//        System.out.println(videosWillBeLoad);
         return videosWillBeLoad;
 
     }

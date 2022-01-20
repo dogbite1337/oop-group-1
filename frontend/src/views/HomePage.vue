@@ -138,11 +138,12 @@ export default {
 
     window.addEventListener('resize', this.recalculateGrid);
   },
-  updated(){
+  updated() {
     // here i am trying to only observer the last element of that class
-       this.lastVideoObserver = new IntersectionObserver(entries =>{
-        let lastVideo = entries[0]
-        if(!lastVideo.isIntersecting) {
+    this.lastVideoObserver = new IntersectionObserver(
+      (entries) => {
+        let lastVideo = entries[0];
+        if (!lastVideo.isIntersecting) {
           // this.loadMoreVideos()
           return;}
 
@@ -157,9 +158,9 @@ export default {
     this.lastVideoObserver.disconnect();
     window.removeEventListener('resize', this.recalculateGrid);
   },
-  
+
   methods: {
-    async loadMoreVideos(){
+    async loadMoreVideos() {
       let newlyLoadedVideos;
       let numberOfCurrentShownVideos = this.relevantVideos.length;
       newlyLoadedVideos = await this.fetchEightMoreVideosFromDB(numberOfCurrentShownVideos);
@@ -174,8 +175,11 @@ export default {
       })
     },
 
-    async fetchEightMoreVideosFromDB(numberOfCurrentShownVideos){
-      return await this.$store.dispatch("fetchEightMoreVideos", numberOfCurrentShownVideos)
+    async fetchEightMoreVideosFromDB(numberOfCurrentShownVideos) {
+      return await this.$store.dispatch(
+        'fetchEightMoreVideos',
+        numberOfCurrentShownVideos
+      );
     },
 
     getGridDimensions() {
@@ -397,6 +401,12 @@ export default {
   position: sticky;
 } */
 
+.footerDiv {
+  position: fixed;
+  top: calc(100vh - 65px);
+  width: 100vw;
+}
+
 /* .clearHistoryButton{
   width: 97px;
   height: 20px;
@@ -491,7 +501,7 @@ export default {
   width: max-content;
   margin-left: auto;
   margin-right: auto;
-  padding-bottom: 20px;
+  padding-bottom: 65px;
 }
 
 .SorryText {

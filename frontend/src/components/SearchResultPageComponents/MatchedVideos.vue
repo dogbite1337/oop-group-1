@@ -12,9 +12,9 @@
     </div>
     <div class="textInfo">
       <div class="titleText">
-          {{ displayTitleBeforeKey(video.title) }}
-          <p class="keyword">{{ displayKeyWord(video.title) }}</p>
-          {{ displayTitleAfterKey(video.title) }}
+        {{ displayTitleBeforeKey(video.title) }}
+        <p class="keyword">{{ displayKeyWord(video.title) }}</p>
+        {{ displayTitleAfterKey(video.title) }}
         <!-- <a class="titleText" :href="'/VideoPage/' + video.videoId">
           {{ video.title }}
         </a> -->
@@ -36,7 +36,6 @@
 
 <script>
 export default {
-
   data() {
     return {
       keyword: this.$store.getters.getKeyWord,
@@ -73,14 +72,14 @@ export default {
       this.lastVideoObserverSearchResult.observe(document.querySelector(".videoCard:last-child"))
   },
 
-  unmounted(){
+  unmounted() {
     this.stopObserver = true;
     // this.lastVideoObserverSearchResult.disconnect();
   },
 
   methods: {
-    async loadMoreVideos(){
-      let lengthOfCurrentShowedVideos = this.matchedVideos.length
+    async loadMoreVideos() {
+      let lengthOfCurrentShowedVideos = this.matchedVideos.length;
       let fullMatchedList = await this.$store.getters.getMatchedVideoList;
 
       if(lengthOfCurrentShowedVideos + 6 > fullMatchedList.length){

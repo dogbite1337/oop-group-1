@@ -56,11 +56,11 @@ export default {
     this.$store.dispatch("setKeyWord", "");
   },
 
-  methods:{
-    async storeMatchedVideoList(matchedVideoList){
-      await this.$store.dispatch("setMatchedVideoList", matchedVideoList)
-    }
-  }
+  methods: {
+    async storeMatchedVideoList(matchedVideoList) {
+      await this.$store.dispatch('setMatchedVideoList', matchedVideoList);
+    },
+  },
 };
 </script>
 

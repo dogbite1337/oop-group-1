@@ -47,12 +47,12 @@
       <div v-if="!showWatchNowInstead" class="UploaderDiv">
         <div class="SpaceDiv" />
         <div class="square1 square">
-          <img class="uploaderProfileDiv" :src="User.profileURL" />
+          <img class="uploaderProfileDiv" :src="Uploader.profileURL" />
         </div>
         <div class="SpaceDiv" />
         <div class="square2 square">
           <div class="usernameDiv">
-            {{ User.username }}
+            {{ Uploader.username }}
           </div>
           <div class="subsDiv">Subscribers: {{ spacedSubs }}</div>
         </div>
@@ -61,9 +61,24 @@
           <div class="videosDiv">Videos: {{ spacedVideos }}</div>
         </div>
         <div class="SpaceDiv" />
-        <div class="square4 square">
-          <div class="subButtonDiv">
-            <button class="subButton" value="Subscribe">+ Subscribe</button>
+        <div v-if="loggedInUser" class="square4 square">
+          <div v-if="loggedInUser.userId != video.userId" class="subButtonDiv">
+            <button
+              v-if="!subscribedAlready"
+              @click="subscribe"
+              class="subButton"
+              value="Subscribe"
+            >
+              + Subscribe
+            </button>
+            <button
+              v-if="subscribedAlready"
+              @click="unsubscribe"
+              class="subButton"
+              value="Unsubscribe"
+            >
+              - Unsubscribe
+            </button>
           </div>
         </div>
         <div class="SpaceDiv" />
@@ -201,6 +216,7 @@ export default {
     return {
       amountOfComments: 0,
       relatedVideos: [],
+      loggedInUser: this.$store.getters.getCurrentUser,
       video: '',
       activeId: 0,
       spacedViews: 0,
@@ -209,7 +225,7 @@ export default {
       spacedStars: 0,
       spacedSubs: 0,
       spacedVideos: 0,
-      User: '',
+      Uploader: '',
       isOnVideosPage: false,
       showWatchNowInstead: false,
       height: window.screen.height / 2,
@@ -221,6 +237,7 @@ export default {
       currentCommenters: [],
       likedVideoAlready: false,
       dislikedVideoAlready: false,
+      subscribedAlready: false,
     };
   },
 
@@ -294,6 +311,23 @@ export default {
           videoId: this.$route.params.id,
         })
     );
+
+    if (this.loggedInUser) {
+      let subsRes = await fetch(
+        '/rest/getSubscribersForId?' +
+          new URLSearchParams({
+            userId: this.loggedInUser.userId,
+          })
+      );
+      let subsResponse = await subsRes.json();
+
+      for (let i = 0; i < subsResponse.length; i++) {
+        if (subsResponse[i].userId == this.video.userId) {
+          this.subscribedAlready = true;
+        }
+      }
+    }
+
     // full width on mobile view on cards
     let commentsResponse = await commentsRes.json();
     this.amountOfComments = commentsResponse.length;
@@ -383,24 +417,26 @@ export default {
           return;}
         this.loadMoreVideos()
         this.lastVideoObserverSearchResult.unobserve(lastVideo.target);
-        if(!this.stopObserver) 
-        this.lastVideoObserverSearchResult.observe(document.querySelector(".videoBox:last-child"))
-      },{rootMargin: "25px"}
-      )
+        if (!this.stopObserver)
+          this.lastVideoObserverSearchResult.observe(
+            document.querySelector('.videoBox:last-child')
+          );
+      },
+      { rootMargin: '25px' }
+    );
 
       this.lastVideoObserverSearchResult.observe(document.querySelector(".videoBox:last-child"))
     })
   },
 
-  beforeUnmount(){
+  beforeUnmount() {
     this.stopObserver = true;
-    this.$store.dispatch("cacheFirstEightVideos",[])
+    this.$store.dispatch('cacheFirstEightVideos', []);
   },
-
 
   watch: {},
   methods: {
-    async loadMoreVideos(){
+    async loadMoreVideos() {
       let newlyLoadedVideos;
       let numberOfCurrentShownVideos = this.relatedVideos.length;
       newlyLoadedVideos = await this.fetchEightMoreVideosFromDB(numberOfCurrentShownVideos);
@@ -409,15 +445,18 @@ export default {
           newlyLoadedVideos.forEach(newVideo => {
             if(!this.relatedVideos.some(data => data.videoId === newVideo.videoId) && this.video.videoId != newVideo.videoId){
               //don't exists
-              this.relatedVideos.push(newVideo)
+              this.relatedVideos.push(newVideo);
             }
-        });
+          });
         }
-      })
+      });
     },
 
-    async fetchEightMoreVideosFromDB(numberOfCurrentShownVideos){
-      return await this.$store.dispatch("fetchEightMoreVideos", numberOfCurrentShownVideos)
+    async fetchEightMoreVideosFromDB(numberOfCurrentShownVideos) {
+      return await this.$store.dispatch(
+        'fetchEightMoreVideos',
+        numberOfCurrentShownVideos
+      );
     },
 
     async updateBasedOnDelete(commentsAfterRemoval) {
@@ -518,6 +557,46 @@ export default {
         newDate += dateObject.getMinutes();
       }
       return newDate;
+    },
+    async unsubscribe() {
+      let myUser = this.$store.getters.getCurrentUser;
+      let uploader = this.video.userId;
+      if (myUser && uploader) {
+        let unsubscribeRes = await fetch(
+          '/api/unsubscribe?' +
+            new URLSearchParams({
+              targetId: this.video.userId,
+              userId: myUser.userId,
+            }),
+          {
+            method: 'DELETE',
+          }
+        );
+        let newAmountOfSubResponse = await unsubscribeRes.json();
+
+        this.spacedSubs = newAmountOfSubResponse;
+        this.subscribedAlready = false;
+      }
+    },
+    async subscribe() {
+      let uploader = this.Uploader;
+
+      if (uploader) {
+        let res = await fetch(
+          '/api/subscribe?' +
+            new URLSearchParams({
+              targetId: uploader.userId,
+              userId: this.loggedInUser.userId,
+            }),
+          {
+            method: 'POST',
+          }
+        );
+        let newAmountOfSubResponse = await res.json();
+
+        this.spacedSubs = newAmountOfSubResponse;
+        this.subscribedAlready = true;
+      }
     },
     async likeVideo() {
       if (this.$store.getters.getCurrentUser && !this.likedVideoAlready) {
@@ -642,12 +721,12 @@ export default {
       );
       let uploaderResponse = await uploaderRes.json();
       let emptyUser = new User(0, '', '', '', 0, 0);
-      this.User = Object.assign(emptyUser, uploaderResponse);
+      this.Uploader = Object.assign(emptyUser, uploaderResponse);
       this.spacedSubs = this.renderSpacedNumbers(
-        this.User.subscribers.toString()
+        this.Uploader.subscribers.toString()
       );
       this.spacedVideos = this.renderSpacedNumbers(
-        this.User.videosPosted.toString()
+        this.Uploader.videosPosted.toString()
       );
     },
     renderSpacedNumbers(stringToPad) {
