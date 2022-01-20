@@ -45,32 +45,24 @@ export default {
       if(!this.$store.getters.getCurrentUser){
         if(this.$store.getters.getMySearchHistoryList!=null){
           mySearchHistoryList = await this.$store.getters.getMySearchHistoryList;
-          console.log(1)
         }
         else if(localStorage.searchHistoryList){
           mySearchHistoryList = JSON.parse(localStorage.searchHistoryList);
-          console.log(2)
         }
 
-        console.log(mySearchHistoryList)
 
         if(mySearchHistoryList.length > 5 && mySearchHistoryList.some(data => (data.keyWord != obj.keyWord))) {
           mySearchHistoryList.splice(mySearchHistoryList.length - 1, 1);
           mySearchHistoryList.unshift(obj);
-          console.log(3)
         }
         else if(mySearchHistoryList.length == 0 || mySearchHistoryList.some(data => (data.keyWord != obj.keyWord))){
           mySearchHistoryList.unshift(obj);
-          console.log(4)
         }
 
-        console.log(mySearchHistoryList)
         await this.$store.dispatch('cacheSearchHistory', mySearchHistoryList)
         localStorage.setItem('searchHistoryList', JSON.stringify(mySearchHistoryList))
       }else{
         //if u r user register in db
-        console.log('called emit')
-        console.log(keyWord)
         this.$emit('addTrendingSearch', keyWord)
       }
 
