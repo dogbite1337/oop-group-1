@@ -13,6 +13,7 @@ export default createStore({
     mySearchHistoryList: null,
     keyWord: '',
     matchedVideoList: [],
+    matchedUserList: [],
     darkTheme: true,
   },
   mutations: {
@@ -59,6 +60,9 @@ export default createStore({
     setMatchedVideoList(state, list) {
       state.matchedVideoList = list;
     },
+    setMatchedUserList(state, list){
+      state.matchedUserList = list;
+    }
   },
   getters: {
     getIsDarkTheme: (state) => {
@@ -91,6 +95,9 @@ export default createStore({
     getMatchedVideoList: (state) => {
       return state.matchedVideoList;
     },
+    getMatchedUserList: (state) =>{
+      return state.matchedUserList;
+    }
   },
   actions: {
     async setDarkTheme(store, darkTheme) {
@@ -174,5 +181,9 @@ export default createStore({
     async setMatchedVideoList(store, list) {
       store.commit('setMatchedVideoList', list);
     },
+
+    async setMatchedUserList(store, list){
+      store.commit('setMatchedUserList', list)
+    }
   },
 });

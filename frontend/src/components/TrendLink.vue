@@ -30,8 +30,6 @@ export default {
 
   async created() {
     this.isDarkTheme = await this.$store.getters.getIsDarkTheme
-    console.log("trending search")
-    console.log(await this.$store.getters.getIsDarkTheme)
     this.trendingSearch = await this.$store.dispatch('getTrendingSearch');
   },
 

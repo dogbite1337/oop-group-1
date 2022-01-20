@@ -16,7 +16,7 @@
               <p class="time">{{ 'Subscribers: ' + user.subscribers }}</p>
             </div>
             <div class="videoCountContainer">
-              <p class="time">{{ 'Videos: ' + user.videosPosted }}</p>
+              <p class="time">{{ 'Videos: ' + user.userVideos.length }}</p>
             </div>
             <button
               class="subBtn"
@@ -31,6 +31,7 @@
       <div class="videosContianer" v-if="user.userVideos.length > 0">
         <div
           class="videoCard"
+          :class="isDarkTheme == true ? 'videoCardDarkTheme' : 'videoCardLightTheme'"
           v-for="video in userVideos(user)"
           :key="video.title"
           @click="goToVideoPage(video)"
@@ -44,11 +45,11 @@
             "
             alt=""
           />
-          <p class="title">{{ video.title }}</p>
+          <p class="title" :class="isDarkTheme == true ? 'titleDarkTheme' : 'titleLightTheme'">{{ video.title }}</p>
           <p class="time">{{ uploadTime(video.uploadDate) }}</p>
         </div>
         <div class="textContainer" v-if="user.userVideos.length > 2">
-          <p>{{ 'check all ' + user.videosPosted + ' videos >' }}</p>
+          <p>{{ 'check all ' + user.userVideos.length + ' videos >' }}</p>
         </div>
       </div>
     </div>
@@ -59,12 +60,16 @@
 export default {
   props: ['matchedUserList'],
 
-  created() {},
 
   data() {
     return {
       loggedInUser: this.$store.getters.getCurrentUser,
+      isDarkTheme: true,
     };
+  },
+
+  async created() {
+    this.isDarkTheme = await this.$store.getters.getIsDarkTheme
   },
 
   methods: {
@@ -176,10 +181,12 @@ p {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   justify-items: center;
+  margin: 0 1rem;
 }
 
 .videoCard {
   text-align: center;
+  margin: 0 0.2rem;
 }
 
 .title {
@@ -198,5 +205,13 @@ p {
 
 .userCard {
   border-bottom: solid 1px #bfbfbf;
+}
+
+.titleLightTheme{
+  color: black;
+}
+
+.videoCardLightTheme{
+  border: black 1px solid;
 }
 </style>

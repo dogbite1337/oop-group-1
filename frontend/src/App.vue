@@ -23,7 +23,7 @@ export default {
     this.isDarkTheme = await this.$store.getters.getIsDarkTheme
     this.isDarkTheme = false;
     await this.$store.dispatch('setDarkTheme', this.isDarkTheme)
-    console.log(this.isDarkTheme)
+    // console.log(this.isDarkTheme)
   },
 };
 </script>

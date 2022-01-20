@@ -11,14 +11,10 @@
       />
     </div>
     <div class="textInfo">
-      <div class="titleText">
+      <div class="titleText" :class="isDarkTheme == true ? 'titleTextDarkTheme' : 'titleTextLightTheme'">
         {{ displayTitleBeforeKey(video.title) }}
         <p class="keyword">{{ displayKeyWord(video.title) }}</p>
         {{ displayTitleAfterKey(video.title) }}
-        <!-- <a class="titleText" :href="'/VideoPage/' + video.videoId">
-          {{ video.title }}
-        </a> -->
-        <!-- <p>{{video.title}}</p> -->
       </div>
       <div class="otherInfo">
         <div class="uploader">
@@ -42,7 +38,12 @@ export default {
       lastVideoObserverSearchResult: null,
       matchedVideos: [],
       stopObserver: false,
+      isDarkTheme: true,
     };
+  },
+
+  async created(){
+    this.isDarkTheme = await this.$store.getters.getIsDarkTheme
   },
 
   async mounted() {
@@ -204,5 +205,9 @@ img {
   margin-left: 3vw;
   align-self: center;
   height: 2.5vh;
+}
+
+.titleTextLightTheme{
+  color: black;
 }
 </style>
