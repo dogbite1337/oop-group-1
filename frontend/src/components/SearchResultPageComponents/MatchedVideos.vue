@@ -12,9 +12,9 @@
     </div>
     <div class="textInfo">
       <div class="titleText">
-          {{ displayTitleBeforeKey(video.title) }}
-          <p class="keyword">{{ displayKeyWord(video.title) }}</p>
-          {{ displayTitleAfterKey(video.title) }}
+        {{ displayTitleBeforeKey(video.title) }}
+        <p class="keyword">{{ displayKeyWord(video.title) }}</p>
+        {{ displayTitleAfterKey(video.title) }}
         <!-- <a class="titleText" :href="'/VideoPage/' + video.videoId">
           {{ video.title }}
         </a> -->
@@ -36,7 +36,6 @@
 
 <script>
 export default {
-
   data() {
     return {
       keyword: this.$store.getters.getKeyWord,
@@ -47,16 +46,17 @@ export default {
   },
 
   async mounted() {
-    if(this.$store.getters.getMatchedVideoList.length > 6){
-      this.matchedVideos = await this.$store.getters.getMatchedVideoList.slice(0,6)
-    }
-    else{
-      this.matchedVideos = await this.$store.getters.getMatchedVideoList
+    if (this.$store.getters.getMatchedVideoList.length > 6) {
+      this.matchedVideos = await this.$store.getters.getMatchedVideoList.slice(
+        0,
+        6
+      );
+    } else {
+      this.matchedVideos = await this.$store.getters.getMatchedVideoList;
     }
   },
 
-  updated(){
-
+  updated() {
     // let htmlElement = document.querySelectorAll(".titleText");
     // htmlElement.forEach(element => {
     //   console.log(element.innerHTML)
@@ -66,39 +66,48 @@ export default {
     // upon start, show 6 videos, and then when the last video DIV is showing, loadMoreVideos
     // however, unobserve should have stopped this from observing the earlier "last div" and observe on the new last div
     // Problem: unobserve had no effect, Observer instead listens to both div
-      this.lastVideoObserverSearchResult = new IntersectionObserver(entries =>{
-        let lastVideo = entries[0]
-        if(!lastVideo.isIntersecting) {
+    this.lastVideoObserverSearchResult = new IntersectionObserver(
+      (entries) => {
+        let lastVideo = entries[0];
+        if (!lastVideo.isIntersecting) {
           // console.log(lastVideo.target)
-          return;}
-        this.loadMoreVideos()
+          return;
+        }
+        this.loadMoreVideos();
         this.lastVideoObserverSearchResult.unobserve(lastVideo.target);
         // Since neither of these worked, i set a switch for temp fix
         // this.lastVideoObserverSearchResult.disconnect();
         // IntersectionObserver.disconnect();
-        if(!this.stopObserver) 
-        this.lastVideoObserverSearchResult.observe(document.querySelector(".videoCard:last-child"))
-      },{rootMargin: "50px"}
-      )
+        if (!this.stopObserver)
+          this.lastVideoObserverSearchResult.observe(
+            document.querySelector('.videoCard:last-child')
+          );
+      },
+      { rootMargin: '50px' }
+    );
 
-      this.lastVideoObserverSearchResult.observe(document.querySelector(".videoCard:last-child"))
+    this.lastVideoObserverSearchResult.observe(
+      document.querySelector('.videoCard:last-child')
+    );
   },
 
-  unmounted(){
+  unmounted() {
     this.stopObserver = true;
   },
 
   methods: {
-    async loadMoreVideos(){
-      let lengthOfCurrentShowedVideos = this.matchedVideos.length
+    async loadMoreVideos() {
+      let lengthOfCurrentShowedVideos = this.matchedVideos.length;
       let fullMatchedList = await this.$store.getters.getMatchedVideoList;
 
-      if(lengthOfCurrentShowedVideos + 6 > fullMatchedList.length){
-        this.matchedVideos = fullMatchedList
-      }
-      else{
-        console.log(fullMatchedList.slice(0, lengthOfCurrentShowedVideos+6))
-        this.matchedVideos = fullMatchedList.slice(0, lengthOfCurrentShowedVideos+6)
+      if (lengthOfCurrentShowedVideos + 6 > fullMatchedList.length) {
+        this.matchedVideos = fullMatchedList;
+      } else {
+        console.log(fullMatchedList.slice(0, lengthOfCurrentShowedVideos + 6));
+        this.matchedVideos = fullMatchedList.slice(
+          0,
+          lengthOfCurrentShowedVideos + 6
+        );
       }
 
       // console.log("loaded more videos")

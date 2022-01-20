@@ -3,9 +3,7 @@
     v-if="matchedUserList.length > 0"
     :matchedUserList="matchedUserList"
   />
-  <MatchedVideos
-    v-if="matchedVideoList.length > 0"
-  />
+  <MatchedVideos v-if="matchedVideoList.length > 0" />
 </template>
 <script>
 import MatchedUsers from './MatchedUsers.vue';

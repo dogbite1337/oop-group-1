@@ -43,7 +43,7 @@ export default createRouter({
     },
     {
       path: '/Profile/:username',
-      component: ProfilePage
-    }
+      component: ProfilePage,
+    },
   ],
 });
