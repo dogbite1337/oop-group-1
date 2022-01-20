@@ -1,9 +1,41 @@
 <template>
-  <div class="MainDiv">
+<div v-if="!darkTheme" class="LightMainDiv">
     <Header />
-    <div class="NoLineDiv" />
+    <div v-if="!darkTheme" class="LightNoLineDiv" />
     <BannerSlider />
-    <div class="CardsContainer">
+    <div v-if="darkTheme" class="DarkCardsContainer">
+      <VideoCard
+        v-for="(videoItem, index) of relevantVideos"
+        :key="index"
+        :video="videoItem"
+        class="videoBox"
+        ref="videoBox"
+      />
+    </div>
+    <div v-if="!darkTheme" class="LightCardsContainer">
+      <VideoCard
+        v-for="(videoItem, index) of relevantVideos"
+        :key="index"
+        :video="videoItem"
+        class="videoBox"
+        ref="videoBox"
+      />
+    </div>
+  </div>
+  <div v-if="darkTheme" class="DarkMainDiv">
+    <Header />
+    <div class="DarkNoLineDiv" />
+    <BannerSlider />
+    <div v-if="darkTheme" class="DarkCardsContainer">
+      <VideoCard
+        v-for="(videoItem, index) of relevantVideos"
+        :key="index"
+        :video="videoItem"
+        class="videoBox"
+        ref="videoBox"
+      />
+    </div>
+    <div v-if="!darkTheme" class="LightCardsContainer">
       <VideoCard
         v-for="(videoItem, index) of relevantVideos"
         :key="index"
@@ -129,12 +161,19 @@ export default {
         ? this.$store.getters.getSearchResults
         : [],
       lastVideoObserver: null,
+      darkTheme: this.$store.getters.getIsDarkTheme
     };
   },
 
   async mounted() {
-    document.getElementsByClassName('CardsContainer')[0].style =
+    if(this.darkTheme){
+      document.getElementsByClassName('DarkCardsContainer')[0].style =
       'grid-template-columns: ' + this.getGridDimensions() + ';';
+    }
+    else {
+      document.getElementsByClassName('LightCardsContainer')[0].style =
+      'grid-template-columns: ' + this.getGridDimensions() + ';';
+    }
 
     window.addEventListener('resize', this.recalculateGrid);
   },
@@ -197,8 +236,14 @@ export default {
       return base;
     },
     recalculateGrid() {
-      document.getElementsByClassName('CardsContainer')[0].style =
+      if(this.darkTheme){
+        document.getElementsByClassName('DarkCardsContainer')[0].style =
         'grid-template-columns: ' + this.getGridDimensions() + ';';
+      }
+      else{
+        document.getElementsByClassName('LightCardsContainer')[0].style =
+        'grid-template-columns: ' + this.getGridDimensions() + ';';
+      }
     },
     showResultsOfSearch() {
       this.showResultsPage = true;
@@ -255,7 +300,13 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto:wght@300;400&display=swap');
 
-.MainDiv {
+.LightMainDiv {
+  background-color: white;
+  height: inherit;
+  overflow-y: scroll;
+}
+
+.DarkMainDiv {
   background-color: #131313;
   height: inherit;
   overflow-y: scroll;
@@ -304,9 +355,14 @@ export default {
 .subscribersP {
   color: #939393;
 }
-.NoLineDiv {
+.DarkNoLineDiv {
   height: 2px;
   background-color: #131313;
+  margin-top: -1px;
+}
+.LightNoLineDiv {
+  height: 2px;
+  background-color: white;
   margin-top: -1px;
 }
 .profileInResultsPage {
@@ -492,7 +548,19 @@ export default {
   margin-bottom: 10px;
 }
 
-.CardsContainer {
+.LightCardsContainer {
+  background-color: white;
+  display: grid;
+  height: auto;
+  grid-template-rows: auto auto auto auto auto;
+  padding-top: 16px;
+  width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 65px;
+}
+
+.DarkCardsContainer {
   background-color: #131313;
   display: grid;
   height: auto;

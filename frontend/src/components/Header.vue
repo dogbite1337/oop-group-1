@@ -1,12 +1,72 @@
 <template>
-  <div class="HeaderDiv">
+  <div v-if="darkTheme" class="DarkHeaderDiv">
     <div class="SpaceDiv" />
     <p @click="resetToStartPage" class="KittyText">KittyKitty</p>
     <div class="SpaceDiv" />
     <p class="SeasonText">Winter</p>
     <div class="SpaceDiv" />
   </div>
-  <div class="SearchAndLoginDiv">
+  <div v-if="!darkTheme" class="LightHeaderDiv">
+    <div class="SpaceDiv" />
+    <p @click="resetToStartPage" class="KittyText">KittyKitty</p>
+    <div class="SpaceDiv" />
+    <p class="SeasonText">Winter</p>
+    <div class="SpaceDiv" />
+  </div>
+  <div v-if="!darkTheme" class="LightSearchAndLoginDiv">
+    <div class="SpaceDiv" />
+    <img
+      class="CatInHeader"
+      src="../projectImages/test.png"
+      @click="playMe"
+    />
+    <audio ref="meow" src="src/projectImages/meowSound.mp3"></audio>
+    <div class="SpaceDiv2 SpaceDiv" />
+    <div class="searchDiv">
+      <router-link class="SearchLink" :to="{ path: '/Search' }">
+        <img
+          class="iconInSearchField"
+          src="../projectImages/magnifying_glass.png"
+        />
+        <input
+          v-on:keyup.enter="search"
+          @change="setKeyWord"
+          @click="resetKey"
+          v-model="searchParam"
+          class="SearchField"
+          type="text"
+          placeholder="Search.."
+        />
+      </router-link>
+      <div class="SpaceDiv" />
+    </div>
+    <div class="SpaceDiv" />
+    <router-link v-if="!$store.getters.getCurrentUser" :to="{ path: '/Login' }">
+      <input class="LoginButton" type="button" value="Login" />
+    </router-link>
+    <img
+      v-else
+      class="profilePic"
+      @click="toggleProfileDropdown"
+      :src="profilePic"
+    />
+    <div class="SpaceDiv" />
+    <div class="SpaceDiv" />
+    <div class="SpaceDiv" />
+    <div v-if="profileDropdown" class="profile-dropdown">
+      <ul v-if="$store.getters.getCurrentUser" class="UlMenu">
+        <router-link
+          :to="{ path: '/Profile/' + $store.getters.getCurrentUser.username }"
+        >
+          <li>My Profile</li>
+        </router-link>
+        <li @click="uploadNavigation">Upload Video</li>
+        <li @click="logout">Logout</li>
+      </ul>
+    </div>
+    <div class="SpaceDiv" />
+  </div>
+  <div v-if="darkTheme" class="DarkSearchAndLoginDiv">
     <div class="SpaceDiv" />
     <img
       class="CatInHeader"
@@ -73,6 +133,7 @@ export default {
         ? this.$store.getters.getCurrentUser.getProfileURL()
         : '',
       profileDropdown: false,
+      darkTheme: false
     };
   },
   created() {
@@ -83,6 +144,15 @@ export default {
   },
 
   async mounted() {
+    this.$store.subscribe(async (mutation, state) => {
+      if (mutation.type == 'setDarkTheme') {
+        if (mutation.payload) {
+          this.darkTheme = true;
+        } else {
+          this.darkTheme = false;
+        }
+      }
+    });
     await this.$store.dispatch('whoAmI');
     if (this.$store.getters.getCurrentUser) {
       this.profilePic = this.$store.getters.getCurrentUser.getProfileURL();
@@ -216,7 +286,21 @@ export default {
   margin-top: 33px;
 }
 
-.HeaderDiv {
+.LightHeaderDiv {
+  display: grid;
+  grid-template-columns: 16px 100px auto 80px;
+  height: 60px;
+  text-align: center;
+  background-image: url('../projectImages/light_winter.gif');
+  background-size: 100% 65px;
+  background-repeat: no-repeat;
+  max-width: 725px;
+  margin-left: auto;
+  margin-right: auto;
+  overflow-y: hidden;
+}
+
+.DarkHeaderDiv {
   display: grid;
   grid-template-columns: 16px 100px auto 80px;
   height: 60px;
@@ -233,7 +317,17 @@ export default {
 .SeasonText {
   overflow-y: hidden;
 }
-.SearchAndLoginDiv {
+.LightSearchAndLoginDiv {
+  display: grid; /* Margin, Cat, Margin, search icon, margin, Search Field, margin, Login Button, Margin */
+  grid-template-columns: auto 43px auto max-content auto auto;
+  background-color: white;
+  padding-top: 16px;
+  border-bottom: solid 1px #bfbfbf;
+  max-width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+.DarkSearchAndLoginDiv {
   display: grid; /* Margin, Cat, Margin, search icon, margin, Search Field, margin, Login Button, Margin */
   grid-template-columns: auto 43px auto max-content auto auto;
   background-color: #131313;
@@ -299,22 +393,22 @@ li {
   padding-bottom: 60px;
 }
 @media screen and (max-width: 300px) {
-  .SearchAndLoginDiv {
+  .LightSearchAndLoginDiv, .DarkSearchAndLoginDiv {
     grid-template-columns: 5px 15px 10px 199px 1px 50px 1px 1px 1px 1px 10px;
   }
 }
 @media screen and (min-width: 301px) {
-  .SearchAndLoginDiv {
+  .LightSearchAndLoginDiv, .DarkSearchAndLoginDiv {
     grid-template-columns: 5px 15px 10px 210px auto 50px 1px 1px 1px 1px 10px;
   }
 }
 @media screen and (min-width: 335px) {
-  .SearchAndLoginDiv {
+  .LightSearchAndLoginDiv, .DarkSearchAndLoginDiv {
     grid-template-columns: 5px 15px 10px 230px auto 50px 1px 1px 1px 1px 10px;
   }
 }
 @media screen and (min-width: 370px) {
-  .SearchAndLoginDiv {
+  .LightSearchAndLoginDiv, .DarkSearchAndLoginDiv {
     grid-template-columns: 5px 15px 10px max-content auto 50px 1px 1px 1px 1px 10px;
   }
 }
