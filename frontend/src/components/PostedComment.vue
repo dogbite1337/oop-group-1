@@ -142,7 +142,7 @@ export default {
   components: {
     CommentReply,
   },
-  emits: ["updateReplies", "removedAReply"],
+  emits: ["updateReplies", "removedAReply", "postedAReply"],
   props: ["activeId", "comment", "replies", "commenters"],
   name: "PostedComment",
 
