@@ -49,6 +49,25 @@ export default {
     this.isDarkTheme = await this.$store.getters.getIsDarkTheme
   },
 
+  // async created(){
+  //   this.$store.subscribe(async (mutation, state) => {
+  //     if (mutation.type == 'setDarkTheme') {
+  //       console.log(mutation)
+  //       if (mutation.payload) {
+  //         this.isDarkTheme = true;
+  //       } else {
+  //         this.isDarkTheme = false;
+  //       }
+  //     }
+  //   })
+  // },
+
+  async created(){
+    this.$store.watch((state) => state.darkTheme, (newVal) => {
+      this.isDarkTheme = newVal
+    })
+  },
+
   async mounted() {
     let detailedSearchList;
     let boolean = false;

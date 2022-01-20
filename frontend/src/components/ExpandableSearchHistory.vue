@@ -53,6 +53,9 @@ export default {
     if(this.$store.getters.getMySearchHistoryList == null && localStorage.searchHistoryList){
       this.mySearchHistoryList = await JSON.parse(localStorage.searchHistoryList)
     }
+    this.$store.watch((state) => state.darkTheme, (newVal) => {
+    this.isDarkTheme = newVal
+    })
   },
 
   async mounted() {

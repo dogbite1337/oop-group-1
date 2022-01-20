@@ -36,7 +36,13 @@ export default {
     else{
       console.log(3)
       this.isDarkTheme = true
+      await this.$store.dispatch('setDarkTheme', this.isDarkTheme)
+      localStorage.setItem('isDarkTheme', JSON.stringify(this.isDarkTheme))
     }
+
+    this.$store.watch((state) => state.darkTheme, (newVal) => {
+      this.isDarkTheme = newVal
+    })
     
     // this.isDarkTheme = await this.$store.getters.getIsDarkTheme
     // this.isDarkTheme = false;

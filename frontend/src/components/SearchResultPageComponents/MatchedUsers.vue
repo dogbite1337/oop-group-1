@@ -70,6 +70,9 @@ export default {
 
   async created() {
     this.isDarkTheme = await this.$store.getters.getIsDarkTheme
+    this.$store.watch((state) => state.darkTheme, (newVal) => {
+    this.isDarkTheme = newVal
+    })
   },
 
   methods: {

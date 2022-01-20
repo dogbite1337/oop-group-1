@@ -28,6 +28,7 @@
       </div>
     </div>
   </div>
+  <div class="emptyDiv"></div>
 </template>
 
 <script>
@@ -44,6 +45,10 @@ export default {
 
   async created(){
     this.isDarkTheme = await this.$store.getters.getIsDarkTheme
+
+    this.$store.watch((state) => state.darkTheme, (newVal) => {
+    this.isDarkTheme = newVal
+    })
   },
 
   async mounted() {
@@ -57,9 +62,8 @@ export default {
     else{
       this.matchedVideos = await this.$store.getters.getMatchedVideoList
     }
-  },
 
-  updated(){
+    this.$nextTick(function () {
       this.lastVideoObserverSearchResult = new IntersectionObserver(entries =>{
         let lastVideo = entries[0]
         if(!lastVideo.isIntersecting) {
@@ -67,10 +71,14 @@ export default {
         this.loadMoreVideos()
         this.lastVideoObserverSearchResult.unobserve(lastVideo.target);
         if(!this.stopObserver) 
-        this.lastVideoObserverSearchResult.observe(document.querySelector(".videoCard:last-child"))
+        this.lastVideoObserverSearchResult.observe(document.querySelector(".emptyDiv"))
       },{rootMargin: "50px"}
       )
-      this.lastVideoObserverSearchResult.observe(document.querySelector(".videoCard:last-child"))
+      this.lastVideoObserverSearchResult.observe(document.querySelector(".emptyDiv"))
+    })
+  },
+
+  updated(){
   },
 
   unmounted() {
