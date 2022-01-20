@@ -1,19 +1,19 @@
 <template>
-  <div class="backgroundDiv" @click="clickedMe">
+  <div :class="isDarkTheme == false ? 'darkBackgroundDiv' : 'lightBackgroundDiv'" @click="clickedMe">
     <router-link class="HomeLink" to="/">
-      <div class="backHomeDiv">
+      <div :class="isDarkTheme == false ? 'darkBackHomeDiv' : 'lightBackHomeDiv'">
         <div class="SpaceDiv" />
         <img class="ArrowIcon" src="../projectImages/white_arrow.png" />
         <div class="SpaceDiv" />
-        <p class="HomeText">Home</p>
+        <p :class="isDarkTheme == false ? 'darkHomeText' : 'lightHomeText'">Home</p>
         <div class="SpaceDiv" />
         <img class="catIcon" src="../projectImages/whiteCatBlackBaground.png" />
         <div class="SpaceDiv" />
       </div>
     </router-link>
-    <div class="videoPreviewDiv">
-      <p class="Video Preview">Video Preview</p>
-      <div class="VideoLinkBox">
+    <div :class="isDarkTheme == false ? 'darkVideoPreviewDiv' : 'lightVideoPreviewDiv'">
+      <p :class="isDarkTheme == false ? 'dark' : 'light'">Video Preview</p>
+      <div :class="isDarkTheme == false ? 'darkVideoLinkBox' : 'lightVideoLinkBox'">
         <img
           class="previewImage"
           :src="
@@ -38,21 +38,21 @@
         </div>
       </div>
       <div class="inputsDiv">
-        <p class="VideoUrlP">Video Url</p>
+        <p class="VideoUrlP" :class="isDarkTheme == false ? 'dark' : 'light'">Video Url</p>
         <input
           v-model="videoURL"
           class="urlInput"
           type="text"
           placeholder="Video url goes here.."
         />
-        <p class="VideoTitleP">Video Title</p>
+        <p class="VideoTitleP" :class="isDarkTheme == false ? 'dark' : 'light'">Video Title</p>
         <input
           v-model="titleOfVideo"
           class="titleInput"
           type="text"
           placeholder="What is the title of the video?"
         />
-        <p class="DescriptionP">Description</p>
+        <p class="DescriptionP" :class="isDarkTheme == false ? 'dark' : 'light'">Description</p>
         <textarea
           v-model="descriptionOfVideo"
           class="DescriptionInput"
@@ -98,7 +98,12 @@ export default {
         ? this.$store.getters.getCurrentUser
         : '',
       canUpload: false,
+      isDarkTheme: true,
     };
+  },
+  beforeCreate () {
+    this.isDarkTheme = this.$store.getters.isDarkTheme;
+    //:class="isDarkTheme == true ? 'searchPageBtnDarkTheme' : 'searchPageBtnLightTheme'
   },
   watch: {
     videoURL() {
@@ -161,6 +166,15 @@ div {
   color: white;
   text-align: center;
 }
+
+.dark {
+  color: white;
+}
+
+.light {
+  color: black;
+}
+
 .uploadButton {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -204,8 +218,17 @@ div {
   padding-top: 1.5px;
   font-family: 'Roboto', sans-serif;
 }
-.backgroundDiv {
+
+.darkBackgroundDiv {
   background-color: black;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: max-content auto;
+  padding-bottom: 10px;
+}
+
+.lightBackgroundDiv {
+  background-color: #E5E5E5;
   height: 100vh;
   display: grid;
   grid-template-rows: max-content auto;
@@ -227,7 +250,7 @@ input {
   padding-top: 0.75px;
   height: max-content;
 }
-.VideoLinkBox {
+.darkVideoLinkBox {
   border: solid 1px white;
   width: max-content;
   margin-left: auto;
@@ -236,14 +259,32 @@ input {
   margin-bottom: 8px;
   background-color: black;
 }
+
+.lightVideoLinkBox {
+  border: solid 1px black;
+  width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 16px;
+  margin-bottom: 8px;
+  background-color: white;
+}
+
 .previewImage {
   height: 100px;
   width: 120px;
 }
-.backHomeDiv {
+
+.darkBackHomeDiv {
   display: grid; /* space, Arrow, space, Home, space, Cat */
   grid-template-columns: 17px 32px 5px 60px 12px 20px auto;
   background-color: black;
+}
+
+.lightBackHomeDiv {
+  display: grid; /* space, Arrow, space, Home, space, Cat */
+  grid-template-columns: 17px 32px 5px 60px 12px 20px auto;
+  background-color: #E5E5E5;
 }
 
 .DescriptionInput {
@@ -273,7 +314,8 @@ input {
   font-size: 13px;
   margin-bottom: 2px;
 }
-.HomeText {
+
+.darkHomeText {
   font-size: 24px;
   font-weight: 500;
   font-family: 'Roboto', sans-serif;
@@ -282,6 +324,17 @@ input {
   color: white;
   margin-bottom: 15px;
 }
+
+.lightHomeText {
+  font-size: 24px;
+  font-weight: 500;
+  font-family: 'Roboto', sans-serif;
+  line-height: 28.13px;
+  margin-top: 18px;
+  color: black;
+  margin-bottom: 15px;
+}
+
 .uploaderDiv {
   display: grid;
   grid-template-columns: auto 14px 9px 100px auto;
@@ -304,7 +357,7 @@ input {
   margin-top: 15px;
   margin-bottom: 12px;
 }
-.videoPreviewDiv {
+.darkVideoPreviewDiv {
   height: max-content;
   width: 388px;
   margin-left: auto;
@@ -312,6 +365,19 @@ input {
   background-color: #131313;
   margin-bottom: 19px;
   border: 0.7px solid #ffffff;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  padding-top: 3px;
+  padding-bottom: 2px;
+}
+
+.lightVideoPreviewDiv {
+  height: max-content;
+  width: 388px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+  margin-bottom: 19px;
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   padding-top: 3px;
