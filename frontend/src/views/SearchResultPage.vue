@@ -33,27 +33,28 @@ export default {
       matchedUserList: [],
     };
   },
-  
-  async created() {
 
-    if(this.$store.getters.getKeyWord){
+  async created() {
+    if (this.$store.getters.getKeyWord) {
       let keyword = this.$store.getters.getKeyWord;
       this.matchedVideoList = await this.$store.dispatch(
-      'getMatchedVideoList',
-      keyword
-    );
-      localStorage.setItem('orginalVideosList', JSON.stringify(this.matchedVideoList));
+        'getMatchedVideoList',
+        keyword
+      );
+      localStorage.setItem(
+        'orginalVideosList',
+        JSON.stringify(this.matchedVideoList)
+      );
       localStorage.setItem('searchKey', keyword);
-    }
-    else{
+    } else {
       let list;
-      list = await JSON.parse(localStorage.orginalVideosList)
-      this.matchedVideoList = list
+      list = await JSON.parse(localStorage.orginalVideosList);
+      this.matchedVideoList = list;
     }
 
     await this.storeMatchedVideoList(this.matchedVideoList);
 
-    this.$store.dispatch("setKeyWord", "");
+    this.$store.dispatch('setKeyWord', '');
   },
 
   methods: {

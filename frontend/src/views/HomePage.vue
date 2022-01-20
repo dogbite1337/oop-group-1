@@ -1,5 +1,5 @@
 <template>
-<div v-if="!darkTheme" class="LightMainDiv">
+  <div v-if="!darkTheme" class="LightMainDiv">
     <Header />
     <div v-if="!darkTheme" class="LightNoLineDiv" />
     <BannerSlider />
@@ -80,7 +80,6 @@ export default {
     await this.loadMoreVideos();
     let allVideos = this.relevantVideos;
 
-
     // this.$store.dispatch('cacheFirstEightVideos', allVideos);
     localStorage.setItem('relatedVideos', JSON.stringify(allVideos));
     this.relevantVideos = [];
@@ -94,17 +93,6 @@ export default {
         this.showSearchPage = true;
       }
       if (mutation.type == 'setShouldResetToStartPage') {
-        this.searchedYet = false;
-        this.showResultsPage = false;
-        this.showSearchPage = false;
-        this.relevantUsers = [];
-        this.relevantVideos = [];
-        let cachedVideos = this.$store.getters.getEightFirstVideos;
-        for (let i = 0; i < cachedVideos.length; i++) {
-          let oldVideo = new Video();
-          oldVideo = Object.assign(oldVideo, cachedVideos[i]);
-          this.relevantVideos.push(oldVideo);
-        }
       }
       if (mutation.type == 'setSearchResults') {
         this.relevantVideos = [];
@@ -161,18 +149,17 @@ export default {
         ? this.$store.getters.getSearchResults
         : [],
       lastVideoObserver: null,
-      darkTheme: this.$store.getters.getIsDarkTheme
+      darkTheme: this.$store.getters.getIsDarkTheme,
     };
   },
 
   async mounted() {
-    if(this.darkTheme){
+    if (this.darkTheme) {
       document.getElementsByClassName('DarkCardsContainer')[0].style =
-      'grid-template-columns: ' + this.getGridDimensions() + ';';
-    }
-    else {
+        'grid-template-columns: ' + this.getGridDimensions() + ';';
+    } else {
       document.getElementsByClassName('LightCardsContainer')[0].style =
-      'grid-template-columns: ' + this.getGridDimensions() + ';';
+        'grid-template-columns: ' + this.getGridDimensions() + ';';
     }
 
     window.addEventListener('resize', this.recalculateGrid);
@@ -184,14 +171,20 @@ export default {
         let lastVideo = entries[0];
         if (!lastVideo.isIntersecting) {
           // this.loadMoreVideos()
-          return;}
+          return;
+        }
 
-          this.loadMoreVideos()
-          this.lastVideoObserver.unobserve(lastVideo.target)
-          this.lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
-      },{rootMargin: "100px"}
-      )
-      this.lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
+        this.loadMoreVideos();
+        this.lastVideoObserver.unobserve(lastVideo.target);
+        this.lastVideoObserver.observe(
+          document.querySelector('.videoBox:last-child')
+        );
+      },
+      { rootMargin: '100px' }
+    );
+    this.lastVideoObserver.observe(
+      document.querySelector('.videoBox:last-child')
+    );
   },
   unmounted() {
     this.lastVideoObserver.disconnect();
@@ -202,16 +195,22 @@ export default {
     async loadMoreVideos() {
       let newlyLoadedVideos;
       let numberOfCurrentShownVideos = this.relevantVideos.length;
-      newlyLoadedVideos = await this.fetchEightMoreVideosFromDB(numberOfCurrentShownVideos);
-      this.$nextTick(function(){
-          if(newlyLoadedVideos.length != 0){
-          newlyLoadedVideos.forEach(newVideo => {
-            if(!this.relevantVideos.some(data => data.videoId === newVideo.videoId)){
-              this.relevantVideos.push(newVideo)
+      newlyLoadedVideos = await this.fetchEightMoreVideosFromDB(
+        numberOfCurrentShownVideos
+      );
+      this.$nextTick(function () {
+        if (newlyLoadedVideos.length != 0) {
+          newlyLoadedVideos.forEach((newVideo) => {
+            if (
+              !this.relevantVideos.some(
+                (data) => data.videoId === newVideo.videoId
+              )
+            ) {
+              this.relevantVideos.push(newVideo);
             }
-        });
-      }
-      })
+          });
+        }
+      });
     },
 
     async fetchEightMoreVideosFromDB(numberOfCurrentShownVideos) {
@@ -236,13 +235,12 @@ export default {
       return base;
     },
     recalculateGrid() {
-      if(this.darkTheme){
+      if (this.darkTheme) {
         document.getElementsByClassName('DarkCardsContainer')[0].style =
-        'grid-template-columns: ' + this.getGridDimensions() + ';';
-      }
-      else{
+          'grid-template-columns: ' + this.getGridDimensions() + ';';
+      } else {
         document.getElementsByClassName('LightCardsContainer')[0].style =
-        'grid-template-columns: ' + this.getGridDimensions() + ';';
+          'grid-template-columns: ' + this.getGridDimensions() + ';';
       }
     },
     showResultsOfSearch() {
@@ -361,7 +359,7 @@ export default {
   margin-top: -1px;
 }
 .LightNoLineDiv {
-  height: 2px;
+  height: 32px;
   background-color: white;
   margin-top: -1px;
 }

@@ -5,8 +5,8 @@
       query: video ? video.videoId : 0,
     }"
   >
-    <div class="BoxDiv">
-      <div @click="clickedRelatedVideo" class="relatedVideoBox">
+    <div v-if="!darkTheme" class="BoxDiv">
+      <div @click="clickedRelatedVideo" class="LightRelatedVideoBox">
         <div class="SpaceBlock" />
         <div class="linkBox">
           <img
@@ -21,7 +21,45 @@
         <div class="SpaceBlock" />
         <div class="textDiv">
           <div class="SpaceBlock" />
-          <div class="titleDiv">
+          <div class="LightTitleDiv">
+            {{ video.title }}
+          </div>
+          <div class="SpaceBlock" />
+          <div class="UploaderDiv">
+            <img class="lightUp" src="../projectImages/Up_Light.png" />
+            <div class="SpaceBlock" />
+            <div class="UploaderTextDiv">{{ video.postedByUsername }}</div>
+          </div>
+          <div class="SpaceBlock" />
+          <div class="ViewsDiv">
+            <div class="PlayerDiv">
+              <img class="PlayerImage" src="../projectImages/Light_Play.png" />
+            </div>
+            <div class="SpaceDiv" />
+            <div class="ViewsNumberDiv">{{ spacedViews }} views</div>
+          </div>
+          <div class="SpaceBlock" />
+        </div>
+        <div class="SpaceBlock" />
+      </div>
+    </div>
+    <div v-if="darkTheme" class="BoxDiv">
+      <div @click="clickedRelatedVideo" class="DarkRelatedVideoBox">
+        <div class="SpaceBlock" />
+        <div class="linkBox">
+          <img
+            class="videoImage"
+            :src="
+              'https://img.youtube.com/vi/' +
+              video.videoURL.substring(32, 43) +
+              '/default.jpg'
+            "
+          />
+        </div>
+        <div class="SpaceBlock" />
+        <div class="textDiv">
+          <div class="SpaceBlock" />
+          <div class="DarkTitleDiv">
             {{ video.title }}
           </div>
           <div class="SpaceBlock" />
@@ -62,6 +100,7 @@ export default {
         ? this.$store.getters.getFirstEightVideos
         : null,
       spacedViews: 0,
+      darkTheme: this.$store.getters.getIsDarkTheme,
     };
   },
   methods: {
@@ -106,7 +145,21 @@ export default {
   font-size: 7px;
 }
 
-.relatedVideoBox {
+.LightRelatedVideoBox {
+  background-color: white;
+  height: max-content;
+  display: grid;
+  grid-template-columns: auto max-content 22px max-content auto;
+  max-width: 1000px;
+  border-bottom: solid 0.5px #bfbfbf;
+  width: 100vw;
+  z-index: 3;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.DarkRelatedVideoBox {
   background-color: black;
   height: max-content;
   display: grid;
@@ -139,11 +192,17 @@ export default {
   height: 95px;
 }
 
-.relatedVideoBox {
+.DarkRelatedVideoBox {
   border-top: solid 1px #939393;
 }
-.titleDiv {
+.DarkTitleDiv {
   color: #ffffff;
+  margin-top: 5px;
+  font-size: 12px;
+  width: 160px;
+}
+.LightTitleDiv {
+  color: black;
   margin-top: 5px;
   font-size: 12px;
   width: 160px;
@@ -154,7 +213,9 @@ export default {
   font-size: 10px;
   color: #939393;
 }
-
+.BoxDiv {
+  border-top: solid 1px grey;
+}
 .UploaderDiv {
   margin-bottom: 5px;
   display: grid;
@@ -166,6 +227,12 @@ export default {
   grid-template-columns: max-content 8px auto;
 }
 
+.lightUp {
+  height: 15px;
+  width: 15px;
+  position: relative;
+  left: -1px;
+}
 .ViewsNumberDiv {
   margin-top: 0.5px;
 }

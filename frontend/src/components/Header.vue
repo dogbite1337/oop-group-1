@@ -15,11 +15,7 @@
   </div>
   <div v-if="!darkTheme" class="LightSearchAndLoginDiv">
     <div class="SpaceDiv" />
-    <img
-      class="CatInHeader"
-      src="../projectImages/test.png"
-      @click="playMe"
-    />
+    <img class="CatInHeader" src="../projectImages/test.png" @click="playMe" />
     <audio ref="meow" src="src/projectImages/meowSound.mp3"></audio>
     <div class="SpaceDiv2 SpaceDiv" />
     <div class="searchDiv">
@@ -53,15 +49,23 @@
     <div class="SpaceDiv" />
     <div class="SpaceDiv" />
     <div class="SpaceDiv" />
-    <div v-if="profileDropdown" class="profile-dropdown">
-      <ul v-if="$store.getters.getCurrentUser" class="UlMenu">
-        <router-link
-          :to="{ path: '/Profile/' + $store.getters.getCurrentUser.username }"
-        >
-          <li>My Profile</li>
-        </router-link>
+    <div v-if="profileDropdown && darkTheme" class="profile-dropdown">
+      <ul v-if="$store.getters.getCurrentUser && darkTheme" class="DarkUlMenu">
+        <li @click="profileNavigation" class="myProfileLink">My Profile</li>
         <li @click="uploadNavigation">Upload Video</li>
         <li @click="logout">Logout</li>
+      </ul>
+    </div>
+    <div v-if="profileDropdown && !darkTheme" class="profile-dropdown">
+      <ul
+        v-if="$store.getters.getCurrentUser && !darkTheme"
+        class="LightUlMenu"
+      >
+        <li @click="profileNavigation" class="lightULItem myProfileLink">
+          My Profile
+        </li>
+        <li @click="uploadNavigation" class="lightULItem">Upload Video</li>
+        <li @click="logout" class="lightULItem">Logout</li>
       </ul>
     </div>
     <div class="SpaceDiv" />
@@ -106,13 +110,9 @@
     <div class="SpaceDiv" />
     <div class="SpaceDiv" />
     <div class="SpaceDiv" />
-    <div v-if="profileDropdown" class="profile-dropdown">
-      <ul v-if="$store.getters.getCurrentUser" class="UlMenu">
-        <router-link
-          :to="{ path: '/Profile/' + $store.getters.getCurrentUser.username }"
-        >
-          <li>My Profile</li>
-        </router-link>
+    <div v-if="profileDropdown && darkTheme" class="profile-dropdown">
+      <ul v-if="$store.getters.getCurrentUser" class="DarkUlMenu">
+        <li @click="profileNavigation">My Profile</li>
         <li @click="uploadNavigation">Upload Video</li>
         <li @click="logout">Logout</li>
       </ul>
@@ -133,7 +133,7 @@ export default {
         ? this.$store.getters.getCurrentUser.getProfileURL()
         : '',
       profileDropdown: false,
-      darkTheme: false
+      darkTheme: false,
     };
   },
   created() {
@@ -153,6 +153,7 @@ export default {
         }
       }
     });
+    this.darkTheme = this.$store.getters.getIsDarkTheme;
     await this.$store.dispatch('whoAmI');
     if (this.$store.getters.getCurrentUser) {
       this.profilePic = this.$store.getters.getCurrentUser.getProfileURL();
@@ -160,6 +161,11 @@ export default {
   },
 
   methods: {
+    profileNavigation() {
+      this.$router.push(
+        '/Profile/' + this.$store.getters.getCurrentUser.username
+      );
+    },
     playMe() {
       this.$refs.meow.play();
     },
@@ -252,6 +258,7 @@ export default {
   display: inline;
   outline: none;
   margin-left: -20px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
 .CatInHeader {
@@ -338,14 +345,30 @@ export default {
   margin-right: auto;
   padding-bottom: 40px;
 }
-.UlMenu {
+.myProfileLink {
+  text-decoration: none;
+}
+.LightUlMenu {
+  height: max-content;
+  width: 100vw;
+  z-index: 5;
+  color: black;
+  position: absolute;
+  background-color: transparent;
+  left: 0px;
+}
+.DarkUlMenu {
   height: max-content;
   width: 100vw;
   z-index: 5;
   color: white;
   position: absolute;
   background-color: transparent;
+  height: 300px;
   left: 0px;
+}
+.lightULItem {
+  color: black;
 }
 .LoginButton {
   border-radius: 30px;
@@ -393,22 +416,26 @@ li {
   padding-bottom: 60px;
 }
 @media screen and (max-width: 300px) {
-  .LightSearchAndLoginDiv, .DarkSearchAndLoginDiv {
+  .LightSearchAndLoginDiv,
+  .DarkSearchAndLoginDiv {
     grid-template-columns: 5px 15px 10px 199px 1px 50px 1px 1px 1px 1px 10px;
   }
 }
 @media screen and (min-width: 301px) {
-  .LightSearchAndLoginDiv, .DarkSearchAndLoginDiv {
+  .LightSearchAndLoginDiv,
+  .DarkSearchAndLoginDiv {
     grid-template-columns: 5px 15px 10px 210px auto 50px 1px 1px 1px 1px 10px;
   }
 }
 @media screen and (min-width: 335px) {
-  .LightSearchAndLoginDiv, .DarkSearchAndLoginDiv {
+  .LightSearchAndLoginDiv,
+  .DarkSearchAndLoginDiv {
     grid-template-columns: 5px 15px 10px 230px auto 50px 1px 1px 1px 1px 10px;
   }
 }
 @media screen and (min-width: 370px) {
-  .LightSearchAndLoginDiv, .DarkSearchAndLoginDiv {
+  .LightSearchAndLoginDiv,
+  .DarkSearchAndLoginDiv {
     grid-template-columns: 5px 15px 10px max-content auto 50px 1px 1px 1px 1px 10px;
   }
 }

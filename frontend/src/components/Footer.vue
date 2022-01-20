@@ -86,6 +86,7 @@ export default {
         }
       }
     });
+    this.darkTheme = this.$store.getters.getIsDarkTheme;
   },
   methods: {},
 };

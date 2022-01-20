@@ -46,30 +46,39 @@ export default {
   },
 
   async mounted() {
-    if(!this.$store.getters.getKeyWord){
-      this.keyword = await localStorage.searchKey
+    if (!this.$store.getters.getKeyWord) {
+      this.keyword = await localStorage.searchKey;
     }
 
-    if(await this.$store.getters.getMatchedVideoList.length > 6){
-      this.matchedVideos = await this.$store.getters.getMatchedVideoList.slice(0,6)
-    }
-    else{
-      this.matchedVideos = await this.$store.getters.getMatchedVideoList
+    if ((await this.$store.getters.getMatchedVideoList.length) > 6) {
+      this.matchedVideos = await this.$store.getters.getMatchedVideoList.slice(
+        0,
+        6
+      );
+    } else {
+      this.matchedVideos = await this.$store.getters.getMatchedVideoList;
     }
   },
 
-  updated(){
-      this.lastVideoObserverSearchResult = new IntersectionObserver(entries =>{
-        let lastVideo = entries[0]
-        if(!lastVideo.isIntersecting) {
-          return;}
-        this.loadMoreVideos()
+  updated() {
+    this.lastVideoObserverSearchResult = new IntersectionObserver(
+      (entries) => {
+        let lastVideo = entries[0];
+        if (!lastVideo.isIntersecting) {
+          return;
+        }
+        this.loadMoreVideos();
         this.lastVideoObserverSearchResult.unobserve(lastVideo.target);
-        if(!this.stopObserver) 
-        this.lastVideoObserverSearchResult.observe(document.querySelector(".videoCard:last-child"))
-      },{rootMargin: "50px"}
-      )
-      this.lastVideoObserverSearchResult.observe(document.querySelector(".videoCard:last-child"))
+        if (!this.stopObserver)
+          this.lastVideoObserverSearchResult.observe(
+            document.querySelector('.videoCard:last-child')
+          );
+      },
+      { rootMargin: '50px' }
+    );
+    this.lastVideoObserverSearchResult.observe(
+      document.querySelector('.videoCard:last-child')
+    );
   },
 
   unmounted() {
@@ -82,11 +91,13 @@ export default {
       let lengthOfCurrentShowedVideos = this.matchedVideos.length;
       let fullMatchedList = await this.$store.getters.getMatchedVideoList;
 
-      if(lengthOfCurrentShowedVideos + 6 > fullMatchedList.length){
-        this.matchedVideos = fullMatchedList
-      }
-      else{
-        this.matchedVideos = fullMatchedList.slice(0, lengthOfCurrentShowedVideos+6)
+      if (lengthOfCurrentShowedVideos + 6 > fullMatchedList.length) {
+        this.matchedVideos = fullMatchedList;
+      } else {
+        this.matchedVideos = fullMatchedList.slice(
+          0,
+          lengthOfCurrentShowedVideos + 6
+        );
       }
     },
 
