@@ -359,7 +359,7 @@ export default {
       activeUser: this.$store.getters.getCurrentUser,
       dislikedCommentAlready: false,
       likedCommentAlready: false,
-      darkTheme: false,
+      darkTheme: this.$store.getters.getIsDarkTheme,
     };
   },
   mounted() {

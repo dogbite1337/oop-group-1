@@ -133,7 +133,7 @@ export default {
         ? this.$store.getters.getCurrentUser.getProfileURL()
         : '',
       profileDropdown: false,
-      darkTheme: false,
+      darkTheme: this.$store.getters.getIsDarkTheme,
     };
   },
   created() {

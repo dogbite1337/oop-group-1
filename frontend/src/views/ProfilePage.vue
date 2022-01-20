@@ -694,15 +694,8 @@ export default {
       newURL: '',
       oldTitle: '',
       oldDescription: '',
-      darkTheme: false,
+      darkTheme: this.$store.getters.getIsDarkTheme,
     };
-  },
-  computed: {
-    cssVars() {
-      return {
-        '--bg-color': 'white',
-      };
-    },
   },
   async mounted() {
     let userRes = await fetch(

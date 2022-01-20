@@ -79,7 +79,7 @@ export default {
   },
   data() {
     return {
-      darkTheme: false,
+      darkTheme: this.$store.getters.getIsDarkTheme,
       currentUser: this.$store.getters.getCurrentUser
         ? this.$store.getters.getCurrentUser
         : null,

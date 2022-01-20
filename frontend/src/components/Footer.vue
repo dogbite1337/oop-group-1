@@ -53,7 +53,7 @@ export default {
   data() {
     return {
       activeUser: this.$store.getters.getCurrentUser,
-      darkTheme: false,
+      darkTheme: this.$store.getters.getIsDarkTheme,
     };
   },
   async mounted() {
