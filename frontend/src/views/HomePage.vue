@@ -518,7 +518,7 @@ export default {
 }
 
 .DarkCardsContainer {
-  background-color: black;
+  background-color: #131313;
   display: grid;
   grid-template-columns: 200px 200px;
   grid-template-rows: max-content;
