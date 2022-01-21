@@ -219,7 +219,7 @@ max-width: 140px;
 .viewCount {
   margin-left: 3vw;
   align-self: center;
-  height: 3vh;
+  height: 1.5vh;
     font-size: small;
 }
 .uploader,
@@ -230,7 +230,7 @@ max-width: 140px;
 
 .textInfo {
   height: 14vh;
-  margin-left: 6vw;
+  margin-left: 1vw;
   place-content: space-between;
   width:160px;
  
@@ -251,7 +251,7 @@ max-width: 120px;
 .viewCount {
   margin-left: 3vw;
   align-self: center;
-  height: 3vh;
+  height: 2vh;
     font-size: small;
 }
 .uploader,
@@ -300,7 +300,7 @@ max-width: 240px;
 
 .textInfo {
   height: 16vh;
-  margin-left: 6vw;
+  margin-left: 8vw;
   place-content: space-between;
   width:220px;
  
@@ -325,7 +325,7 @@ max-width: 240px;
 .viewCount {
   margin-left: 3vw;
   align-self: center;
-  height: 2.5vh;
+  height: 2vh;
   font-size: large;
 }
 .uploader,
@@ -337,7 +337,7 @@ max-width: 240px;
 
 .textInfo {
   height: 18vh;
-  margin-left: 8vw;
+  margin-left: 10vw;
   place-content: space-between;
   width:220px;
  
