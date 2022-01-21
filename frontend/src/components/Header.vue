@@ -255,7 +255,7 @@ export default {
   text-decoration: none;
 }
 
-.sun{
+.sun {
   margin-left: -13px;
 }
 .searchDiv {
@@ -478,7 +478,6 @@ export default {
   grid-row: 1;
   text-align: -webkit-center;
   align-self: center;
-  
 }
 
 .themeSwitch {

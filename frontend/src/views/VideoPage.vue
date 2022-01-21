@@ -838,7 +838,11 @@ export default {
       }
     },
     async likeVideo() {
-      if (this.$store.getters.getCurrentUser && !this.likedVideoAlready) {
+      if (
+        this.$store.getters.getCurrentUser &&
+        !this.likedVideoAlready &&
+        !this.dislikedVideoAlready
+      ) {
         let relevantInfo = {
           userId: this.$store.getters.getCurrentUser.userId,
           videoId: this.video.videoId,
@@ -864,12 +868,18 @@ export default {
         this.video.likes = likedVideoResponse;
         this.spacedLikes = this.video.likes;
         this.likedVideoAlready = true;
+      } else if (this.dislikedVideoAlready) {
+        alert('You already disliked this video.');
       } else {
         alert('You have to log in to like Videos!');
       }
     },
     async dislikeVideo() {
-      if (this.$store.getters.getCurrentUser && !this.dislikedVideoAlready) {
+      if (
+        this.$store.getters.getCurrentUser &&
+        !this.likedVideoAlready &&
+        !this.dislikedVideoAlready
+      ) {
         let relevantInfo = {
           relatesToVideoId: this.$route.params.id,
           userId: this.$store.getters.getCurrentUser.userId,
@@ -896,8 +906,10 @@ export default {
         this.video.dislikes = dislikedVideoResponse;
         this.spacedDislikes = this.video.dislikes;
         this.dislikedVideoAlready = true;
+      } else if (this.likedVideoAlready) {
+        alert('You already liked this video.');
       } else {
-        alert('You have to log in to dislike Videos!');
+        alert('You have to log in to like Videos!');
       }
     },
     async actOnResize() {

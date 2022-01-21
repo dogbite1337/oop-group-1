@@ -120,7 +120,7 @@ export default {
         : [],
       lastVideoObserver: null,
       darkTheme: false,
-      showPadder: (window.outerWidth > 418 ? false : true)
+      showPadder: window.outerWidth > 418 ? false : true,
     };
   },
 
@@ -135,7 +135,7 @@ export default {
       }
     });
     document.getElementsByClassName('CardsContainer')[0].style =
-          'grid-template-columns: ' + this.getGridDimensions() + ';';
+      'grid-template-columns: ' + this.getGridDimensions() + ';';
     window.addEventListener('resize', this.recalculateGrid);
   },
   updated() {
@@ -374,7 +374,7 @@ export default {
   color: white;
   padding-top: 3px;
 }
-.Padder{
+.Padder {
   height: 10px;
 }
 .VideoTitleDiv {
@@ -572,13 +572,14 @@ export default {
   margin-right: 8px;
 }
 @media screen and (max-width: 418px) {
-  .LightCardsContainer, .DarkCardsContainer{
+  .LightCardsContainer,
+  .DarkCardsContainer {
     position: relative;
     width: 100vw;
     max-width: 100vw;
     display: block;
   }
-  .videoBox{
+  .videoBox {
     height: 200px;
     margin-top: 20px;
     margin-bottom: 20px;
@@ -634,6 +635,4 @@ export default {
   margin-right: auto;
   margin-top: -164px;
 }
-
-
 </style>

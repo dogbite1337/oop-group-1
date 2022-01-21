@@ -31,7 +31,9 @@
       <div class="videosContianer" v-if="user.userVideos.length > 0">
         <div
           class="videoCard"
-          :class="isDarkTheme == true ? 'videoCardDarkTheme' : 'videoCardLightTheme'"
+          :class="
+            isDarkTheme == true ? 'videoCardDarkTheme' : 'videoCardLightTheme'
+          "
           v-for="video in userVideos(user)"
           :key="video.title"
           @click="goToVideoPage(video)"
@@ -45,7 +47,12 @@
             "
             alt=""
           />
-          <p class="title" :class="isDarkTheme == true ? 'titleDarkTheme' : 'titleLightTheme'">{{ video.title }}</p>
+          <p
+            class="title"
+            :class="isDarkTheme == true ? 'titleDarkTheme' : 'titleLightTheme'"
+          >
+            {{ video.title }}
+          </p>
           <p class="time">{{ uploadTime(video.uploadDate) }}</p>
         </div>
         <div class="textContainer" v-if="user.userVideos.length > 2">
@@ -60,7 +67,6 @@
 export default {
   props: ['matchedUserList'],
 
-
   data() {
     return {
       loggedInUser: this.$store.getters.getCurrentUser,
@@ -69,10 +75,13 @@ export default {
   },
 
   async created() {
-    this.isDarkTheme = await this.$store.getters.getIsDarkTheme
-    this.$store.watch((state) => state.darkTheme, (newVal) => {
-    this.isDarkTheme = newVal
-    })
+    this.isDarkTheme = await this.$store.getters.getIsDarkTheme;
+    this.$store.watch(
+      (state) => state.darkTheme,
+      (newVal) => {
+        this.isDarkTheme = newVal;
+      }
+    );
   },
 
   methods: {
@@ -210,11 +219,11 @@ p {
   border-bottom: solid 1px #bfbfbf;
 }
 
-.titleLightTheme{
+.titleLightTheme {
   color: black;
 }
 
-.videoCardLightTheme{
+.videoCardLightTheme {
   border: black 1px solid;
 }
 </style>

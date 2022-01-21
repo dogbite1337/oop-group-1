@@ -80,11 +80,8 @@ export default {
         this.$router.push(
           '/Profile/' + this.$store.getters.getCurrentUser.username
         );
-      }
-      else{
-        this.$router.push(
-          '/Login'
-        )
+      } else {
+        this.$router.push('/Login');
       }
     },
   },
@@ -215,7 +212,8 @@ export default {
   z-index: 5;
   left: 20px;
 }
-.LightProfileDiv, .DarkProfileDiv {
+.LightProfileDiv,
+.DarkProfileDiv {
   width: 35px;
   height: 60px;
   background-color: transparent;
@@ -238,11 +236,11 @@ export default {
   max-height: max-content;
   overflow-y: clip;
 }
-@media screen and (max-width: 380px){
-  .IconDiv{
+@media screen and (max-width: 380px) {
+  .IconDiv {
     grid-template-columns: 5px auto 0px auto 0px 165px 5px;
   }
-  .SmileImage{
+  .SmileImage {
     position: relative;
     left: -125px;
   }

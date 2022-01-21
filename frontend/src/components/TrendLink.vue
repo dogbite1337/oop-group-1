@@ -1,10 +1,20 @@
 <template>
   <div class="title">
-    <h1 :class="isDarkTheme == true ? 'darkTheme' : 'lightTheme'">Top 10 Trending Searches</h1>
+    <h1 :class="isDarkTheme == true ? 'darkTheme' : 'lightTheme'">
+      Top 10 Trending Searches
+    </h1>
   </div>
-  <div class="trendGrid" :class="isDarkTheme == true ? 'trendGridDarkTheme' : 'trendGridLightTheme'">
-    <div class="itemsContainer" >
-      <div v-for="(trend, index) of trendingSearch" :key="trend" class="item" :class="isDarkTheme == true ? 'itemDarkTheme' : 'itemLightTheme'">
+  <div
+    class="trendGrid"
+    :class="isDarkTheme == true ? 'trendGridDarkTheme' : 'trendGridLightTheme'"
+  >
+    <div class="itemsContainer">
+      <div
+        v-for="(trend, index) of trendingSearch"
+        :key="trend"
+        class="item"
+        :class="isDarkTheme == true ? 'itemDarkTheme' : 'itemLightTheme'"
+      >
         <p @click="makeSearch(trend)">
           {{
             index +
@@ -29,11 +39,14 @@ export default {
   },
 
   async created() {
-    this.isDarkTheme = await this.$store.getters.getIsDarkTheme
+    this.isDarkTheme = await this.$store.getters.getIsDarkTheme;
     this.trendingSearch = await this.$store.dispatch('getTrendingSearch');
-    this.$store.watch((state) => state.darkTheme, (newVal) => {
-      this.isDarkTheme = newVal
-    })
+    this.$store.watch(
+      (state) => state.darkTheme,
+      (newVal) => {
+        this.isDarkTheme = newVal;
+      }
+    );
   },
 
   methods: {
@@ -128,19 +141,19 @@ h1 {
   height: 25vh;
 }
 
-.lightTheme{
+.lightTheme {
   color: #bfbfbf;
 }
 
-.trendGridLightTheme{
+.trendGridLightTheme {
   border: 1px solid black;
 }
 
-.itemLightTheme{
+.itemLightTheme {
   background-color: #939393;
 }
 
-.itemLightTheme p{
+.itemLightTheme p {
   color: white;
 }
 </style>

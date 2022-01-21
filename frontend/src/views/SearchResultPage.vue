@@ -48,19 +48,17 @@ export default {
       localStorage.setItem('searchKey', keyword);
 
       this.matchedUserList = await this.$store.dispatch(
-      'getMatchedUserList',
-      keyword
-    );
+        'getMatchedUserList',
+        keyword
+      );
 
       localStorage.setItem('userList', JSON.stringify(this.matchedUserList));
-
-    }
-    else{
+    } else {
       let list;
-      list = await JSON.parse(localStorage.orginalVideosList)
-      this.matchedVideoList = list
+      list = await JSON.parse(localStorage.orginalVideosList);
+      this.matchedVideoList = list;
 
-      this.matchedUserList = await JSON.parse(localStorage.userList)
+      this.matchedUserList = await JSON.parse(localStorage.userList);
     }
 
     await this.storeMatchedVideoList(this.matchedVideoList);
@@ -74,9 +72,9 @@ export default {
       await this.$store.dispatch('setMatchedVideoList', matchedVideoList);
     },
 
-    async storeMatchedUserList(list){
-      await this.$store.dispatch('setMatchedUserList', list)
-    }
+    async storeMatchedUserList(list) {
+      await this.$store.dispatch('setMatchedUserList', list);
+    },
   },
 };
 </script>

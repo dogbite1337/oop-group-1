@@ -155,7 +155,8 @@ export default {
   .lowerDiv {
     width: 100vw;
   }
-  .LightCardBox, .DarkCardBox {
+  .LightCardBox,
+  .DarkCardBox {
     max-width: 100vw;
     width: 100vw;
     background-color: white;
@@ -239,6 +240,4 @@ export default {
   margin-top: 2px;
   padding-top: 1.5px;
 }
-
-
 </style>
