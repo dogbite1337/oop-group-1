@@ -131,6 +131,7 @@ export default {
   height: 36px;
   width: 35px;
   background: transparent;
+  border-radius: 30px;
 }
 
 .ProfileIcon {
@@ -190,6 +191,7 @@ export default {
 .LightProfileDiv {
   padding-top: 10px;
   margin-left: 40px;
+  border-radius: 30px;
 }
 .LightHomeDiv {
   width: 35px;
