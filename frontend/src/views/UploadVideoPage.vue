@@ -1,19 +1,19 @@
 <template>
-  <div :class="isDarkTheme == false ? 'darkBackgroundDiv' : 'lightBackgroundDiv'" @click="clickedMe">
+  <div :class="isDarkTheme == true ? 'darkBackgroundDiv' : 'lightBackgroundDiv'" @click="clickedMe">
     <router-link class="HomeLink" to="/">
-      <div :class="isDarkTheme == false ? 'darkBackHomeDiv' : 'lightBackHomeDiv'">
+      <div :class="isDarkTheme == true ? 'darkBackHomeDiv' : 'lightBackHomeDiv'">
         <div class="SpaceDiv" />
         <img class="ArrowIcon" src="../projectImages/white_arrow.png" />
         <div class="SpaceDiv" />
-        <p :class="isDarkTheme == false ? 'darkHomeText' : 'lightHomeText'">Home</p>
+        <p class="homeText" :class="isDarkTheme == true ? 'whiteText' : 'blackText'">Home</p>
         <div class="SpaceDiv" />
         <img class="catIcon" src="../projectImages/whiteCatBlackBaground.png" />
         <div class="SpaceDiv" />
       </div>
     </router-link>
-    <div :class="isDarkTheme == false ? 'darkVideoPreviewDiv' : 'lightVideoPreviewDiv'">
-      <p :class="isDarkTheme == false ? 'dark' : 'light'">Video Preview</p>
-      <div :class="isDarkTheme == false ? 'darkVideoLinkBox' : 'lightVideoLinkBox'">
+    <div :class="isDarkTheme == true ? 'darkVideoPreviewDiv' : 'lightVideoPreviewDiv'">
+      <p :class="isDarkTheme == true ? 'whiteText' : 'blackText'">Video Preview</p>
+      <div :class="isDarkTheme == true ? 'darkVideoLinkBox' : 'lightVideoLinkBox'">
         <img
           class="previewImage"
           :src="
@@ -27,7 +27,7 @@
         <div class="TitleDivInVideoPreview">
           {{ titleOfVideo == '' ? 'Title' : titleOfVideo }}
         </div>
-        <div class="uploaderDiv">
+        <div class="uploaderDiv" :class="isDarkTheme == true ? 'blackBackground whiteText' : 'whiteBackground blackText'">
           <div class="SpaceDiv" />
           <div class="upDiv">UP</div>
           <div class="SpaceDiv" />
@@ -37,25 +37,26 @@
           <div class="SpaceDiv" />
         </div>
       </div>
-      <div class="inputsDiv">
-        <p class="VideoUrlP" :class="isDarkTheme == false ? 'dark' : 'light'">Video Url</p>
+      <div class="inputsDiv" :class="isDarkTheme == true ? 'blackBackground whiteText' : 'whiteBackground blackText'">
+        <p class="VideoUrlP">Video Url</p>
         <input
           v-model="videoURL"
-          class="urlInput"
+          :class="isDarkTheme == true ? 'whiteBorder' : 'blackBorder'"
           type="text"
           placeholder="Video url goes here.."
         />
-        <p class="VideoTitleP" :class="isDarkTheme == false ? 'dark' : 'light'">Video Title</p>
+        <p class="VideoTitleP">Video Title</p>
         <input
           v-model="titleOfVideo"
-          class="titleInput"
+          :class="isDarkTheme == true ? 'whiteBorder' : 'blackBorder'"
           type="text"
           placeholder="What is the title of the video?"
         />
-        <p class="DescriptionP" :class="isDarkTheme == false ? 'dark' : 'light'">Description</p>
+        <p class="DescriptionP">Description</p>
         <textarea
           v-model="descriptionOfVideo"
           class="DescriptionInput"
+          :class="isDarkTheme == true ? 'whiteBorder' : 'blackBorder'"
           placeholder="What is the video about? (Optional)"
         >
         </textarea>
@@ -98,12 +99,11 @@ export default {
         ? this.$store.getters.getCurrentUser
         : '',
       canUpload: false,
-      isDarkTheme: true,
+      isDarkTheme: false,
     };
   },
   beforeCreate () {
-    this.isDarkTheme = this.$store.getters.isDarkTheme;
-    //:class="isDarkTheme == true ? 'searchPageBtnDarkTheme' : 'searchPageBtnLightTheme'
+    //this.isDarkTheme = this.$store.getters.isDarkTheme;
   },
   watch: {
     videoURL() {
@@ -163,16 +163,31 @@ export default {
 }
 p,
 div {
-  color: white;
   text-align: center;
 }
 
-.dark {
+.whiteText {
   color: white;
 }
 
-.light {
+.blackText {
   color: black;
+}
+
+.whiteBackground {
+  background-color: white;
+}
+
+.blackBackground {
+  background-color: #131313;
+}
+
+.whiteBorder {
+  border: 0.7px solid white;
+}
+
+.blackBorder {
+  border: 0.7px solid black;
 }
 
 .uploadButton {
@@ -238,9 +253,9 @@ div {
 input {
   width: 362px;
   padding-left: 10px;
-  background-color: #131313;
+  /*background-color: #131313;
   color: white;
-  border: 0.7px solid #ffffff;
+  border: 0.7px solid #ffffff;*/
   box-sizing: border-box;
   padding-top: 2.5px;
   padding-bottom: 2.5px;
@@ -290,12 +305,9 @@ input {
 .DescriptionInput {
   height: 70px;
   width: 343px;
-  background-color: #131313;
-  border: solid 0.7px white;
   padding-left: 10px;
   padding-right: 10px;
   padding-top: 5px;
-  color: white;
 }
 .VideoUrlP,
 .DescriptionP,
@@ -315,23 +327,12 @@ input {
   margin-bottom: 2px;
 }
 
-.darkHomeText {
+.homeText {
   font-size: 24px;
   font-weight: 500;
   font-family: 'Roboto', sans-serif;
   line-height: 28.13px;
   margin-top: 18px;
-  color: white;
-  margin-bottom: 15px;
-}
-
-.lightHomeText {
-  font-size: 24px;
-  font-weight: 500;
-  font-family: 'Roboto', sans-serif;
-  line-height: 28.13px;
-  margin-top: 18px;
-  color: black;
   margin-bottom: 15px;
 }
 
@@ -339,7 +340,6 @@ input {
   display: grid;
   grid-template-columns: auto 14px 9px 100px auto;
   font-size: 10px;
-  background-color: #131313;
   height: 14px;
   padding: 0px;
   margin: 0px;
