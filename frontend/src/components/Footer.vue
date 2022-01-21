@@ -1,20 +1,22 @@
 <template>
   <div class="IconDiv">
     <div class="SpaceDiv" />
-    <router-link :to="{ path: '/' }">
-      <div v-if="darkTheme" class="DarkHomeDiv">
-        <img class="HomeIcon" src="../projectImages/Dark_House.png" />
-        <router-link :to="{ path: '/' }">
-          <div class="HomeText">Home</div>
-        </router-link>
-      </div>
-      <div v-if="!darkTheme" class="LightHomeDiv">
-        <img class="HomeIcon" src="../projectImages/Light_House.png" />
-        <router-link :to="{ path: '/' }">
-          <div class="LightHomeText">Home</div>
-        </router-link>
-      </div>
-    </router-link>
+    <div class="firstBox">
+      <router-link :to="{ path: '/' }">
+        <div v-if="darkTheme" class="DarkHomeDiv">
+          <img class="HomeIcon" src="../projectImages/Dark_House.png" />
+          <router-link :to="{ path: '/' }">
+            <div class="HomeText">Home</div>
+          </router-link>
+        </div>
+        <div v-if="!darkTheme" class="LightHomeDiv">
+          <img class="HomeIcon" src="../projectImages/Light_House.png" />
+          <router-link :to="{ path: '/' }">
+            <div class="LightHomeText">Home</div>
+          </router-link>
+        </div>
+      </router-link>
+    </div>
     <div class="SpaceDiv" />
     <div class="PantherDiv">
       <img
@@ -29,31 +31,16 @@
       />
     </div>
     <div class="SpaceDiv" />
-    <div v-if="activeUser" class="loggedInRoute">
-      <router-link :to="{ path: '/Profile/' + activeUser }">
-        <div @click="seeIfLoggedIn" v-if="darkTheme" class="HomeDiv">
-          <img class="ProfileIcon" src="../projectImages/Dark_User.png" />
-          <div class="ProfileText">Profile</div>
-        </div>
-        <div @click="seeIfLoggedIn" v-if="!darkTheme" class="LightProfileDiv">
-          <img class="ProfileIcon" src="../projectImages/Light_User.png" />
-          <div class="LightProfileText">Profile</div>
-        </div>
-      </router-link>
-    </div>
-    <div v-if="!activeUser" class="LightProfileDiv">
-      <img
-        v-if="darkTheme"
-        class="ProfileIcon"
-        src="../projectImages/Dark_User.png"
-      />
-      <img
-        v-if="!darkTheme"
-        class="ProfileIcon"
-        src="../projectImages/Light_User.png"
-      />
-      <div v-if="darkTheme" class="DarkProfileText">Profile</div>
-      <div v-if="!darkTheme" class="LightProfileText">Profile</div>
+    <div class="SecondBox">
+      <div @click="goToProfilePage" v-if="darkTheme" class="DarkProfileDiv">
+        <img class="HomeIcon" src="../projectImages/Dark_User.png" />
+
+        <div class="HomeText">Profile</div>
+      </div>
+      <div @click="goToProfilePage" v-if="!darkTheme" class="LightProfileDiv">
+        <img class="HomeIcon" src="../projectImages/Light_User.png" />
+        <div class="LightHomeText">Profile</div>
+      </div>
     </div>
     <div class="SpaceDiv" />
   </div>
@@ -65,8 +52,8 @@ export default {
   name: 'Footer',
   data() {
     return {
-      activeUser: '',
-      darkTheme: false,
+      activeUser: this.$store.getters.getCurrentUser,
+      darkTheme: this.$store.getters.getIsDarkTheme,
     };
   },
   async mounted() {
@@ -86,8 +73,22 @@ export default {
         }
       }
     });
+    this.darkTheme = this.$store.getters.getIsDarkTheme;
   },
-  methods: {},
+  methods: {
+    goToProfilePage() {
+      if (this.$store.getters.getCurrentUser) {
+        this.$router.push(
+          '/Profile/' + this.$store.getters.getCurrentUser.username
+        );
+      }
+      else{
+        this.$router.push(
+          '/Login'
+        )
+      }
+    },
+  },
 };
 </script>
 
@@ -96,17 +97,25 @@ export default {
 
 .IconDiv {
   display: grid;
-  grid-template-columns: auto max-content auto auto auto max-content auto;
-  height: 58px;
+  grid-template-columns: 5px 165px 10px 100px 25px 165px 5px;
+  height: 60px;
   text-align: center;
   background-color: black;
-  padding-top: 7px;
   /* top: 100vh;
   width: 100vw; */
   position: sticky;
   bottom: 0;
+  padding-top: 2px;
+  padding-bottom: 7px;
 }
 
+.firstBox {
+  width: 120px;
+}
+
+.SecondBox {
+  width: 120px;
+}
 .PantherDiv {
   height: 50px;
 }
@@ -122,6 +131,7 @@ export default {
   height: 36px;
   width: 35px;
   background: transparent;
+  border-radius: 30px;
 }
 
 .ProfileIcon {
@@ -141,6 +151,7 @@ export default {
   padding-top: 7px;
   height: 240px;
   top: -100px;
+  left: -180px;
   position: relative;
   overflow-y: clip;
 }
@@ -158,17 +169,6 @@ export default {
   left: -35px;
   top: 13px;
 }
-.DarkProfileText {
-  width: max-content;
-  background-color: none;
-  display: inline-block;
-  color: white;
-  font-weight: 400;
-  font-family: 'Roboto', sans-serif;
-  line-height: 14.06px;
-  font-size: 12px;
-  position: relative;
-}
 
 .LightHomeText {
   width: max-content;
@@ -183,21 +183,23 @@ export default {
   left: 0px;
   top: -8px;
 }
-.HomeDiv,
+.DarkHomeDiv,
 .LightHomeDiv {
-  margin-left: 35px;
+  padding-top: 7px;
 }
-
-.DarkHomeDiv {
-  margin-left: 0px;
+.DarkProfileDiv,
+.LightProfileDiv {
+  padding-top: 10px;
+  margin-left: 40px;
+  border-radius: 30px;
 }
-
 .LightHomeDiv {
   width: 35px;
   height: 60px;
   background-color: transparent;
   position: absolute;
   z-index: 5;
+  left: 20px;
 }
 .LightProfileDiv {
   width: 35px;

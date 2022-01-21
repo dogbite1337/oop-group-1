@@ -1,20 +1,20 @@
 <template>
-  <div class="MainDiv">
+  <div class="MainDiv" :class="isDarkTheme == true ? 'MainDivDarkTheme' : 'MainDivLightTheme'">
     <Header @update="register" />
     <div class="searchPage">
-      <TrendLink @addTrendingSearch="addTrendingSearch($event)"/>
+      <TrendLink @addTrendingSearch="addTrendingSearch($event)" />
       <ExpandableSearchHistory />
       <div class="searchPageButtonsContainer">
-        <button @click="register" type="button">Search</button>
-        <button @click="showConfirmModal" type="button">Clear History</button>
+        <button class="searchPageBtn" @click="register" type="button" :class="isDarkTheme == true ? 'searchPageBtnDarkTheme' : 'searchPageBtnLightTheme'">Search</button>
+        <button class="searchPageBtn" @click="showConfirmModal" type="button" :class="isDarkTheme == true ? 'searchPageBtnDarkTheme' : 'searchPageBtnLightTheme'">Clear History</button>
       </div>
     </div>
     <div class="confirmModalBackGround" v-if="showConfirmWindow">
-      <div class="confirmModalContainer">
-        <p>Are you sure you want to reset search history? This action can not be un done</p>
+      <div class="confirmModalContainer" :class="isDarkTheme == true ? 'confirmModalContainerDarkTheme' : 'confirmModalContainerLightTheme'">
+        <p>Are you sure you want to reset search history? This action can not be undone</p>
         <div class="confirmBtnContainer">
-          <button class="confirmBtn" type="button" @click="clearHistory">Yes</button>
-          <button class="confirmBtn" type="button" @click="showConfirmWindow=false">No</button>
+          <button class="yesConfirmBtn" type="button" @click="clearHistory">Yes</button>
+          <button class="noConfirmBtn" type="button" @click="showConfirmWindow=false" :class="isDarkTheme == true ? 'noConfirmBtnDarkTheme' : 'noConfirmBtnLightTheme'">No</button>
         </div>
       </div>
     </div>
@@ -28,12 +28,13 @@ import ExpandableSearchHistory from '../components/ExpandableSearchHistory.vue';
 import Footer from '../components/Footer.vue';
 
 export default {
-  emits: ['update','addTrendingSearch'],
+  emits: ['update', 'addTrendingSearch'],
   data() {
     return {
       searchHistory: [],
       currentUser: null,
       showConfirmWindow: false,
+      isDarkTheme: true,
     };
   },
 
@@ -44,7 +45,28 @@ export default {
     ExpandableSearchHistory,
   },
 
-  created() {},
+  async beforeCreate() {
+    this.isDarkTheme = await this.$store.getters.getIsDarkTheme
+  },
+
+  // async created(){
+  //   this.$store.subscribe(async (mutation, state) => {
+  //     if (mutation.type == 'setDarkTheme') {
+  //       console.log(mutation)
+  //       if (mutation.payload) {
+  //         this.isDarkTheme = true;
+  //       } else {
+  //         this.isDarkTheme = false;
+  //       }
+  //     }
+  //   })
+  // },
+
+  async created(){
+    this.$store.watch((state) => state.darkTheme, (newVal) => {
+      this.isDarkTheme = newVal
+    })
+  },
 
   async mounted() {
     let detailedSearchList;
@@ -76,9 +98,9 @@ export default {
   beforeUnmount() {},
 
   methods: {
-    async addTrendingSearch(keyword){
-      await this.$store.dispatch('setKeyWord', keyword)
-      this.register()
+    async addTrendingSearch(keyword) {
+      await this.$store.dispatch('setKeyWord', keyword);
+      this.register();
     },
 
     async register() {
@@ -95,12 +117,11 @@ export default {
             this.searchHistory.push(element);
           });
         }
-      }else{
-        if(this.$store.getters.getMySearchHistoryList != null){
+      } else {
+        if (this.$store.getters.getMySearchHistoryList != null) {
           this.searchHistory = this.$store.getters.getMySearchHistoryList;
-        }
-        else if(localStorage.searchHistorList){
-          this.searchHistory = await JSON.parse(localStorage.searchHistoryList)
+        } else if (localStorage.searchHistorList) {
+          this.searchHistory = await JSON.parse(localStorage.searchHistoryList);
         }
       }
       let boolean = await this.checkIfListContainsKey(
@@ -131,18 +152,15 @@ export default {
           });
         }
         this.$router.push('/SearchResult');
-        
       } else if (this.currentUser && boolean && searchParam) {
         this.$router.push('/SearchResult');
-        
       } else if (!this.currentUser && boolean && searchParam) {
         this.$router.push('/SearchResult');
-        
       } else if (!this.currentUser && !boolean && searchParam) {
-        if(this.$store.getters.getMySearchHistoryList != null){
+        if (this.$store.getters.getMySearchHistoryList != null) {
           this.searchHistory = this.$store.getters.getMySearchHistoryList;
-        }else if(localStorage.searchHistoryList){
-          this.searchHistory = await JSON.parse(localStorage.searchHistoryList)
+        } else if (localStorage.searchHistoryList) {
+          this.searchHistory = await JSON.parse(localStorage.searchHistoryList);
         }
 
         if (this.searchHistory.length > 5) {
@@ -157,16 +175,14 @@ export default {
 
         await this.$store.dispatch('cacheSearchHistory', this.searchHistory);
         this.$router.push('/SearchResult');
-        
       }
     },
 
-    showConfirmModal(){
+    showConfirmModal() {
       this.showConfirmWindow = true;
     },
 
     async clearHistory() {
-      
       this.searchHistory = [];
       await this.$store.dispatch('cacheSearchHistory', this.searchHistory);
       if (this.currentUser) {
@@ -199,7 +215,7 @@ export default {
   background-color: #131313;
 }
 
-.IconDiv{
+.IconDiv {
   position: absolute;
   width: -webkit-fill-available;
 }
@@ -213,7 +229,7 @@ export default {
   text-align: center;
 }
 
-.searchPageButtonsContainer button {
+.searchPageBtn {
   color: black;
   background-color: white;
   width: 25vw;
@@ -222,7 +238,7 @@ export default {
   height: 5vh;
 }
 
-.confirmModalBackGround{
+.confirmModalBackGround {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -238,31 +254,49 @@ export default {
     top: 40%;
     width: 100%;
     max-width: 80vw;
-    background-color: #595959;
+    background-color: #2d2c2c;
     border-radius: 10px;
     text-align: center;
     padding: 2rem;
     z-index: 99;
 }
 
-.confirmModalContainer p{
+.confirmModalContainer p {
   color: white;
   font-size: larger;
 }
 
-.confirmBtnContainer{
+.confirmBtnContainer {
   display: flex;
   place-content: space-evenly;
   margin-top: 2rem;
 }
 
-.confirmBtn{
+.yesConfirmBtn,
+.noConfirmBtn{
   width: 6rem;
   padding: 0.5rem;
   font-size: large;
-  background-color: #595959;
+  background-color: #2d2c2c;
   border: solid 1px white;
   color: white;
+}
+
+.noConfirmBtnLightTheme{
+  background-color: #929090;
+}
+
+.yesConfirmBtn{
+  background-color: rgba(255, 0, 0, 0.5);
+}
+
+.searchPageBtnLightTheme{
+  background-color: black;
+  color: white;
+}
+
+.confirmModalContainerLightTheme {
+  background-color: #929090;
 }
 
 

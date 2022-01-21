@@ -105,18 +105,14 @@
     </div>
     <div class="forgotPasswordDiv">Forgot your password?</div>
   </div>
-  <Footer />
 </template>
 <script>
 import User from '../jsClasses/general/User';
-import Footer from '../components/Footer.vue';
+
 import store from '../store';
 
 export default {
   name: 'LoginPage',
-  components: {
-    Footer,
-  },
   data() {
     return {
       canLogIn: false,

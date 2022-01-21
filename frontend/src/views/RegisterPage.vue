@@ -162,18 +162,14 @@
       </div>
     </div>
   </div>
-  <Footer />
 </template>
 <script>
 import User from '../jsClasses/general/User';
-import Footer from '../components/Footer.vue';
+
 import store from '../store';
 
 export default {
   name: 'RegisterPage',
-  components: {
-    Footer,
-  },
   data() {
     return {
       canRegister: false,

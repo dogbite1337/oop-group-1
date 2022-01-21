@@ -11,14 +11,15 @@
       />
     </div>
     <div class="textInfo">
-      <div class="titleText">
+      <div
+        class="titleText"
+        :class="
+          isDarkTheme == true ? 'titleTextDarkTheme' : 'titleTextLightTheme'
+        "
+      >
         {{ displayTitleBeforeKey(video.title) }}
         <p class="keyword">{{ displayKeyWord(video.title) }}</p>
         {{ displayTitleAfterKey(video.title) }}
-        <!-- <a class="titleText" :href="'/VideoPage/' + video.videoId">
-          {{ video.title }}
-        </a> -->
-        <!-- <p>{{video.title}}</p> -->
       </div>
       <div class="otherInfo">
         <div class="uploader">
@@ -32,6 +33,7 @@
       </div>
     </div>
   </div>
+  <div class="emptyDiv"></div>
 </template>
 
 <script>
@@ -42,34 +44,55 @@ export default {
       lastVideoObserverSearchResult: null,
       matchedVideos: [],
       stopObserver: false,
+      isDarkTheme: true,
     };
   },
 
-  async mounted() {
-    if(!this.$store.getters.getKeyWord){
-      this.keyword = await localStorage.searchKey
-    }
+  async created() {
+    this.isDarkTheme = await this.$store.getters.getIsDarkTheme;
 
-    if(await this.$store.getters.getMatchedVideoList.length > 6){
-      this.matchedVideos = await this.$store.getters.getMatchedVideoList.slice(0,6)
-    }
-    else{
-      this.matchedVideos = await this.$store.getters.getMatchedVideoList
-    }
+    this.$store.watch(
+      (state) => state.darkTheme,
+      (newVal) => {
+        this.isDarkTheme = newVal;
+      }
+    );
   },
 
-  updated(){
-      this.lastVideoObserverSearchResult = new IntersectionObserver(entries =>{
-        let lastVideo = entries[0]
-        if(!lastVideo.isIntersecting) {
-          return;}
-        this.loadMoreVideos()
-        this.lastVideoObserverSearchResult.unobserve(lastVideo.target);
-        if(!this.stopObserver) 
-        this.lastVideoObserverSearchResult.observe(document.querySelector(".videoCard:last-child"))
-      },{rootMargin: "50px"}
-      )
-      this.lastVideoObserverSearchResult.observe(document.querySelector(".videoCard:last-child"))
+  async mounted() {
+    if (!this.$store.getters.getKeyWord) {
+      this.keyword = await localStorage.searchKey;
+    }
+
+    if ((await this.$store.getters.getMatchedVideoList.length) > 6) {
+      this.matchedVideos = await this.$store.getters.getMatchedVideoList.slice(
+        0,
+        6
+      );
+    } else {
+      this.matchedVideos = await this.$store.getters.getMatchedVideoList;
+    }
+
+    this.$nextTick(function () {
+      this.lastVideoObserverSearchResult = new IntersectionObserver(
+        (entries) => {
+          let lastVideo = entries[0];
+          if (!lastVideo.isIntersecting) {
+            return;
+          }
+          this.loadMoreVideos();
+          this.lastVideoObserverSearchResult.unobserve(lastVideo.target);
+          if (!this.stopObserver)
+            this.lastVideoObserverSearchResult.observe(
+              document.querySelector('.emptyDiv')
+            );
+        },
+        { rootMargin: '50px' }
+      );
+      this.lastVideoObserverSearchResult.observe(
+        document.querySelector('.emptyDiv')
+      );
+    });
   },
 
   unmounted() {
@@ -82,11 +105,13 @@ export default {
       let lengthOfCurrentShowedVideos = this.matchedVideos.length;
       let fullMatchedList = await this.$store.getters.getMatchedVideoList;
 
-      if(lengthOfCurrentShowedVideos + 6 > fullMatchedList.length){
-        this.matchedVideos = fullMatchedList
-      }
-      else{
-        this.matchedVideos = fullMatchedList.slice(0, lengthOfCurrentShowedVideos+6)
+      if (lengthOfCurrentShowedVideos + 6 > fullMatchedList.length) {
+        this.matchedVideos = fullMatchedList;
+      } else {
+        this.matchedVideos = fullMatchedList.slice(
+          0,
+          lengthOfCurrentShowedVideos + 6
+        );
       }
     },
 
