@@ -139,6 +139,7 @@ export default {
 .ImageBox {
   height: 80px;
   width: 100%;
+  max-width: 190px;
 }
 
 .LightTitleText {
@@ -216,9 +217,8 @@ export default {
   .CardBox {
     max-width: 100vw;
     max-height: 260px;
-     margin-top: 1px;
+    margin-top: 1px;
     margin-bottom: 1px;
-    
   }
   .ImageBox {
     height: 105px;
@@ -230,68 +230,65 @@ export default {
     max-width: 48vw;
     max-height: 400px;
     margin-left: auto;
-     margin-right: auto;
+    margin-right: auto;
     margin-top: 1px;
     margin-bottom: 5px;
-      margin-left:3px;
-  margin-right:3px;
+    margin-left: 3px;
+    margin-right: 3px;
   }
   .ImageBox {
     height: 100px;
-    width:190px;
+    width: 190px;
   }
 }
 
-
-@media screen and (min-width: 440px) and (max-width:560px) {
+@media screen and (min-width: 440px) and (max-width: 560px) {
   .CardBox {
     max-width: 48vw;
     max-height: 200px;
     margin-left: auto;
-     margin-right: auto;
+    margin-right: auto;
     margin-top: 1px;
     margin-bottom: 6px;
-    margin-left:5px;
-  margin-right:5px;
+    margin-left: 5px;
+    margin-right: 5px;
   }
   .ImageBox {
     height: 120px;
-    width:220px;
+    width: 220px;
   }
 }
 
-
-@media screen and (min-width: 560px) and (max-width:600px) {
+@media screen and (min-width: 560px) and (max-width: 600px) {
   .CardBox {
     max-width: 56vw;
-  max-height: 180px;
+    max-height: max-content;
     margin-left: auto;
-     margin-right: auto;
+    margin-right: auto;
     margin-top: 1px;
     margin-bottom: 6px;
-    margin-left:5px;
-  margin-right:5px;
+    margin-left: 5px;
+    margin-right: 5px;
   }
   .ImageBox {
     height: 100px;
-    width:270px;
+    width: 270px;
   }
 }
 @media screen and (min-width: 601px) {
   .CardBox {
     max-width: 42vw;
-    max-height: 400px;
+    max-height: max-content;
     margin-left: auto;
-     margin-right: auto;
+    margin-right: auto;
     margin-top: 1px;
     margin-bottom: 6px;
-    margin-left:2px;
-  margin-right:2px;
+    margin-left: 2px;
+    margin-right: 2px;
   }
   .ImageBox {
     height: 130px;
-    width:196px;
+    width: 196px;
   }
 }
-
 </style>

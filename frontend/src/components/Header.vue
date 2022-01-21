@@ -15,65 +15,7 @@
     <p class="SeasonText">Winter</p>
     <div class="SpaceDiv" />
   </div>
-
-  <div v-if="!isDarkTheme" class="LightSearchAndLoginDiv">
-    <div class="SpaceDiv" />
-    <img class="CatInHeader" src="../projectImages/test.png" @click="playMe" />
-    <audio ref="meow" src="src/projectImages/meowSound.mp3"></audio>
-    <div class="SpaceDiv2 SpaceDiv" />
-    <div class="searchDiv">
-      <router-link class="SearchLink" :to="{ path: '/Search' }">
-        <img
-          class="iconInSearchField"
-          src="../projectImages/magnifying_glass.png"
-        />
-        <input
-          v-on:keyup.enter="search"
-          @change="setKeyWord"
-          @click="resetKey"
-          v-model="searchParam"
-          class="SearchField"
-          type="text"
-          placeholder="Search.."
-        />
-      </router-link>
-      <div class="SpaceDiv" />
-    </div>
-    <div class="SpaceDiv" />
-    <router-link v-if="!$store.getters.getCurrentUser" :to="{ path: '/Login' }">
-      <input class="LoginButton" type="button" value="Login" />
-    </router-link>
-    <img
-      v-else
-      class="profilePic"
-      @click="toggleProfileDropdown"
-      :src="profilePic"
-    />
-    <div class="SpaceDiv" />
-    <div class="SpaceDiv" />
-    <div class="SpaceDiv" />
-    <div v-if="profileDropdown && isDarkTheme" class="profile-dropdown">
-      <ul v-if="$store.getters.getCurrentUser && isDarkTheme" class="DarkUlMenu">
-        <li @click="profileNavigation" class="myProfileLink">My Profile</li>
-        <li @click="uploadNavigation">Upload Video</li>
-        <li @click="logout">Logout</li>
-      </ul>
-    </div>
-    <div v-if="profileDropdown && !isDarkTheme" class="profile-dropdown">
-      <ul
-        v-if="$store.getters.getCurrentUser && !isDarkTheme"
-        class="LightUlMenu"
-      >
-        <li @click="profileNavigation" class="lightULItem myProfileLink">
-          My Profile
-        </li>
-        <li @click="uploadNavigation" class="lightULItem">Upload Video</li>
-        <li @click="logout" class="lightULItem">Logout</li>
-      </ul>
-    </div>
-    <div class="SpaceDiv" />
-  </div>
-  <div v-if="isDarkTheme" class="DarkSearchAndLoginDiv">
+  <div class="SearchAndLoginDiv">
     <div class="SpaceDiv" />
     <img
       class="CatInHeader"
@@ -113,9 +55,13 @@
     <div class="SpaceDiv" />
     <div class="SpaceDiv" />
     <div class="SpaceDiv" />
-    <div v-if="profileDropdown && isDarkTheme" class="profile-dropdown">
-      <ul v-if="$store.getters.getCurrentUser" class="DarkUlMenu">
-        <li @click="profileNavigation">My Profile</li>
+    <div v-if="profileDropdown" class="profile-dropdown">
+      <ul v-if="$store.getters.getCurrentUser" class="UlMenu">
+        <router-link
+          :to="{ path: '/Profile/' + $store.getters.getCurrentUser.username }"
+        >
+          <li>My Profile</li>
+        </router-link>
         <li @click="uploadNavigation">Upload Video</li>
         <li @click="logout">Logout</li>
       </ul>
@@ -136,7 +82,7 @@ export default {
         ? this.$store.getters.getCurrentUser.getProfileURL()
         : '',
       profileDropdown: false,
-      isDarkTheme: true
+      isDarkTheme: true,
     };
   },
   created() {
@@ -149,22 +95,12 @@ export default {
       this.searchParam = this.$store.getters.getKeyWord;
     }
 
-    this.$store.watch((state) => state.isDarkTheme, (newVal) => {
+    this.$store.watch((state) => state.darkTheme, (newVal) => {
       this.isDarkTheme = newVal
     })
   },
 
   async mounted() {
-    this.$store.subscribe(async (mutation, state) => {
-      if (mutation.type == 'setDarkTheme') {
-        if (mutation.payload) {
-          this.isDarkTheme = true;
-        } else {
-          this.isDarkTheme = false;
-        }
-      }
-    });
-    this.isDarkTheme = this.$store.getters.getIsDarkTheme;
     await this.$store.dispatch('whoAmI');
     if (this.$store.getters.getCurrentUser) {
       this.profilePic = this.$store.getters.getCurrentUser.getProfileURL();
@@ -172,11 +108,6 @@ export default {
   },
 
   methods: {
-    profileNavigation() {
-      this.$router.push(
-        '/Profile/' + this.$store.getters.getCurrentUser.username
-      );
-    },
     async changedTheme(){
       if(this.isDarkTheme){
         this.isDarkTheme = false;
@@ -283,7 +214,6 @@ export default {
   display: inline;
   outline: none;
   margin-left: -20px;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
 .CatInHeader {
@@ -321,11 +251,10 @@ export default {
   /* margin-top: 33px; */
 }
 
-
-
-.DarkHeaderDiv {
+.HeaderDiv {
   display: grid;
-  grid-template-columns: 16px 100px auto 80px;
+  grid-template-columns: 16px 100px auto 20%;
+  grid-template-rows: repeat(2, 50%);
   height: 60px;
   text-align: center;
   background-image: url('../projectImages/ghosts.gif');
@@ -340,17 +269,7 @@ export default {
 .SeasonText {
   overflow-y: hidden;
 }
-.LightSearchAndLoginDiv {
-  display: grid; /* Margin, Cat, Margin, search icon, margin, Search Field, margin, Login Button, Margin */
-  grid-template-columns: auto 43px auto max-content auto auto;
-  background-color: white;
-  padding-top: 16px;
-  border-bottom: solid 1px #bfbfbf;
-  max-width: max-content;
-  margin-left: auto;
-  margin-right: auto;
-}
-.DarkSearchAndLoginDiv {
+.SearchAndLoginDiv {
   display: grid; /* Margin, Cat, Margin, search icon, margin, Search Field, margin, Login Button, Margin */
   grid-template-columns: auto 43px auto max-content auto auto;
   background-color: #131313;
@@ -361,30 +280,14 @@ export default {
   margin-right: auto;
   padding-bottom: 40px;
 }
-.myProfileLink {
-  text-decoration: none;
-}
-.LightUlMenu {
-  height: max-content;
-  width: 100vw;
-  z-index: 5;
-  color: black;
-  position: absolute;
-  background-color: transparent;
-  left: 0px;
-}
-.DarkUlMenu {
+.UlMenu {
   height: max-content;
   width: 100vw;
   z-index: 5;
   color: white;
   position: absolute;
   background-color: transparent;
-  height: 300px;
   left: 0px;
-}
-.lightULItem {
-  color: black;
 }
 .LoginButton {
   border-radius: 30px;
@@ -481,26 +384,22 @@ li {
 
 
 @media screen and (max-width: 300px) {
-  .LightSearchAndLoginDiv,
-  .DarkSearchAndLoginDiv {
+  .SearchAndLoginDiv {
     grid-template-columns: 5px 15px 10px 199px 1px 50px 1px 1px 1px 1px 10px;
   }
 }
 @media screen and (min-width: 301px) {
-  .LightSearchAndLoginDiv,
-  .DarkSearchAndLoginDiv {
+  .SearchAndLoginDiv {
     grid-template-columns: 5px 15px 10px 210px auto 50px 1px 1px 1px 1px 10px;
   }
 }
 @media screen and (min-width: 335px) {
-  .LightSearchAndLoginDiv,
-  .DarkSearchAndLoginDiv {
+  .SearchAndLoginDiv {
     grid-template-columns: 5px 15px 10px 230px auto 50px 1px 1px 1px 1px 10px;
   }
 }
 @media screen and (min-width: 370px) {
-  .LightSearchAndLoginDiv,
-  .DarkSearchAndLoginDiv {
+  .SearchAndLoginDiv {
     grid-template-columns: 5px 15px 10px max-content auto 50px 1px 1px 1px 1px 10px;
   }
 }

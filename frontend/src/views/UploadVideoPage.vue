@@ -77,7 +77,6 @@
       </button>
     </div>
   </div>
-  <Footer />
 </template>
 <script>
 import User from '../jsClasses/general/User';
@@ -86,9 +85,6 @@ import store from '../store';
 
 export default {
   name: 'UploadVideoPage',
-  components: {
-    Footer,
-  },
   data() {
     return {
       videoURL: '',
