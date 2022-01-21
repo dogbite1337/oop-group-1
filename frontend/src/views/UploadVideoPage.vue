@@ -29,7 +29,10 @@
         </div>
         <div class="uploaderDiv" :class="isDarkTheme == true ? 'blackBackground whiteText' : 'whiteBackground blackText'">
           <div class="SpaceDiv" />
-          <div class="upDiv">UP</div>
+          <div
+            class="upDiv"
+            :class="isDarkTheme == true ? 'blackBackground whiteText grayBorder' : 'whiteBackground blackText blackBorder'"
+            >UP</div>
           <div class="SpaceDiv" />
           <div class="usernameDiv">
             {{ currentUser != '' ? currentUser.getUsername() : 'None' }}
@@ -37,18 +40,18 @@
           <div class="SpaceDiv" />
         </div>
       </div>
-      <div class="inputsDiv" :class="isDarkTheme == true ? 'blackBackground whiteText' : 'whiteBackground blackText'">
+      <div class="inputsDiv" :class="isDarkTheme == true ? 'whiteText' : 'blackText'">
         <p class="VideoUrlP">Video Url</p>
         <input
           v-model="videoURL"
-          :class="isDarkTheme == true ? 'whiteBorder' : 'blackBorder'"
+          :class="isDarkTheme == true ? 'blackBackground whiteText whiteBorder' : 'whiteBackground blackText blackBorder'"
           type="text"
           placeholder="Video url goes here.."
         />
         <p class="VideoTitleP">Video Title</p>
         <input
           v-model="titleOfVideo"
-          :class="isDarkTheme == true ? 'whiteBorder' : 'blackBorder'"
+          :class="isDarkTheme == true ? 'blackBackground whiteText whiteBorder' : 'whiteBackground blackText blackBorder'"
           type="text"
           placeholder="What is the title of the video?"
         />
@@ -56,7 +59,7 @@
         <textarea
           v-model="descriptionOfVideo"
           class="DescriptionInput"
-          :class="isDarkTheme == true ? 'whiteBorder' : 'blackBorder'"
+          :class="isDarkTheme == true ? 'blackBackground whiteText whiteBorder' : 'whiteBackground blackText blackBorder'"
           placeholder="What is the video about? (Optional)"
         >
         </textarea>
@@ -190,6 +193,10 @@ div {
   border: 0.7px solid black;
 }
 
+.grayBorder {
+  border: solid 0.7px #939393;
+}
+
 .uploadButton {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -221,17 +228,6 @@ div {
   color: rgba(255, 255, 255, 0.45);
   background-color: rgba(45, 44, 44, 0.5);
   border: 0.7px solid rgba(255, 255, 255, 0.45);
-}
-.upDiv {
-  width: 12px;
-  height: 8px;
-  background-color: white;
-  margin-bottom: 7px;
-  border: solid 1px #939393;
-  font-size: 7px;
-  text-align: center;
-  padding-top: 1.5px;
-  font-family: 'Roboto', sans-serif;
 }
 
 .darkBackgroundDiv {
@@ -344,13 +340,19 @@ input {
   padding: 0px;
   margin: 0px;
 }
+
 .upDiv {
+  width: 12px;
   margin-top: 1.25px;
   margin-left: 2.5px;
-  color: white;
-  background-color: #131313;
+  margin-bottom: 7px;
+  font-size: 7px;
+  text-align: center;
+  padding-top: 1.5px;
+  font-family: 'Roboto', sans-serif;
   height: max-content;
 }
+
 .catIcon {
   width: 28px;
   height: 31px;
