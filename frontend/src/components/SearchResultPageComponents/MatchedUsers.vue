@@ -5,19 +5,16 @@
         <div class="profilePicContainer">
           <img class="profilePic" :src="user.profileURL" alt="" />
         </div>
-
         <div class="otherInfoContainer">
           <div class="username">
             <p class="userNameTEXT">{{ user.username }}</p>
-          </div>
-
+          </div.
           <div class="subAndVideo">
             <div class="subContainer">
               <p class="time">{{ 'Subscribers: ' + user.subscribers }}</p>
             </div>
-          
             <div class="videoCountContainer">
-          
+            
               <p class="time">{{ 'Videos: ' + user.userVideos.length }}</p>
             </div>
             <button
@@ -29,7 +26,6 @@
           </div>
         </div>
       </div>
-
       <div class="videosContainer" v-if="user.userVideos.length > 0">
         <div
           class="videoCard"
@@ -61,7 +57,6 @@
 <script>
 export default {
   props: ['matchedUserList'],
-
 
   data() {
     return {
@@ -168,7 +163,7 @@ p {
 .time {
   font-size: smaller;
   font: menu;
-  color: grey;
+  color: white;
 }
 
 .subContainer p,
@@ -178,7 +173,7 @@ p {
  {
   font-size: smaller;
   font: menu;
-  color: grey;
+  color: white;
 }
 
 .subBtn {
@@ -206,6 +201,7 @@ p {
 
 .title {
   font-size: smaller;
+   color: white;
 }
 
 .textContainer {
@@ -230,7 +226,6 @@ p {
   border: black 1px solid;
 }
 
-
 @media screen and (max-width: 350px) {
   .profilePic {
   height: 8vh;
@@ -249,15 +244,20 @@ p {
   grid-column: span 3;
   margin: 3%;
 }
-
+.subContainer p,
+.videoCountContainer p,
+.time {
+  font-size: smaller;
+}
 .subContainer p,
 .videoCountContainer p,
 .textContainer p,
-.userNameTEXT{
-    font-size: small;
-}
-.time,.titleDarkTheme,.titleLightTheme{
-  font:small;
+.userNameTEXT
+ {
+  font-size: smaller;
+ }
+  .title {
+  font-size: smaller;
 }
 
 }
@@ -276,28 +276,27 @@ p {
   height: 12vh;
   width:12vh;
 }
-  .textContainer {
-  grid-column: span 3;
-  margin: 3%;
+.subContainer p,
+.videoCountContainer p,
+.time {
+  font-size: small;
 }
 .subContainer p,
-.videoCountContainer p{
+.videoCountContainer p,
+.textContainer p,
+.userNameTEXT
+ {
   font-size: small;
-  font: menu;
-  color: grey;
-  
+ }
+  .title {
+  font-size: small;
 }
-
-.time,.titleDarkTheme,.titleLightTheme{
-  font:medium;
-}
-
 
 }
 
 @media screen and (max-width:620px) and (min-width: 480px) {
      .profilePic {
-  height: 12vh;
+  height: 8vh;
   border-radius: 45px;
   width: 14vw;
   margin-left:3vh;
@@ -307,22 +306,21 @@ p {
   height: 16vh;
   width:18vh;
 }
- .textContainer {
-  grid-column: span 3;
-  margin: 3%;
+.subContainer p,
+.videoCountContainer p,
+.time {
+  font-size: medium;
 }
-
 .subContainer p,
 .videoCountContainer p,
 .textContainer p,
-.userNameTEXT{
-    font-size:  medium;
+.userNameTEXT
+ {
+  font-size: medium;
+ }
+  .title {
+  font-size: medium;
 }
-
-.time,.titleDarkTheme,.titleLightTheme{
-  font:medium;
-}
-
 }
 
 @media screen and  (max-width:820px) and (min-width: 620px) {
@@ -336,70 +334,85 @@ p {
   height: 16vh;
   width:18vh;
 }
- .textContainer {
-  grid-column: span 3;
-  margin: 2%;
+.subContainer p,
+.videoCountContainer p,
+.time {
+  font-size: large;
 }
-
 .subContainer p,
 .videoCountContainer p,
 .textContainer p,
-.userNameTEXT{
-    font-size: large;
+.userNameTEXT
+ {
+  font-size: large;
+ }
+  .title {
+  font-size: large;
 }
 
 
-.time,.titleDarkTheme,.titleLightTheme{
-  font:large;
+
 }
-}
+
 @media screen and (min-width:820px) {
     .profilePic {
   height: 9vh;
   border-radius: 55px;
   width: 12vw;
-  margin-left:6vh;
+  margin-left:4vh;
 }
 
 .videoCard img {
   height: 18vh;
   width:20vh;
 }
-
+.subContainer p,
+.videoCountContainer p,
+.time {
+  font-size: larger;
+}
 .subContainer p,
 .videoCountContainer p,
 .textContainer p,
-.userNameTEXT{
-    font-size: larger;
+.userNameTEXT
+ {
+  font-size: larger;
+ }
+  .title {
+  font-size: larger;
 }
-.time,.titleDarkTheme,.titleLightTheme{
-  font:larger;
-}
+
 @media screen and (min-width:1024px) {
        .profilePic {
   height: 12vh;
   border-radius: 55px;
   width: 10vw;
-  margin-left:10vh;
+  margin-left:9vh;
 }
 
 .videoCard img {
   height: 22vh;
   width:30vh;
 }
-
+.subContainer p,
+.videoCountContainer p,
+.time {
+  font-size: x-large;
+}
 .subContainer p,
 .videoCountContainer p,
 .textContainer p,
-.userNameTEXT{
-     font:x-large;
-}
-.time,.titleDarkTheme,.titleLightTheme{
-  font:x-large;
+.userNameTEXT
+ {
+  font-size: x-large;
+ }
+  .title {
+  font-size: x-large;
 }
 
 }
 }
+
 </style>
 
 
