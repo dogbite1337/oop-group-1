@@ -137,6 +137,7 @@ p {
   display: flex;
   color: white;
   display: inline;
+  font-size: small;
 }
 
 /* .title p {
@@ -205,4 +206,147 @@ img {
   align-self: center;
   height: 2.5vh;
 }
+
+@media screen and (max-width: 355px) {
+
+.titleText {
+margin-top:1px;
+font-size: medium;
+max-width: 140px;
+  
+}
+.uploaderName,
+.viewCount {
+  margin-left: 3vw;
+  align-self: center;
+  height: 3vh;
+    font-size: small;
+}
+.uploader,
+.view {
+  display: grid;
+  grid-template-columns: 14% auto; 
+}
+
+.textInfo {
+  height: 14vh;
+  margin-left: 6vw;
+  place-content: space-between;
+  width:160px;
+ 
+}
+
+
+}
+
+@media screen and (max-width:520px) and (min-width: 356px) {
+
+.titleText {
+margin-top:1px;
+font-size: medium;
+max-width: 120px;
+  
+}
+.uploaderName,
+.viewCount {
+  margin-left: 3vw;
+  align-self: center;
+  height: 3vh;
+    font-size: small;
+}
+.uploader,
+.view {
+  display: grid;
+  grid-template-columns: 14% auto; 
+}
+
+.textInfo {
+  height: 16vh;
+  margin-left: 6vw;
+  place-content: space-between;
+  width:160px;
+ 
+}
+
+.thumbnail {
+  height: 16vh;
+  width:46vw;
+  
+}
+
+}
+
+@media screen and (max-width:620px) and (min-width: 520px) {
+
+.titleText {
+margin-top:1px;
+font-size: large;
+max-width: 240px;
+  
+}
+.uploaderName,
+.viewCount {
+  margin-left: 3vw;
+  align-self: center;
+  height: 2.5vh;
+  font-size: medium;
+}
+.uploader,
+.view {
+  display: grid;
+  grid-template-columns: 14% auto; 
+
+}
+
+.textInfo {
+  height: 16vh;
+  margin-left: 6vw;
+  place-content: space-between;
+  width:220px;
+ 
+}
+.thumbnail {
+  height: 16vh;
+  width:48vw;
+}
+
+
+}
+
+@media screen and (max-width:820px) and (min-width: 620px) {
+
+.titleText {
+margin-top:1px;
+font-size: large;
+max-width: 240px;
+  
+}
+.uploaderName,
+.viewCount {
+  margin-left: 3vw;
+  align-self: center;
+  height: 2.5vh;
+  font-size: large;
+}
+.uploader,
+.view {
+  display: grid;
+  grid-template-columns: 14% auto; 
+
+}
+
+.textInfo {
+  height: 18vh;
+  margin-left: 8vw;
+  place-content: space-between;
+  width:220px;
+ 
+}
+
+.thumbnail {
+  height: 18vh;
+  width:50vw;
+}
+}
+
 </style>
