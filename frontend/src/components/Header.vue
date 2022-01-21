@@ -1,21 +1,96 @@
 <template>
-  <div class="HeaderDiv" :style="{'background-image': isDarkTheme == true ? 'url(' + '/src/projectImages/ghosts.gif' + ')' : 'url(' + 'src/projectImages/WinterWarm.gif' + ')'
-                                  ,'background-size': isDarkTheme == true ? '100% 120px' : 'cover'}" >
+  <div
+    class="HeaderDiv"
+    :style="{
+      'background-image':
+        isDarkTheme == true
+          ? 'url(' + '/src/projectImages/ghosts.gif' + ')'
+          : 'url(' + 'src/projectImages/WinterWarm.gif' + ')',
+      'background-size': isDarkTheme == true ? '100% 120px' : 'cover',
+    }"
+  >
     <div class="SpaceDiv" />
     <p @click="resetToStartPage" class="KittyText">KittyKitty</p>
     <div class="SpaceDiv" />
     <div class="switchContainer">
-      <input type="checkbox" id="checkbox" class="themeSwitch" @change="changedTheme">
-      <label for="checkbox" class="switch" :class="isDarkTheme == true ? 'switchDarkTheme' : 'switchLightTheme'">
-        <img src="src/projectImages/sun.png" alt="" class="sun">
-        <img src="src/projectImages/moon.png" alt="" class="moon">
-        <div class="switchItem" :class="isDarkTheme == true ? 'switchItemDarkTheme' : 'switchItemLightTheme'"></div>
+      <input
+        type="checkbox"
+        id="checkbox"
+        class="themeSwitch"
+        @change="changedTheme"
+      />
+      <label
+        for="checkbox"
+        class="switch"
+        :class="isDarkTheme == true ? 'switchDarkTheme' : 'switchLightTheme'"
+      >
+        <img src="src/projectImages/sun.png" alt="" class="sun" />
+        <img src="src/projectImages/moon.png" alt="" class="moon" />
+        <div
+          class="switchItem"
+          :class="
+            isDarkTheme == true ? 'switchItemDarkTheme' : 'switchItemLightTheme'
+          "
+        ></div>
       </label>
     </div>
     <p class="SeasonText">Winter</p>
     <div class="SpaceDiv" />
   </div>
-  <div class="SearchAndLoginDiv">
+  <div v-if="!isDarkTheme" class="LightSearchAndLoginDiv">
+    <div class="SpaceDiv" />
+    <img
+      class="CatInHeader"
+      src="../projectImages/Cat no background.png"
+      @click="playMe"
+    />
+    <audio ref="meow" src="src/projectImages/meowSound.mp3"></audio>
+    <div class="SpaceDiv2 SpaceDiv" />
+    <div class="searchDiv">
+      <router-link class="SearchLink" :to="{ path: '/Search' }">
+        <img
+          class="iconInSearchField"
+          src="../projectImages/magnifying_glass.png"
+        />
+        <input
+          v-on:keyup.enter="search"
+          @change="setKeyWord"
+          @click="resetKey"
+          v-model="searchParam"
+          class="SearchField"
+          type="text"
+          placeholder="Search.."
+        />
+      </router-link>
+      <div class="SpaceDiv" />
+    </div>
+    <div class="SpaceDiv" />
+    <router-link v-if="!$store.getters.getCurrentUser" :to="{ path: '/Login' }">
+      <input class="LoginButton" type="button" value="Login" />
+    </router-link>
+    <img
+      v-else
+      class="profilePic"
+      @click="toggleProfileDropdown"
+      :src="profilePic"
+    />
+    <div class="SpaceDiv" />
+    <div class="SpaceDiv" />
+    <div class="SpaceDiv" />
+    <div v-if="profileDropdown && !isDarkTheme" class="profile-dropdown">
+      <ul v-if="$store.getters.getCurrentUser" class="LightUlMenu">
+        <router-link
+          :to="{ path: '/Profile/' + $store.getters.getCurrentUser.username }"
+        >
+          <li class="LightProfileLink" v-if="!isDarkTheme">My Profile</li>
+        </router-link>
+        <li v-if="!isDarkTheme" @click="uploadNavigation">Upload Video</li>
+        <li v-if="!isDarkTheme" @click="logout">Logout</li>
+      </ul>
+    </div>
+    <div class="SpaceDiv" />
+  </div>
+  <div v-if="isDarkTheme" class="DarkSearchAndLoginDiv">
     <div class="SpaceDiv" />
     <img
       class="CatInHeader"
@@ -56,14 +131,14 @@
     <div class="SpaceDiv" />
     <div class="SpaceDiv" />
     <div v-if="profileDropdown" class="profile-dropdown">
-      <ul v-if="$store.getters.getCurrentUser" class="UlMenu">
+      <ul v-if="$store.getters.getCurrentUser" class="DarkUlMenu">
         <router-link
           :to="{ path: '/Profile/' + $store.getters.getCurrentUser.username }"
         >
-          <li>My Profile</li>
+          <li class="DarkProfileLink" v-if="isDarkTheme">My Profile</li>
         </router-link>
-        <li @click="uploadNavigation">Upload Video</li>
-        <li @click="logout">Logout</li>
+        <li v-if="isDarkTheme" @click="uploadNavigation">Upload Video</li>
+        <li v-if="isDarkTheme" @click="logout">Logout</li>
       </ul>
     </div>
     <div class="SpaceDiv" />
@@ -87,7 +162,7 @@ export default {
   },
   created() {
     this.isDarkTheme = this.$store.getters.getIsDarkTheme;
-    if(this.isDarkTheme == null){
+    if (this.isDarkTheme == null) {
       this.isDarkTheme = true;
     }
     let route = this.$router.currentRoute.value.fullPath;
@@ -95,9 +170,12 @@ export default {
       this.searchParam = this.$store.getters.getKeyWord;
     }
 
-    this.$store.watch((state) => state.darkTheme, (newVal) => {
-      this.isDarkTheme = newVal
-    })
+    this.$store.watch(
+      (state) => state.darkTheme,
+      (newVal) => {
+        this.isDarkTheme = newVal;
+      }
+    );
   },
 
   async mounted() {
@@ -105,21 +183,28 @@ export default {
     if (this.$store.getters.getCurrentUser) {
       this.profilePic = this.$store.getters.getCurrentUser.getProfileURL();
     }
+    this.$store.subscribe(async (mutation, state) => {
+      console.log(mutation);
+      if (mutation.payload) {
+        this.isDarkTheme = true;
+      } else {
+        this.isDarkTheme = false;
+      }
+    });
   },
 
   methods: {
-    async changedTheme(){
-      if(this.isDarkTheme){
+    async changedTheme() {
+      if (this.isDarkTheme) {
         this.isDarkTheme = false;
-        await this.$store.dispatch("setDarkTheme", this.isDarkTheme);
+        await this.$store.dispatch('setDarkTheme', this.isDarkTheme);
         localStorage.setItem('isDarkTheme', JSON.stringify(this.isDarkTheme));
-      }
-      else{
+      } else {
         this.isDarkTheme = true;
-        await this.$store.dispatch("setDarkTheme", this.isDarkTheme);
+        await this.$store.dispatch('setDarkTheme', this.isDarkTheme);
         localStorage.setItem('isDarkTheme', JSON.stringify(this.isDarkTheme));
       }
-      console.log(this.isDarkTheme)
+      console.log(this.isDarkTheme);
     },
 
     playMe() {
@@ -167,8 +252,12 @@ export default {
 
 * {
   overflow-x: hidden;
+  text-decoration: none;
 }
 
+.sun{
+  margin-left: -13px;
+}
 .searchDiv {
   display: grid;
   grid-template-columns: max-content max-content 10px;
@@ -269,25 +358,61 @@ export default {
 .SeasonText {
   overflow-y: hidden;
 }
-.SearchAndLoginDiv {
+.moon {
+  margin-left: 3px;
+}
+.LightSearchAndLoginDiv {
   display: grid; /* Margin, Cat, Margin, search icon, margin, Search Field, margin, Login Button, Margin */
   grid-template-columns: auto 43px auto max-content auto auto;
-  background-color: #131313;
+  background-color: white;
   padding-top: 16px;
   border-bottom: solid 1px #bfbfbf;
-  max-width: max-content;
+  max-width: 100vw;
   margin-left: auto;
   margin-right: auto;
-  padding-bottom: 40px;
+  padding-bottom: 3px;
 }
-.UlMenu {
+.DarkSearchAndLoginDiv {
+  display: grid; /* Margin, Cat, Margin, search icon, margin, Search Field, margin, Login Button, Margin */
+  grid-template-columns: auto 43px auto max-content auto auto;
+  background-color: black;
+  padding-top: 16px;
+  border-bottom: solid 1px #bfbfbf;
+  max-width: 100vw;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 3px;
+}
+.DarkUlMenu {
   height: max-content;
   width: 100vw;
   z-index: 5;
   color: white;
   position: absolute;
   background-color: transparent;
+  text-align: center;
+  padding-top: 10px;
   left: 0px;
+  text-decoration: none;
+}
+.LightUlMenu {
+  height: max-content;
+  width: 100vw;
+  z-index: 5;
+  color: black;
+  position: absolute;
+  background-color: transparent;
+  text-align: center;
+  padding-top: 10px;
+  left: 0px;
+  text-decoration: none;
+}
+.DarkProfileLink {
+  color: white;
+}
+.LightProfileLink,
+.LightProfileLink:visited {
+  color: black;
 }
 .LoginButton {
   border-radius: 30px;
@@ -323,65 +448,77 @@ export default {
   height: 10px;
   width: 10px;
 }
-li {
+.switchLightTheme,
+.switchDarkTheme {
+  max-width: 48px;
+}
+.switchItemLightTheme,
+.switchItemDarkTheme {
+  max-width: 19px;
+}
+.DarkLi {
   text-align: center;
   color: white;
   font-family: 'Roboto', sans-serif;
   margin-top: 10px;
 }
+.LightLi {
+  text-align: center;
+  color: black;
+  font-family: 'Roboto', sans-serif;
+  margin-top: 10px;
+}
 .profile-dropdown {
   height: max-content;
-  padding-top: 45px;
   padding-bottom: 60px;
 }
 
-.switchContainer{
+.switchContainer {
   grid-column: 4;
   grid-row: 1;
   text-align: -webkit-center;
   align-self: center;
+  
 }
 
-.themeSwitch{
+.themeSwitch {
   opacity: 0;
   position: absolute;
 }
 
 /* .themeSwitch:checked + .switch .switchItem, */
-.switchItemLightTheme
-{
+.switchItemLightTheme {
   transform: translateX(6.5vw);
 }
 
-.switchItemDarkTheme{
+.switchItemDarkTheme {
   transform: none;
 }
 
-
-.switchItem{
-    height: 2.4vh;
-    width: 7vw;
-    background-color: #242222;
-    border-radius: 50%;
-    position: absolute;
-    top: 0;
-    left: 1px;
-    transition: transform 0.2s linear;
+.switchItem {
+  height: 2.4vh;
+  width: 22px;
+  background-color: #242222;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: -2px;
+  transition: transform 0.2s linear;
 }
 
-.switch{
+.switch {
   position: relative;
   display: grid;
   grid-template-columns: repeat(2, 50%);
+  max-width: 48px;
   background-color: #9c9c9c;
   height: 2.5vh;
-  width: 14vw;
+  width: 48px;
   border-radius: 50px;
   padding: 5px;
   place-items: center;
   box-sizing: border-box;
 }
-
 
 @media screen and (max-width: 300px) {
   .SearchAndLoginDiv {

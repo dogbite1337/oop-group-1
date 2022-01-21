@@ -1,50 +1,27 @@
 <template>
-  <div v-if="!darkTheme" class="LightMainDiv">
-    <Header />
-    <div v-if="!darkTheme" class="LightNoLineDiv" />
-    <BannerSlider />
-    <div v-if="darkTheme" class="DarkCardsContainer">
-      <VideoCard
-        v-for="(videoItem, index) of relevantVideos"
-        :key="index"
-        :video="videoItem"
-        class="videoBox"
-        ref="videoBox"
-      />
-    </div>
-    <div v-if="!darkTheme" class="LightCardsContainer">
-      <VideoCard
-        v-for="(videoItem, index) of relevantVideos"
-        :key="index"
-        :video="videoItem"
-        class="videoBox"
-        ref="videoBox"
-      />
-    </div>
+  <Header />
+  <div v-if="!darkTheme" class="LightNoLineDiv" />
+  <div v-if="darkTheme" class="DarkNoLineDiv" />
+  <BannerSlider />
+  <div v-if="darkTheme" class="DarkCardsContainer CardsContainer">
+    <VideoCard
+      v-for="(videoItem, index) of relevantVideos"
+      :key="index"
+      :video="videoItem"
+      class="videoBox"
+      ref="videoBox"
+    />
   </div>
-  <div v-if="darkTheme" class="DarkMainDiv">
-    <Header />
-    <div class="DarkNoLineDiv" />
-    <BannerSlider />
-    <div v-if="darkTheme" class="DarkCardsContainer">
-      <VideoCard
-        v-for="(videoItem, index) of relevantVideos"
-        :key="index"
-        :video="videoItem"
-        class="videoBox"
-        ref="videoBox"
-      />
-    </div>
-    <div v-if="!darkTheme" class="LightCardsContainer">
-      <VideoCard
-        v-for="(videoItem, index) of relevantVideos"
-        :key="index"
-        :video="videoItem"
-        class="videoBox"
-        ref="videoBox"
-      />
-    </div>
+  <div v-if="!darkTheme" class="LightCardsContainer CardsContainer">
+    <VideoCard
+      v-for="(videoItem, index) of relevantVideos"
+      :key="index"
+      :video="videoItem"
+      class="videoBox"
+      ref="videoBox"
+    />
   </div>
+
   <Footer class="footerDiv" />
 </template>
 <script>
@@ -69,13 +46,6 @@ export default {
     BannerSlider,
   },
   async created() {
-    // let allVideos = await this.getVideosForCurrentPage();
-
-    // Yang new code
-    // let allVideos = await this.getAllVideos();
-    // if (allVideos.length > 8) {
-    //   allVideos = allVideos.slice(allVideos.length - 8, allVideos.length);
-    // }
     this.relevantVideos = [];
     await this.loadMoreVideos();
     let allVideos = this.relevantVideos;
@@ -149,19 +119,23 @@ export default {
         ? this.$store.getters.getSearchResults
         : [],
       lastVideoObserver: null,
-      darkTheme: this.$store.getters.getIsDarkTheme,
+      darkTheme: false,
+      showPadder: (window.outerWidth > 418 ? false : true)
     };
   },
 
   async mounted() {
-    if (this.darkTheme) {
-      document.getElementsByClassName('DarkCardsContainer')[0].style =
-        'grid-template-columns: ' + this.getGridDimensions() + ';';
-    } else {
-      document.getElementsByClassName('LightCardsContainer')[0].style =
-        'grid-template-columns: ' + this.getGridDimensions() + ';';
-    }
-
+    this.$store.subscribe(async (mutation, state) => {
+      if (mutation.type == 'setDarkTheme') {
+        if (mutation.payload) {
+          this.darkTheme = true;
+        } else {
+          this.darkTheme = false;
+        }
+      }
+    });
+    document.getElementsByClassName('CardsContainer')[0].style =
+          'grid-template-columns: ' + this.getGridDimensions() + ';';
     window.addEventListener('resize', this.recalculateGrid);
   },
   updated() {
@@ -222,24 +196,24 @@ export default {
 
     getGridDimensions() {
       let base = '';
-      for (let i = 0; i < Math.floor(window.screen.width / 200); i++) {
-        base += 'auto ';
+      for (let i = 0; i < Math.floor(window.screen.width / 210); i++) {
+        base += '192px ';
         if (i >= 8) {
-          base = 'auto auto auto auto auto auto auto auto';
+          base = '192px 192px 192px 192px 192px 192px 192px 192px';
           break;
         }
       }
       if (window.screen.width <= 340) {
-        base = 'auto auto';
+        base = '192px 192px';
       }
       return base;
     },
     recalculateGrid() {
       if (this.darkTheme) {
-        document.getElementsByClassName('DarkCardsContainer')[0].style =
+        document.getElementsByClassName('CardsContainer')[0].style =
           'grid-template-columns: ' + this.getGridDimensions() + ';';
       } else {
-        document.getElementsByClassName('LightCardsContainer')[0].style =
+        document.getElementsByClassName('CardsContainer')[0].style =
           'grid-template-columns: ' + this.getGridDimensions() + ';';
       }
     },
@@ -248,30 +222,6 @@ export default {
       this.showSearchPage = false;
     },
 
-    // expandSearchHistory() {
-    //   this.expandedSearchHistory = true;
-    // },
-    // closeSearchHistory() {
-    //   this.expandedSearchHistory = false;
-    // },
-
-    // async getVideosForCurrentPage() {
-    //   if (this.currentPage == 1 && this.$store.getters.getEightFirstVideos) {
-    //     return this.$store.getters.getEightFirstVideos;
-    //   }
-    //   if (!this.currentPage) {
-    //     this.currentPage = 1;
-    //   }
-    //   let res = await fetch(
-    //     '/rest/getVideosForCurrentPage?' +
-    //       new URLSearchParams({
-    //         currentPage: this.currentPage,
-    //       })
-    //   );
-
-    //   let response = await res.json();
-    //   return response;
-    // },
     async getAllVideos() {
       let res = await fetch('/rest/getAllVideos');
 
@@ -315,6 +265,8 @@ export default {
 }
 .videoBox {
   margin-bottom: 10px;
+  max-width: max-content;
+  display: inline;
 }
 .coveringDiv {
   background-color: #131313;
@@ -354,8 +306,8 @@ export default {
   color: #939393;
 }
 .DarkNoLineDiv {
-  height: 2px;
-  background-color: #131313;
+  height: 32px;
+  background-color: black;
   margin-top: -1px;
 }
 .LightNoLineDiv {
@@ -363,6 +315,7 @@ export default {
   background-color: white;
   margin-top: -1px;
 }
+
 .profileInResultsPage {
   width: 80px;
   height: 50px;
@@ -420,6 +373,9 @@ export default {
   text-align: center;
   color: white;
   padding-top: 3px;
+}
+.Padder{
+  height: 10px;
 }
 .VideoTitleDiv {
   margin-top: -4px;
@@ -549,26 +505,31 @@ export default {
 .LightCardsContainer {
   background-color: white;
   display: grid;
-  height: auto;
-  grid-template-rows: auto auto auto auto auto;
-  padding-top: 16px;
-  width: max-content;
+  grid-template-columns: 200px 200px;
+  grid-template-rows: max-content;
   margin-left: auto;
   margin-right: auto;
+  max-width: max-content;
+  height: auto;
+  padding-top: 16px;
   padding-bottom: 65px;
-  max-width: 100vw;
+  position: relative;
+  left: 0px;
 }
 
 .DarkCardsContainer {
-  background-color: #131313;
+  background-color: black;
   display: grid;
-  height: auto;
-  grid-template-rows: auto auto auto auto auto;
-  padding-top: 16px;
-  width: max-content;
+  grid-template-columns: 200px 200px;
+  grid-template-rows: max-content;
   margin-left: auto;
   margin-right: auto;
+  max-width: max-content;
+  height: auto;
+  padding-top: 16px;
   padding-bottom: 65px;
+  position: relative;
+  left: 0px;
 }
 
 .SorryText {
@@ -609,6 +570,24 @@ export default {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   margin-left: 8px;
   margin-right: 8px;
+}
+@media screen and (max-width: 418px) {
+  .LightCardsContainer, .DarkCardsContainer{
+    position: relative;
+    width: 100vw;
+    max-width: 100vw;
+    display: block;
+  }
+  .videoBox{
+    height: 200px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    width: 100vw;
+    max-width: 100vw;
+    left: -10px;
+    display: block;
+  }
 }
 .pacManIcon {
   width: 20px;
@@ -656,219 +635,5 @@ export default {
   margin-top: -164px;
 }
 
-@media screen and (min-width: 401px) {
-.CardsContainer {
-  width: max-content;
-  margin-left: auto;
-  margin-right: auto;
-  padding-bottom: 65px;
-}
-}
 
-@media screen and (min-width: 550px) {
-  .sliderBackground {
-    transform: scaleX(0.95);
-    transform: scaleY(1.05);
-
-    height: 164px;
-    z-index: -1;
-  }
-  .lastPacManIcon {
-    width: 20px;
-    display: inline;
-    margin-top: 22px;
-    z-index: 3;
-  }
-
-  .FirstWhiteCircle {
-    width: 8px;
-    height: 8px;
-    border-radius: 30px;
-    background-color: white;
-    border: 0.7px solid black;
-    margin-top: 28px;
-    box-sizing: border-box;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    margin-left: 12px;
-    z-index: 3;
-  }
-
-  .WhiteCircle {
-    width: 8px;
-    height: 8px;
-    border-radius: 30px;
-    background-color: white;
-    border: 0.7px solid black;
-    margin-top: 28px;
-    box-sizing: border-box;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    margin-left: 8px;
-    margin-right: 8px;
-    z-index: 3;
-  }
-  .pacManIcon {
-    width: 20px;
-    display: inline;
-    margin-top: 22px;
-    margin-left: 4px;
-    z-index: 3;
-  }
-
-  .titleText {
-    -webkit-text-stroke-width: 0.007px;
-    -webkit-text-stroke-color: #c9c9c9;
-    font-family: 'Revalia', cursive;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 15px;
-    line-height: 18.6px;
-    color: #ffffff;
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25),
-      0px 4px 4px rgba(0, 0, 0, 0.25);
-    z-index: 3;
-    position: absolute;
-  }
-}
-
-@media screen and (min-width: 700px) {
-  .CardsContainer {
-    margin-top: 20px;
-  }
-  .sliderBackground {
-    transform: scaleX(0.9);
-    transform: scaleY(1.1);
-    height: 164px;
-    z-index: -1;
-  }
-  .lastPacManIcon {
-    width: 20px;
-    display: inline;
-    margin-top: 22px;
-    z-index: 3;
-  }
-
-  .FirstWhiteCircle {
-    width: 8px;
-    height: 8px;
-    border-radius: 30px;
-    background-color: white;
-    border: 0.7px solid black;
-    margin-top: 28px;
-    box-sizing: border-box;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    margin-left: 12px;
-    z-index: 3;
-  }
-
-  .WhiteCircle {
-    width: 8px;
-    height: 8px;
-    border-radius: 30px;
-    background-color: white;
-    border: 0.7px solid black;
-    margin-top: 28px;
-    box-sizing: border-box;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    margin-left: 8px;
-    margin-right: 8px;
-    z-index: 3;
-  }
-  .pacManIcon {
-    width: 20px;
-    display: inline;
-    margin-top: 22px;
-    margin-left: 4px;
-    z-index: 3;
-  }
-
-  .titleText {
-    -webkit-text-stroke-width: 0.007px;
-    -webkit-text-stroke-color: #c9c9c9;
-    font-family: 'Revalia', cursive;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 15px;
-    line-height: 18.6px;
-    color: #ffffff;
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25),
-      0px 4px 4px rgba(0, 0, 0, 0.25);
-    z-index: 3;
-    position: absolute;
-  }
-}
-
-@media screen and (min-width: 850px) {
-  .sliderBackground {
-    width: 90%;
-    transform: scaleY(1.5);
-
-    height: 164px;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    z-index: -1;
-  }
-  .lastPacManIcon {
-    width: 20px;
-    display: inline;
-    margin-top: 22px;
-    z-index: 3;
-  }
-
-  .FirstWhiteCircle {
-    width: 8px;
-    height: 8px;
-    border-radius: 30px;
-    background-color: white;
-    border: 0.7px solid black;
-    margin-top: 28px;
-    box-sizing: border-box;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    margin-left: 12px;
-    z-index: 3;
-  }
-
-  .WhiteCircle {
-    width: 8px;
-    height: 8px;
-    border-radius: 30px;
-    background-color: white;
-    border: 0.7px solid black;
-    margin-top: 28px;
-    box-sizing: border-box;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    margin-left: 8px;
-    margin-right: 8px;
-    z-index: 3;
-  }
-  .pacManIcon {
-    width: 20px;
-    display: inline;
-    margin-top: 22px;
-    margin-left: 4px;
-    z-index: 3;
-  }
-
-  .titleText {
-    -webkit-text-stroke-width: 0.007px;
-    -webkit-text-stroke-color: #c9c9c9;
-    font-family: 'Revalia', cursive;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 15px;
-    line-height: 18.6px;
-    padding-left: 30px;
-    color: #ffffff;
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25),
-      0px 4px 4px rgba(0, 0, 0, 0.25);
-    z-index: 3;
-    position: absolute;
-  }
-}
-@media screen and (max-width: 400px) {
-  .videoBox {
-    width: 98vw;
-    
-  }
-  
-}
 </style>

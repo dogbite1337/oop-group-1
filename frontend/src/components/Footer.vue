@@ -34,8 +34,7 @@
     <div class="SecondBox">
       <div @click="goToProfilePage" v-if="darkTheme" class="DarkProfileDiv">
         <img class="HomeIcon" src="../projectImages/Dark_User.png" />
-
-        <div class="HomeText">Profile</div>
+        <div class="DarkHomeText">Profile</div>
       </div>
       <div @click="goToProfilePage" v-if="!darkTheme" class="LightProfileDiv">
         <img class="HomeIcon" src="../projectImages/Light_User.png" />
@@ -97,7 +96,7 @@ export default {
 
 .IconDiv {
   display: grid;
-  grid-template-columns: 5px 165px 10px 100px 25px 165px 5px;
+  grid-template-columns: 5px 165px 30px auto 25px 165px 5px;
   height: 60px;
   text-align: center;
   background-color: black;
@@ -118,6 +117,8 @@ export default {
 }
 .PantherDiv {
   height: 50px;
+  position: relative;
+  max-width: 360px;
 }
 .PantherImage {
   height: 50px;
@@ -151,7 +152,7 @@ export default {
   padding-top: 7px;
   height: 240px;
   top: -100px;
-  left: -180px;
+  left: -200px;
   position: relative;
   overflow-y: clip;
 }
@@ -168,6 +169,19 @@ export default {
   position: relative;
   left: -35px;
   top: 13px;
+}
+.DarkHomeText {
+  width: max-content;
+  background-color: transparent;
+  display: inline-block;
+  color: white;
+  font-weight: 400;
+  font-family: 'Roboto', sans-serif;
+  line-height: 14.06px;
+  font-size: 12px;
+  position: relative;
+  left: 0px;
+  top: -8px;
 }
 
 .LightHomeText {
@@ -201,7 +215,7 @@ export default {
   z-index: 5;
   left: 20px;
 }
-.LightProfileDiv {
+.LightProfileDiv, .DarkProfileDiv {
   width: 35px;
   height: 60px;
   background-color: transparent;
@@ -223,5 +237,14 @@ export default {
 .IconDiv {
   max-height: max-content;
   overflow-y: clip;
+}
+@media screen and (max-width: 380px){
+  .IconDiv{
+    grid-template-columns: 5px auto 0px auto 0px 165px 5px;
+  }
+  .SmileImage{
+    position: relative;
+    left: -125px;
+  }
 }
 </style>
