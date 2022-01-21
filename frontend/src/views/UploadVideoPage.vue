@@ -1,19 +1,19 @@
 <template>
-  <div :class="isDarkTheme == true ? 'darkBackgroundDiv' : 'lightBackgroundDiv'" @click="clickedMe">
+  <div :class="$store.state.darkTheme == true ? 'darkBackgroundDiv' : 'lightBackgroundDiv'" @click="clickedMe">
     <router-link class="HomeLink" to="/">
-      <div :class="isDarkTheme == true ? 'darkBackHomeDiv' : 'lightBackHomeDiv'">
+      <div :class="$store.state.darkTheme == true ? 'darkBackHomeDiv' : 'lightBackHomeDiv'">
         <div class="SpaceDiv" />
-        <img :class="isDarkTheme == true ? 'darkArrowIcon' : 'lightArrowIcon'" src="../projectImages/arrow.png" />
+        <img :class="$store.state.darkTheme == true ? 'darkArrowIcon' : 'lightArrowIcon'" src="../projectImages/arrow.png" />
         <div class="SpaceDiv" />
-        <p class="homeText" :class="isDarkTheme == true ? 'whiteText' : 'blackText'">Home</p>
+        <p class="homeText" :class="$store.state.darkTheme == true ? 'whiteText' : 'blackText'">Home</p>
         <div class="SpaceDiv" />
-        <img :class="isDarkTheme == true ? 'darkCatIcon' : 'lightCatIcon'" src="../projectImages/black-cat.png" />
+        <img :class="$store.state.darkTheme == true ? 'darkCatIcon' : 'lightCatIcon'" src="../projectImages/black-cat.png" />
         <div class="SpaceDiv" />
       </div>
     </router-link>
-    <div :class="isDarkTheme == true ? 'darkVideoPreviewDiv' : 'lightVideoPreviewDiv'">
-      <p :class="isDarkTheme == true ? 'whiteText' : 'blackText'">Video Preview</p>
-      <div :class="isDarkTheme == true ? 'darkVideoLinkBox' : 'lightVideoLinkBox'">
+    <div :class="$store.state.darkTheme == true ? 'darkVideoPreviewDiv' : 'lightVideoPreviewDiv'">
+      <p :class="$store.state.darkTheme == true ? 'whiteText' : 'blackText'">Video Preview</p>
+      <div :class="$store.state.darkTheme == true ? 'darkVideoLinkBox' : 'lightVideoLinkBox'">
         <img
           class="previewImage"
           :src="
@@ -27,11 +27,11 @@
         <div class="TitleDivInVideoPreview">
           {{ titleOfVideo == '' ? 'Title' : titleOfVideo }}
         </div>
-        <div class="uploaderDiv" :class="isDarkTheme == true ? 'darkBlackBackground whiteText' : 'whiteBackground blackText'">
+        <div class="uploaderDiv" :class="$store.state.darkTheme == true ? 'darkBlackBackground whiteText' : 'whiteBackground blackText'">
           <div class="SpaceDiv" />
           <div
             class="upDiv"
-            :class="isDarkTheme == true ? 'blackBackground whiteText grayBorder' : 'whiteBackground blackText blackBorder'"
+            :class="$store.state.darkTheme == true ? 'blackBackground whiteText grayBorder' : 'whiteBackground blackText blackBorder'"
             >UP</div>
           <div class="SpaceDiv" />
           <div class="usernameDiv">
@@ -40,18 +40,18 @@
           <div class="SpaceDiv" />
         </div>
       </div>
-      <div class="inputsDiv" :class="isDarkTheme == true ? 'whiteText' : 'blackText'">
+      <div class="inputsDiv" :class="$store.state.darkTheme == true ? 'whiteText' : 'blackText'">
         <p class="VideoUrlP">Video Url</p>
         <input
           v-model="videoURL"
-          :class="isDarkTheme == true ? 'blackBackground whiteText whiteBorder' : 'whiteBackground blackText blackBorder'"
+          :class="$store.state.darkTheme == true ? 'blackBackground whiteText whiteBorder' : 'whiteBackground blackText blackBorder'"
           type="text"
           placeholder="Video url goes here.."
         />
         <p class="VideoTitleP">Video Title</p>
         <input
           v-model="titleOfVideo"
-          :class="isDarkTheme == true ? 'blackBackground whiteText whiteBorder' : 'whiteBackground blackText blackBorder'"
+          :class="$store.state.darkTheme == true ? 'blackBackground whiteText whiteBorder' : 'whiteBackground blackText blackBorder'"
           type="text"
           placeholder="What is the title of the video?"
         />
@@ -59,7 +59,7 @@
         <textarea
           v-model="descriptionOfVideo"
           class="DescriptionInput"
-          :class="isDarkTheme == true ? 'blackBackground whiteText whiteBorder' : 'whiteBackground blackText blackBorder'"
+          :class="$store.state.darkTheme == true ? 'blackBackground whiteText whiteBorder' : 'whiteBackground blackText blackBorder'"
           placeholder="What is the video about? (Optional)"
         >
         </textarea>
@@ -67,14 +67,14 @@
       <button
         @click="uploadVideo"
         v-if="canUpload"
-        :class="isDarkTheme == true ? 'darkUploadButton' : 'lightUploadButton'"
+        :class="$store.state.darkTheme == true ? 'darkUploadButton' : 'lightUploadButton'"
         value="Upload Video"
       >
         Upload Video
       </button>
       <button
         v-if="!canUpload"
-        :class="isDarkTheme == true ? 'darkDisabledUploadButton' : 'lightDisabledUploadButton'"
+        :class="$store.state.darkTheme == true ? 'darkDisabledUploadButton' : 'lightDisabledUploadButton'"
         value="Upload Video"
       >
         Upload Video
@@ -83,9 +83,6 @@
   </div>
 </template>
 <script>
-import User from '../jsClasses/general/User';
-import Footer from '../components/Footer.vue';
-import store from '../store';
 
 export default {
   name: 'UploadVideoPage',
@@ -98,11 +95,7 @@ export default {
         ? this.$store.getters.getCurrentUser
         : '',
       canUpload: false,
-      isDarkTheme: true,
     };
-  },
-  beforeCreate () {
-    this.isDarkTheme = this.$store.getters.isDarkTheme;
   },
   watch: {
     videoURL() {
