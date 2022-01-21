@@ -15,14 +15,8 @@
     <p class="SeasonText">Winter</p>
     <div class="SpaceDiv" />
   </div>
-  <div v-if="!darkTheme" class="LightHeaderDiv">
-    <div class="SpaceDiv" />
-    <p @click="resetToStartPage" class="KittyText">KittyKitty</p>
-    <div class="SpaceDiv" />
-    <p class="SeasonText">Winter</p>
-    <div class="SpaceDiv" />
-  </div>
-  <div v-if="!darkTheme" class="LightSearchAndLoginDiv">
+
+  <div v-if="!isDarkTheme" class="LightSearchAndLoginDiv">
     <div class="SpaceDiv" />
     <img class="CatInHeader" src="../projectImages/test.png" @click="playMe" />
     <audio ref="meow" src="src/projectImages/meowSound.mp3"></audio>
@@ -58,16 +52,16 @@
     <div class="SpaceDiv" />
     <div class="SpaceDiv" />
     <div class="SpaceDiv" />
-    <div v-if="profileDropdown && darkTheme" class="profile-dropdown">
-      <ul v-if="$store.getters.getCurrentUser && darkTheme" class="DarkUlMenu">
+    <div v-if="profileDropdown && isDarkTheme" class="profile-dropdown">
+      <ul v-if="$store.getters.getCurrentUser && isDarkTheme" class="DarkUlMenu">
         <li @click="profileNavigation" class="myProfileLink">My Profile</li>
         <li @click="uploadNavigation">Upload Video</li>
         <li @click="logout">Logout</li>
       </ul>
     </div>
-    <div v-if="profileDropdown && !darkTheme" class="profile-dropdown">
+    <div v-if="profileDropdown && !isDarkTheme" class="profile-dropdown">
       <ul
-        v-if="$store.getters.getCurrentUser && !darkTheme"
+        v-if="$store.getters.getCurrentUser && !isDarkTheme"
         class="LightUlMenu"
       >
         <li @click="profileNavigation" class="lightULItem myProfileLink">
@@ -79,7 +73,7 @@
     </div>
     <div class="SpaceDiv" />
   </div>
-  <div v-if="darkTheme" class="DarkSearchAndLoginDiv">
+  <div v-if="isDarkTheme" class="DarkSearchAndLoginDiv">
     <div class="SpaceDiv" />
     <img
       class="CatInHeader"
@@ -119,7 +113,7 @@
     <div class="SpaceDiv" />
     <div class="SpaceDiv" />
     <div class="SpaceDiv" />
-    <div v-if="profileDropdown && darkTheme" class="profile-dropdown">
+    <div v-if="profileDropdown && isDarkTheme" class="profile-dropdown">
       <ul v-if="$store.getters.getCurrentUser" class="DarkUlMenu">
         <li @click="profileNavigation">My Profile</li>
         <li @click="uploadNavigation">Upload Video</li>
@@ -142,6 +136,7 @@ export default {
         ? this.$store.getters.getCurrentUser.getProfileURL()
         : '',
       profileDropdown: false,
+      isDarkTheme: true
     };
   },
   created() {
@@ -154,7 +149,7 @@ export default {
       this.searchParam = this.$store.getters.getKeyWord;
     }
 
-    this.$store.watch((state) => state.darkTheme, (newVal) => {
+    this.$store.watch((state) => state.isDarkTheme, (newVal) => {
       this.isDarkTheme = newVal
     })
   },
@@ -163,13 +158,13 @@ export default {
     this.$store.subscribe(async (mutation, state) => {
       if (mutation.type == 'setDarkTheme') {
         if (mutation.payload) {
-          this.darkTheme = true;
+          this.isDarkTheme = true;
         } else {
-          this.darkTheme = false;
+          this.isDarkTheme = false;
         }
       }
     });
-    this.darkTheme = this.$store.getters.getIsDarkTheme;
+    this.isDarkTheme = this.$store.getters.getIsDarkTheme;
     await this.$store.dispatch('whoAmI');
     if (this.$store.getters.getCurrentUser) {
       this.profilePic = this.$store.getters.getCurrentUser.getProfileURL();
@@ -326,20 +321,7 @@ export default {
   /* margin-top: 33px; */
 }
 
-.LightHeaderDiv {
-  display: grid;
-  grid-template-columns: 16px 100px auto 20%;
-  grid-template-rows: repeat(2, 50%);
-  height: 60px;
-  text-align: center;
-  background-image: url('../projectImages/light_winter.gif');
-  background-size: 100% 65px;
-  background-repeat: no-repeat;
-  max-width: 725px;
-  margin-left: auto;
-  margin-right: auto;
-  overflow-y: hidden;
-}
+
 
 .DarkHeaderDiv {
   display: grid;
