@@ -382,7 +382,6 @@ overflow: hidden;
 
 .titleText {
 margin-top:1px;
-font-size: large;
 max-width: 260px;
 font-size: x-large;
 overflow: hidden;
@@ -406,7 +405,7 @@ overflow: hidden;
   height: 20vh;
   margin-left: 12vw;
   place-content: space-between;
-  width:260px;
+  width:280px;
  
 }
 
