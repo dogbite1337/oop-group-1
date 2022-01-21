@@ -1,6 +1,6 @@
 <template>
-  <main class="app-main">
-    <div class="BackDrop">
+  <main class="app-main" :class="isDarkTheme == true ? 'app-mainDarkTheme' : 'app-mainLightTheme'">
+    <div class="BackDrop" :class="isDarkTheme == true ? 'BackDropDarkTheme' : 'BackDropLightTheme'" >
       <router-view />
     </div>
   </main>
@@ -15,9 +15,40 @@ export default {
     Header,
   },
   data() {
-    return {};
+    return {
+      isDarkTheme: true,
+    };
   },
-  created() {},
+  async created() {
+    // if we refreshed and there is a save, load saved theme
+    if(await this.$store.getters.getIsDarkTheme == null && localStorage.isDarkTheme){
+      console.log(1)
+      this.isDarkTheme = await JSON.parse(localStorage.isDarkTheme);
+      await this.$store.dispatch('setDarkTheme', this.isDarkTheme)
+    }
+    // if state has a saved theme and there is no save in localstoreage
+    else if(((await this.$store.getters.getIsDarkTheme == true || await this.$store.getters.getIsDarkTheme == false) && !localStorage.isDarkTheme)){
+      console.log(2)
+      this.isDarkTheme = await this.$store.getters.getIsDarkTheme
+      localStorage.setItem('isDarkTheme', JSON.stringify(this.isDarkTheme))
+    }
+    // if we enter the page for the first time
+    else{
+      console.log(3)
+      this.isDarkTheme = true
+      await this.$store.dispatch('setDarkTheme', this.isDarkTheme)
+      localStorage.setItem('isDarkTheme', JSON.stringify(this.isDarkTheme))
+    }
+
+    this.$store.watch((state) => state.darkTheme, (newVal) => {
+      this.isDarkTheme = newVal
+    })
+    
+    // this.isDarkTheme = await this.$store.getters.getIsDarkTheme
+    // this.isDarkTheme = false;
+    // await this.$store.dispatch('setDarkTheme', this.isDarkTheme)
+    // console.log(this.isDarkTheme)
+  },
 };
 </script>
 
@@ -34,5 +65,13 @@ export default {
 .BackDrop {
   background-color: #131313;
   /* overflow-y: scroll; */
+}
+.lightTheme{
+  color: #bfbfbf;
+}
+.BackDropLightTheme,
+.app-mainLightTheme,
+.MainDivLightTheme{
+  background-color: white !important
 }
 </style>

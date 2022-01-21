@@ -1,31 +1,20 @@
 <template>
-  <div class="MainDiv">
+  <div class="MainDiv" :class="isDarkTheme == true ? 'MainDivDarkTheme' : 'MainDivLightTheme'">
     <Header @update="register" />
     <div class="searchPage">
       <TrendLink @addTrendingSearch="addTrendingSearch($event)" />
       <ExpandableSearchHistory />
       <div class="searchPageButtonsContainer">
-        <button @click="register" type="button">Search</button>
-        <button @click="showConfirmModal" type="button">Clear History</button>
+        <button class="searchPageBtn" @click="register" type="button" :class="isDarkTheme == true ? 'searchPageBtnDarkTheme' : 'searchPageBtnLightTheme'">Search</button>
+        <button class="searchPageBtn" @click="showConfirmModal" type="button" :class="isDarkTheme == true ? 'searchPageBtnDarkTheme' : 'searchPageBtnLightTheme'">Clear History</button>
       </div>
     </div>
     <div class="confirmModalBackGround" v-if="showConfirmWindow">
-      <div class="confirmModalContainer">
-        <p>
-          Are you sure you want to reset search history? This action can not be
-          un done
-        </p>
+      <div class="confirmModalContainer" :class="isDarkTheme == true ? 'confirmModalContainerDarkTheme' : 'confirmModalContainerLightTheme'">
+        <p>Are you sure you want to reset search history? This action can not be undone</p>
         <div class="confirmBtnContainer">
-          <button class="confirmBtn" type="button" @click="clearHistory">
-            Yes
-          </button>
-          <button
-            class="confirmBtn"
-            type="button"
-            @click="showConfirmWindow = false"
-          >
-            No
-          </button>
+          <button class="yesConfirmBtn" type="button" @click="clearHistory">Yes</button>
+          <button class="noConfirmBtn" type="button" @click="showConfirmWindow=false" :class="isDarkTheme == true ? 'noConfirmBtnDarkTheme' : 'noConfirmBtnLightTheme'">No</button>
         </div>
       </div>
     </div>
@@ -45,6 +34,7 @@ export default {
       searchHistory: [],
       currentUser: null,
       showConfirmWindow: false,
+      isDarkTheme: true,
     };
   },
 
@@ -55,7 +45,28 @@ export default {
     ExpandableSearchHistory,
   },
 
-  created() {},
+  async beforeCreate() {
+    this.isDarkTheme = await this.$store.getters.getIsDarkTheme
+  },
+
+  // async created(){
+  //   this.$store.subscribe(async (mutation, state) => {
+  //     if (mutation.type == 'setDarkTheme') {
+  //       console.log(mutation)
+  //       if (mutation.payload) {
+  //         this.isDarkTheme = true;
+  //       } else {
+  //         this.isDarkTheme = false;
+  //       }
+  //     }
+  //   })
+  // },
+
+  async created(){
+    this.$store.watch((state) => state.darkTheme, (newVal) => {
+      this.isDarkTheme = newVal
+    })
+  },
 
   async mounted() {
     let detailedSearchList;
@@ -218,7 +229,7 @@ export default {
   text-align: center;
 }
 
-.searchPageButtonsContainer button {
+.searchPageBtn {
   color: black;
   background-color: white;
   width: 25vw;
@@ -237,17 +248,17 @@ export default {
   background-color: rgba(0, 0, 0, 0.7);
 }
 
-.confirmModalContainer {
-  position: relative;
-  margin: 0 auto;
-  top: 40%;
-  width: 100%;
-  max-width: 80vw;
-  background-color: #595959;
-  border-radius: 10px;
-  text-align: center;
-  padding: 2rem;
-  z-index: 99;
+.confirmModalContainer{
+    position: relative;
+    margin: 0 auto;
+    top: 40%;
+    width: 100%;
+    max-width: 80vw;
+    background-color: #2d2c2c;
+    border-radius: 10px;
+    text-align: center;
+    padding: 2rem;
+    z-index: 99;
 }
 
 .confirmModalContainer p {
@@ -261,12 +272,32 @@ export default {
   margin-top: 2rem;
 }
 
-.confirmBtn {
+.yesConfirmBtn,
+.noConfirmBtn{
   width: 6rem;
   padding: 0.5rem;
   font-size: large;
-  background-color: #595959;
+  background-color: #2d2c2c;
   border: solid 1px white;
   color: white;
 }
+
+.noConfirmBtnLightTheme{
+  background-color: #929090;
+}
+
+.yesConfirmBtn{
+  background-color: rgba(255, 0, 0, 0.5);
+}
+
+.searchPageBtnLightTheme{
+  background-color: black;
+  color: white;
+}
+
+.confirmModalContainerLightTheme {
+  background-color: #929090;
+}
+
+
 </style>

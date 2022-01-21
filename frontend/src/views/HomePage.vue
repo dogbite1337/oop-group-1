@@ -656,6 +656,15 @@ export default {
   margin-top: -164px;
 }
 
+@media screen and (min-width: 401px) {
+.CardsContainer {
+  width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 65px;
+}
+}
+
 @media screen and (min-width: 550px) {
   .sliderBackground {
     transform: scaleX(0.95);
@@ -857,7 +866,9 @@ export default {
 }
 @media screen and (max-width: 400px) {
   .videoBox {
-    width: 100vw;
+    width: 98vw;
+    
   }
+  
 }
 </style>

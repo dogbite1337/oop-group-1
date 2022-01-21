@@ -215,18 +215,83 @@ export default {
 @media screen and (max-width: 400px) {
   .CardBox {
     max-width: 100vw;
-    max-height: 600px;
-    height: max-content;
-    margin-left: 0px;
-    margin-right: 0px;
-    margin-bottom: 5px;
-    margin-top: 5px;
+    max-height: 260px;
+     margin-top: 1px;
+    margin-bottom: 1px;
+    
   }
   .ImageBox {
-    height: 300px;
-  }
-  .lowerDiv {
-    position: relative;
+    height: 105px;
   }
 }
+
+@media screen and (min-width: 400px) {
+  .CardBox {
+    max-width: 48vw;
+    max-height: 400px;
+    margin-left: auto;
+     margin-right: auto;
+    margin-top: 1px;
+    margin-bottom: 5px;
+      margin-left:3px;
+  margin-right:3px;
+  }
+  .ImageBox {
+    height: 100px;
+    width:190px;
+  }
+}
+
+
+@media screen and (min-width: 440px) and (max-width:560px) {
+  .CardBox {
+    max-width: 48vw;
+    max-height: 200px;
+    margin-left: auto;
+     margin-right: auto;
+    margin-top: 1px;
+    margin-bottom: 6px;
+    margin-left:5px;
+  margin-right:5px;
+  }
+  .ImageBox {
+    height: 120px;
+    width:220px;
+  }
+}
+
+
+@media screen and (min-width: 560px) and (max-width:600px) {
+  .CardBox {
+    max-width: 56vw;
+  max-height: 180px;
+    margin-left: auto;
+     margin-right: auto;
+    margin-top: 1px;
+    margin-bottom: 6px;
+    margin-left:5px;
+  margin-right:5px;
+  }
+  .ImageBox {
+    height: 100px;
+    width:270px;
+  }
+}
+@media screen and (min-width: 601px) {
+  .CardBox {
+    max-width: 42vw;
+    max-height: 400px;
+    margin-left: auto;
+     margin-right: auto;
+    margin-top: 1px;
+    margin-bottom: 6px;
+    margin-left:2px;
+  margin-right:2px;
+  }
+  .ImageBox {
+    height: 130px;
+    width:196px;
+  }
+}
+
 </style>

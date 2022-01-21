@@ -1,8 +1,17 @@
 <template>
-  <div v-if="darkTheme" class="DarkHeaderDiv">
+  <div class="HeaderDiv" :style="{'background-image': isDarkTheme == true ? 'url(' + '/src/projectImages/ghosts.gif' + ')' : 'url(' + 'src/projectImages/WinterWarm.gif' + ')'
+                                  ,'background-size': isDarkTheme == true ? '100% 120px' : 'cover'}" >
     <div class="SpaceDiv" />
     <p @click="resetToStartPage" class="KittyText">KittyKitty</p>
     <div class="SpaceDiv" />
+    <div class="switchContainer">
+      <input type="checkbox" id="checkbox" class="themeSwitch" @change="changedTheme">
+      <label for="checkbox" class="switch" :class="isDarkTheme == true ? 'switchDarkTheme' : 'switchLightTheme'">
+        <img src="src/projectImages/sun.png" alt="" class="sun">
+        <img src="src/projectImages/moon.png" alt="" class="moon">
+        <div class="switchItem" :class="isDarkTheme == true ? 'switchItemDarkTheme' : 'switchItemLightTheme'"></div>
+      </label>
+    </div>
     <p class="SeasonText">Winter</p>
     <div class="SpaceDiv" />
   </div>
@@ -133,14 +142,21 @@ export default {
         ? this.$store.getters.getCurrentUser.getProfileURL()
         : '',
       profileDropdown: false,
-      darkTheme: this.$store.getters.getIsDarkTheme,
     };
   },
   created() {
+    this.isDarkTheme = this.$store.getters.getIsDarkTheme;
+    if(this.isDarkTheme == null){
+      this.isDarkTheme = true;
+    }
     let route = this.$router.currentRoute.value.fullPath;
     if (route == '/SearchResult') {
       this.searchParam = this.$store.getters.getKeyWord;
     }
+
+    this.$store.watch((state) => state.darkTheme, (newVal) => {
+      this.isDarkTheme = newVal
+    })
   },
 
   async mounted() {
@@ -166,6 +182,20 @@ export default {
         '/Profile/' + this.$store.getters.getCurrentUser.username
       );
     },
+    async changedTheme(){
+      if(this.isDarkTheme){
+        this.isDarkTheme = false;
+        await this.$store.dispatch("setDarkTheme", this.isDarkTheme);
+        localStorage.setItem('isDarkTheme', JSON.stringify(this.isDarkTheme));
+      }
+      else{
+        this.isDarkTheme = true;
+        await this.$store.dispatch("setDarkTheme", this.isDarkTheme);
+        localStorage.setItem('isDarkTheme', JSON.stringify(this.isDarkTheme));
+      }
+      console.log(this.isDarkTheme)
+    },
+
     playMe() {
       this.$refs.meow.play();
     },
@@ -278,9 +308,12 @@ export default {
   color: #ffffff;
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25);
   margin-top: 16px;
+  grid-row: span 2;
 }
 
 .SeasonText {
+  grid-row: 2;
+  grid-column: 4;
   -webkit-text-stroke-width: 0.007px;
   -webkit-text-stroke-color: #c9c9c9;
   font-family: 'Revalia', cursive;
@@ -290,12 +323,13 @@ export default {
   line-height: 19px;
   color: #ffffff;
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25);
-  margin-top: 33px;
+  /* margin-top: 33px; */
 }
 
 .LightHeaderDiv {
   display: grid;
-  grid-template-columns: 16px 100px auto 80px;
+  grid-template-columns: 16px 100px auto 20%;
+  grid-template-rows: repeat(2, 50%);
   height: 60px;
   text-align: center;
   background-image: url('../projectImages/light_winter.gif');
@@ -415,6 +449,55 @@ li {
   padding-top: 45px;
   padding-bottom: 60px;
 }
+
+.switchContainer{
+  grid-column: 4;
+  grid-row: 1;
+  text-align: -webkit-center;
+  align-self: center;
+}
+
+.themeSwitch{
+  opacity: 0;
+  position: absolute;
+}
+
+/* .themeSwitch:checked + .switch .switchItem, */
+.switchItemLightTheme
+{
+  transform: translateX(6.5vw);
+}
+
+.switchItemDarkTheme{
+  transform: none;
+}
+
+
+.switchItem{
+    height: 2.4vh;
+    width: 7vw;
+    background-color: #242222;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 1px;
+    transition: transform 0.2s linear;
+}
+
+.switch{
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, 50%);
+  background-color: #9c9c9c;
+  height: 2.5vh;
+  width: 14vw;
+  border-radius: 50px;
+  padding: 5px;
+  place-items: center;
+  box-sizing: border-box;
+}
+
+
 @media screen and (max-width: 300px) {
   .LightSearchAndLoginDiv,
   .DarkSearchAndLoginDiv {

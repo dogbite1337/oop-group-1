@@ -818,6 +818,7 @@ export default {
     chooseWhiteTheme() {
       this.darkTheme = false;
       this.$store.dispatch('setDarkTheme', false);
+      localStorage.setItem('isDarkTheme', JSON.stringify(false));
     },
     cancelEditMode() {
       this.editMode = false;
