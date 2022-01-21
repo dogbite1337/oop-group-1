@@ -1,7 +1,7 @@
 <template>
-  <div v-if="currentUser" class="BackgroundDiv">
+  <div v-if="currentUser && !darkTheme" class="LightBackgroundDiv">
     <router-link class="HomeLink" to="/">
-      <div class="backHomeDiv">
+      <div class="LightBackHomeDiv">
         <div class="SpaceDiv" />
         <img
           v-if="darkTheme"
@@ -324,6 +324,335 @@
         @unsubscribe="unsubscribe"
       />
     </div>
+    <div class="RoomBlock" />
+    <Footer class="footerDiv" />
+  </div>
+  <div v-if="currentUser && darkTheme" class="DarkBackgroundDiv">
+    <router-link class="HomeLink" to="/">
+      <div class="DarkBackHomeDiv">
+        <div class="SpaceDiv" />
+        <img
+          v-if="darkTheme"
+          class="ArrowIcon"
+          src="../projectImages/white_arrow.png"
+        />
+        <img
+          v-if="!darkTheme"
+          class="LightArrowIcon"
+          src="../projectImages/light_Arrow.png"
+        />
+        <div class="SpaceDiv" />
+        <p v-if="darkTheme" class="HomeText">Home</p>
+        <p v-if="!darkTheme" class="lightHomeText">Home</p>
+        <div class="SpaceDiv" />
+        <img
+          v-if="darkTheme"
+          class="catIcon"
+          src="../projectImages/whiteCatBlackBaground.png"
+        />
+        <img
+          v-if="!darkTheme"
+          class="catIcon"
+          src="../projectImages/light_Cat.png"
+        />
+        <div class="SpaceDiv" />
+      </div>
+    </router-link>
+    <div v-if="currentUser" class="userNameDiv">{{ currentUser.username }}</div>
+    <div v-if="currentUser" class="imageDiv">
+      <img class="profileImage" :src="currentUser.profileURL" />
+    </div>
+    <div class="themeDiv">
+      <div v-if="darkTheme" class="themeText">Current Theme</div>
+      <div v-if="!darkTheme" class="lightThemeText">Current Theme</div>
+      <div class="themeGrid">
+        <div class="SpaceBlock" />
+        <div
+          @click="chooseWhiteTheme"
+          v-if="darkTheme"
+          class="whiteTheme theme"
+        >
+          Light
+        </div>
+        <div v-if="!darkTheme" class="chosenWhiteTheme theme">Light</div>
+        <div class="SpaceBlock" />
+        <div
+          @click="chooseBlackTheme"
+          v-if="!darkTheme"
+          class="blackTheme theme"
+        >
+          Dark
+        </div>
+        <div v-if="darkTheme" class="chosenBlackTheme theme">Dark</div>
+        <div class="SpaceBlock" />
+      </div>
+    </div>
+    <div class="SectionGrid">
+      <div class="SpaceBlock" />
+      <div class="ProfileTextDiv">
+        <div
+          @click="switchToMyProfile"
+          v-if="!chosenProfileInfo && darkTheme"
+          class="notChosenProfileInfo"
+        >
+          Profile Info
+        </div>
+        <div
+          @click="switchToMyProfile"
+          v-if="!chosenProfileInfo && !darkTheme"
+          class="lightNotChosenProfileInfo"
+        >
+          Profile Info
+        </div>
+        <div v-if="chosenProfileInfo" class="ChosenProfileInfo">
+          Profile Info
+        </div>
+      </div>
+      <div class="SpaceBlock" />
+      <div class="myVideosTextDiv">
+        <div
+          @click="switchToMyVideos"
+          v-if="!chosenMyVideos && darkTheme"
+          class="notChosenMyVideos"
+        >
+          My Videos
+        </div>
+        <div
+          @click="switchToMyVideos"
+          v-if="!chosenMyVideos && !darkTheme"
+          class="lightNotChosenMyVideos"
+        >
+          My Videos
+        </div>
+        <div v-if="chosenMyVideos" class="ChosenMyVideos">My Videos</div>
+      </div>
+      <div class="SpaceBlock" />
+      <div class="mySubscribersDiv">
+        <div
+          @click="switchToMySubscribers"
+          v-if="!chosenSubscribers && darkTheme"
+          class="notChosenSubscriptions"
+        >
+          Subscriptions
+        </div>
+        <div
+          @click="switchToMySubscribers"
+          v-if="!chosenSubscribers && !darkTheme"
+          class="lightNotChosenSubscriptions"
+        >
+          Subscriptions
+        </div>
+        <div v-if="chosenSubscribers" class="ChosenSubscribers">
+          Subscriptions
+        </div>
+      </div>
+      <div class="SpaceBlock" />
+    </div>
+    <div v-if="chosenProfileInfo && currentUser" class="ProfileInfoSection">
+      <div v-if="currentUser && darkTheme" class="SubscribersGrid">
+        <div class="SpaceBlock" />
+        <div class="SubscribersText">Subscribers:</div>
+        <div class="SpaceBlock" />
+        <div class="SubscribersNumber">{{ currentSubs }}</div>
+        <div class="SpaceBlock" />
+        <div class="FillerBlock" />
+      </div>
+      <div v-if="currentUser && !darkTheme" class="LightSubscribersGrid">
+        <div class="SpaceBlock" />
+        <div class="SubscribersText">Subscribers:</div>
+        <div class="SpaceBlock" />
+        <div class="SubscribersNumber">{{ currentSubs }}</div>
+        <div class="SpaceBlock" />
+        <div class="FillerBlock" />
+      </div>
+      <div v-if="currentUser && darkTheme" class="VideosGrid">
+        <div class="SpaceBlock" />
+        <div class="VideosText">Videos:</div>
+        <div class="SpaceBlock" />
+        <div class="VideosNumber">{{ currentUser.videosPosted }}</div>
+        <div class="SpaceBlock" />
+        <div class="FillerBlock" />
+      </div>
+      <div v-if="currentUser && !darkTheme" class="LightVideosGrid">
+        <div class="SpaceBlock" />
+        <div class="VideosText">Videos:</div>
+        <div class="SpaceBlock" />
+        <div class="VideosNumber">{{ currentUser.videosPosted }}</div>
+        <div class="SpaceBlock" />
+        <div class="FillerBlock" />
+      </div>
+      <div v-if="currentUser" class="InfoGrid">
+        <div class="UsernameGrid">
+          <div class="SpaceBlock" />
+          <div v-if="!editMode" class="UsernameText">Username:</div>
+          <div v-if="editMode" class="UsernameText">New Username:</div>
+          <div class="SpaceBlock" />
+          <div v-if="!editMode" class="UsernameValue">
+            {{ currentUser.username }}
+          </div>
+          <input
+            v-model="wantedUsername"
+            v-if="editMode"
+            type="text"
+            :placeholder="currentUser.username"
+            class="UsernameInput"
+          />
+          <div class="SpaceBlock" />
+          <div class="FillerBlock" />
+        </div>
+        <div class="PasswordGrid">
+          <div class="SpaceBlock" />
+          <div v-if="!editMode" class="PasswordText">Password:</div>
+          <div v-if="editMode" class="NewPasswordText">New Password:</div>
+          <div class="SpaceBlock" />
+          <div v-if="!editMode" class="PasswordValue">***********</div>
+          <input
+            v-model="wantedPassword"
+            v-if="editMode"
+            placeholder="New Password"
+            class="NewPasswordInput"
+            type="password"
+          />
+          <div class="SpaceBlock" />
+          <div class="FillerBlock" />
+        </div>
+        <div class="DescriptionGrid">
+          <div class="SpaceBlock" />
+          <div v-if="!editMode" class="DescriptionText">Description:</div>
+          <div v-if="editMode" class="DescriptionText">New Description:</div>
+          <div class="SpaceBlock" />
+          <div v-if="!editMode" class="DescriptionValue">
+            {{ currentUser.description }}
+          </div>
+          <textarea
+            v-if="editMode"
+            name="yourReply"
+            class="descriptionInput"
+            rows="5"
+            cols="33"
+            :placeholder="currentUser.description"
+            v-model="wantedDescription"
+          />
+          <div class="SpaceBlock" />
+          <div class="FillerBlock" />
+        </div>
+      </div>
+      <div class="UploadGrid">
+        <div class="SpaceBlock" />
+        <div class="PreviewGrid">
+          <div class="previewText">Preview</div>
+          <img
+            v-if="!wantedImage && darkTheme"
+            class="previewImage"
+            src="../projectImages/Dark_User.png"
+          />
+          <img
+            v-if="!wantedImage && !darkTheme"
+            class="previewImage"
+            src="../projectImages/Light_User.png"
+          />
+          <img v-if="wantedImage" class="previewImage" :src="wantedImage" />
+        </div>
+        <div class="SpaceBlock" />
+        <div class="EditGrid">
+          <input
+            class="imageInput"
+            type="text"
+            placeholder="Image URL goes here"
+            v-model="wantedImage"
+          />
+          <button
+            v-if="!editMode"
+            @click="enableEditMode"
+            class="editInfoButton"
+          >
+            Edit Info
+          </button>
+          <button
+            v-if="editMode"
+            @click="cancelEditMode"
+            class="cancelInfoButton"
+          >
+            Cancel
+          </button>
+          <button v-if="editMode" @click="saveChanges" class="saveInfoButton">
+            Save
+          </button>
+        </div>
+        <div class="SpaceBlock" />
+      </div>
+    </div>
+    <div v-if="chosenMyVideos" class="myVideosSection">
+      <VideoInProfilePage
+        v-for="(videoItem, index) of myVideos"
+        :key="index"
+        :video="videoItem"
+        @deletedVideo="showDeleteDialog"
+        @editVideo="showEditDialog"
+        class="videoBox"
+      />
+      <div v-if="deleteVideoDialog" class="deleteDialog">
+        Are you sure that you want to delete this video?
+        <button @click="deleteAndUpdate" class="deleteVideoButton" value="Yes">
+          Yes
+        </button>
+        <button
+          @click="cancelDelete"
+          class="cancelDeleteVideoButton"
+          value="No"
+        >
+          No
+        </button>
+      </div>
+      <div class="editDialogDiv">
+        <div v-if="editDialog" class="editDialog">
+          <div class="titleInputGrid">
+            <div class="SpaceBlock" />
+            <div class="titleLabel">Title:</div>
+            <div class="SpaceBlock" />
+            <input
+              class="newTitleInput"
+              v-model="newTitle"
+              placeholder="New Title"
+              type="text"
+            />
+            <div class="SpaceBlock" />
+            <div @click="closeEditDialog" class="XButton">X</div>
+            <div class="SpaceBlock" />
+          </div>
+          <div class="descriptionInputGrid">
+            <div class="SpaceBlock" />
+            <div class="DescriptionLabel">Description:</div>
+            <div class="SpaceBlock" />
+            <textarea
+              class="newDescriptionInput"
+              rows="7"
+              cols="33"
+              placeholder="New Text"
+              v-model="newDescription"
+            />
+            <div class="SpaceBlock" />
+          </div>
+          <button
+            @click="editVideo"
+            class="saveNewDescriptionButton"
+            value="Save"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+    <div v-if="chosenSubscribers" class="mySubscribersSection">
+      <SubscriptionToUser
+        v-for="(subbedTo, index) of peopleSubscribedTo"
+        :subbedTo="subbedTo"
+        :key="index"
+        class="videoBox"
+        @unsubscribe="unsubscribe"
+      />
+    </div>
+    <div class="RoomBlock" />
     <Footer class="footerDiv" />
   </div>
 </template>
@@ -382,6 +711,8 @@ export default {
     this.currentSubs = this.renderSpacedNumbers(
       foundUser.subscribers.toString()
     );
+
+    this.darkTheme = this.$store.getters.getIsDarkTheme;
 
     let subsRes = await fetch(
       '/rest/getSubscribersForId?' +
@@ -483,18 +814,9 @@ export default {
     chooseBlackTheme() {
       this.darkTheme = true;
       this.$store.dispatch('setDarkTheme', true);
-      localStorage.setItem('isDarkTheme', JSON.stringify(true));
-      document.getElementsByClassName('LightBackgroundDiv')[0].className =
-        'BackgroundDiv';
-      document.getElementsByClassName('lightBackHomeDiv')[0].className =
-        'backHomeDiv';
     },
     chooseWhiteTheme() {
       this.darkTheme = false;
-      document.getElementsByClassName('BackgroundDiv')[0].className =
-        'LightBackgroundDiv';
-      document.getElementsByClassName('backHomeDiv')[0].className =
-        'lightBackHomeDiv';
       this.$store.dispatch('setDarkTheme', false);
       localStorage.setItem('isDarkTheme', JSON.stringify(false));
     },
@@ -605,6 +927,9 @@ export default {
   color: white;
   font-size: 25px;
   margin-top: 5px;
+}
+.RoomBlock{
+  height: 60px;
 }
 .saveNewDescriptionButton {
   display: block;
@@ -856,7 +1181,8 @@ export default {
   display: grid;
   grid-template-rows: 5vh auto;
   background-color: black;
-  position: sticky;
+  position: absolute;
+  bottom: 0px;
   padding-bottom: 10px;
   width: 100%;
 }
@@ -901,7 +1227,7 @@ export default {
   width: calc(100vw + 19px);
   height: 100vh;
 }
-.BackgroundDiv {
+.DarkBackgroundDiv {
   background-color: black;
   width: calc(100vw + 19px);
   height: 100vh;
@@ -942,7 +1268,13 @@ export default {
   border-bottom: solid 1px white;
   padding-bottom: 39px;
 }
-.backHomeDiv {
+.LightBackHomeDiv {
+  display: grid; /* space, Arrow, space, Home, space, Cat */
+  grid-template-columns: 17px 32px 5px 60px 12px 20px auto;
+  background-color: white;
+  margin-top: 20px;
+}
+.DarkBackHomeDiv {
   display: grid; /* space, Arrow, space, Home, space, Cat */
   grid-template-columns: 17px 32px 5px 60px 12px 20px auto;
   background-color: black;

@@ -11,7 +11,12 @@
       />
     </div>
     <div class="textInfo">
-      <div class="titleText" :class="isDarkTheme == true ? 'titleTextDarkTheme' : 'titleTextLightTheme'">
+      <div
+        class="titleText"
+        :class="
+          isDarkTheme == true ? 'titleTextDarkTheme' : 'titleTextLightTheme'
+        "
+      >
         {{ displayTitleBeforeKey(video.title) }}
         <p class="keyword">{{ displayKeyWord(video.title) }}</p>
         {{ displayTitleAfterKey(video.title) }}
@@ -43,42 +48,51 @@ export default {
     };
   },
 
-  async created(){
-    this.isDarkTheme = await this.$store.getters.getIsDarkTheme
+  async created() {
+    this.isDarkTheme = await this.$store.getters.getIsDarkTheme;
 
-    this.$store.watch((state) => state.darkTheme, (newVal) => {
-    this.isDarkTheme = newVal
-    })
+    this.$store.watch(
+      (state) => state.darkTheme,
+      (newVal) => {
+        this.isDarkTheme = newVal;
+      }
+    );
   },
 
   async mounted() {
-    if(!this.$store.getters.getKeyWord){
-      this.keyword = await localStorage.searchKey
+    if (!this.$store.getters.getKeyWord) {
+      this.keyword = await localStorage.searchKey;
     }
 
-    if(await this.$store.getters.getMatchedVideoList.length > 6){
-      this.matchedVideos = await this.$store.getters.getMatchedVideoList.slice(0,6)
-    }
-    else{
-      this.matchedVideos = await this.$store.getters.getMatchedVideoList
+    if ((await this.$store.getters.getMatchedVideoList.length) > 6) {
+      this.matchedVideos = await this.$store.getters.getMatchedVideoList.slice(
+        0,
+        6
+      );
+    } else {
+      this.matchedVideos = await this.$store.getters.getMatchedVideoList;
     }
 
     this.$nextTick(function () {
-      this.lastVideoObserverSearchResult = new IntersectionObserver(entries =>{
-        let lastVideo = entries[0]
-        if(!lastVideo.isIntersecting) {
-          return;}
-        this.loadMoreVideos()
-        this.lastVideoObserverSearchResult.unobserve(lastVideo.target);
-        if(!this.stopObserver) 
-        this.lastVideoObserverSearchResult.observe(document.querySelector(".emptyDiv"))
-      },{rootMargin: "50px"}
-      )
-      this.lastVideoObserverSearchResult.observe(document.querySelector(".emptyDiv"))
-    })
-  },
-
-  updated(){
+      this.lastVideoObserverSearchResult = new IntersectionObserver(
+        (entries) => {
+          let lastVideo = entries[0];
+          if (!lastVideo.isIntersecting) {
+            return;
+          }
+          this.loadMoreVideos();
+          this.lastVideoObserverSearchResult.unobserve(lastVideo.target);
+          if (!this.stopObserver)
+            this.lastVideoObserverSearchResult.observe(
+              document.querySelector('.emptyDiv')
+            );
+        },
+        { rootMargin: '50px' }
+      );
+      this.lastVideoObserverSearchResult.observe(
+        document.querySelector('.emptyDiv')
+      );
+    });
   },
 
   unmounted() {
@@ -91,11 +105,13 @@ export default {
       let lengthOfCurrentShowedVideos = this.matchedVideos.length;
       let fullMatchedList = await this.$store.getters.getMatchedVideoList;
 
-      if(lengthOfCurrentShowedVideos + 6 > fullMatchedList.length){
-        this.matchedVideos = fullMatchedList
-      }
-      else{
-        this.matchedVideos = fullMatchedList.slice(0, lengthOfCurrentShowedVideos+6)
+      if (lengthOfCurrentShowedVideos + 6 > fullMatchedList.length) {
+        this.matchedVideos = fullMatchedList;
+      } else {
+        this.matchedVideos = fullMatchedList.slice(
+          0,
+          lengthOfCurrentShowedVideos + 6
+        );
       }
     },
 
@@ -215,7 +231,7 @@ img {
   height: 2.5vh;
 }
 
-.titleTextLightTheme{
+.titleTextLightTheme {
   color: black;
 }
 </style>

@@ -2,7 +2,7 @@
   <div class="MainDiv" :class="isDarkTheme == true ? 'MainDivDarkTheme' : 'MainDivLightTheme'">
     <Header @update="register" />
     <div class="searchPage">
-      <TrendLink @addTrendingSearch="addTrendingSearch($event)"/>
+      <TrendLink @addTrendingSearch="addTrendingSearch($event)" />
       <ExpandableSearchHistory />
       <div class="searchPageButtonsContainer">
         <button class="searchPageBtn" @click="register" type="button" :class="isDarkTheme == true ? 'searchPageBtnDarkTheme' : 'searchPageBtnLightTheme'">Search</button>
@@ -28,7 +28,7 @@ import ExpandableSearchHistory from '../components/ExpandableSearchHistory.vue';
 import Footer from '../components/Footer.vue';
 
 export default {
-  emits: ['update','addTrendingSearch'],
+  emits: ['update', 'addTrendingSearch'],
   data() {
     return {
       searchHistory: [],
@@ -98,9 +98,9 @@ export default {
   beforeUnmount() {},
 
   methods: {
-    async addTrendingSearch(keyword){
-      await this.$store.dispatch('setKeyWord', keyword)
-      this.register()
+    async addTrendingSearch(keyword) {
+      await this.$store.dispatch('setKeyWord', keyword);
+      this.register();
     },
 
     async register() {
@@ -117,12 +117,11 @@ export default {
             this.searchHistory.push(element);
           });
         }
-      }else{
-        if(this.$store.getters.getMySearchHistoryList != null){
+      } else {
+        if (this.$store.getters.getMySearchHistoryList != null) {
           this.searchHistory = this.$store.getters.getMySearchHistoryList;
-        }
-        else if(localStorage.searchHistorList){
-          this.searchHistory = await JSON.parse(localStorage.searchHistoryList)
+        } else if (localStorage.searchHistorList) {
+          this.searchHistory = await JSON.parse(localStorage.searchHistoryList);
         }
       }
       let boolean = await this.checkIfListContainsKey(
@@ -153,18 +152,15 @@ export default {
           });
         }
         this.$router.push('/SearchResult');
-        
       } else if (this.currentUser && boolean && searchParam) {
         this.$router.push('/SearchResult');
-        
       } else if (!this.currentUser && boolean && searchParam) {
         this.$router.push('/SearchResult');
-        
       } else if (!this.currentUser && !boolean && searchParam) {
-        if(this.$store.getters.getMySearchHistoryList != null){
+        if (this.$store.getters.getMySearchHistoryList != null) {
           this.searchHistory = this.$store.getters.getMySearchHistoryList;
-        }else if(localStorage.searchHistoryList){
-          this.searchHistory = await JSON.parse(localStorage.searchHistoryList)
+        } else if (localStorage.searchHistoryList) {
+          this.searchHistory = await JSON.parse(localStorage.searchHistoryList);
         }
 
         if (this.searchHistory.length > 5) {
@@ -179,16 +175,14 @@ export default {
 
         await this.$store.dispatch('cacheSearchHistory', this.searchHistory);
         this.$router.push('/SearchResult');
-        
       }
     },
 
-    showConfirmModal(){
+    showConfirmModal() {
       this.showConfirmWindow = true;
     },
 
     async clearHistory() {
-      
       this.searchHistory = [];
       await this.$store.dispatch('cacheSearchHistory', this.searchHistory);
       if (this.currentUser) {
@@ -221,7 +215,7 @@ export default {
   background-color: #131313;
 }
 
-.IconDiv{
+.IconDiv {
   position: absolute;
   width: -webkit-fill-available;
 }
@@ -244,7 +238,7 @@ export default {
   height: 5vh;
 }
 
-.confirmModalBackGround{
+.confirmModalBackGround {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -267,12 +261,12 @@ export default {
     z-index: 99;
 }
 
-.confirmModalContainer p{
+.confirmModalContainer p {
   color: white;
   font-size: larger;
 }
 
-.confirmBtnContainer{
+.confirmBtnContainer {
   display: flex;
   place-content: space-evenly;
   margin-top: 2rem;

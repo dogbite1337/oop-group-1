@@ -1,8 +1,24 @@
 <template>
-  <div class="CommentGrid">
-    <div class="mainGrid">
+  <div v-if="!darkTheme" class="LightCommentGrid">
+    <div class="LightMainGrid">
       <div class="SpaceDiv" />
-      <div class="userGrid">
+      <div v-if="!darkTheme" class="LightUserGrid">
+        <div class="SpaceDiv" />
+        <img
+          v-if="commenter"
+          :src="commenter.profileURL"
+          class="commentImage"
+        />
+        <div class="SpaceDiv" />
+        <div v-if="commenter" class="usernameDiv">{{ commenter.username }}</div>
+        <div class="SpaceDiv" />
+        <div v-if="reply" class="timeOfPostingDiv">
+          Posted at
+          {{ convertDateObjectToString(new Date(reply.timeOfPosting)) }}
+        </div>
+        <div class="SpaceDiv" />
+      </div>
+      <div v-if="darkTheme" class="DarkUserGrid">
         <div class="SpaceDiv" />
         <img
           v-if="commenter"
@@ -20,11 +36,73 @@
       </div>
       <div class="SpaceDiv" />
     </div>
-    <div class="CommentDiv">{{ reply.content }}</div>
+    <div v-if="!darkTheme" class="LightCommentDiv">{{ reply.content }}</div>
   </div>
-  <div class="StatsDiv">
+  <div v-if="darkTheme" class="DarkCommentGrid">
+    <div class="mainGrid">
+      <div class="SpaceDiv" />
+      <div class="DarkUserGrid">
+        <div class="SpaceDiv" />
+        <img
+          v-if="commenter"
+          :src="commenter.profileURL"
+          class="commentImage"
+        />
+        <div class="SpaceDiv" />
+        <div v-if="commenter" class="usernameDiv">{{ commenter.username }}</div>
+        <div class="SpaceDiv" />
+        <div v-if="reply" class="timeOfPostingDiv">
+          Posted at
+          {{ convertDateObjectToString(new Date(reply.timeOfPosting)) }}
+        </div>
+        <div class="SpaceDiv" />
+      </div>
+      <div class="SpaceDiv" />
+    </div>
+    <div v-if="darkTheme" class="DarkCommentDiv">{{ reply.content }}</div>
+  </div>
+  <div v-if="!darkTheme" class="LightStatsDiv">
     <div class="SpaceDiv" />
-    <div class="LikesDiv">
+    <div v-if="!darkTheme" class="LightLikesDiv">
+      <img
+        v-if="!likedReplyAlready"
+        @click="like"
+        class="commentLike"
+        src="../projectImages/like_white_background.png"
+      />
+      <img
+        v-if="likedReplyAlready"
+        class="commentLike"
+        src="../projectImages/blue_like_whiteBackground.png"
+      />
+      <div class="SpaceDiv" />
+      {{ reply.likes }}
+    </div>
+    <div class="SpaceDiv" />
+    <div class="LightDislikesDiv">
+      <img
+        v-if="!dislikedReplyAlready"
+        @click="dislike"
+        class="commentDislike"
+        src="../projectImages/dislike_white_background.png"
+      />
+      <img
+        v-if="dislikedReplyAlready"
+        class="commentDislike"
+        src="../projectImages/blue_dislike_whiteBackground.png"
+      />
+      <div class="SpaceDiv" />
+      {{ reply.dislikes }}
+    </div>
+    <div class="SpaceDiv" />
+
+    <div class="SpaceBlock" />
+    <div class="timestampOfComments"></div>
+    <div class="SpaceBlock" />
+  </div>
+  <div v-if="darkTheme" class="DarkStatsDiv">
+    <div class="SpaceDiv" />
+    <div v-if="darkTheme" class="DarkLikesDiv">
       <img
         v-if="!likedReplyAlready"
         @click="like"
@@ -40,17 +118,28 @@
       {{ reply.likes }}
     </div>
     <div class="SpaceDiv" />
-    <div class="DislikesDiv">
+    <div v-if="darkTheme" class="DarkDislikesDiv">
       <img
-        v-if="!dislikedReplyAlready"
+        v-if="!dislikedReplyAlready && darkTheme"
         @click="dislike"
         class="commentDislike"
         src="../projectImages/dislike_black_background.png"
       />
       <img
-        v-if="dislikedReplyAlready"
+        v-if="!dislikedReplyAlready && !darkTheme"
+        @click="dislike"
+        class="commentDislike"
+        src="../projectImages/dislike_white_background.png"
+      />
+      <img
+        v-if="dislikedReplyAlready && darkTheme"
         class="commentDislike"
         src="../projectImages/blue_dislike.png"
+      />
+      <img
+        v-if="dislikedReplyAlready && !darkTheme"
+        class="commentDislike"
+        src="../projectImages/blue_dislike_whiteBackground.png"
       />
       <div class="SpaceDiv" />
       {{ reply.dislikes }}
@@ -70,6 +159,7 @@ export default {
     return {
       likedReplyAlready: false,
       dislikedReplyAlready: false,
+      darkTheme: this.$store.getters.getIsDarkTheme,
     };
   },
   async mounted() {
@@ -284,8 +374,19 @@ export default {
   padding: 3px;
 }
 
-.LikesDiv,
-.DislikesDiv {
+.LightLikesDiv,
+.LightDislikesDiv {
+  display: grid;
+  grid-template-columns: max-content 10px max-content;
+  width: 65px;
+  background-color: white;
+  color: black;
+  padding-top: 3px;
+  padding-left: 3px;
+  padding-right: 2px;
+}
+.DarkLikesDiv,
+.DarkDislikesDiv {
   display: grid;
   grid-template-columns: max-content 10px max-content;
   width: 65px;
@@ -304,7 +405,6 @@ export default {
   display: grid;
   width: 100vw;
   grid-template-columns: auto max-content auto;
-  background-color: yellow;
   max-width: 400px;
   margin-left: auto;
   margin-right: auto;
@@ -340,7 +440,17 @@ export default {
   width: 100vw;
   padding-bottom: 10px;
 }
-.CommentGrid {
+.LightCommentGrid {
+  height: max-content;
+  background-color: white;
+  color: black;
+  max-width: 450px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 10px;
+  border-top: solid 1px black;
+}
+.DarkCommentGrid {
   height: max-content;
   background-color: black;
   color: white;
@@ -377,7 +487,20 @@ export default {
   padding-top: 4px;
   padding-bottom: 10px;
 }
-.StatsDiv {
+.LightStatsDiv {
+  display: grid;
+  grid-template-columns: 30px max-content 10px max-content 15px auto auto max-content 1px;
+  background-color: white;
+  color: black;
+  width: 100vw;
+  max-width: 450px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 4px;
+  padding-bottom: 10px;
+  border-bottom: solid 1px black;
+}
+.DarkStatsDiv {
   display: grid;
   grid-template-columns: 30px max-content 10px max-content 15px auto auto max-content 1px;
   background-color: black;
@@ -405,7 +528,17 @@ export default {
   padding-left: 35px;
   padding-top: 10px;
 }
-.CommentDiv {
+.LightCommentDiv {
+  width: 100vw;
+  background-color: white;
+  color: black;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 35px;
+  padding-top: 10px;
+}
+.DarkCommentDiv {
   width: 100vw;
   background-color: black;
   max-width: 400px;
@@ -439,7 +572,16 @@ export default {
   background-color: black;
   padding-top: 5px;
 }
-.userGrid {
+.LightUserGrid {
+  display: grid;
+  grid-template-columns: 25px max-content 15px max-content auto max-content 25px;
+  width: 100vw;
+  max-width: 450px;
+  background-color: white;
+  color: black;
+  padding-top: 5px;
+}
+.DarkUserGrid {
   display: grid;
   grid-template-columns: 25px max-content 15px max-content auto max-content 25px;
   width: 100vw;
@@ -447,7 +589,9 @@ export default {
   background-color: black;
   padding-top: 5px;
 }
-.mainGrid {
+.LightMainGrid {
+  color: black;
+  background-color: white;
   display: grid;
   grid-template-columns: auto max-content auto;
 }

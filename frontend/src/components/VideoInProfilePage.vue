@@ -25,7 +25,7 @@
         <div class="SpaceBlock" />
         <div class="textDiv">
           <div class="SpaceBlock" />
-          <div class="titleDiv">
+          <div v-if="darkTheme" class="DarkTitleDiv">
             {{ video.title }}
           </div>
           <div class="SpaceBlock" />
@@ -68,7 +68,7 @@
         <div class="SpaceBlock" />
         <div class="textDiv">
           <div class="SpaceBlock" />
-          <div class="titleDiv">
+          <div v-if="!darkTheme" class="LightTitleDiv">
             {{ video.title }}
           </div>
           <div class="SpaceBlock" />
@@ -110,13 +110,13 @@
       <div class="SpaceBlock" />
       <img
         @click="deleteVideo"
-        class="Trash"
+        class="DarkTrash"
         v-if="darkTheme"
         src="../projectImages/Trashcan.png"
       />
       <img
         @click="deleteVideo"
-        class="Trash"
+        class="LightTrash"
         v-if="!darkTheme"
         src="../projectImages/Light_Trash.png"
       />
@@ -148,10 +148,22 @@ export default {
         ? this.$store.getters.getFirstEightVideos
         : null,
       spacedViews: 0,
-      darkTheme: true,
+      darkTheme: this.$store.getters.getIsDarkTheme,
     };
   },
   methods: {
+    mounted() {
+      this.$store.subscribe(async (mutation, state) => {
+        if (mutation.type == 'setDarkTheme') {
+          if (mutation.payload) {
+            this.darkTheme = true;
+          } else {
+            this.darkTheme = false;
+          }
+        }
+        this.darkTheme = this.$store.getters.isDarkTheme;
+      });
+    },
     async deleteVideo() {
       this.$emit('deletedVideo', this.video.videoId);
     },
@@ -197,7 +209,13 @@ export default {
   width: 400px;
   background-color: transparent;
 }
-.Trash {
+.LightTrash {
+  height: 30px;
+  width: 30px;
+  position: relative;
+  top: 1px;
+}
+.DarkTrash {
   height: 30px;
   width: 30px;
   position: relative;
@@ -270,7 +288,13 @@ export default {
 .relatedVideoBox {
   border-top: solid 1px #939393;
 }
-.titleDiv {
+.LightTitleDiv {
+  color: black;
+  margin-top: 5px;
+  font-size: 12px;
+  width: 160px;
+}
+.DarkTitleDiv {
   color: #ffffff;
   margin-top: 5px;
   font-size: 12px;

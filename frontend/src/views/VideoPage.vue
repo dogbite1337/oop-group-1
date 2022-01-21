@@ -3,7 +3,16 @@
     <router-link class="HomeLink" to="/">
       <div class="backHomeDiv">
         <div class="SpaceDiv" />
-        <img class="ArrowIcon" src="../projectImages/big_arrow.png" />
+        <img
+          v-if="darkTheme"
+          class="ArrowIcon"
+          src="../projectImages/big_arrow.png"
+        />
+        <img
+          v-if="!darkTheme"
+          class="LightArrowIcon"
+          src="../projectImages/right-arrow.png"
+        />
         <div class="SpaceDiv" />
       </div>
     </router-link>
@@ -23,7 +32,10 @@
     </div>
     <div class="someOther" />
     <div class="UpperSection">
-      <div v-if="!showWatchNowInstead" class="descriptionAndCommentsDiv">
+      <div
+        v-if="!showWatchNowInstead && darkTheme"
+        class="DarkDescriptionAndCommentsDiv"
+      >
         <div class="SpaceDiv" />
         <div class="middleDiv">
           <div v-if="!showDescriptionSection" class="notChosenDescriptionDiv">
@@ -44,24 +56,80 @@
         </div>
         <div class="SpaceDiv" />
       </div>
-      <div v-if="!showWatchNowInstead" class="UploaderDiv">
+      <div
+        v-if="!showWatchNowInstead && !darkTheme"
+        class="LightDescriptionAndCommentsDiv"
+      >
         <div class="SpaceDiv" />
-        <div class="square1 square">
+        <div class="middleDiv">
+          <div v-if="!showDescriptionSection" class="notChosenDescriptionDiv">
+            Description
+          </div>
+          <div v-if="showDescriptionSection" class="ChosenDescriptionDiv">
+            Description
+            <div class="LineDiv" />
+          </div>
+          <div class="SpaceDiv" />
+          <div v-if="showDescriptionSection" class="notChosenCommentsDiv">
+            Comments({{ amountOfComments }})
+          </div>
+          <div v-if="!showDescriptionSection" class="ChosenCommentsDiv">
+            Comments({{ amountOfComments }})
+            <div class="LineDiv" />
+          </div>
+        </div>
+        <div class="SpaceDiv" />
+      </div>
+      <div v-if="!showWatchNowInstead && !darkTheme" class="LightUploaderDiv">
+        <div class="SpaceDiv" />
+        <div v-if="darkTheme" class="square1 DarkSquare">
+          <img class="uploaderProfileDiv" :src="Uploader.profileURL" />
+        </div>
+        <div v-if="!darkTheme" class="square1 LightSquare">
           <img class="uploaderProfileDiv" :src="Uploader.profileURL" />
         </div>
         <div class="SpaceDiv" />
-        <div class="square2 square">
+        <div v-if="darkTheme" class="square2 DarkSquare">
+          <div class="usernameDiv">
+            {{ Uploader.username }}
+          </div>
+          <div class="subsDiv">Subscribers: {{ spacedSubs }}</div>
+        </div>
+        <div v-if="!darkTheme" class="square2 LightSquare">
           <div class="usernameDiv">
             {{ Uploader.username }}
           </div>
           <div class="subsDiv">Subscribers: {{ spacedSubs }}</div>
         </div>
         <div class="SpaceDiv" />
-        <div class="square3 square">
+        <div v-if="darkTheme" class="square3 DarkSquare">
+          <div class="videosDiv">Videos: {{ spacedVideos }}</div>
+        </div>
+        <div v-if="!darkTheme" class="square3 LightSquare">
           <div class="videosDiv">Videos: {{ spacedVideos }}</div>
         </div>
         <div class="SpaceDiv" />
-        <div v-if="loggedInUser" class="square4 square">
+        <div v-if="loggedInUser && darkTheme" class="square4 DarkSquare">
+          <div v-if="loggedInUser.userId != video.userId" class="subButtonDiv">
+            <button
+              v-if="!subscribedAlready"
+              @click="subscribe"
+              class="subButton"
+              value="Subscribe"
+            >
+              + Subscribe
+            </button>
+            <button
+              v-if="subscribedAlready"
+              @click="unsubscribe"
+              class="subButton"
+              value="Unsubscribe"
+            >
+              - Unsubscribe
+            </button>
+          </div>
+        </div>
+        <div v-if="loggedInUser && !darkTheme" class="square4 LightSquare">
           <div v-if="loggedInUser.userId != video.userId" class="subButtonDiv">
             <button
               v-if="!subscribedAlready"
@@ -83,28 +151,91 @@
         </div>
         <div class="SpaceDiv" />
       </div>
-      <div v-if="!showWatchNowInstead" class="videoTitleDiv">
+
+      <div v-if="!showWatchNowInstead && darkTheme" class="DarkVideoTitleDiv">
         <div class="titleDiv">{{ video.title }}</div>
         <div class="descriptionDiv">{{ video.description }}</div>
       </div>
-      <div v-if="!showWatchNowInstead" class="viewsAndDateDiv">
+      <div v-if="!showWatchNowInstead && !darkTheme" class="LightVideoTitleDiv">
+        <div class="titleDiv">{{ video.title }}</div>
+        <div class="descriptionDiv">{{ video.description }}</div>
+      </div>
+      <div v-if="!showWatchNowInstead && darkTheme" class="DarkViewsAndDateDiv">
         <div class="SpaceDiv" />
-        <div class="square playButtonDiv">
+        <div class="DarkSquare playButtonDiv">
           <img class="playButton" src="../projectImages/small_grey_trans.png" />
         </div>
         <div class="SpaceDiv" />
-        <div class="viewsDiv square">{{ spacedViews }} views</div>
+        <div class="DarkViewsDiv DarkSquare">{{ spacedViews }} views</div>
         <div class="SpaceDiv" />
-        <div class="uploadDateDiv square">
+        <div class="DarkUploadDateDiv DarkSquare">
           {{
             new Date(video.uploadDate).toLocaleDateString().replaceAll('/', '-')
           }}
         </div>
         <div class="SpaceDiv" />
       </div>
-      <div v-if="!showWatchNowInstead" class="likesAndDislikesNumberDiv">
+      <div
+        v-if="!showWatchNowInstead && !darkTheme"
+        class="LightViewsAndDateDiv"
+      >
         <div class="SpaceDiv" />
-        <div class="likesNumberDiv">
+        <div class="LightSquare LightPlayButtonDiv">
+          <img class="LightPlayButton" src="../projectImages/Light_Play.png" />
+        </div>
+        <div class="SpaceDiv" />
+        <div class="LightViewsDiv LightSquare">{{ spacedViews }} views</div>
+        <div class="SpaceDiv" />
+        <div class="LightUploadDateDiv LightSquare">
+          {{
+            new Date(video.uploadDate).toLocaleDateString().replaceAll('/', '-')
+          }}
+        </div>
+        <div class="SpaceDiv" />
+      </div>
+      <div
+        v-if="!showWatchNowInstead && !darkTheme"
+        class="LightLikesAndDislikesNumberDiv"
+      >
+        <div class="SpaceDiv" />
+        <div class="LightLikesNumberDiv">
+          <img
+            v-if="!likedVideoAlready"
+            @click="likeVideo"
+            src="../projectImages/like_white_background.png"
+          />
+          <img
+            v-if="likedVideoAlready"
+            src="../projectImages/blue_white_like.png"
+          />
+          <div class="likesDiv">{{ spacedLikes }}</div>
+        </div>
+        <div class="SpaceDiv" />
+        <div class="LightDislikesNumberDiv">
+          <img
+            v-if="!dislikedVideoAlready"
+            @click="dislikeVideo"
+            src="../projectImages/dislike_white_background.png"
+          />
+          <img
+            v-if="dislikedVideoAlready"
+            src="../projectImages/blue_white_dislike.png"
+          />
+          <div class="thumbsDownDiv">{{ spacedDislikes }}</div>
+        </div>
+        <div class="SpaceDiv" />
+        <div class="LightStarNumberDiv">
+          <img src="../projectImages/grey_star_trans.png" />
+          <div class="starsDiv">{{ spacedStars }}</div>
+        </div>
+        <div class="SpaceDiv" />
+      </div>
+      <div
+        v-if="!showWatchNowInstead && darkTheme"
+        class="DarkLikesAndDislikesNumberDiv"
+      >
+        <div class="SpaceDiv" />
+        <div class="DarkLikesNumberDiv">
           <img
             v-if="!likedVideoAlready"
             @click="likeVideo"
@@ -114,7 +245,7 @@
           <div class="likesDiv">{{ spacedLikes }}</div>
         </div>
         <div class="SpaceDiv" />
-        <div class="dislikesNumberDiv">
+        <div class="DarkDislikesNumberDiv">
           <img
             v-if="!dislikedVideoAlready"
             @click="dislikeVideo"
@@ -127,7 +258,7 @@
           <div class="thumbsDownDiv">{{ spacedDislikes }}</div>
         </div>
         <div class="SpaceDiv" />
-        <div class="starNumberDiv">
+        <div class="DarkStarNumberDiv">
           <img src="../projectImages/grey_star_trans.png" />
           <div class="starsDiv">{{ spacedStars }}</div>
         </div>
@@ -135,7 +266,7 @@
       </div>
     </div>
   </div>
-  <div class="videosBody">
+  <div v-if="!darkTheme" class="LightVideosBody">
     <div v-if="showWatchNowInstead" class="watchNowScrollGrid">
       <div class="watchNowTextDiv">
         <div class="SpaceBlock" />
@@ -162,13 +293,31 @@
         <div class="SpaceDiv" />
       </div>
     </div>
-    <CommentInput
-      class="postingCommentDiv"
-      @postedComment="updateComments"
-      :videoId="video.videoId"
-      v-if="showCommentsSection"
-    />
-    <div class="postedCommentsDiv" v-if="showCommentsSection">
+    <div v-if="showCommentsSection">
+      <CommentInput
+        class="postingCommentDiv"
+        @postedComment="updateComments"
+        :videoId="video.videoId"
+      />
+    </div>
+    <div
+      class="LightPostedCommentsDiv"
+      v-if="showCommentsSection && !darkTheme"
+    >
+      <PostedComment
+        v-for="(commentItem, index) of relevantComments"
+        :key="index"
+        :comment="commentItem"
+        :replies="currentReplies"
+        :commenters="currentCommenters"
+        :activeId="activeId"
+        class="commentBox"
+        @removedAReply="updateBasedOnDelete"
+        @postedAReply="updateCommentSection"
+        @updateReplies="updateReplies"
+      />
+    </div>
+    <div class="DarkPostedCommentsDiv" v-if="showCommentsSection && darkTheme">
       <PostedComment
         v-for="(commentItem, index) of relevantComments"
         :key="index"
@@ -183,12 +332,86 @@
       />
     </div>
     <!-- <div class="relatedVideosContainer" v-if="startRenderingtrue"> -->
-      <RelatedVideo
-        v-for="(videoItem, index) of relatedVideos"
-        :key="index"
-        :video="videoItem"
-        class="videoBox"
+    <RelatedVideo
+      v-for="(videoItem, index) of relatedVideos"
+      :key="index"
+      :video="videoItem"
+      class="videoBox"
+    />
+    <!-- </div> -->
+  </div>
+  <div v-if="darkTheme" class="DarkVideosBody">
+    <div v-if="showWatchNowInstead" class="watchNowScrollGrid">
+      <div class="watchNowTextDiv">
+        <div class="SpaceBlock" />
+        <img class="ArrowIcon" src="../projectImages/big_arrow.png" />
+        <div class="SpaceBlock" />
+        <img class="watchNowPlay" src="../projectImages/whitePlay.png" />
+        <div class="SpaceBlock" />
+        <div class="watchNowText">Watch Now</div>
+        <div class="SpaceBlock" />
+      </div>
+      <div v-if="showWatchNowInstead" class="descriptionAndCommentsDivInScroll">
+        <div class="SpaceDiv" />
+        <div class="middleDiv">
+          <div v-if="!showDescriptionTab" class="notChosenDescriptionDiv">
+            Description
+          </div>
+          <div v-if="showDescriptionTab" class="ChosenDescriptionDiv">
+            Description
+            <div class="LineDiv" />
+          </div>
+          <div class="SpaceDiv" />
+          <div class="commentsDiv">Comments({{ amountOfComments }})</div>
+        </div>
+        <div class="SpaceDiv" />
+      </div>
+    </div>
+    <div v-if="showCommentsSection">
+      <CommentInput
+        class="postingCommentDiv"
+        @postedComment="updateComments"
+        :videoId="video.videoId"
       />
+    </div>
+    <div
+      class="LightPostedCommentsDiv"
+      v-if="showCommentsSection && !darkTheme"
+    >
+      <PostedComment
+        v-for="(commentItem, index) of relevantComments"
+        :key="index"
+        :comment="commentItem"
+        :replies="currentReplies"
+        :commenters="currentCommenters"
+        :activeId="activeId"
+        class="commentBox"
+        @removedAReply="updateBasedOnDelete"
+        @postedAReply="updateCommentSection"
+        @updateReplies="updateReplies"
+      />
+    </div>
+    <div class="DarkPostedCommentsDiv" v-if="showCommentsSection && darkTheme">
+      <PostedComment
+        v-for="(commentItem, index) of relevantComments"
+        :key="index"
+        :comment="commentItem"
+        :replies="currentReplies"
+        :commenters="currentCommenters"
+        :activeId="activeId"
+        class="commentBox"
+        @removedAReply="updateBasedOnDelete"
+        @postedAReply="updateCommentSection"
+        @updateReplies="updateReplies"
+      />
+    </div>
+    <!-- <div class="relatedVideosContainer" v-if="startRenderingtrue"> -->
+    <RelatedVideo
+      v-for="(videoItem, index) of relatedVideos"
+      :key="index"
+      :video="videoItem"
+      class="videoBox"
+    />
     <!-- </div> -->
   </div>
 </template>
@@ -238,6 +461,7 @@ export default {
       likedVideoAlready: false,
       dislikedVideoAlready: false,
       subscribedAlready: false,
+      darkTheme: this.$store.getters.getIsDarkTheme,
     };
   },
 
@@ -254,10 +478,14 @@ export default {
     this.actOnResize();
     this.isOnVideosPage = true;
     window.scrollTo(0, 0);
+    if (!this.darkTheme) {
+      document.getElementsByClassName('backgroundDiv')[0].style =
+        'background-color: white;';
+    }
 
     this.relatedVideos = [];
     // this.relatedVideos = await this.$store.dispatch('fetchEightMoreVideos', 0);
-    this.relatedVideos = await JSON.parse(localStorage.relatedVideos)
+    this.relatedVideos = await JSON.parse(localStorage.relatedVideos);
 
     let fixedList = [];
     if (this.relatedVideos) {
@@ -409,24 +637,28 @@ export default {
     this.incrementViewCount(this.$route.path);
 
     this.$nextTick(function () {
-    // Code that will run only after the
-    // entire view has been re-rendered
-        this.lastVideoObserverSearchResult = new IntersectionObserver(entries =>{
-        let lastVideo = entries[0]
-        if(!lastVideo.isIntersecting) {
-          return;}
-        this.loadMoreVideos()
-        this.lastVideoObserverSearchResult.unobserve(lastVideo.target);
-        if (!this.stopObserver)
-          this.lastVideoObserverSearchResult.observe(
-            document.querySelector('.videoBox:last-child')
-          );
-      },
-      { rootMargin: '25px' }
-    );
+      // Code that will run only after the
+      // entire view has been re-rendered
+      this.lastVideoObserverSearchResult = new IntersectionObserver(
+        (entries) => {
+          let lastVideo = entries[0];
+          if (!lastVideo.isIntersecting) {
+            return;
+          }
+          this.loadMoreVideos();
+          this.lastVideoObserverSearchResult.unobserve(lastVideo.target);
+          if (!this.stopObserver)
+            this.lastVideoObserverSearchResult.observe(
+              document.querySelector('.videoBox:last-child')
+            );
+        },
+        { rootMargin: '25px' }
+      );
 
-      this.lastVideoObserverSearchResult.observe(document.querySelector(".videoBox:last-child"))
-    })
+      this.lastVideoObserverSearchResult.observe(
+        document.querySelector('.videoBox:last-child')
+      );
+    });
   },
 
   beforeUnmount() {
@@ -439,11 +671,18 @@ export default {
     async loadMoreVideos() {
       let newlyLoadedVideos;
       let numberOfCurrentShownVideos = this.relatedVideos.length;
-      newlyLoadedVideos = await this.fetchEightMoreVideosFromDB(numberOfCurrentShownVideos);
-      this.$nextTick(function(){
-          if(newlyLoadedVideos.length != 0){
-          newlyLoadedVideos.forEach(newVideo => {
-            if(!this.relatedVideos.some(data => data.videoId === newVideo.videoId) && this.video.videoId != newVideo.videoId){
+      newlyLoadedVideos = await this.fetchEightMoreVideosFromDB(
+        numberOfCurrentShownVideos
+      );
+      this.$nextTick(function () {
+        if (newlyLoadedVideos.length != 0) {
+          newlyLoadedVideos.forEach((newVideo) => {
+            if (
+              !this.relatedVideos.some(
+                (data) => data.videoId === newVideo.videoId
+              ) &&
+              this.video.videoId != newVideo.videoId
+            ) {
               //don't exists
               this.relatedVideos.push(newVideo);
             }
@@ -785,7 +1024,15 @@ export default {
   margin-top: 40px;
   overflow-y: hidden;
 }
-.postedCommentsDiv {
+.LightPostedCommentsDiv {
+  background-color: white;
+  border-top: solid 10px white;
+  border-bottom: solid 10px white;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.DarkPostedCommentsDiv {
   margin-top: 10px;
   margin-bottom: 10px;
 }
@@ -794,8 +1041,11 @@ export default {
   width: 45px;
   margin-top: 4px;
 }
+.LightVideosBody {
+  background-color: white;
+}
 
-.videosBody {
+.DarkVideosBody {
   background-color: #131313;
 }
 .watchNowScrollGrid {
@@ -853,7 +1103,15 @@ export default {
   overflow: hidden;
 }
 
-.UploaderDiv {
+.LightUploaderDiv {
+  display: grid;
+  grid-template-columns: 17px 40px 19px 82px 19px 20px auto max-content 19px;
+  background-color: white;
+  height: max-content;
+  padding-bottom: 16px;
+}
+
+.DarkUploaderDiv {
   display: grid;
   grid-template-columns: 17px 40px 19px 82px 19px 20px auto max-content 19px;
   background-color: black;
@@ -862,7 +1120,7 @@ export default {
 }
 .videosDiv {
   font-size: 9px;
-  margin-top: 16px;
+  margin-top: 17px;
   color: #939393;
 }
 .likeAndDislikeIconDiv {
@@ -892,7 +1150,21 @@ export default {
   max-width: 820px;
 }
 
-.square {
+.LightPlayButton {
+  height: 10px;
+  position: relative;
+  top: -4px;
+}
+.LightSquare {
+  margin-top: 1px;
+  width: max-content;
+  background-color: white;
+  height: max-content;
+  outline: none;
+  color: white;
+}
+
+.DarkSquare {
   margin-top: 1px;
   width: max-content;
   background-color: black;
@@ -900,7 +1172,16 @@ export default {
   outline: solid black 1px;
   color: white;
 }
-.viewsDiv {
+.LightViewsDiv {
+  margin-top: 1px;
+  width: max-content;
+  background-color: white;
+  height: max-content;
+  color: white;
+  font-size: 10px;
+  color: #939393;
+}
+.DarkViewsDiv {
   margin-top: 1px;
   width: max-content;
   background-color: black;
@@ -910,7 +1191,15 @@ export default {
   font-size: 10px;
   color: #939393;
 }
-.uploadDateDiv {
+.LightUploadDateDiv {
+  margin-top: 2px;
+  width: max-content;
+  background-color: white;
+  height: max-content;
+  color: #939393;
+  font-size: 10px;
+}
+.DarkUploadDateDiv {
   margin-top: 2px;
   width: max-content;
   background-color: black;
@@ -930,7 +1219,18 @@ export default {
   padding-bottom: 3px;
   border-bottom: 0.5px solid #bfbfbf;
 }
-.descriptionAndCommentsDiv {
+.LightDescriptionAndCommentsDiv {
+  display: grid;
+  grid-template-columns: auto max-content auto;
+  font-family: 'Roboto', sans-serif;
+  background-color: white;
+  color: black;
+  padding-top: 14px;
+  margin-top: -5px;
+  padding-bottom: 3px;
+  border-bottom: 0.5px solid black;
+}
+.DarkDescriptionAndCommentsDiv {
   display: grid;
   grid-template-columns: auto max-content auto;
   font-family: 'Roboto', sans-serif;
@@ -941,16 +1241,32 @@ export default {
   padding-bottom: 3px;
   border-bottom: 0.5px solid #bfbfbf;
 }
-.likesAndDislikesNumberDiv {
+.LightLikesAndDislikesNumberDiv {
+  display: grid;
+  grid-template-columns: auto max-content auto max-content auto max-content auto;
+  background-color: white;
+  border-bottom: #bfbfbf solid 0.5px;
+  padding-top: 10px;
+}
+.DarkLikesAndDislikesNumberDiv {
   display: grid;
   grid-template-columns: auto max-content auto max-content auto max-content auto;
   background-color: black;
   border-bottom: #bfbfbf solid 0.5px;
   padding-top: 10px;
 }
-.likesNumberDiv,
-.dislikesNumberDiv,
-.starNumberDiv {
+.LightLikesNumberDiv,
+.LightDislikesNumberDiv,
+.LightStarNumberDiv {
+  text-align: center;
+  color: #939393;
+  background-color: white;
+  font-size: 10px;
+  padding-bottom: 10px;
+}
+.DarkLikesNumberDiv,
+.DarkDislikesNumberDiv,
+.DarkStarNumberDiv {
   text-align: center;
   color: #939393;
   background-color: black;
@@ -969,6 +1285,7 @@ export default {
   min-width: 100vw;
   width: 100vw;
 }
+
 .playButtonDiv {
   width: 13px;
   height: 9px;
@@ -980,6 +1297,10 @@ export default {
   display: grid;
   grid-template-columns: max-content 92px max-content;
 }
+.LightArrowIcon {
+  transform: rotate(180deg);
+  margin-left: 30px;
+}
 .ArrowIcon {
   transform: rotate(00deg);
   transform: scale(4, 3.5);
@@ -989,7 +1310,14 @@ export default {
   width: 28px;
   margin-left: 15px;
 }
-.viewsAndDateDiv {
+.LightViewsAndDateDiv {
+  display: grid;
+  grid-template-columns: 21px max-content 12px max-content 28px max-content;
+  background-color: white;
+  color: #939393;
+  padding-bottom: 2px;
+}
+.DarkViewsAndDateDiv {
   display: grid;
   grid-template-columns: 21px max-content 12px max-content 28px max-content;
   background-color: black;
@@ -1028,7 +1356,14 @@ export default {
   height: 268px;
   width: 100vw;
 }
-.videoTitleDiv {
+.LightVideoTitleDiv {
+  color: black;
+  background-color: white;
+  padding-left: 17px;
+  padding-bottom: 9px;
+}
+
+.DarkVideoTitleDiv {
   color: white;
   background-color: black;
   padding-left: 17px;
@@ -1054,7 +1389,7 @@ export default {
 }
 
 @media screen and (max-width: 305px) {
-  .UploaderDiv {
+  .DarkUploaderDiv {
     display: grid;
     grid-template-columns: auto 40px auto max-content auto auto 3px auto auto;
     background-color: black;

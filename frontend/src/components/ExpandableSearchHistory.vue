@@ -66,11 +66,14 @@ export default {
           mutation.type == 'setUser') &&
         !this.$store.getters.getCurrentUser
       ) {
-        if(this.$store.getters.getMySearchHistoryList!=null){
+        if (this.$store.getters.getMySearchHistoryList != null) {
           this.mySearchHistoryList = await this.$store.getters
-          .getMySearchHistoryList;
+            .getMySearchHistoryList;
 
-          localStorage.setItem('searchHistoryList', JSON.stringify(this.mySearchHistoryList))
+          localStorage.setItem(
+            'searchHistoryList',
+            JSON.stringify(this.mySearchHistoryList)
+          );
         }
         return;
       }
@@ -95,12 +98,11 @@ export default {
         boolean = true;
         return;
       }
-      
+
       if (
         mutation.type == 'setMySearchHistoryList' &&
         this.$store.getters.getCurrentUser
       ) {
-
         this.mySearchHistoryList = await this.$store.dispatch(
           'getSearchHistories',
           this.$store.getters.getCurrentUser.userId
