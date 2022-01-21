@@ -214,7 +214,7 @@ export default {
   padding-top: 1.5px;
 }
 @media screen and (max-width: 400px) {
-  .CardBox {
+  .LightCardBox, .DarkCardBox {
     max-width: 100vw;
     max-height: 260px;
     margin-top: 1px;
@@ -226,7 +226,7 @@ export default {
 }
 
 @media screen and (min-width: 400px) {
-  .CardBox {
+  .LightCardBox, .DarkCardBox {
     max-width: 48vw;
     max-height: 400px;
     margin-left: auto;
@@ -243,7 +243,7 @@ export default {
 }
 
 @media screen and (min-width: 440px) and (max-width: 560px) {
-  .CardBox {
+  .LightCardBox, .DarkCardBox {
     max-width: 48vw;
     max-height: 200px;
     margin-left: auto;
@@ -260,7 +260,7 @@ export default {
 }
 
 @media screen and (min-width: 560px) and (max-width: 600px) {
-  .CardBox {
+  .LightCardBox, .DarkCardBox {
     max-width: 56vw;
     max-height: max-content;
     margin-left: auto;
@@ -276,7 +276,7 @@ export default {
   }
 }
 @media screen and (min-width: 601px) {
-  .CardBox {
+  .LightCardBox, .DarkCardBox {
     max-width: 42vw;
     max-height: max-content;
     margin-left: auto;
