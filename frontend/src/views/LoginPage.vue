@@ -89,7 +89,7 @@
         class="LightDisabledLoginButton"
         disabled
         value="Login"
-        v-if="!canLogIn"
+        v-if="!canLogIn && !darkTheme"
       >
         Login
       </button>
