@@ -1,9 +1,41 @@
 <template>
-  <div class="MainDiv">
+  <div v-if="!darkTheme" class="LightMainDiv">
     <Header />
-    <div class="NoLineDiv" />
+    <div v-if="!darkTheme" class="LightNoLineDiv" />
     <BannerSlider />
-    <div class="CardsContainer">
+    <div v-if="darkTheme" class="DarkCardsContainer">
+      <VideoCard
+        v-for="(videoItem, index) of relevantVideos"
+        :key="index"
+        :video="videoItem"
+        class="videoBox"
+        ref="videoBox"
+      />
+    </div>
+    <div v-if="!darkTheme" class="LightCardsContainer">
+      <VideoCard
+        v-for="(videoItem, index) of relevantVideos"
+        :key="index"
+        :video="videoItem"
+        class="videoBox"
+        ref="videoBox"
+      />
+    </div>
+  </div>
+  <div v-if="darkTheme" class="DarkMainDiv">
+    <Header />
+    <div class="DarkNoLineDiv" />
+    <BannerSlider />
+    <div v-if="darkTheme" class="DarkCardsContainer">
+      <VideoCard
+        v-for="(videoItem, index) of relevantVideos"
+        :key="index"
+        :video="videoItem"
+        class="videoBox"
+        ref="videoBox"
+      />
+    </div>
+    <div v-if="!darkTheme" class="LightCardsContainer">
       <VideoCard
         v-for="(videoItem, index) of relevantVideos"
         :key="index"
@@ -48,7 +80,6 @@ export default {
     await this.loadMoreVideos();
     let allVideos = this.relevantVideos;
 
-
     // this.$store.dispatch('cacheFirstEightVideos', allVideos);
     localStorage.setItem('relatedVideos', JSON.stringify(allVideos));
     this.relevantVideos = [];
@@ -62,17 +93,6 @@ export default {
         this.showSearchPage = true;
       }
       if (mutation.type == 'setShouldResetToStartPage') {
-        this.searchedYet = false;
-        this.showResultsPage = false;
-        this.showSearchPage = false;
-        this.relevantUsers = [];
-        this.relevantVideos = [];
-        let cachedVideos = this.$store.getters.getEightFirstVideos;
-        for (let i = 0; i < cachedVideos.length; i++) {
-          let oldVideo = new Video();
-          oldVideo = Object.assign(oldVideo, cachedVideos[i]);
-          this.relevantVideos.push(oldVideo);
-        }
       }
       if (mutation.type == 'setSearchResults') {
         this.relevantVideos = [];
@@ -129,12 +149,18 @@ export default {
         ? this.$store.getters.getSearchResults
         : [],
       lastVideoObserver: null,
+      darkTheme: this.$store.getters.getIsDarkTheme,
     };
   },
 
   async mounted() {
-    document.getElementsByClassName('CardsContainer')[0].style =
-      'grid-template-columns: ' + this.getGridDimensions() + ';';
+    if (this.darkTheme) {
+      document.getElementsByClassName('DarkCardsContainer')[0].style =
+        'grid-template-columns: ' + this.getGridDimensions() + ';';
+    } else {
+      document.getElementsByClassName('LightCardsContainer')[0].style =
+        'grid-template-columns: ' + this.getGridDimensions() + ';';
+    }
 
     window.addEventListener('resize', this.recalculateGrid);
   },
@@ -145,14 +171,20 @@ export default {
         let lastVideo = entries[0];
         if (!lastVideo.isIntersecting) {
           // this.loadMoreVideos()
-          return;}
+          return;
+        }
 
-          this.loadMoreVideos()
-          this.lastVideoObserver.unobserve(lastVideo.target)
-          this.lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
-      },{rootMargin: "100px"}
-      )
-      this.lastVideoObserver.observe(document.querySelector(".videoBox:last-child"))
+        this.loadMoreVideos();
+        this.lastVideoObserver.unobserve(lastVideo.target);
+        this.lastVideoObserver.observe(
+          document.querySelector('.videoBox:last-child')
+        );
+      },
+      { rootMargin: '100px' }
+    );
+    this.lastVideoObserver.observe(
+      document.querySelector('.videoBox:last-child')
+    );
   },
   unmounted() {
     this.lastVideoObserver.disconnect();
@@ -163,16 +195,22 @@ export default {
     async loadMoreVideos() {
       let newlyLoadedVideos;
       let numberOfCurrentShownVideos = this.relevantVideos.length;
-      newlyLoadedVideos = await this.fetchEightMoreVideosFromDB(numberOfCurrentShownVideos);
-      this.$nextTick(function(){
-          if(newlyLoadedVideos.length != 0){
-          newlyLoadedVideos.forEach(newVideo => {
-            if(!this.relevantVideos.some(data => data.videoId === newVideo.videoId)){
-              this.relevantVideos.push(newVideo)
+      newlyLoadedVideos = await this.fetchEightMoreVideosFromDB(
+        numberOfCurrentShownVideos
+      );
+      this.$nextTick(function () {
+        if (newlyLoadedVideos.length != 0) {
+          newlyLoadedVideos.forEach((newVideo) => {
+            if (
+              !this.relevantVideos.some(
+                (data) => data.videoId === newVideo.videoId
+              )
+            ) {
+              this.relevantVideos.push(newVideo);
             }
-        });
-      }
-      })
+          });
+        }
+      });
     },
 
     async fetchEightMoreVideosFromDB(numberOfCurrentShownVideos) {
@@ -197,8 +235,13 @@ export default {
       return base;
     },
     recalculateGrid() {
-      document.getElementsByClassName('CardsContainer')[0].style =
-        'grid-template-columns: ' + this.getGridDimensions() + ';';
+      if (this.darkTheme) {
+        document.getElementsByClassName('DarkCardsContainer')[0].style =
+          'grid-template-columns: ' + this.getGridDimensions() + ';';
+      } else {
+        document.getElementsByClassName('LightCardsContainer')[0].style =
+          'grid-template-columns: ' + this.getGridDimensions() + ';';
+      }
     },
     showResultsOfSearch() {
       this.showResultsPage = true;
@@ -255,7 +298,13 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto:wght@300;400&display=swap');
 
-.MainDiv {
+.LightMainDiv {
+  background-color: white;
+  height: inherit;
+  overflow-y: scroll;
+}
+
+.DarkMainDiv {
   background-color: #131313;
   height: inherit;
   overflow-y: scroll;
@@ -304,9 +353,14 @@ export default {
 .subscribersP {
   color: #939393;
 }
-.NoLineDiv {
+.DarkNoLineDiv {
   height: 2px;
   background-color: #131313;
+  margin-top: -1px;
+}
+.LightNoLineDiv {
+  height: 32px;
+  background-color: white;
   margin-top: -1px;
 }
 .profileInResultsPage {
@@ -492,7 +546,20 @@ export default {
   margin-bottom: 10px;
 }
 
-.CardsContainer {
+.LightCardsContainer {
+  background-color: white;
+  display: grid;
+  height: auto;
+  grid-template-rows: auto auto auto auto auto;
+  padding-top: 16px;
+  width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 65px;
+  max-width: 100vw;
+}
+
+.DarkCardsContainer {
   background-color: #131313;
   display: grid;
   height: auto;
@@ -587,6 +654,15 @@ export default {
   margin-left: auto;
   margin-right: auto;
   margin-top: -164px;
+}
+
+@media screen and (min-width: 401px) {
+.CardsContainer {
+  width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 65px;
+}
 }
 
 @media screen and (min-width: 550px) {
@@ -790,7 +866,9 @@ export default {
 }
 @media screen and (max-width: 400px) {
   .videoBox {
-    width: 100vw;
+    width: 98vw;
+    
   }
+  
 }
 </style>

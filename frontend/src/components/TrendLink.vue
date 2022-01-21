@@ -1,10 +1,10 @@
 <template>
   <div class="title">
-    <h1>Top 10 Trending Searches</h1>
+    <h1 :class="isDarkTheme == true ? 'darkTheme' : 'lightTheme'">Top 10 Trending Searches</h1>
   </div>
-  <div class="trendGrid">
-    <div class="itemsContainer">
-      <div v-for="(trend, index) of trendingSearch" :key="trend" class="item">
+  <div class="trendGrid" :class="isDarkTheme == true ? 'trendGridDarkTheme' : 'trendGridLightTheme'">
+    <div class="itemsContainer" >
+      <div v-for="(trend, index) of trendingSearch" :key="trend" class="item" :class="isDarkTheme == true ? 'itemDarkTheme' : 'itemLightTheme'">
         <p @click="makeSearch(trend)">
           {{
             index +
@@ -20,15 +20,20 @@
 <script>
 export default {
   name: 'TrendLink',
-  emits:['addTrendingSearch'],
+  emits: ['addTrendingSearch'],
   data() {
     return {
       trendingSearch: [],
+      isDarkTheme: true,
     };
   },
 
-  async mounted() {
+  async created() {
+    this.isDarkTheme = await this.$store.getters.getIsDarkTheme
     this.trendingSearch = await this.$store.dispatch('getTrendingSearch');
+    this.$store.watch((state) => state.darkTheme, (newVal) => {
+      this.isDarkTheme = newVal
+    })
   },
 
   methods: {
@@ -36,40 +41,42 @@ export default {
       await this.$store.dispatch('setKeyWord', keyWord);
 
       let obj = {
-        keyWord: keyWord
-      }
+        keyWord: keyWord,
+      };
 
       let mySearchHistoryList = [];
 
       //if u are not logged in
-      if(!this.$store.getters.getCurrentUser){
-        if(this.$store.getters.getMySearchHistoryList!=null){
-          mySearchHistoryList = await this.$store.getters.getMySearchHistoryList;
-        }
-        else if(localStorage.searchHistoryList){
+      if (!this.$store.getters.getCurrentUser) {
+        if (this.$store.getters.getMySearchHistoryList != null) {
+          mySearchHistoryList = await this.$store.getters
+            .getMySearchHistoryList;
+        } else if (localStorage.searchHistoryList) {
           mySearchHistoryList = JSON.parse(localStorage.searchHistoryList);
         }
 
-
-        if(mySearchHistoryList.length > 5 && mySearchHistoryList.some(data => (data.keyWord != obj.keyWord))) {
+        if (
+          mySearchHistoryList.length > 5 &&
+          mySearchHistoryList.some((data) => data.keyWord != obj.keyWord)
+        ) {
           mySearchHistoryList.splice(mySearchHistoryList.length - 1, 1);
           mySearchHistoryList.unshift(obj);
-        }
-        else if(mySearchHistoryList.length == 0 || mySearchHistoryList.some(data => (data.keyWord != obj.keyWord))){
+        } else if (
+          mySearchHistoryList.length == 0 ||
+          mySearchHistoryList.some((data) => data.keyWord != obj.keyWord)
+        ) {
           mySearchHistoryList.unshift(obj);
         }
 
-        await this.$store.dispatch('cacheSearchHistory', mySearchHistoryList)
-        localStorage.setItem('searchHistoryList', JSON.stringify(mySearchHistoryList))
-      }else{
+        await this.$store.dispatch('cacheSearchHistory', mySearchHistoryList);
+        localStorage.setItem(
+          'searchHistoryList',
+          JSON.stringify(mySearchHistoryList)
+        );
+      } else {
         //if u r user register in db
-        this.$emit('addTrendingSearch', keyWord)
+        this.$emit('addTrendingSearch', keyWord);
       }
-
-      
-      
-
-
 
       this.$router.push('/SearchResult');
     },
@@ -119,5 +126,21 @@ h1 {
   grid-gap: 2px;
   justify-content: center;
   height: 25vh;
+}
+
+.lightTheme{
+  color: #bfbfbf;
+}
+
+.trendGridLightTheme{
+  border: 1px solid black;
+}
+
+.itemLightTheme{
+  background-color: #939393;
+}
+
+.itemLightTheme p{
+  color: white;
 }
 </style>
