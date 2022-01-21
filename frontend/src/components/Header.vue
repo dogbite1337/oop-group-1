@@ -184,7 +184,6 @@ export default {
       this.profilePic = this.$store.getters.getCurrentUser.getProfileURL();
     }
     this.$store.subscribe(async (mutation, state) => {
-      console.log(mutation);
       if (mutation.payload) {
         this.isDarkTheme = true;
       } else {
@@ -204,7 +203,6 @@ export default {
         await this.$store.dispatch('setDarkTheme', this.isDarkTheme);
         localStorage.setItem('isDarkTheme', JSON.stringify(this.isDarkTheme));
       }
-      console.log(this.isDarkTheme);
     },
 
     playMe() {

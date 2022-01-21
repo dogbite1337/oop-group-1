@@ -10,7 +10,9 @@
       v-if="matchedVideoList.length <= 0 && matchedUserList.length <= 0"
     />
   </div>
-  <Footer />
+  <div class="footerDiv">
+    <Footer />
+  </div>
 </template>
 
 <script>
@@ -87,5 +89,9 @@ export default {
 
 .BackDrop {
   height: 0;
+}
+.footerDiv {
+  position: relative;
+  top: 100vh;
 }
 </style>
