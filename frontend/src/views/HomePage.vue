@@ -1,5 +1,5 @@
 <template>
-  <div class="MainDiv">
+  <div class="MainDiv" >
     <Header />
     <div class="NoLineDiv" />
     <BannerSlider />

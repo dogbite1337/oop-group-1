@@ -11,14 +11,10 @@
       />
     </div>
     <div class="textInfo">
-      <div class="titleText">
+      <div class="titleText" :class="isDarkTheme == true ? 'titleTextDarkTheme' : 'titleTextLightTheme'">
         {{ displayTitleBeforeKey(video.title) }}
         <p class="keyword">{{ displayKeyWord(video.title) }}</p>
         {{ displayTitleAfterKey(video.title) }}
-        <!-- <a class="titleText" :href="'/VideoPage/' + video.videoId">
-          {{ video.title }}
-        </a> -->
-        <!-- <p>{{video.title}}</p> -->
       </div>
       <div class="otherInfo">
         <div class="uploader">
@@ -32,6 +28,7 @@
       </div>
     </div>
   </div>
+  <div class="emptyDiv"></div>
 </template>
 
 <script>
@@ -42,7 +39,16 @@ export default {
       lastVideoObserverSearchResult: null,
       matchedVideos: [],
       stopObserver: false,
+      isDarkTheme: true,
     };
+  },
+
+  async created(){
+    this.isDarkTheme = await this.$store.getters.getIsDarkTheme
+
+    this.$store.watch((state) => state.darkTheme, (newVal) => {
+    this.isDarkTheme = newVal
+    })
   },
 
   async mounted() {
@@ -56,9 +62,8 @@ export default {
     else{
       this.matchedVideos = await this.$store.getters.getMatchedVideoList
     }
-  },
 
-  updated(){
+    this.$nextTick(function () {
       this.lastVideoObserverSearchResult = new IntersectionObserver(entries =>{
         let lastVideo = entries[0]
         if(!lastVideo.isIntersecting) {
@@ -66,10 +71,14 @@ export default {
         this.loadMoreVideos()
         this.lastVideoObserverSearchResult.unobserve(lastVideo.target);
         if(!this.stopObserver) 
-        this.lastVideoObserverSearchResult.observe(document.querySelector(".videoCard:last-child"))
+        this.lastVideoObserverSearchResult.observe(document.querySelector(".emptyDiv"))
       },{rootMargin: "50px"}
       )
-      this.lastVideoObserverSearchResult.observe(document.querySelector(".videoCard:last-child"))
+      this.lastVideoObserverSearchResult.observe(document.querySelector(".emptyDiv"))
+    })
+  },
+
+  updated(){
   },
 
   unmounted() {
@@ -204,5 +213,9 @@ img {
   margin-left: 3vw;
   align-self: center;
   height: 2.5vh;
+}
+
+.titleTextLightTheme{
+  color: black;
 }
 </style>

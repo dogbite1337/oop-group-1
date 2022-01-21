@@ -482,11 +482,12 @@ export default {
     },
     chooseBlackTheme() {
       this.darkTheme = true;
+      this.$store.dispatch('setDarkTheme', true);
+      localStorage.setItem('isDarkTheme', JSON.stringify(true));
       document.getElementsByClassName('LightBackgroundDiv')[0].className =
         'BackgroundDiv';
       document.getElementsByClassName('lightBackHomeDiv')[0].className =
         'backHomeDiv';
-      this.$store.dispatch('setDarkTheme', true);
     },
     chooseWhiteTheme() {
       this.darkTheme = false;
@@ -495,6 +496,7 @@ export default {
       document.getElementsByClassName('backHomeDiv')[0].className =
         'lightBackHomeDiv';
       this.$store.dispatch('setDarkTheme', false);
+      localStorage.setItem('isDarkTheme', JSON.stringify(false));
     },
     cancelEditMode() {
       this.editMode = false;
