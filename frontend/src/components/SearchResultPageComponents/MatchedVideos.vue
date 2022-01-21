@@ -213,13 +213,14 @@ img {
 margin-top:1px;
 font-size: medium;
 max-width: 140px;
+overflow: hidden;
   
 }
 .uploaderName,
 .viewCount {
   margin-left: 3vw;
   align-self: center;
-  height: 1.5vh;
+  height: 2vh;
     font-size: small;
 }
 .uploader,
@@ -229,7 +230,7 @@ max-width: 140px;
 }
 
 .textInfo {
-  height: 14vh;
+  height: 15vh;
   margin-left: 1vw;
   place-content: space-between;
   width:160px;
@@ -245,6 +246,7 @@ max-width: 140px;
 margin-top:1px;
 font-size: medium;
 max-width: 120px;
+overflow: hidden;
   
 }
 .uploaderName,
@@ -282,6 +284,7 @@ max-width: 120px;
 margin-top:1px;
 font-size: large;
 max-width: 240px;
+overflow: hidden;
   
 }
 .uploaderName,
@@ -319,6 +322,7 @@ max-width: 240px;
 margin-top:1px;
 font-size: large;
 max-width: 240px;
+overflow: hidden;
   
 }
 .uploaderName,
@@ -346,6 +350,44 @@ max-width: 240px;
 .thumbnail {
   height: 18vh;
   width:50vw;
+}
+}
+
+@media screen and (min-width:820px) {
+
+.titleText {
+margin-top:1px;
+font-size: large;
+max-width: 260px;
+font-size: x-large;
+overflow: hidden;
+  
+}
+.uploaderName,
+.viewCount {
+  margin-left: 3vw;
+  align-self: center;
+  height: 2.5vh;
+  font-size: x-large;
+}
+.uploader,
+.view {
+  display: grid;
+  grid-template-columns: 15% auto; 
+
+}
+
+.textInfo {
+  height: 20vh;
+  margin-left: 12vw;
+  place-content: space-between;
+  width:260px;
+ 
+}
+
+.thumbnail {
+  height: 20vh;
+  width:53vw;
 }
 }
 
