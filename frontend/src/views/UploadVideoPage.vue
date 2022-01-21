@@ -3,11 +3,11 @@
     <router-link class="HomeLink" to="/">
       <div :class="isDarkTheme == true ? 'darkBackHomeDiv' : 'lightBackHomeDiv'">
         <div class="SpaceDiv" />
-        <img class="ArrowIcon" src="../projectImages/white_arrow.png" />
+        <img :class="isDarkTheme == true ? 'darkArrowIcon' : 'lightArrowIcon'" src="../projectImages/arrow.png" />
         <div class="SpaceDiv" />
         <p class="homeText" :class="isDarkTheme == true ? 'whiteText' : 'blackText'">Home</p>
         <div class="SpaceDiv" />
-        <img class="catIcon" src="../projectImages/whiteCatBlackBaground.png" />
+        <img :class="isDarkTheme == true ? 'darkCatIcon' : 'lightCatIcon'" src="../projectImages/black-cat.png" />
         <div class="SpaceDiv" />
       </div>
     </router-link>
@@ -27,7 +27,7 @@
         <div class="TitleDivInVideoPreview">
           {{ titleOfVideo == '' ? 'Title' : titleOfVideo }}
         </div>
-        <div class="uploaderDiv" :class="isDarkTheme == true ? 'blackBackground whiteText' : 'whiteBackground blackText'">
+        <div class="uploaderDiv" :class="isDarkTheme == true ? 'darkBlackBackground whiteText' : 'whiteBackground blackText'">
           <div class="SpaceDiv" />
           <div
             class="upDiv"
@@ -67,14 +67,14 @@
       <button
         @click="uploadVideo"
         v-if="canUpload"
-        class="uploadButton"
+        :class="isDarkTheme == true ? 'darkUploadButton' : 'lightUploadButton'"
         value="Upload Video"
       >
         Upload Video
       </button>
       <button
         v-if="!canUpload"
-        class="DisabledUploadButton"
+        :class="isDarkTheme == true ? 'darkDisabledUploadButton' : 'lightDisabledUploadButton'"
         value="Upload Video"
       >
         Upload Video
@@ -102,11 +102,11 @@ export default {
         ? this.$store.getters.getCurrentUser
         : '',
       canUpload: false,
-      isDarkTheme: false,
+      isDarkTheme: true,
     };
   },
   beforeCreate () {
-    //this.isDarkTheme = this.$store.getters.isDarkTheme;
+    this.isDarkTheme = this.$store.getters.isDarkTheme;
   },
   watch: {
     videoURL() {
@@ -185,6 +185,10 @@ div {
   background-color: #131313;
 }
 
+.darkBlackBackground {
+  background-color: black;
+}
+
 .whiteBorder {
   border: 0.7px solid white;
 }
@@ -197,7 +201,7 @@ div {
   border: solid 0.7px #939393;
 }
 
-.uploadButton {
+.darkUploadButton {
   margin-top: 10px;
   margin-bottom: 10px;
   width: max-content;
@@ -211,7 +215,23 @@ div {
   padding-top: 2px;
   padding-bottom: 2px;
 }
-.DisabledUploadButton {
+
+.lightUploadButton {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: max-content;
+  padding-left: 5px;
+  padding-right: 5px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  border: solid 0.7px black;
+  border-radius: 5px;
+  background: #B56464;
+  color: white;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.darkDisabledUploadButton {
   margin-top: 10px;
   margin-bottom: 10px;
   width: max-content;
@@ -227,6 +247,25 @@ div {
   font-size: 10px;
   color: rgba(255, 255, 255, 0.45);
   background-color: rgba(45, 44, 44, 0.5);
+  border: 0.7px solid rgba(255, 255, 255, 0.45);
+}
+
+.lightDisabledUploadButton {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: max-content;
+  padding-left: 5px;
+  padding-right: 5px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  border: solid 0.7px black;
+  border-radius: 5px;
+  background-color: rgba(45, 44, 44, 0.5);
+  color: white;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.45);
+  background: rgba(181, 100, 100, 0.5);
   border: 0.7px solid rgba(255, 255, 255, 0.45);
 }
 
@@ -261,6 +300,7 @@ input {
   padding-top: 0.75px;
   height: max-content;
 }
+
 .darkVideoLinkBox {
   border: solid 1px white;
   width: max-content;
@@ -311,13 +351,23 @@ input {
   margin-bottom: 2px;
   margin-top: 7px;
 }
-.ArrowIcon {
-  transform: rotate(180deg);
+
+.darkArrowIcon {
+  margin-top: 20px;
+  margin-bottom: 12px;
+  height: 25px;
+  width: 28px;
+  -webkit-filter: invert(100%); /* Safari/Chrome */
+  filter: invert(100%);
+}
+
+.lightArrowIcon {
   margin-top: 20px;
   margin-bottom: 12px;
   height: 25px;
   width: 28px;
 }
+
 .TitleDivInVideoPreview {
   font-size: 13px;
   margin-bottom: 2px;
@@ -353,12 +403,22 @@ input {
   height: max-content;
 }
 
-.catIcon {
+.darkCatIcon {
+  width: 28px;
+  height: 31px;
+  margin-top: 15px;
+  margin-bottom: 12px;
+  -webkit-filter: invert(100%); /* Safari/Chrome */
+  filter: invert(100%);
+}
+
+.lightCatIcon {
   width: 28px;
   height: 31px;
   margin-top: 15px;
   margin-bottom: 12px;
 }
+
 .darkVideoPreviewDiv {
   height: max-content;
   width: 388px;
