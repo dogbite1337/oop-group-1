@@ -8,7 +8,7 @@
         <div class="otherInfoContainer">
           <div class="username">
             <p class="userNameTEXT">{{ user.username }}</p>
-          </div.
+          </div>
           <div class="subAndVideo">
             <div class="subContainer">
               <p class="time">{{ 'Subscribers: ' + user.subscribers }}</p>
