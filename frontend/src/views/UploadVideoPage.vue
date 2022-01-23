@@ -1,19 +1,19 @@
 <template>
-  <div class="backgroundDiv" @click="clickedMe">
+  <div :class="$store.state.darkTheme == true ? 'darkBackgroundDiv' : 'lightBackgroundDiv'" @click="clickedMe">
     <router-link class="HomeLink" to="/">
-      <div class="backHomeDiv">
+      <div :class="$store.state.darkTheme == true ? 'darkBackHomeDiv' : 'lightBackHomeDiv'">
         <div class="SpaceDiv" />
-        <img class="ArrowIcon" src="../projectImages/white_arrow.png" />
+        <img :class="$store.state.darkTheme == true ? 'darkArrowIcon' : 'lightArrowIcon'" src="../projectImages/arrow.png" />
         <div class="SpaceDiv" />
-        <p class="HomeText">Home</p>
+        <p class="homeText" :class="$store.state.darkTheme == true ? 'whiteText' : 'blackText'">Home</p>
         <div class="SpaceDiv" />
-        <img class="catIcon" src="../projectImages/whiteCatBlackBaground.png" />
+        <img :class="$store.state.darkTheme == true ? 'darkCatIcon' : 'lightCatIcon'" src="../projectImages/black-cat.png" />
         <div class="SpaceDiv" />
       </div>
     </router-link>
-    <div class="videoPreviewDiv">
-      <p class="Video Preview">Video Preview</p>
-      <div class="VideoLinkBox">
+    <div :class="$store.state.darkTheme == true ? 'darkVideoPreviewDiv' : 'lightVideoPreviewDiv'">
+      <p :class="$store.state.darkTheme == true ? 'whiteText' : 'blackText'">Video Preview</p>
+      <div :class="$store.state.darkTheme == true ? 'darkVideoLinkBox' : 'lightVideoLinkBox'">
         <img
           class="previewImage"
           :src="
@@ -27,9 +27,12 @@
         <div class="TitleDivInVideoPreview">
           {{ titleOfVideo == '' ? 'Title' : titleOfVideo }}
         </div>
-        <div class="uploaderDiv">
+        <div class="uploaderDiv" :class="$store.state.darkTheme == true ? 'darkBlackBackground whiteText' : 'whiteBackground blackText'">
           <div class="SpaceDiv" />
-          <div class="upDiv">UP</div>
+          <div
+            class="upDiv"
+            :class="$store.state.darkTheme == true ? 'blackBackground whiteText grayBorder' : 'whiteBackground blackText blackBorder'"
+            >UP</div>
           <div class="SpaceDiv" />
           <div class="usernameDiv">
             {{ currentUser != '' ? currentUser.getUsername() : 'None' }}
@@ -37,18 +40,18 @@
           <div class="SpaceDiv" />
         </div>
       </div>
-      <div class="inputsDiv">
+      <div class="inputsDiv" :class="$store.state.darkTheme == true ? 'whiteText' : 'blackText'">
         <p class="VideoUrlP">Video Url</p>
         <input
           v-model="videoURL"
-          class="urlInput"
+          :class="$store.state.darkTheme == true ? 'blackBackground whiteText whiteBorder' : 'whiteBackground blackText blackBorder'"
           type="text"
           placeholder="Video url goes here.."
         />
         <p class="VideoTitleP">Video Title</p>
         <input
           v-model="titleOfVideo"
-          class="titleInput"
+          :class="$store.state.darkTheme == true ? 'blackBackground whiteText whiteBorder' : 'whiteBackground blackText blackBorder'"
           type="text"
           placeholder="What is the title of the video?"
         />
@@ -56,6 +59,7 @@
         <textarea
           v-model="descriptionOfVideo"
           class="DescriptionInput"
+          :class="$store.state.darkTheme == true ? 'blackBackground whiteText whiteBorder' : 'whiteBackground blackText blackBorder'"
           placeholder="What is the video about? (Optional)"
         >
         </textarea>
@@ -63,14 +67,14 @@
       <button
         @click="uploadVideo"
         v-if="canUpload"
-        class="uploadButton"
+        :class="$store.state.darkTheme == true ? 'darkUploadButton' : 'lightUploadButton'"
         value="Upload Video"
       >
         Upload Video
       </button>
       <button
         v-if="!canUpload"
-        class="DisabledUploadButton"
+        :class="$store.state.darkTheme == true ? 'darkDisabledUploadButton' : 'lightDisabledUploadButton'"
         value="Upload Video"
       >
         Upload Video
@@ -79,9 +83,6 @@
   </div>
 </template>
 <script>
-import User from '../jsClasses/general/User';
-import Footer from '../components/Footer.vue';
-import store from '../store';
 
 export default {
   name: 'UploadVideoPage',
@@ -154,10 +155,42 @@ export default {
 }
 p,
 div {
-  color: white;
   text-align: center;
 }
-.uploadButton {
+
+.whiteText {
+  color: white;
+}
+
+.blackText {
+  color: black;
+}
+
+.whiteBackground {
+  background-color: white;
+}
+
+.blackBackground {
+  background-color: #131313;
+}
+
+.darkBlackBackground {
+  background-color: black;
+}
+
+.whiteBorder {
+  border: 0.7px solid white;
+}
+
+.blackBorder {
+  border: 0.7px solid black;
+}
+
+.grayBorder {
+  border: solid 0.7px #939393;
+}
+
+.darkUploadButton {
   margin-top: 10px;
   margin-bottom: 10px;
   width: max-content;
@@ -171,7 +204,23 @@ div {
   padding-top: 2px;
   padding-bottom: 2px;
 }
-.DisabledUploadButton {
+
+.lightUploadButton {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: max-content;
+  padding-left: 5px;
+  padding-right: 5px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  border: solid 0.7px black;
+  border-radius: 5px;
+  background: #B56464;
+  color: white;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.darkDisabledUploadButton {
   margin-top: 10px;
   margin-bottom: 10px;
   width: max-content;
@@ -189,19 +238,36 @@ div {
   background-color: rgba(45, 44, 44, 0.5);
   border: 0.7px solid rgba(255, 255, 255, 0.45);
 }
-.upDiv {
-  width: 12px;
-  height: 8px;
-  background-color: white;
-  margin-bottom: 7px;
-  border: solid 1px #939393;
-  font-size: 7px;
-  text-align: center;
-  padding-top: 1.5px;
-  font-family: 'Roboto', sans-serif;
+
+.lightDisabledUploadButton {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: max-content;
+  padding-left: 5px;
+  padding-right: 5px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  border: solid 0.7px black;
+  border-radius: 5px;
+  background-color: rgba(45, 44, 44, 0.5);
+  color: white;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.45);
+  background: rgba(181, 100, 100, 0.5);
+  border: 0.7px solid rgba(255, 255, 255, 0.45);
 }
-.backgroundDiv {
+
+.darkBackgroundDiv {
   background-color: black;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: max-content auto;
+  padding-bottom: 10px;
+}
+
+.lightBackgroundDiv {
+  background-color: #E5E5E5;
   height: 100vh;
   display: grid;
   grid-template-rows: max-content auto;
@@ -211,9 +277,9 @@ div {
 input {
   width: 362px;
   padding-left: 10px;
-  background-color: #131313;
+  /*background-color: #131313;
   color: white;
-  border: 0.7px solid #ffffff;
+  border: 0.7px solid #ffffff;*/
   box-sizing: border-box;
   padding-top: 2.5px;
   padding-bottom: 2.5px;
@@ -223,7 +289,8 @@ input {
   padding-top: 0.75px;
   height: max-content;
 }
-.VideoLinkBox {
+
+.darkVideoLinkBox {
   border: solid 1px white;
   width: max-content;
   margin-left: auto;
@@ -232,25 +299,40 @@ input {
   margin-bottom: 8px;
   background-color: black;
 }
+
+.lightVideoLinkBox {
+  border: solid 1px black;
+  width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 16px;
+  margin-bottom: 8px;
+  background-color: white;
+}
+
 .previewImage {
   height: 100px;
   width: 120px;
 }
-.backHomeDiv {
+
+.darkBackHomeDiv {
   display: grid; /* space, Arrow, space, Home, space, Cat */
   grid-template-columns: 17px 32px 5px 60px 12px 20px auto;
   background-color: black;
 }
 
+.lightBackHomeDiv {
+  display: grid; /* space, Arrow, space, Home, space, Cat */
+  grid-template-columns: 17px 32px 5px 60px 12px 20px auto;
+  background-color: #E5E5E5;
+}
+
 .DescriptionInput {
   height: 70px;
   width: 343px;
-  background-color: #131313;
-  border: solid 0.7px white;
   padding-left: 10px;
   padding-right: 10px;
   padding-top: 5px;
-  color: white;
 }
 .VideoUrlP,
 .DescriptionP,
@@ -258,49 +340,75 @@ input {
   margin-bottom: 2px;
   margin-top: 7px;
 }
-.ArrowIcon {
-  transform: rotate(180deg);
+
+.darkArrowIcon {
+  margin-top: 20px;
+  margin-bottom: 12px;
+  height: 25px;
+  width: 28px;
+  -webkit-filter: invert(100%); /* Safari/Chrome */
+  filter: invert(100%);
+}
+
+.lightArrowIcon {
   margin-top: 20px;
   margin-bottom: 12px;
   height: 25px;
   width: 28px;
 }
+
 .TitleDivInVideoPreview {
   font-size: 13px;
   margin-bottom: 2px;
 }
-.HomeText {
+
+.homeText {
   font-size: 24px;
   font-weight: 500;
   font-family: 'Roboto', sans-serif;
   line-height: 28.13px;
   margin-top: 18px;
-  color: white;
   margin-bottom: 15px;
 }
+
 .uploaderDiv {
   display: grid;
   grid-template-columns: auto 14px 9px 100px auto;
   font-size: 10px;
-  background-color: #131313;
   height: 14px;
   padding: 0px;
   margin: 0px;
 }
+
 .upDiv {
+  width: 12px;
   margin-top: 1.25px;
   margin-left: 2.5px;
-  color: white;
-  background-color: #131313;
+  margin-bottom: 7px;
+  font-size: 7px;
+  text-align: center;
+  padding-top: 1.5px;
+  font-family: 'Roboto', sans-serif;
   height: max-content;
 }
-.catIcon {
+
+.darkCatIcon {
+  width: 28px;
+  height: 31px;
+  margin-top: 15px;
+  margin-bottom: 12px;
+  -webkit-filter: invert(100%); /* Safari/Chrome */
+  filter: invert(100%);
+}
+
+.lightCatIcon {
   width: 28px;
   height: 31px;
   margin-top: 15px;
   margin-bottom: 12px;
 }
-.videoPreviewDiv {
+
+.darkVideoPreviewDiv {
   height: max-content;
   width: 388px;
   margin-left: auto;
@@ -308,6 +416,19 @@ input {
   background-color: #131313;
   margin-bottom: 19px;
   border: 0.7px solid #ffffff;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  padding-top: 3px;
+  padding-bottom: 2px;
+}
+
+.lightVideoPreviewDiv {
+  height: max-content;
+  width: 388px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+  margin-bottom: 19px;
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   padding-top: 3px;
