@@ -263,11 +263,13 @@ export default {
   width: 200px;
   height: 200px;
 }
+
 .videoBox {
   margin-bottom: 10px;
   max-width: max-content;
   display: inline;
 }
+
 .coveringDiv {
   background-color: #131313;
   width: 45px;
@@ -289,8 +291,8 @@ export default {
   background-color: transparent;
   outline: 10px solid #131313;
   border-radius: 30px;
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   z-index: 3;
   margin-top: -50px;
   position: relative;
@@ -299,11 +301,13 @@ export default {
   display: grid;
   grid-template-columns: 17px 39px 19px 165px 1px auto;
 }
-.usernameP {
-  color: #e75858;
+.usernameP{
+  color: #E75858;
+  margin-left:5px;
 }
 .subscribersP {
   color: #939393;
+  margin-left:5px;
 }
 .DarkNoLineDiv {
   height: 32px;
@@ -634,5 +638,339 @@ export default {
   margin-left: auto;
   margin-right: auto;
   margin-top: -164px;
+}
+
+@media screen and (min-width: 401px) {
+.CardsContainer {
+  width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 65px;
+}
+}
+
+@media screen and (min-width: 550px) {
+  .sliderBackground {
+    transform: scaleX(0.95);
+    transform: scaleY(1.05);
+
+    height: 164px;
+    z-index: -1;
+  }
+  .lastPacManIcon {
+    width: 20px;
+    display: inline;
+    margin-top: 22px;
+    z-index: 3;
+  }
+
+  .FirstWhiteCircle {
+    width: 8px;
+    height: 8px;
+    border-radius: 30px;
+    background-color: white;
+    border: 0.7px solid black;
+    margin-top: 28px;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin-left: 12px;
+    z-index: 3;
+  }
+
+  .WhiteCircle {
+    width: 8px;
+    height: 8px;
+    border-radius: 30px;
+    background-color: white;
+    border: 0.7px solid black;
+    margin-top: 28px;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin-left: 8px;
+    margin-right: 8px;
+    z-index: 3;
+  }
+  .pacManIcon {
+    width: 20px;
+    display: inline;
+    margin-top: 22px;
+    margin-left: 4px;
+    z-index: 3;
+  }
+
+  .titleText {
+    -webkit-text-stroke-width: 0.007px;
+    -webkit-text-stroke-color: #c9c9c9;
+    font-family: 'Revalia', cursive;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 18.6px;
+    color: #ffffff;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25),
+      0px 4px 4px rgba(0, 0, 0, 0.25);
+    z-index: 3;
+    position: absolute;
+  }
+      .topVideosGrid{
+  transform: scale(1.1, 1.1);
+  margin-bottom:10px;
+   margin-top:15px;
+  }
+
+  .CardBox{
+    transform: scale(1.1, 1.1);
+  margin-bottom:10px;
+   margin-top:10px;
+  }
+
+  
+.userResultsDiv{
+transform: scale(1.3, 1.3);
+  margin-bottom:20px;
+   margin-top:20px;
+  margin-left:40px;
+    position: sticky;
+}
+
+.SubscribeButton{
+  height: 18px;
+  width: 80px;
+  font-size: 12px;
+  line-height: 12px;
+  margin-bottom: 20px;
+  top: -30px;
+}
+  
+    .topVideosGrid{
+  transform: scale(1.1, 1.1);
+  margin-bottom:10px;
+   margin-top:20px;
+  }
+    .checkAllVideosLink{
+  font-size: 12px;
+
+}
+
+  .CardBox{
+    transform: scale(1.1, 1.1);
+  margin-bottom:20px;
+   margin-top:20px;
+   margin-left:30px;
+
+  }
+}
+  
+
+@media screen and (min-width: 700px) {
+  .CardsContainer {
+    margin-top: 20px;
+  }
+  .sliderBackground {
+    transform: scaleX(0.9);
+    transform: scaleY(1.1);
+    height: 164px;
+    z-index: -1;
+  }
+  .lastPacManIcon {
+    width: 20px;
+    display: inline;
+    margin-top: 22px;
+    z-index: 3;
+  }
+
+  .FirstWhiteCircle {
+    width: 8px;
+    height: 8px;
+    border-radius: 30px;
+    background-color: white;
+    border: 0.7px solid black;
+    margin-top: 28px;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin-left: 12px;
+    z-index: 3;
+  }
+
+  .WhiteCircle {
+    width: 8px;
+    height: 8px;
+    border-radius: 30px;
+    background-color: white;
+    border: 0.7px solid black;
+    margin-top: 28px;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin-left: 8px;
+    margin-right: 8px;
+    z-index: 3;
+  }
+  .pacManIcon {
+    width: 20px;
+    display: inline;
+    margin-top: 22px;
+    margin-left: 4px;
+    z-index: 3;
+  }
+
+  .titleText {
+    -webkit-text-stroke-width: 0.007px;
+    -webkit-text-stroke-color: #c9c9c9;
+    font-family: 'Revalia', cursive;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 18.6px;
+    color: #ffffff;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25),
+      0px 4px 4px rgba(0, 0, 0, 0.25);
+    z-index: 3;
+    position: absolute;
+  }
+
+.userResultsDiv{
+transform: scale(1.3, 1.3);
+  margin-bottom:40px;
+   margin-top:40px;
+  margin-left:65px;
+    position: sticky;
+}
+
+.SubscribeButton{
+  height: 20px;
+  width: 80px;
+  font-size: 13px;
+  line-height: 12px;
+  margin-bottom: 20px;
+  top: -30px;
+}
+  
+    .topVideosGrid{
+  transform: scale(1.3, 1.3);
+  margin-bottom:20px;
+   margin-top:40px;
+  }
+    .checkAllVideosLink{
+  font-size: 13px;
+
+}
+
+  .CardBox{
+    transform: scale(1.3, 1.3);
+  margin-bottom:20px;
+   margin-top:30px;
+   margin-left:110px;
+
+  }
+}
+
+@media screen and (min-width: 850px) {
+  .sliderBackground {
+    width: 90%;
+    transform: scaleY(1.5);
+
+    height: 164px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    z-index: -1;
+  }
+  .lastPacManIcon {
+    width: 20px;
+    display: inline;
+    margin-top: 22px;
+    z-index: 3;
+  }
+
+  .FirstWhiteCircle {
+    width: 8px;
+    height: 8px;
+    border-radius: 30px;
+    background-color: white;
+    border: 0.7px solid black;
+    margin-top: 28px;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin-left: 12px;
+    z-index: 3;
+  }
+
+  .WhiteCircle {
+    width: 8px;
+    height: 8px;
+    border-radius: 30px;
+    background-color: white;
+    border: 0.7px solid black;
+    margin-top: 28px;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin-left: 8px;
+    margin-right: 8px;
+    z-index: 3;
+  }
+  .pacManIcon {
+    width: 20px;
+    display: inline;
+    margin-top: 22px;
+    margin-left: 4px;
+    z-index: 3;
+  }
+
+  .titleText {
+    -webkit-text-stroke-width: 0.007px;
+    -webkit-text-stroke-color: #c9c9c9;
+    font-family: 'Revalia', cursive;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 18.6px;
+    padding-left: 30px;
+    color: #ffffff;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25),
+      0px 4px 4px rgba(0, 0, 0, 0.25);
+    z-index: 3;
+    position: absolute;
+  }
+.userResultsDiv{
+transform: scale(1.5, 1.5);
+  margin-bottom:40px;
+   margin-top:60px;
+  margin-left:85px;
+    position: sticky;
+}
+
+.SubscribeButton{
+  height: 24px;
+  width: 100px;
+  font-size: 14px;
+  line-height: 12px;
+  margin-bottom: 20px;
+  top: -30px;
+     position:relative;
+}
+  
+  .topVideosGrid{
+  transform: scale(1.5, 1.5);
+  margin-bottom:40px;
+   margin-top:60px;
+  }
+  .checkAllVideosLink{
+  font-size: 15px;
+
+}
+
+  .CardBox{
+ transform: scale(1.5, 1.5);
+  margin-bottom:40px;
+   margin-top:60px;
+       margin-left:110px;
+       position:fixed;
+  }
+}
+@media screen and (max-width: 400px) {
+  .videoBox {
+    width: 98vw;
+    
+  }
+  
 }
 </style>
