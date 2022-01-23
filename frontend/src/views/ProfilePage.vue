@@ -928,7 +928,7 @@ export default {
   font-size: 25px;
   margin-top: 5px;
 }
-.RoomBlock{
+.RoomBlock {
   height: 60px;
 }
 .saveNewDescriptionButton {
