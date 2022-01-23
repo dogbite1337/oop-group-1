@@ -30,8 +30,10 @@
         <div class="SpaceDiv" />
       </div>
     </router-link>
+
     <div v-if="!hideEyes" class="girlsOpenEyesDiv" />
     <div v-if="hideEyes" class="girlsClosedEyesDiv" />
+    <div class="allInfoDiv">
     <div class="emailDiv">
       <p class="UsernameText">Username</p>
       <input
@@ -91,6 +93,7 @@
         placeholder="Tell us about yourself (Optional)"
       />
     </div>
+   
     <div class="RegisterContent">
       <div class="RegisterDiv">
         <div />
@@ -157,11 +160,12 @@
             type="button"
             value="Register"
           />
+          </div>
         </div>
         <div />
       </div>
     </div>
-  </div>
+   </div>
 </template>
 <script>
 import User from '../jsClasses/general/User';
@@ -442,7 +446,7 @@ export default {
 }
 .DarkDescriptionText {
   display: inline;
-  color: white;
+  color: yellow;
   font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: normal;
@@ -681,62 +685,142 @@ export default {
 	margin-top: 15px;
 	margin-bottom: 12px;
 }
+	.allInfoDiv {
+		display:grid;
+    justify-content: center;
+      margin-top:-50px;
+	}
 
-.inputGrid {
-	display: grid;
-	background-color: #2d2c2c;
-	width: 350px;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 60px;
-	margin-bottom: 60px;
-}
-
-@media screen and (min-width: 550px) {
+@media screen and (max-width: 330px) {
 	.girlsOpenEyesDiv,
 	.girlsClosedEyesDiv {
-		width: 460px;
+    width: 220px;
+	height: 80px;
+	text-align: center;
+	background-size: 100% 80px;
+	background-repeat: no-repeat;
+	margin-left: auto;
+	margin-right:auto;
+	margin-top: 20px;
+  
+  }
+.allInfoDiv {
+transform:scale(0.6,0.6)
+    
+	}
+
+}
+@media screen and (max-width:480px) and (min-width: 330px) {
+	.girlsOpenEyesDiv,
+	.girlsClosedEyesDiv {
+		width: 260px;
+    height: 100px;
+    	text-align: center;
+      background-size: 100% 100px;
+      	background-repeat: no-repeat;
 		margin-left: auto;
 		margin-right: auto;
 		margin-top: 30px;
-		margin-bottom: 30px;
-		height: 200px;
-		background-size: 100% 200px;
+	  margin-bottom:20px;
+
 	}
-	.upScaleDiv {
-		transform: scale(1.1, 1.1);
+	.allInfoDiv{
+    
+		transform: scale(0.7, 0.7);
+ 
 	}
 }
 
-@media screen and (min-width: 700px) {
-	.girlsOpenEyesDiv,
+
+@media screen and (max-width:620px) and (min-width: 480px) {
+		.girlsOpenEyesDiv,
 	.girlsClosedEyesDiv {
-		width: 580px;
+		width: 300px;
+    height: 120px;
+    	text-align: center;
+      background-size: 100% 120px;
+      	background-repeat: no-repeat;
 		margin-left: auto;
 		margin-right: auto;
-		margin-top: 40px;
-		margin-bottom: 40px;
-		height: 240px;
-		background-size: 100% 240px;
+		margin-top: 30px;
+    	  margin-bottom:40px;
+	
+
 	}
-	.upScaleDiv {
-		transform: scale(1.2, 1.1);
+	.allInfoDiv{
+    
+		transform: scale(0.8, 0.8);
+ 
 	}
 }
 
-@media screen and (min-width: 850px) {
-	.girlsOpenEyesDiv,
+
+@media screen and  (max-width:820px) and (min-width: 620px) {
+		.girlsOpenEyesDiv,
 	.girlsClosedEyesDiv {
-		width: 640px;
+		width: 360px;
+    height: 140px;
+    	text-align: center;
+      background-size: 100% 140px;
+      	background-repeat: no-repeat;
 		margin-left: auto;
 		margin-right: auto;
-		margin-top: 50px;
-		margin-bottom: 60px;
-		height: 300px;
-		background-size: 100% 300px;
+		margin-top: 30px;
+    	  margin-bottom:60px;
+	
+
 	}
-	.upScaleDiv {
-		transform: scale(1.3, 1.1);
+	.allInfoDiv{
+    
+		transform: scale(0.9, 0.9);
+ 
 	}
 }
+@media screen and (min-width:820px) {
+		.girlsOpenEyesDiv,
+	.girlsClosedEyesDiv {
+		width: 380px;
+    height: 160px;
+    	text-align: center;
+      background-size: 100% 160px;
+      	background-repeat: no-repeat;
+		margin-left: auto;
+		margin-right: auto;
+		margin-top: 30px;
+    	  margin-bottom:80px;
+	
+
+	}
+	.allInfoDiv{
+    
+		transform: scale(1.0, 1.0);
+ 
+	}
+}
+
+@media screen and (min-width:1024px) {
+      		.girlsOpenEyesDiv,
+	.girlsClosedEyesDiv {
+		width: 480px;
+    height: 180px;
+    	text-align: center;
+      background-size: 100% 180px;
+      	background-repeat: no-repeat;
+		margin-left: auto;
+		margin-right: auto;
+		margin-top: 30px;
+    	  margin-bottom:120px;
+	
+
+	}
+	.allInfoDiv{
+    
+		transform: scale(1.2, 1.2);
+ 
+	}
+
+}
+
 </style>
+
+
