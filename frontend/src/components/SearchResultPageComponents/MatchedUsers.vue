@@ -19,10 +19,26 @@
               <p class="time">{{ 'Videos: ' + user.userVideos.length }}</p>
             </div>
             <button
-              class="subBtn"
-              v-if="loggedInUser && loggedInUser.userId != user.userId"
+              :class="'subBtn ' + user.userId"
+              v-if="
+                loggedInUser &&
+                loggedInUser.userId != user.userId &&
+                !subscribedAlready
+              "
+              @click="subscribe"
             >
               + Subscribe
+            </button>
+            <button
+              :class="'unsubButton ' + user.userId"
+              v-if="
+                loggedInUser &&
+                loggedInUser.userId != user.userId &&
+                subscribedAlready
+              "
+              @click="unsubscribe"
+            >
+              - Unsubscribe
             </button>
           </div>
         </div>
@@ -64,6 +80,7 @@
 </template>
 
 <script>
+import User from '../../jsClasses/general/User';
 export default {
   props: ['matchedUserList'],
 
@@ -71,6 +88,7 @@ export default {
     return {
       loggedInUser: this.$store.getters.getCurrentUser,
       isDarkTheme: true,
+      subscribedAlready: false,
     };
   },
 
@@ -82,9 +100,72 @@ export default {
         this.isDarkTheme = newVal;
       }
     );
+    if (this.loggedInUser) {
+      let subsRes = await fetch(
+        '/rest/getSubscribersForId?' +
+          new URLSearchParams({
+            userId: this.loggedInUser.userId,
+          })
+      );
+      let subscribersResponse = await subsRes.json();
+      for (let e = 0; e < this.matchedUserList.length; e++) {
+        for (let i = 0; i < subscribersResponse.length; i++) {
+          if (subscribersResponse[i].userId == this.matchedUserList[e].userId) {
+            this.subscribedAlready = true;
+          }
+        }
+      }
+    }
   },
 
   methods: {
+    async unsubscribe(e) {
+      let targetUserId = e.target.className.split(' ')[1];
+
+      let unsubscribeRes = await fetch(
+        '/api/unsubscribe?' +
+          new URLSearchParams({
+            targetId: targetUserId,
+            userId: this.loggedInUser.userId,
+          }),
+        {
+          method: 'DELETE',
+        }
+      );
+      let subscribersResponse = await unsubscribeRes.json();
+
+      for (let i = 0; i < this.matchedUserList.length; i++) {
+        if ((this.matchedUserList[i].userId = targetUserId)) {
+          this.matchedUserList[i].subscribers = subscribersResponse;
+          break;
+        }
+      }
+
+      this.subscribedAlready = false;
+    },
+    async subscribe(e) {
+      let targetUserId = e.target.className.split(' ')[1];
+      let res = await fetch(
+        '/api/subscribe?' +
+          new URLSearchParams({
+            targetId: targetUserId,
+            userId: this.loggedInUser.userId,
+          }),
+        {
+          method: 'POST',
+        }
+      );
+      let subscribersResponse = await res.json();
+
+      for (let i = 0; i < this.matchedUserList.length; i++) {
+        if ((this.matchedUserList[i].userId = targetUserId)) {
+          this.matchedUserList[i].subscribers = subscribersResponse;
+          break;
+        }
+      }
+
+      this.subscribedAlready = true;
+    },
     goToVideoPage(video) {
       this.$router.push('/VideoPage/' + video.videoId);
     },
@@ -176,6 +257,12 @@ p {
   font-size: smaller;
   font: menu;
   color: grey;
+}
+
+.unsubButton {
+  background: #e75858;
+  color: white;
+  padding: 3px;
 }
 
 .subBtn {

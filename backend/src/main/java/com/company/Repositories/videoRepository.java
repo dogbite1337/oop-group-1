@@ -401,20 +401,25 @@ public class videoRepository {
         ResultSet rs = nextEightVideos.executeQuery();
 
         while(rs.next()){
-            Video newVideo = new Video(0, 0, 0, "Not found", "Not found", "Not found", 0, "", "0", "0", "0");
-            newVideo.setVideoId(rs.getInt("videoId"));
-            newVideo.setUserId(rs.getInt("userId"));
-            long tempLong = Long.parseLong(String.valueOf((rs.getTimestamp("uploadDate").getTime())));
-            newVideo.setUploadDate(tempLong);
-            newVideo.setVideoURL(rs.getString("videoURL"));
-            newVideo.setTitle(rs.getString("title"));
-            newVideo.setDescription(rs.getString("description"));
-            newVideo.setViews(rs.getInt("views"));
-            newVideo.setPostedByUsername(rs.getString("postedByUsername"));
-            newVideo.setLikes(String.valueOf(rs.getInt("likes")));
-            newVideo.setDislikes(String.valueOf(rs.getInt("dislikes")));
-            newVideo.setStars(String.valueOf(rs.getInt("stars")));
-            videosWillBeLoad.add(newVideo);
+            try {
+                Video newVideo = new Video(0, 0, 0, "Not found", "Not found", "Not found", 0, "", "0", "0", "0");
+                newVideo.setVideoId(rs.getInt("videoId"));
+                newVideo.setUserId(rs.getInt("userId"));
+                long tempLong = Long.parseLong(String.valueOf((rs.getTimestamp("uploadDate").getTime())));
+                newVideo.setUploadDate(tempLong);
+                newVideo.setVideoURL(rs.getString("videoURL"));
+                newVideo.setTitle(rs.getString("title"));
+                newVideo.setDescription(rs.getString("description"));
+                newVideo.setViews(rs.getInt("views"));
+                newVideo.setPostedByUsername(rs.getString("postedByUsername"));
+                newVideo.setLikes(String.valueOf(rs.getInt("likes")));
+                newVideo.setDislikes(String.valueOf(rs.getInt("dislikes")));
+                newVideo.setStars(String.valueOf(rs.getInt("stars")));
+                videosWillBeLoad.add(newVideo);
+            }catch(Exception e){
+                System.out.println("Failed in videoRep");
+            }
+
         }
         con.close();
         return videosWillBeLoad;
