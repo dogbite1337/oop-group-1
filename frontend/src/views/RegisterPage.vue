@@ -445,17 +445,21 @@ export default {
 	line-height: 21px;
 }
 .DarkDescriptionText {
+  position: relative;
+  left: -2px;
+  z-index: 10;
   display: inline;
-  color: yellow;
+  color: white;
   font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 18px;
   line-height: 21px;
+
 }
 .LightDescriptionText {
   position: relative;
-  left: -11px;
+  left: -2px;
   z-index: 10;
   display: inline;
   color: black;
