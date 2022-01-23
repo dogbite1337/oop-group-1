@@ -64,7 +64,8 @@ export default {
 }
 .BackDrop {
   background-color: #131313;
-  /* overflow-y: scroll; */
+  overflow-y: scroll;
+  height: -webkit-fill-available;
 }
 .lightTheme{
   color: #bfbfbf;
