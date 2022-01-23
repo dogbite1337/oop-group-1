@@ -94,6 +94,8 @@ public class likeRepository {
         }
     }
 
+
+
     public ArrayList<Like> getLikesForComment(Integer commentId) {
         ArrayList<Like> relevantLikes = new ArrayList<Like>();
         try {
