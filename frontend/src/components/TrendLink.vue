@@ -147,7 +147,7 @@ h1 {
 @media screen and (max-width: 450px) {
   .trendGrid{
     display: grid;
-    grid-template-columns: 10% 80% 10%;
+    grid-template-columns: 6% 1fr 6%;
   }
   .itemsContainer {
     grid-column-start: 2;

@@ -232,7 +232,7 @@ export default {
 .searchPageBtn {
   color: black;
   background-color: white;
-  width: 25vw;
+  width: 6rem;
   border-radius: 10px;
   margin: 20px;
   height: 5vh;

@@ -25,8 +25,8 @@
       </div>
     </div>
 
-    <div class="historyItemContainer" v-if="btnClicked && mySearchHistoryList">
-      <div class="historyItem" v-for="item of mySearchHistoryList" :key="item">
+    <div class="historyItemContainer" v-if="btnClicked && mySearchHistoryList" :class="isDarkTheme == true ? 'historyItemContainerDarkTheme' : 'historyItemContainerLightTheme'">
+      <div class="historyItem" v-for="item of mySearchHistoryList" :key="item" :class="isDarkTheme == true ? 'historyItemDarkTheme' : 'historyItemLightTheme'">
         <p v-if="item" @click="makeSearch(item.keyWord)">
           {{
             item.keyWord.length > 12
@@ -142,7 +142,7 @@ h1 {
 }
 
 button {
-  width: 15vw;
+  width: 4rem;
 }
 
 .historyItemContainer {
@@ -176,6 +176,24 @@ button {
 
 .historyItemLightTheme p{
   color: #939393;
+}
+
+@media screen and (max-width: 450px) {
+  .searchHistoryContainer{
+    grid-template-columns: auto 1fr;
+  }
+
+  /* button{
+    width: unset;
+  } */
+
+  .historyItem{
+    grid-column: 2;
+  }
+
+  .historyItemContainer{
+    grid-template-columns: 6% 1fr 6%;;
+  }
 }
 
 
