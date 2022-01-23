@@ -129,6 +129,7 @@ export default {
         searchParam
       );
       if (this.currentUser && !boolean && searchParam) {
+     
         let obj = {
           userId: this.currentUser.userId,
           keyWord: searchParam,
@@ -153,10 +154,13 @@ export default {
         }
         this.$router.push('/SearchResult');
       } else if (this.currentUser && boolean && searchParam) {
+        
         this.$router.push('/SearchResult');
       } else if (!this.currentUser && boolean && searchParam) {
+        
         this.$router.push('/SearchResult');
       } else if (!this.currentUser && !boolean && searchParam) {
+        
         if (this.$store.getters.getMySearchHistoryList != null) {
           this.searchHistory = this.$store.getters.getMySearchHistoryList;
         } else if (localStorage.searchHistoryList) {

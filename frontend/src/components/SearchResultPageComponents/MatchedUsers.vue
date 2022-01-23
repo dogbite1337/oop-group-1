@@ -73,6 +73,15 @@ export default {
     this.$store.watch((state) => state.darkTheme, (newVal) => {
     this.isDarkTheme = newVal
     })
+
+    // if not logged in or refreshed and there is a save
+    if(this.loggedInUser == null && localStorage.loggedInUser){
+      this.loggedInUser = await JSON.parse(localStorage.loggedInUser)
+    }
+    // if not logged in or refreshed and there is no save
+    else if(this.loggedInUser == null && !localStorage.loggedInUser){
+      return;
+    }
   },
 
   methods: {
@@ -139,9 +148,9 @@ p {
 }
 
 .profilePic {
-  height: 7vh;
+  height: 5rem;
   border-radius: 45px;
-  width: 16vw;
+  width: 5rem;
 }
 
 .otherInfoContainer {
@@ -189,7 +198,8 @@ p {
 
 .videoCard {
   text-align: center;
-  margin: 0 0.2rem;
+  margin: 0.2rem;
+  width: -webkit-fill-available;
 }
 
 .title {
@@ -216,5 +226,41 @@ p {
 
 .videoCardLightTheme{
   border: black 1px solid;
+}
+
+.profilePicContainer{
+  text-align: center;
+}
+
+@media screen and (max-width: 470px) {
+  .otherInfoContainer{
+    display: grid;
+    grid-column: 4;
+    justify-content: center;
+  }
+  .subAndVideo{
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .subBtn{
+    width: 7rem;
+  }
+
+  .profilePicContainer{
+    grid-column: 2;
+    /* place-self: center; */
+  }
+
+  .infoContainer{
+    grid-template-columns: 8% auto 8% auto 8%;
+  }
+
+  .videosContianer{
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .textContainer{
+    grid-column: 1 / span 2;
+  }
 }
 </style>

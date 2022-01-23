@@ -105,6 +105,7 @@ export default createStore({
     },
     async login(store, currentUser) {
       store.commit('setUser', currentUser);
+      localStorage.setItem('loggedInUser', JSON.stringify(currentUser))
       // store.commit('setMySearchHistoryList', [])
     },
     async updateSearchResult(store, searchResults) {
@@ -134,6 +135,7 @@ export default createStore({
     async logout(store) {
       await fetch('/api/logout');
       store.commit('setUser', null);
+      localStorage.removeItem('loggedInUser');
       // store.commit('setMySearchHistoryList', [])
     },
     async getSearchHistories(store, id) {

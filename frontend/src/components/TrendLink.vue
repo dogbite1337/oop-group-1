@@ -55,18 +55,19 @@ export default {
           mySearchHistoryList = JSON.parse(localStorage.searchHistoryList);
         }
 
+
         if (
           mySearchHistoryList.length > 5 &&
-          mySearchHistoryList.some((data) => data.keyWord != obj.keyWord)
+          !mySearchHistoryList.some((data) => data.keyWord == obj.keyWord)
         ) {
           mySearchHistoryList.splice(mySearchHistoryList.length - 1, 1);
           mySearchHistoryList.unshift(obj);
         } else if (
-          mySearchHistoryList.length == 0 ||
-          mySearchHistoryList.some((data) => data.keyWord != obj.keyWord)
+          mySearchHistoryList.length < 6 &&
+          !mySearchHistoryList.some((data) => data.keyWord == obj.keyWord)
         ) {
           mySearchHistoryList.unshift(obj);
-        }
+        } 
 
         await this.$store.dispatch('cacheSearchHistory', mySearchHistoryList);
         localStorage.setItem(
