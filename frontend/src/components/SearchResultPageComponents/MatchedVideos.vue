@@ -162,6 +162,7 @@ p {
   display: flex;
   color: white;
   display: inline;
+  font-size: small;
 }
 
 /* .title p {
@@ -231,37 +232,187 @@ img {
   /* height: 2.5vh; */
 }
 
-.titleTextLightTheme {
-  color: black;
-}
+@media screen and (max-width: 355px) {
 
-@media screen and (max-width: 400px) {
-  .videoCard {
-    grid-template-rows: 1fr auto;
-  }
-
-  .thumbnail{
-    grid-row: 1;
-    grid-column: 1 / span 2;
-    margin: 0 0 1vh 0;
-  }
-
-  .textInfo{
-    grid-column: 1 / span 2;
-    height: unset;
-    margin: 0 0 0.2vh 0;
-  }
-
-  .otherInfo{
-    margin: 1vh 0 0.2vh 0;
-  }
-
-  .uploaderName,
-  .viewCount{
-    height: unset;
-  }
-
-
+.titleText {
+margin-top:1px;
+font-size: medium;
+max-width: 140px;
+overflow: hidden;
   
 }
+.uploaderName,
+.viewCount {
+  margin-left: 3vw;
+  align-self: center;
+  height: 2vh;
+    font-size: small;
+}
+.uploader,
+.view {
+  display: grid;
+  grid-template-columns: 14% auto; 
+}
+
+.textInfo {
+  height: 15vh;
+  margin-left: 1vw;
+  place-content: space-between;
+  width:160px;
+ 
+}
+
+
+}
+
+@media screen and (max-width:520px) and (min-width: 356px) {
+
+.titleText {
+margin-top:1px;
+font-size: medium;
+max-width: 120px;
+overflow: hidden;
+  
+}
+.uploaderName,
+.viewCount {
+  margin-left: 3vw;
+  align-self: center;
+  height: 2vh;
+    font-size: small;
+}
+.uploader,
+.view {
+  display: grid;
+  grid-template-columns: 14% auto; 
+}
+
+.textInfo {
+  height: 16vh;
+  margin-left: 6vw;
+  place-content: space-between;
+  width:160px;
+ 
+}
+
+.thumbnail {
+  height: 16vh;
+  width:46vw;
+  
+}
+
+}
+
+@media screen and (max-width:620px) and (min-width: 520px) {
+
+.titleText {
+margin-top:1px;
+font-size: large;
+max-width: 240px;
+overflow: hidden;
+  
+}
+.uploaderName,
+.viewCount {
+  margin-left: 3vw;
+  align-self: center;
+  height: 2.5vh;
+  font-size: medium;
+}
+.uploader,
+.view {
+  display: grid;
+  grid-template-columns: 14% auto; 
+
+}
+
+.textInfo {
+  height: 16vh;
+  margin-left: 8vw;
+  place-content: space-between;
+  width:220px;
+ 
+}
+.thumbnail {
+  height: 16vh;
+  width:48vw;
+}
+
+
+}
+
+@media screen and (max-width:820px) and (min-width: 620px) {
+
+.titleText {
+margin-top:1px;
+font-size: large;
+max-width: 240px;
+overflow: hidden;
+  
+}
+.uploaderName,
+.viewCount {
+  margin-left: 3vw;
+  align-self: center;
+  height: 2vh;
+  font-size: large;
+}
+.uploader,
+.view {
+  display: grid;
+  grid-template-columns: 14% auto; 
+
+}
+
+.textInfo {
+  height: 18vh;
+  margin-left: 10vw;
+  place-content: space-between;
+  width:220px;
+ 
+}
+
+.thumbnail {
+  height: 18vh;
+  width:50vw;
+}
+}
+
+@media screen and (min-width:820px) {
+
+.titleText {
+margin-top:1px;
+max-width: 260px;
+font-size: x-large;
+overflow: hidden;
+  
+}
+.uploaderName,
+.viewCount {
+  margin-left: 3vw;
+  align-self: center;
+  height: 2.5vh;
+  font-size: x-large;
+}
+.uploader,
+.view {
+  display: grid;
+  grid-template-columns: 15% auto; 
+
+}
+
+.textInfo {
+  height: 20vh;
+  margin-left: 12vw;
+  place-content: space-between;
+  width:280px;
+ 
+}
+
+.thumbnail {
+  height: 20vh;
+  width:53vw;
+}
+}
+
 </style>

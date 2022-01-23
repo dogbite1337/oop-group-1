@@ -276,31 +276,31 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto:wght@300;400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Revalia&family=Roboto:wght@300;400&display=swap");
 
 * {
-  outline: none;
-  border: none;
+	outline: none;
+	border: none;
 }
 .HomeLink {
-  text-decoration: none;
+	text-decoration: none;
 }
 .imageURLInput,
 .DarkUploadImageButton,
 .LightUploadImageButton,
 .registerButton {
-  display: block;
+	display: block;
 }
 .RegisterContent {
-  width: max-content;
-  margin-left: auto;
-  margin-right: auto;
+	width: max-content;
+	margin-left: auto;
+	margin-right: auto;
 }
 .DarkUploadImageButton,
 .LightUploadImageButton,
 .registerButton {
-  margin-top: 9px;
+	margin-top: 9px;
 }
 .LightImageURLInput {
   width: 243px;
@@ -349,17 +349,17 @@ export default {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 .RegisterButton {
-  width: 142px;
-  color: white;
-  font-size: 18px;
-  line-height: 21px;
-  font-family: 'Roboto', sans-serif;
-  margin-top: 10px;
-  height: 40px;
-  background: #2d2c2c;
-  border: 0.7px solid #ffffff;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	width: 142px;
+	color: white;
+	font-size: 18px;
+	line-height: 21px;
+	font-family: "Roboto", sans-serif;
+	margin-top: 10px;
+	height: 40px;
+	background: #2d2c2c;
+	border: 0.7px solid #ffffff;
+	box-sizing: border-box;
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 .LightDisabledRegisterButton {
   width: 142px;
@@ -398,47 +398,47 @@ export default {
   text-align: center;
 }
 .xDiv {
-  color: white;
-  width: 25px;
-  height: 22px;
-  z-index: 500;
-  text-align: center;
-  padding-top: 3px;
-  position: relative;
-  margin-left: 117%;
-  margin-top: -23px;
-  border-radius: 50px;
-  background-color: #c4c4c4;
+	color: white;
+	width: 25px;
+	height: 22px;
+	z-index: 500;
+	text-align: center;
+	padding-top: 3px;
+	position: relative;
+	margin-left: 117%;
+	margin-top: -23px;
+	border-radius: 50px;
+	background-color: #c4c4c4;
 }
 
 .sevenPixelsLineDiv {
-  height: 7px;
+	height: 7px;
 }
 .fivePixelsLineDiv {
-  height: 5px;
+	height: 5px;
 }
 .PreviewImage {
-  width: 80px;
-  height: 80px;
-  border-radius: 60px;
+	width: 80px;
+	height: 80px;
+	border-radius: 60px;
 }
 .PreviewImageDiv {
-  width: max-content;
-  padding-right: 10px;
+	width: max-content;
+	padding-right: 10px;
 }
 .RegisterDiv {
-  display: grid; /* space, preview, space, input, space */
-  grid-template-columns: 33px auto 0px auto 8px;
+	display: grid; /* space, preview, space, input, space */
+	grid-template-columns: 33px auto 0px auto 8px;
 }
 .UsernameText,
 .PasswordText {
-  display: inline;
-  color: white;
-  font-family: 'Roboto', sans-serif;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 18px;
-  line-height: 21px;
+	display: inline;
+	color: white;
+	font-family: "Roboto", sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 18px;
+	line-height: 21px;
 }
 .DarkDescriptionText {
   display: inline;
@@ -462,23 +462,21 @@ export default {
   line-height: 21px;
 }
 .forgotPasswordDiv {
-  text-align: center;
-  font-family: 'Roboto', sans-serif;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 18px;
-  line-height: 21px;
-  /* identical to box height */
-
-  text-align: center;
-
-  color: #eb6a6a;
-  margin-top: 23px;
+	text-align: center;
+	font-family: "Roboto", sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 18px;
+	line-height: 21px;
+	/* identical to box height */
+	text-align: center;
+	color: #eb6a6a;
+	margin-top: 23px;
 }
 
 .backgroundDiv {
-  background-color: black;
-  height: 100vh;
+	background-color: black;
+	height: 100vh;
 }
 
 .DarkLineDiv {
@@ -571,69 +569,73 @@ export default {
   outline: none;
 }
 .UsernameText {
-  z-index: 3;
-  position: relative;
-  margin-top: 12.5px;
-  font-size: 18px;
-  font-weight: 400;
-  font-family: 'Roboto', sans-serif;
-  line-height: 21.06px;
+	z-index: 3;
+	position: relative;
+	margin-top: 12.5px;
+	font-size: 18px;
+	font-weight: 400;
+	font-family: "Roboto", sans-serif;
+	line-height: 21.06px;
 }
 .PasswordText {
-  padding-right: 32px;
-  z-index: 3;
-  position: relative;
-  font-size: 18px;
-  font-weight: 400;
-  font-family: 'Roboto', sans-serif;
-  line-height: 21.06px;
+	padding-right: 32px;
+	z-index: 3;
+	position: relative;
+	font-size: 18px;
+	font-weight: 400;
+	font-family: "Roboto", sans-serif;
+	line-height: 21.06px;
 }
 .emailDiv {
-  margin-top: 10px;
+	margin-top: 10px;
 }
 .passwordDiv {
-  margin-bottom: 12px;
+	margin-bottom: 12px;
 }
 .DescriptionDiv {
-  display: block;
-  width: 292px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 100px;
+	display: block;
+	width: 292px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 100px;
 }
 .emailDiv,
 .passwordDiv {
-  width: 232px;
-  margin-left: auto;
-  margin-right: auto;
-  outline: 1px solid black;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  padding-left: 6px;
+	width: 232px;
+	margin-left: auto;
+	margin-right: auto;
+	outline: 1px solid #2d2c2c;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	padding-left: 6px;
 }
 
 .passwordDiv {
-  padding-right: 47px;
-  margin-top: 3px;
+	padding-right: 47px;
+	margin-top: 3px;
 }
 .emailDiv {
-  padding-right: 47px;
+	padding-right: 47px;
 }
 .girlsOpenEyesDiv {
-  height: 140px;
-  text-align: center;
-  background-image: url('../projectImages/open eyes.PNG');
-  background-size: 97% 140px;
-  background-repeat: no-repeat;
-  margin-left: 15px;
+	height: 140px;
+	text-align: center;
+	background-image: url("../projectImages/open eyes.PNG");
+	background-size: 100% 140px;
+	background-repeat: no-repeat;
+	margin-left: 40px;
+	margin-right: 40px;
+	margin-top: 20px;
 }
 .girlsClosedEyesDiv {
-  height: 140px;
-  text-align: center;
-  background-image: url('../projectImages/cover eyes.PNG');
-  background-size: 97% 140px;
-  background-repeat: no-repeat;
-  margin-left: 15px;
+	height: 140px;
+	text-align: center;
+	background-image: url("../projectImages/cover eyes.PNG");
+	background-size: 100% 140px;
+	background-repeat: no-repeat;
+	margin-left: 40px;
+	margin-right: 40px;
+	margin-top: 20px;
 }
 .backHomeDiv {
   display: grid; /* space, Arrow, space, Home, space, Cat */
@@ -649,11 +651,11 @@ export default {
 }
 
 .ArrowIcon {
-  transform: rotate(180deg);
-  margin-top: 20px;
-  margin-bottom: 12px;
-  height: 25px;
-  width: 28px;
+	transform: rotate(180deg);
+	margin-top: 20px;
+	margin-bottom: 12px;
+	height: 25px;
+	width: 28px;
 }
 .DarkHomeText {
   font-size: 24px;
@@ -674,9 +676,67 @@ export default {
   margin-bottom: 15px;
 }
 .catIcon {
-  width: 28px;
-  height: 31px;
-  margin-top: 15px;
-  margin-bottom: 12px;
+	width: 28px;
+	height: 31px;
+	margin-top: 15px;
+	margin-bottom: 12px;
+}
+
+.inputGrid {
+	display: grid;
+	background-color: #2d2c2c;
+	width: 350px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 60px;
+	margin-bottom: 60px;
+}
+
+@media screen and (min-width: 550px) {
+	.girlsOpenEyesDiv,
+	.girlsClosedEyesDiv {
+		width: 460px;
+		margin-left: auto;
+		margin-right: auto;
+		margin-top: 30px;
+		margin-bottom: 30px;
+		height: 200px;
+		background-size: 100% 200px;
+	}
+	.upScaleDiv {
+		transform: scale(1.1, 1.1);
+	}
+}
+
+@media screen and (min-width: 700px) {
+	.girlsOpenEyesDiv,
+	.girlsClosedEyesDiv {
+		width: 580px;
+		margin-left: auto;
+		margin-right: auto;
+		margin-top: 40px;
+		margin-bottom: 40px;
+		height: 240px;
+		background-size: 100% 240px;
+	}
+	.upScaleDiv {
+		transform: scale(1.2, 1.1);
+	}
+}
+
+@media screen and (min-width: 850px) {
+	.girlsOpenEyesDiv,
+	.girlsClosedEyesDiv {
+		width: 640px;
+		margin-left: auto;
+		margin-right: auto;
+		margin-top: 50px;
+		margin-bottom: 60px;
+		height: 300px;
+		background-size: 100% 300px;
+	}
+	.upScaleDiv {
+		transform: scale(1.3, 1.1);
+	}
 }
 </style>

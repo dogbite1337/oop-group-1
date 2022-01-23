@@ -111,7 +111,7 @@ export default {
 
 .LightCardBox {
   height: max-content;
-  max-width: 192px;
+  max-width: 190px;
   max-height: 160px;
   background-color: white;
   border: 0.7px solid #000000;
@@ -125,10 +125,11 @@ export default {
 
 .DarkCardBox {
   height: max-content;
-  max-width: 192px;
+  max-width: 190px;
   max-height: 160px;
-  background-color: #000000;
+  background-color: black;
   border: 0.7px solid #000000;
+  color: black;
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   margin-left: 6px;
@@ -136,10 +137,36 @@ export default {
   padding-bottom: 12px;
 }
 
+.lowerDiv {
+  width: 180px;
+}
 .ImageBox {
   height: 80px;
   width: 100%;
-  max-width: 190px;
+  max-width: 180px;
+}
+
+@media screen and (max-width: 418px) {
+  .ImageBox {
+    height: 160px;
+    width: 100vw;
+    max-width: 100vw;
+  }
+  .lowerDiv {
+    width: 100vw;
+  }
+  .LightCardBox,
+  .DarkCardBox {
+    max-width: 100vw;
+    width: 100vw;
+    background-color: white;
+    border: 0.7px solid #000000;
+    color: black;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    padding-bottom: 12px;
+    display: grid;
+  }
 }
 
 .LightTitleText {
@@ -212,83 +239,5 @@ export default {
   line-height: 12px;
   margin-top: 2px;
   padding-top: 1.5px;
-}
-@media screen and (max-width: 400px) {
-  .CardBox {
-    max-width: 100vw;
-    max-height: 260px;
-    margin-top: 1px;
-    margin-bottom: 1px;
-  }
-  .ImageBox {
-    height: 105px;
-  }
-}
-
-@media screen and (min-width: 400px) {
-  .CardBox {
-    max-width: 48vw;
-    max-height: 400px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 1px;
-    margin-bottom: 5px;
-    margin-left: 3px;
-    margin-right: 3px;
-  }
-  .ImageBox {
-    height: 100px;
-    width: 190px;
-  }
-}
-
-@media screen and (min-width: 440px) and (max-width: 560px) {
-  .CardBox {
-    max-width: 48vw;
-    max-height: 200px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 1px;
-    margin-bottom: 6px;
-    margin-left: 5px;
-    margin-right: 5px;
-  }
-  .ImageBox {
-    height: 120px;
-    width: 220px;
-  }
-}
-
-@media screen and (min-width: 560px) and (max-width: 600px) {
-  .CardBox {
-    max-width: 56vw;
-    max-height: max-content;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 1px;
-    margin-bottom: 6px;
-    margin-left: 5px;
-    margin-right: 5px;
-  }
-  .ImageBox {
-    height: 100px;
-    width: 270px;
-  }
-}
-@media screen and (min-width: 601px) {
-  .CardBox {
-    max-width: 42vw;
-    max-height: max-content;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 1px;
-    margin-bottom: 6px;
-    margin-left: 2px;
-    margin-right: 2px;
-  }
-  .ImageBox {
-    height: 130px;
-    width: 196px;
-  }
 }
 </style>

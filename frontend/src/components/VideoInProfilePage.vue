@@ -212,19 +212,22 @@ export default {
 .LightTrash {
   height: 30px;
   width: 30px;
-  position: relative;
+  position: absolute;
+  left: calc(100vw - 40px);
   top: 1px;
 }
 .DarkTrash {
   height: 30px;
   width: 30px;
-  position: relative;
+  position: absolute;
+  left: calc(100vw - 40px);
   top: 1px;
 }
 .Pen {
   height: 23px;
   width: 23px;
-  position: relative;
+  position: absolute;
+  left: calc(100vw - 70px);
   top: 5px;
 }
 .UpDiv {
