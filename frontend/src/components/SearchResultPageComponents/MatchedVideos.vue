@@ -228,10 +228,40 @@ img {
 .viewCount {
   margin-left: 3vw;
   align-self: center;
-  height: 2.5vh;
+  /* height: 2.5vh; */
 }
 
 .titleTextLightTheme {
   color: black;
+}
+
+@media screen and (max-width: 400px) {
+  .videoCard {
+    grid-template-rows: 1fr auto;
+  }
+
+  .thumbnail{
+    grid-row: 1;
+    grid-column: 1 / span 2;
+    margin: 0 0 1vh 0;
+  }
+
+  .textInfo{
+    grid-column: 1 / span 2;
+    height: unset;
+    margin: 0 0 0.2vh 0;
+  }
+
+  .otherInfo{
+    margin: 1vh 0 0.2vh 0;
+  }
+
+  .uploaderName,
+  .viewCount{
+    height: unset;
+  }
+
+
+  
 }
 </style>
