@@ -143,4 +143,17 @@ h1 {
 .itemLightTheme p{
   color: white;
 }
+
+@media screen and (max-width: 450px) {
+  .trendGrid{
+    display: grid;
+    grid-template-columns: 10% 80% 10%;
+  }
+  .itemsContainer {
+    grid-column-start: 2;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(10,auto);
+    height: unset;
+  }
+}
 </style>
