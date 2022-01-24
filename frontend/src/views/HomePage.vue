@@ -152,9 +152,9 @@ export default {
       }
     );
 
-    document.getElementsByClassName('CardsContainer')[0].style =
-      'grid-template-columns: ' + this.getGridDimensions() + ';';
-    window.addEventListener('resize', this.recalculateGrid);
+    // document.getElementsByClassName('CardsContainer')[0].style =
+    //   'grid-template-columns: ' + this.getGridDimensions() + ';';
+    // window.addEventListener('resize', this.recalculateGrid);
   },
   updated() {
     // here i am trying to only observer the last element of that class
