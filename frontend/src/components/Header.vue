@@ -214,7 +214,9 @@ export default {
       this.searchParam = '';
     },
 
-    resetToStartPage() {
+    async resetToStartPage() {
+      await this.$store.dispatch('setDarkTheme', this.isDarkTheme);
+      localStorage.setItem('isDarkTheme', JSON.stringify(this.isDarkTheme));
       this.$store.dispatch('resetToStartPage', true);
       this.searchParam = '';
       this.$router.push('/');
@@ -229,6 +231,8 @@ export default {
     },
     async logout() {
       await this.$store.dispatch('logout');
+      await this.$store.dispatch('setDarkTheme', this.isDarkTheme);
+      localStorage.setItem('isDarkTheme', JSON.stringify(this.isDarkTheme));
       this.toggleProfileDropdown();
       this.$router.push('/');
     },

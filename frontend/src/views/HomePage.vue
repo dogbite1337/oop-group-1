@@ -121,16 +121,11 @@ export default {
         ? this.$store.getters.getSearchResults
         : [],
       lastVideoObserver: null,
-      darkTheme: localStorage.isDarkTheme === true ? true : false,
+      darkTheme: (localStorage.isDarkTheme == "true" ? true : false),
       showPadder: window.outerWidth > 418 ? false : true,
     };
   },
   async mounted() {
-    if (localStorage.isDarkTheme === true) {
-      this.darkTheme = true;
-    } else {
-      this.darkTheme = false;
-    }
     this.$store.subscribe(async (mutation, state) => {
       if (mutation.type == 'setDarkTheme') {
         if (mutation.payload) {
