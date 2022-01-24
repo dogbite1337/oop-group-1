@@ -1423,4 +1423,63 @@ export default {
   border: none;
   font-family: 'Roboto', sans-serif;
 }
+
+@media screen and (max-width: 420px) {
+
+.SectionGrid,
+.lightSectionGrid {
+  grid-template-columns: 15% auto 15%;
+  justify-content: center;
+  grid-row-gap: 0.5rem;
+}
+
+.ProfileTextDiv{
+  grid-column: 2;
+}
+
+.myVideosTextDiv{
+  grid-column: 2;
+}
+.mySubscribersDiv{
+  grid-column: 2;
+}
+
+.imageInput{
+  width: max-content;
+}
+
+.UsernameGrid,
+.PasswordGrid,
+.DescriptionGrid{
+  grid-template-columns: 10px 80% 10%;
+}
+
+.UsernameInput,
+.NewPasswordInput,
+.descriptionInput,
+.UsernameValue,
+.PasswordValue,
+.DescriptionValue
+{
+  grid-column: 2/span 2;
+  grid-row: 2;
+  margin-left: unset;
+}
+
+.descriptionInput{
+  width: unset;
+}
+
+.cancelInfoButton,
+.saveInfoButton{
+  position: unset;
+  left: unset;
+  margin-left: unset;
+      width: 5rem;
+    justify-self: center;
+    margin-right: unset;
+}
+
+
+}
 </style>
