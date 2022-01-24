@@ -358,7 +358,7 @@ p {
     grid-template-columns: 8% auto 8% auto 8%;
   }
 
-  .videosContianer {
+  .videosContainer {
     grid-template-columns: 1fr 1fr;
   }
 
