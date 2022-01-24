@@ -895,7 +895,7 @@ export default {
       let videoRes = await fetch(
         '/rest/getAllVideosByUsername?' +
           new URLSearchParams({
-            providedUsername: 'xQc',
+            providedUsername: this.currentUser.username,
           })
       );
       this.myVideos = [];
