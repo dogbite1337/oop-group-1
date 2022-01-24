@@ -10,9 +10,9 @@
       v-if="matchedVideoList.length <= 0 && matchedUserList.length <= 0"
     />
   </div>
-  <div class="footerDiv">
+  <!-- <div class="footerDiv"> -->
     <Footer />
-  </div>
+  <!-- </div> -->
 </template>
 
 <script>

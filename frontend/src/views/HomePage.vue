@@ -431,11 +431,11 @@ export default {
   position: sticky;
 } */
 
-.footerDiv {
+/* .footerDiv {
   position: fixed;
   top: calc(100vh - 65px);
   width: 100vw;
-}
+} */
 
 /* .clearHistoryButton{
   width: 97px;

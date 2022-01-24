@@ -49,6 +49,7 @@ export default {
   },
 
   async created() {
+    this.stopObserver = false;
     this.isDarkTheme = await this.$store.getters.getIsDarkTheme;
 
     this.$store.watch(
@@ -77,6 +78,7 @@ export default {
       this.lastVideoObserverSearchResult = new IntersectionObserver(
         (entries) => {
           let lastVideo = entries[0];
+          // console.log(lastVideo)
           if (!lastVideo.isIntersecting) {
             return;
           }
@@ -87,7 +89,7 @@ export default {
               document.querySelector('.emptyDiv')
             );
         },
-        { rootMargin: '50px' }
+        { rootMargin: '100px' }
       );
       this.lastVideoObserverSearchResult.observe(
         document.querySelector('.emptyDiv')
@@ -163,6 +165,11 @@ p {
   color: white;
   display: inline;
   font-size: small;
+}
+
+.emptyDiv{
+  height: 0.5rem;
+  width: 1rem;
 }
 
 /* .title p {
