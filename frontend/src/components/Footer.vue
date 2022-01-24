@@ -1,24 +1,23 @@
 <template>
-  <div class="IconDiv">
-    <div class="SpaceDiv" />
+  <div class="IconDiv" :style="{'background-image': darkTheme == true ? 'url(' + '/src/projectImages/panther.png' + ')' 
+  : 'url(' + 'src/projectImages/smile.png' + ')',
+  'background-position-x': darkTheme == true ? '1rem' : 'unset',
+  'background-size': darkTheme == true ? '100vw 30rem' : '100vw 15rem'}">
+    <!-- <div class="SpaceDiv" /> -->
     <div class="firstBox">
       <router-link :to="{ path: '/' }">
-        <div v-if="darkTheme" class="DarkHomeDiv">
+        <div v-if="darkTheme" class="DarkHomeDiv" @click="goToHome">
           <img class="HomeIcon" src="../projectImages/Dark_House.png" />
-          <router-link :to="{ path: '/' }">
-            <div class="HomeText">Home</div>
-          </router-link>
+          <div class="HomeText">Home</div>
         </div>
-        <div v-if="!darkTheme" class="LightHomeDiv">
+        <div v-if="!darkTheme" class="LightHomeDiv" @click="goToHome">
           <img class="HomeIcon" src="../projectImages/Light_House.png" />
-          <router-link :to="{ path: '/' }">
-            <div class="LightHomeText">Home</div>
-          </router-link>
+          <div class="LightHomeText">Home</div>
         </div>
       </router-link>
     </div>
-    <div class="SpaceDiv" />
-    <div class="PantherDiv">
+    <!-- <div class="SpaceDiv" /> -->
+    <!-- <div class="PantherDiv">
       <img
         v-if="darkTheme"
         class="PantherImage"
@@ -29,8 +28,8 @@
         class="SmileImage"
         src="../projectImages/smile.png"
       />
-    </div>
-    <div class="SpaceDiv" />
+    </div> -->
+    <!-- <div class="SpaceDiv" /> -->
     <div class="SecondBox">
       <div @click="goToProfilePage" v-if="darkTheme" class="DarkProfileDiv">
         <img class="HomeIcon" src="../projectImages/Dark_User.png" />
@@ -41,7 +40,7 @@
         <div class="LightHomeText">Profile</div>
       </div>
     </div>
-    <div class="SpaceDiv" />
+    <!-- <div class="SpaceDiv" /> -->
   </div>
 </template>
 <script>
@@ -75,6 +74,10 @@ export default {
     this.darkTheme = this.$store.getters.getIsDarkTheme;
   },
   methods: {
+    goToHome(){
+      this.$router.push('/');
+    },
+
     goToProfilePage() {
       if (this.$store.getters.getCurrentUser) {
         this.$router.push(
@@ -93,7 +96,7 @@ export default {
 
 .IconDiv {
   display: grid;
-  grid-template-columns: 5px 165px 30px auto 25px 165px 5px;
+  grid-template-columns: repeat(5, 1fr);
   height: 60px;
   text-align: center;
   background-color: black;
@@ -106,11 +109,13 @@ export default {
 }
 
 .firstBox {
-  width: 120px;
+  /* width: 120px; */
+  grid-column: 1;
 }
 
 .SecondBox {
-  width: 120px;
+  /* width: 120px; */
+  grid-column: 5;
 }
 .PantherDiv {
   height: 50px;
@@ -130,6 +135,7 @@ export default {
   width: 35px;
   background: transparent;
   border-radius: 30px;
+  align-self: center;
 }
 
 .ProfileIcon {
@@ -150,7 +156,7 @@ export default {
   height: 240px;
   top: -100px;
   left: -200px;
-  position: relative;
+  /* position: relative; */
   overflow-y: clip;
 }
 .HomeText,
@@ -163,20 +169,20 @@ export default {
   font-family: 'Roboto', sans-serif;
   line-height: 14.06px;
   font-size: 12px;
-  position: relative;
+  /* position: relative; */
   left: -35px;
   top: 13px;
 }
 .DarkHomeText {
   width: max-content;
   background-color: transparent;
-  display: inline-block;
+  /* display: inline-block; */
   color: white;
   font-weight: 400;
   font-family: 'Roboto', sans-serif;
   line-height: 14.06px;
   font-size: 12px;
-  position: relative;
+  /* position: relative; */
   left: 0px;
   top: -8px;
 }
@@ -184,45 +190,55 @@ export default {
 .LightHomeText {
   width: max-content;
   background-color: transparent;
-  display: inline-block;
+  /* display: inline-block; */
   color: black;
   font-weight: 400;
   font-family: 'Roboto', sans-serif;
   line-height: 14.06px;
   font-size: 12px;
-  position: relative;
-  left: 0px;
-  top: -8px;
+  /* position: relative; */
+  /* left: 0px;
+  top: -8px; */
+  align-self: center;
 }
 .DarkHomeDiv,
 .LightHomeDiv {
   padding-top: 7px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .DarkProfileDiv,
 .LightProfileDiv {
-  padding-top: 10px;
-  margin-left: 40px;
+  padding-top: 7px;
+  /* margin-left: 40px; */
   border-radius: 30px;
+  text-align: -webkit-center;
+  display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-.LightHomeDiv {
+
+/* .LightHomeDiv {
   width: 35px;
   height: 60px;
   background-color: transparent;
-  position: absolute;
+  position: absolute; COMMENT OUT
   z-index: 5;
   left: 20px;
-}
+} */
+
 .LightProfileDiv,
 .DarkProfileDiv {
-  width: 35px;
-  height: 60px;
+  /* width: 35px;
+  height: 60px; */
   background-color: transparent;
   color: black;
-  position: absolute;
+  /* position: absolute; */
   z-index: 5;
   right: 25px;
-  padding-top: 7px;
-  padding-right: 10px;
+  /* padding-top: 7px;
+  padding-right: 10px; */
 }
 
 .LightProfileText {
@@ -234,9 +250,15 @@ export default {
 }
 .IconDiv {
   max-height: max-content;
-  overflow-y: clip;
+  /* overflow-y: clip; COMMENT OUT */
+  background-image: url(/src/projectImages/panther.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100vw 30rem;
+  background-position-x: 1rem;
 }
-@media screen and (max-width: 380px) {
+
+/* @media screen and (max-width: 380px) {
   .IconDiv {
     grid-template-columns: 5px auto 0px auto 0px 165px 5px;
   }
@@ -244,5 +266,5 @@ export default {
     position: relative;
     left: -125px;
   }
-}
+} */
 </style>

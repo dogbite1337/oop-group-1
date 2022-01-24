@@ -48,6 +48,7 @@ export default {
   },
 
   async created() {
+    this.stopObserver = false;
     this.isDarkTheme = await this.$store.getters.getIsDarkTheme;
 
     this.$store.watch(
@@ -76,6 +77,7 @@ export default {
       this.lastVideoObserverSearchResult = new IntersectionObserver(
         (entries) => {
           let lastVideo = entries[0];
+          // console.log(lastVideo)
           if (!lastVideo.isIntersecting) {
             return;
           }
@@ -86,7 +88,7 @@ export default {
               document.querySelector('.emptyDiv')
             );
         },
-        { rootMargin: '50px' }
+        { rootMargin: '100px' }
       );
       this.lastVideoObserverSearchResult.observe(
         document.querySelector('.emptyDiv')
@@ -168,6 +170,11 @@ p {
   color: black;
   display: inline;
   font-size: small;
+}
+
+.emptyDiv{
+  height: 0.5rem;
+  width: 1rem;
 }
 
 /* .title p {
@@ -265,7 +272,7 @@ img {
   }
 }
 
-@media screen and (max-width: 520px) and (min-width: 356px) {
+/* @media screen and (max-width: 520px) and (min-width: 356px) {
   .titleText {
     margin-top: 1px;
     font-size: medium;
@@ -278,7 +285,7 @@ img {
     align-self: center;
     height: 2vh;
     font-size: small;
-  }
+  } */
 
   @media screen and (max-width: 400px) {
     .videoCard {
@@ -438,5 +445,5 @@ overflow: hidden;
   height: 20vh;
   width:53vw;
 }*/
-}
+
 </style>
