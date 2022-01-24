@@ -11,10 +11,14 @@
           </div>
           <div class="subAndVideo">
             <div class="subContainer">
-              <p class="time">{{ 'Subscribers: ' + user.subscribers }}</p>
+              <p class="time" :class="
+            isDarkTheme == true ? 'pTagDarkTheme' : 'pTagLightTheme'
+          ">{{ 'Subscribers: ' + user.subscribers }}</p>
             </div>
             <div class="videoCountContainer">
-              <p class="time">{{ 'Videos: ' + user.userVideos.length }}</p>
+              <p class="time" :class="
+            isDarkTheme == true ? 'pTagDarkTheme' : 'pTagLightTheme'"
+            >{{ 'Videos: ' + user.userVideos.length }}</p>
             </div>
             <button
               :class="'subBtn ' + user.userId"
@@ -333,6 +337,10 @@ p {
 
 .profilePicContainer {
   text-align: center;
+}
+
+.pTagLightTheme{
+  color: black !important;
 }
 
 @media screen and (max-width: 470px) {
