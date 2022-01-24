@@ -14,9 +14,8 @@
       <div
         class="titleText"
         :class="
-          isDarkTheme == true ? 'titleTextDarkTheme' : 'titleTextLightTheme'
-        "
-      >
+          isDarkTheme == true ? 'titleTextDarkTheme' : 'titleTextLightTheme' "
+      >  
         {{ displayTitleBeforeKey(video.title) }}
         <p class="keyword">{{ displayKeyWord(video.title) }}</p>
         {{ displayTitleAfterKey(video.title) }}
@@ -161,6 +160,12 @@ p {
 .titleText {
   display: flex;
   color: white;
+  display: inline;
+  font-size: small;
+}
+.titleTextLightTheme{
+    display: flex;
+  color: black;
   display: inline;
   font-size: small;
 }
