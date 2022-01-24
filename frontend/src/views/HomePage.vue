@@ -163,7 +163,9 @@ export default {
     );
   },
   unmounted() {
-    this.lastVideoObserver.disconnect();
+    if(this.lastVideoObserver){
+      this.lastVideoObserver.disconnect();
+    }
     window.removeEventListener('resize', this.recalculateGrid);
   },
 
