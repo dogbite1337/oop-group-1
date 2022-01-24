@@ -149,11 +149,11 @@ export default {
   data() {
     return {
       searchParam: '',
-      profilePic: localStorage.activeUser != undefined ? '' : '',
+      profilePic: localStorage.loggedInUser != undefined ? '' : '',
       profileDropdown: false,
       isDarkTheme: localStorage.isDarkTheme == 'true' ? true : false,
       isLoggedIn: false,
-      currentName: JSON.parse(localStorage.activeUser).username,
+      currentName: this.$store.getters.getCurrentUser,
     };
   },
   created() {
@@ -161,17 +161,21 @@ export default {
     if (route == '/SearchResult') {
       this.searchParam = this.$store.getters.getKeyWord;
     }
+
+    if(this.currentName!=null && localStorage.loggedInUser){
+      this.currentName = JSON.parse(localStorage.loggedInUser).username
+    }
   },
 
   async mounted() {
     await this.$store.dispatch('whoAmI');
-    if (localStorage.activeUser != 'null') {
+    if (localStorage.loggedInUser != 'null') {
       let myUser = new User();
-      let newUser = Object.assign(myUser, JSON.parse(localStorage.activeUser));
+      let newUser = Object.assign(myUser, JSON.parse(localStorage.loggedInUser));
       this.isLoggedIn = true;
       this.profilePic = newUser.getProfileURL();
     }
-    if (localStorage.activeUser == 'null') {
+    if (localStorage.loggedInUser == 'null') {
       this.isLoggedIn = false;
       this.profilePic = '';
     }
@@ -223,7 +227,7 @@ export default {
       await this.$store.dispatch('logout');
       await this.$store.dispatch('setDarkTheme', this.isDarkTheme);
       localStorage.setItem('isDarkTheme', JSON.stringify(this.isDarkTheme));
-      localStorage.setItem('activeUser', null);
+      localStorage.setItem('loggedInUser', null);
       this.isLoggedIn = false;
       this.toggleProfileDropdown();
       this.$router.push('/');

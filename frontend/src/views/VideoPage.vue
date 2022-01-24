@@ -836,7 +836,7 @@ export default {
     async unsubscribe() {
       let uploader = this.video.userId;
 
-      let activeUserId = JSON.parse(localStorage.activeUser).userId;
+      let activeUserId = JSON.parse(localStorage.loggedInUser).userId;
 
       if (this.activeUserId != 0) {
         let unsubscribeRes = await fetch(
@@ -859,7 +859,7 @@ export default {
       let uploader = this.Uploader;
 
       if (uploader) {
-        let currentUser = JSON.parse(localStorage.activeUser);
+        let currentUser = JSON.parse(localStorage.loggedInUser);
         let res = await fetch(
           '/api/subscribe?' +
             new URLSearchParams({
@@ -883,7 +883,7 @@ export default {
         !this.dislikedVideoAlready
       ) {
         let relevantInfo = {
-          userId: JSON.parse(localStorage.activeUser).userId,
+          userId: JSON.parse(localStorage.loggedInUser).userId,
           videoId: this.video.videoId,
           likes: this.video.likes,
         };
@@ -895,7 +895,7 @@ export default {
 
         let likeObject = {
           relatesToVideoId: this.$route.params.id,
-          userId: JSON.parse(localStorage.activeUser).userId,
+          userId: JSON.parse(localStorage.loggedInUser).userId,
           videoId: this.video.videoId,
           commentId: -1,
         };
