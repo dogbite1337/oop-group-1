@@ -41,10 +41,6 @@ export default {
     this.$store.watch((state) => state.darkTheme, (newVal) => {
       this.isDarkTheme = newVal
     })
-    
-    // this.isDarkTheme = await this.$store.getters.getIsDarkTheme
-    // this.isDarkTheme = false;
-    // await this.$store.dispatch('setDarkTheme', this.isDarkTheme)
   },
 };
 </script>
