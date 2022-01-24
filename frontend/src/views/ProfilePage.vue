@@ -1426,7 +1426,9 @@ export default {
 
 @media screen and (max-width: 800px){
   .LightSubscribersGrid,
-  .LightVideosGrid{
+  .LightVideosGrid,
+  .VideosGrid,
+  .SubscribersGrid{
     /* grid-template-columns: repeat(10, 10%); */
     display: flex;
     margin-left: 10%;
@@ -1437,6 +1439,11 @@ export default {
     width: unset;
     position: unset;
     left: unset;
+  }
+
+  .VideosText,
+  .SubscribersText{
+    width: 7rem;
   }
 
   .SubscribersNumber,
