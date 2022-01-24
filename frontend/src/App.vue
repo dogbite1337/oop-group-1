@@ -41,7 +41,6 @@ export default {
     this.$store.watch((state) => state.darkTheme, (newVal) => {
       this.isDarkTheme = newVal
     })
-
   },
 };
 </script>

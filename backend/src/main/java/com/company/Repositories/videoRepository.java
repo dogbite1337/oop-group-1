@@ -417,9 +417,8 @@ public class videoRepository {
                 newVideo.setStars(String.valueOf(rs.getInt("stars")));
                 videosWillBeLoad.add(newVideo);
             }catch(Exception e){
-                System.out.println("Failed in videoRep");
+                System.out.println(e);
             }
-
         }
         con.close();
         return videosWillBeLoad;
