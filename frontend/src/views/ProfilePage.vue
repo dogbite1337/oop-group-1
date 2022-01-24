@@ -122,36 +122,36 @@
     </div>
     <div v-if="chosenProfileInfo && currentUser" class="ProfileInfoSection">
       <div v-if="currentUser && darkTheme" class="SubscribersGrid">
-        <div class="SpaceBlock" />
+        <div class="SpaceBlock1" />
         <div class="SubscribersText">Subscribers:</div>
-        <div class="SpaceBlock" />
+        <div class="SpaceBlock1" />
         <div class="SubscribersNumber">{{ currentSubs }}</div>
-        <div class="SpaceBlock" />
-        <div class="FillerBlock" />
+        <div class="SpaceBlock1" />
+        <div class="FillerBlock1" />
       </div>
       <div v-if="currentUser && !darkTheme" class="LightSubscribersGrid">
-        <div class="SpaceBlock" />
+        <div class="SpaceBlock1" />
         <div class="SubscribersText">Subscribers:</div>
-        <div class="SpaceBlock" />
+        <div class="SpaceBlock1" />
         <div class="SubscribersNumber">{{ currentSubs }}</div>
-        <div class="SpaceBlock" />
-        <div class="FillerBlock" />
+        <div class="SpaceBlock1" />
+        <div class="FillerBlock1" />
       </div>
       <div v-if="currentUser && darkTheme" class="VideosGrid">
-        <div class="SpaceBlock" />
+        <div class="SpaceBlock1" />
         <div class="VideosText">Videos:</div>
-        <div class="SpaceBlock" />
+        <div class="SpaceBlock1" />
         <div class="VideosNumber">{{ currentUser.videosPosted }}</div>
-        <div class="SpaceBlock" />
-        <div class="FillerBlock" />
+        <div class="SpaceBlock1" />
+        <div class="FillerBlock1" />
       </div>
       <div v-if="currentUser && !darkTheme" class="LightVideosGrid">
-        <div class="SpaceBlock" />
+        <div class="SpaceBlock1" />
         <div class="VideosText">Videos:</div>
-        <div class="SpaceBlock" />
+        <div class="SpaceBlock1" />
         <div class="VideosNumber">{{ currentUser.videosPosted }}</div>
-        <div class="SpaceBlock" />
-        <div class="FillerBlock" />
+        <div class="SpaceBlock1" />
+        <div class="FillerBlock1" />
       </div>
       <div v-if="currentUser" class="InfoGrid">
         <div class="UsernameGrid">
@@ -1424,6 +1424,36 @@ export default {
   font-family: 'Roboto', sans-serif;
 }
 
+@media screen and (max-width: 800px){
+  .LightSubscribersGrid,
+  .LightVideosGrid{
+    /* grid-template-columns: repeat(10, 10%); */
+    display: flex;
+    margin-left: 10%;
+  }
+
+  .VideosText,
+  .VideosNumber{
+    width: unset;
+    position: unset;
+    left: unset;
+  }
+
+  .SubscribersNumber,
+  .VideosNumber{
+    margin-left: 1rem;
+  }
+  
+  .SpaceBlock1
+  {
+    display: none;
+  }
+
+  .SubscribersText{
+    grid-column: 2 /span 2;
+  }
+}
+
 @media screen and (max-width: 420px) {
 
 .SectionGrid,
@@ -1475,9 +1505,9 @@ export default {
   position: unset;
   left: unset;
   margin-left: unset;
-      width: 5rem;
-    justify-self: center;
-    margin-right: unset;
+  width: 138px;
+  justify-self: start;
+  margin-right: unset;
 }
 
 
