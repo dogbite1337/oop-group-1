@@ -2,12 +2,12 @@
   <Header />
   <div class="mainContainer">
     <HasResult
-      v-if="matchedVideoList.length > 0 || matchedUserList.length > 0"
+      v-if="showResult==true"
       :matchedVideoList="matchedVideoList"
       :matchedUserList="matchedUserList"
     />
     <NoResult
-      v-if="matchedVideoList.length <= 0 && matchedUserList.length <= 0"
+      v-if="showResult==false"
     />
   </div>
   <!-- <div class="footerDiv"> -->
@@ -33,6 +33,7 @@ export default {
     return {
       matchedVideoList: [],
       matchedUserList: [],
+      showResult: null,
     };
   },
 
@@ -67,6 +68,13 @@ export default {
     await this.storeMatchedUserList(this.matchedUserList);
 
     this.$store.dispatch('setKeyWord', '');
+
+    if(this.matchedVideoList.length > 0 || this.matchedUserList.length > 0){
+      this.showResult = true;
+    }
+    else{
+      this.showResult = false;
+    }
   },
 
   methods: {
