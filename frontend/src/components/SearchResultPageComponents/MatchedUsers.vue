@@ -14,7 +14,6 @@
               <p class="time">{{ 'Subscribers: ' + user.subscribers }}</p>
             </div>
             <div class="videoCountContainer">
-            
               <p class="time">{{ 'Videos: ' + user.userVideos.length }}</p>
             </div>
             <button
@@ -91,17 +90,20 @@ export default {
   },
 
   async created() {
-    this.isDarkTheme = await this.$store.getters.getIsDarkTheme
-    this.$store.watch((state) => state.darkTheme, (newVal) => {
-    this.isDarkTheme = newVal
-    })
+    this.isDarkTheme = await this.$store.getters.getIsDarkTheme;
+    this.$store.watch(
+      (state) => state.darkTheme,
+      (newVal) => {
+        this.isDarkTheme = newVal;
+      }
+    );
 
     // if not logged in or refreshed and there is a save
-    if(this.loggedInUser == null && localStorage.loggedInUser){
-      this.loggedInUser = await JSON.parse(localStorage.loggedInUser)
+    if (this.loggedInUser == null && localStorage.loggedInUser) {
+      this.loggedInUser = await JSON.parse(localStorage.loggedInUser);
     }
     // if not logged in or refreshed and there is no save
-    else if(this.loggedInUser == null && !localStorage.loggedInUser){
+    else if (this.loggedInUser == null && !localStorage.loggedInUser) {
       return;
     }
     if (this.loggedInUser) {
@@ -266,8 +268,7 @@ p {
 .subContainer p,
 .videoCountContainer p,
 .textContainer p,
-.userNameTEXT
- {
+.userNameTEXT {
   font-size: smaller;
   font: menu;
   color: white;
@@ -305,7 +306,7 @@ p {
 
 .title {
   font-size: smaller;
-   color: white;
+  color: white;
 }
 
 .textContainer {
@@ -330,38 +331,38 @@ p {
   border: black 1px solid;
 }
 
-.profilePicContainer{
+.profilePicContainer {
   text-align: center;
 }
 
 @media screen and (max-width: 470px) {
-  .otherInfoContainer{
+  .otherInfoContainer {
     display: grid;
     grid-column: 4;
     justify-content: center;
   }
-  .subAndVideo{
+  .subAndVideo {
     display: grid;
     grid-template-columns: 1fr;
   }
-  .subBtn{
+  .subBtn {
     width: 7rem;
   }
 
-  .profilePicContainer{
+  .profilePicContainer {
     grid-column: 2;
     /* place-self: center; */
   }
 
-  .infoContainer{
+  .infoContainer {
     grid-template-columns: 8% auto 8% auto 8%;
   }
 
-  .videosContianer{
+  .videosContianer {
     grid-template-columns: 1fr 1fr;
   }
 
-  .textContainer{
+  .textContainer {
     grid-column: 1 / span 2;
   }
 }
@@ -551,10 +552,4 @@ p {
 
 }
 }*/
-
 </style>
-
-
-
-
-

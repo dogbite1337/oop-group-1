@@ -85,13 +85,11 @@ export default {
 .mainContainer {
   height: inherit;
   overflow: scroll;
-  max-width:100vw;
-
+  max-width: 100vw;
 }
 
 .BackDrop {
   height: 0;
-
 }
 .footerDiv {
   position: relative;

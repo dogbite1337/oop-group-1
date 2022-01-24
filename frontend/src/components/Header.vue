@@ -180,6 +180,7 @@ export default {
 
   async mounted() {
     await this.$store.dispatch('whoAmI');
+
     if (this.$store.getters.getCurrentUser) {
       this.profilePic = this.$store.getters.getCurrentUser.getProfileURL();
     }
