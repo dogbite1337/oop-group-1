@@ -70,7 +70,9 @@
           >
             {{ video.title }}
           </p>
-          <p class="time">{{ uploadTime(video.uploadDate) }}</p>
+          <p class="time" :class="
+            isDarkTheme == true ? 'pTagDarkTheme' : 'pTagLightTheme'
+          ">{{ uploadTime(video.uploadDate) }}</p>
         </div>
         <div class="textContainer" v-if="user.userVideos.length > 2">
           <p>{{ 'check all ' + user.userVideos.length + ' videos >' }}</p>
