@@ -157,39 +157,31 @@ export default {
         ? this.$store.getters.getCurrentUser.getProfileURL()
         : '',
       profileDropdown: false,
-      isDarkTheme: true,
+      isDarkTheme: (localStorage.isDarkTheme == "true" ? true : false),
     };
   },
   created() {
-    this.isDarkTheme = this.$store.getters.getIsDarkTheme;
-    if (this.isDarkTheme == null) {
-      this.isDarkTheme = true;
-    }
+
     let route = this.$router.currentRoute.value.fullPath;
     if (route == '/SearchResult') {
       this.searchParam = this.$store.getters.getKeyWord;
     }
 
-    this.$store.watch(
-      (state) => state.darkTheme,
-      (newVal) => {
-        this.isDarkTheme = newVal;
-      }
-    );
   },
 
   async mounted() {
     await this.$store.dispatch('whoAmI');
+
     if (this.$store.getters.getCurrentUser) {
       this.profilePic = this.$store.getters.getCurrentUser.getProfileURL();
     }
-    this.$store.subscribe(async (mutation, state) => {
-      if (mutation.payload) {
-        this.isDarkTheme = true;
-      } else {
-        this.isDarkTheme = false;
-      }
-    });
+    if(localStorage.isDarkTheme == "true"){
+      this.isDarkTheme = true;
+    }
+    else{
+      this.isDarkTheme = false;
+    }
+
   },
 
   methods: {
@@ -213,7 +205,9 @@ export default {
       this.searchParam = '';
     },
 
-    resetToStartPage() {
+    async resetToStartPage() {
+      await this.$store.dispatch('setDarkTheme', this.isDarkTheme);
+      localStorage.setItem('isDarkTheme', JSON.stringify(this.isDarkTheme));
       this.$store.dispatch('resetToStartPage', true);
       this.searchParam = '';
       this.$router.push('/');
@@ -228,6 +222,8 @@ export default {
     },
     async logout() {
       await this.$store.dispatch('logout');
+      await this.$store.dispatch('setDarkTheme', this.isDarkTheme);
+      localStorage.setItem('isDarkTheme', JSON.stringify(this.isDarkTheme));
       this.toggleProfileDropdown();
       this.$router.push('/');
     },

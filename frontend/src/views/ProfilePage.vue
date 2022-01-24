@@ -809,6 +809,7 @@ export default {
     chooseBlackTheme() {
       this.darkTheme = true;
       this.$store.dispatch('setDarkTheme', true);
+      localStorage.setItem('isDarkTheme', JSON.stringify(true));
     },
     chooseWhiteTheme() {
       this.darkTheme = false;
