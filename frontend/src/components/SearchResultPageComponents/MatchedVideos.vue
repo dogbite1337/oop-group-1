@@ -272,7 +272,7 @@ img {
   }
 }
 
-@media screen and (max-width: 520px) and (min-width: 356px) {
+/* @media screen and (max-width: 520px) and (min-width: 356px) {
   .titleText {
     margin-top: 1px;
     font-size: medium;
@@ -285,7 +285,7 @@ img {
     align-self: center;
     height: 2vh;
     font-size: small;
-  }
+  } */
 
   @media screen and (max-width: 400px) {
     .videoCard {
@@ -445,5 +445,5 @@ overflow: hidden;
   height: 20vh;
   width:53vw;
 }*/
-}
+
 </style>
