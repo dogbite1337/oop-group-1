@@ -324,8 +324,6 @@
         @unsubscribe="unsubscribe"
       />
     </div>
-    <div class="RoomBlock" />
-    <Footer class="footerDiv" />
   </div>
   <div v-if="currentUser && darkTheme" class="DarkBackgroundDiv">
     <router-link class="HomeLink" to="/">
@@ -652,8 +650,6 @@
         @unsubscribe="unsubscribe"
       />
     </div>
-    <div class="RoomBlock" />
-    <Footer class="footerDiv" />
   </div>
 </template>
 <script>
@@ -667,7 +663,6 @@ export default {
   emits: ['unsubscribe'],
   name: 'ProfilePage',
   components: {
-    Footer,
     SubscriptionToUser,
     VideoInProfilePage,
   },
@@ -1177,15 +1172,7 @@ export default {
 .HomeLink {
   text-decoration: none;
 }
-.footerDiv {
-  display: grid;
-  grid-template-rows: 5vh auto;
-  background-color: black;
-  position: absolute;
-  bottom: 0px;
-  padding-bottom: 10px;
-  width: 100%;
-}
+
 .rest {
   height: 50px;
   background-color: red;
