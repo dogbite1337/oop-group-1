@@ -169,13 +169,13 @@ export default {
 
   async mounted() {
     await this.$store.dispatch('whoAmI');
-    if (localStorage.loggedInUser != 'null') {
+    if (localStorage.loggedInUser) {
       let myUser = new User();
       let newUser = Object.assign(myUser, JSON.parse(localStorage.loggedInUser));
       this.isLoggedIn = true;
       this.profilePic = newUser.getProfileURL();
     }
-    if (localStorage.loggedInUser == 'null') {
+    if (!localStorage.loggedInUser) {
       this.isLoggedIn = false;
       this.profilePic = '';
     }
@@ -227,7 +227,7 @@ export default {
       await this.$store.dispatch('logout');
       await this.$store.dispatch('setDarkTheme', this.isDarkTheme);
       localStorage.setItem('isDarkTheme', JSON.stringify(this.isDarkTheme));
-      localStorage.setItem('loggedInUser', null);
+      localStorage.removeItem('loggedInUser');
       this.isLoggedIn = false;
       this.toggleProfileDropdown();
       this.$router.push('/');
