@@ -68,18 +68,19 @@ export default {
           mySearchHistoryList = JSON.parse(localStorage.searchHistoryList);
         }
 
+
         if (
           mySearchHistoryList.length > 5 &&
-          mySearchHistoryList.some((data) => data.keyWord != obj.keyWord)
+          !mySearchHistoryList.some((data) => data.keyWord == obj.keyWord)
         ) {
           mySearchHistoryList.splice(mySearchHistoryList.length - 1, 1);
           mySearchHistoryList.unshift(obj);
         } else if (
-          mySearchHistoryList.length == 0 ||
-          mySearchHistoryList.some((data) => data.keyWord != obj.keyWord)
+          mySearchHistoryList.length < 6 &&
+          !mySearchHistoryList.some((data) => data.keyWord == obj.keyWord)
         ) {
           mySearchHistoryList.unshift(obj);
-        }
+        } 
 
         await this.$store.dispatch('cacheSearchHistory', mySearchHistoryList);
         localStorage.setItem(
@@ -155,5 +156,18 @@ h1 {
 
 .itemLightTheme p {
   color: white;
+}
+
+@media screen and (max-width: 450px) {
+  .trendGrid{
+    display: grid;
+    grid-template-columns: 6% 1fr 6%;
+  }
+  .itemsContainer {
+    grid-column-start: 2;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(10,auto);
+    height: unset;
+  }
 }
 </style>
