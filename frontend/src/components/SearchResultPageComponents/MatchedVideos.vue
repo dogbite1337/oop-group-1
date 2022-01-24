@@ -157,7 +157,7 @@ p {
   color: rgb(255, 99, 99);
   font-size: inherit;
   display: inline;
-  margin: 0 -5px;
+  margin: 0 -3.5px;
 }
 
 .titleText {
@@ -165,6 +165,7 @@ p {
   color: white;
   display: inline;
   font-size: small;
+  padding-left:4px;
 }
 .titleTextLightTheme {
   display: flex;
