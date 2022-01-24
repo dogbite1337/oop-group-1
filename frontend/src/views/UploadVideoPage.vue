@@ -277,9 +277,6 @@ div {
 input {
   width: 362px;
   padding-left: 10px;
-  /*background-color: #131313;
-  color: white;
-  border: 0.7px solid #ffffff;*/
   box-sizing: border-box;
   padding-top: 2.5px;
   padding-bottom: 2.5px;
