@@ -157,16 +157,14 @@ export default {
         ? this.$store.getters.getCurrentUser.getProfileURL()
         : '',
       profileDropdown: false,
-      isDarkTheme: (localStorage.isDarkTheme == "true" ? true : false),
+      isDarkTheme: localStorage.isDarkTheme == 'true' ? true : false,
     };
   },
   created() {
-
     let route = this.$router.currentRoute.value.fullPath;
     if (route == '/SearchResult') {
       this.searchParam = this.$store.getters.getKeyWord;
     }
-
   },
 
   async mounted() {
@@ -175,13 +173,11 @@ export default {
     if (this.$store.getters.getCurrentUser) {
       this.profilePic = this.$store.getters.getCurrentUser.getProfileURL();
     }
-    if(localStorage.isDarkTheme == "true"){
+    if (localStorage.isDarkTheme == 'true') {
       this.isDarkTheme = true;
-    }
-    else{
+    } else {
       this.isDarkTheme = false;
     }
-
   },
 
   methods: {
@@ -264,7 +260,12 @@ export default {
     margin-left: 5px;
     margin-right: 10px;
   }
+  .profilePic {
+    position: relative;
+    right: 30px;
+  }
 }
+
 .searchIcon {
   height: 20px;
   width: 20px;
@@ -517,6 +518,14 @@ export default {
   .SearchAndLoginDiv {
     grid-template-columns: 5px 15px 10px 199px 1px 50px 1px 1px 1px 1px 10px;
   }
+  .searchDiv {
+    position: relative;
+    left: -20px;
+  }
+  .profilePic {
+    position: relative;
+    left: -50px;
+  }
 }
 @media screen and (min-width: 301px) {
   .SearchAndLoginDiv {
@@ -531,6 +540,10 @@ export default {
 @media screen and (min-width: 370px) {
   .SearchAndLoginDiv {
     grid-template-columns: 5px 15px 10px max-content auto 50px 1px 1px 1px 1px 10px;
+  }
+  .profilePic {
+    position: relative;
+    right: 20px;
   }
 }
 </style>
