@@ -1,17 +1,32 @@
 <template>
   <div class="searchHistoryContainer" v-if="mySearchHistoryList.length > 0">
     <div class="title">
-      <h1 :class="isDarkTheme == true ? 'darkTheme' : 'lightTheme'">Search History</h1>
+      <h1 :class="isDarkTheme == true ? 'darkTheme' : 'lightTheme'">
+        Search History
+      </h1>
     </div>
     <div class="buttonContainer">
-      <button @click="btnClicked ? (btnClicked = false) : (btnClicked = true)" :class="isDarkTheme == true ? 'btnDarkTheme' : 'btnLightTheme'">
+      <button
+        @click="btnClicked ? (btnClicked = false) : (btnClicked = true)"
+        :class="isDarkTheme == true ? 'btnDarkTheme' : 'btnLightTheme'"
+      >
         {{ btnClicked ? 'close' : 'expand' }}
       </button>
     </div>
-    <div class="historyItemContainer" v-if="!btnClicked && mySearchHistoryList" :class="isDarkTheme == true ? 'historyItemContainerDarkTheme' : 'historyItemContainerLightTheme'">
+    <div
+      class="historyItemContainer"
+      v-if="!btnClicked && mySearchHistoryList"
+      :class="
+        isDarkTheme == true
+          ? 'historyItemContainerDarkTheme'
+          : 'historyItemContainerLightTheme'
+      "
+    >
       <div
         class="historyItem"
-        :class="isDarkTheme == true ? 'historyItemDarkTheme' : 'historyItemLightTheme'"
+        :class="
+          isDarkTheme == true ? 'historyItemDarkTheme' : 'historyItemLightTheme'
+        "
         v-for="item of mySearchHistoryList.slice(0, 3)"
         :key="item"
       >
@@ -48,14 +63,22 @@ export default {
       isDarkTheme: true,
     };
   },
-  async beforeCreate(){
-    this.isDarkTheme = await this.$store.getters.getIsDarkTheme
-    if(this.$store.getters.getMySearchHistoryList == null && localStorage.searchHistoryList){
-      this.mySearchHistoryList = await JSON.parse(localStorage.searchHistoryList)
+  async beforeCreate() {
+    this.isDarkTheme = await this.$store.getters.getIsDarkTheme;
+    if (
+      this.$store.getters.getMySearchHistoryList == null &&
+      localStorage.searchHistoryList
+    ) {
+      this.mySearchHistoryList = await JSON.parse(
+        localStorage.searchHistoryList
+      );
     }
-    this.$store.watch((state) => state.darkTheme, (newVal) => {
-    this.isDarkTheme = newVal
-    })
+    this.$store.watch(
+      (state) => state.darkTheme,
+      (newVal) => {
+        this.isDarkTheme = newVal;
+      }
+    );
   },
 
   async mounted() {
@@ -161,20 +184,20 @@ button {
   text-align: center;
 }
 
-.btnLightTheme{
+.btnLightTheme {
   background-color: black;
   color: white;
 }
 
-.historyItemContainerLightTheme{
+.historyItemContainerLightTheme {
   background-color: #939393;
 }
 
-.historyItemLightTheme{
+.historyItemLightTheme {
   background-color: white;
 }
 
-.historyItemLightTheme p{
+.historyItemLightTheme p {
   color: #939393;
 }
 
