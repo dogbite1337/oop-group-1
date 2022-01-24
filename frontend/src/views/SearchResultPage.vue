@@ -83,9 +83,9 @@ export default {
 
 <style scoped>
 .mainContainer {
-  /* height: 100vh; */
+  height: inherit;
   overflow: scroll;
-  max-width:100vw;
+  /* max-width:100vw; */
 
 }
 
@@ -94,7 +94,7 @@ export default {
 
 }
 .footerDiv {
-  position: relative;
-  top: 100vh;
+  /* position: relative; */
+  /* top: 100vh; */
 }
 </style>
