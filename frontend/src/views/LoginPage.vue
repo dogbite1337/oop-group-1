@@ -119,7 +119,7 @@ export default {
       hideEyes: '',
       wantedUserName: '',
       wantedPassword: '',
-      darkTheme: this.$store.getters.getIsDarkTheme,
+      darkTheme: (localStorage.isDarkTheme == "true" ? true : false),
     };
   },
   mounted() {
@@ -208,7 +208,7 @@ export default {
 .LineDiv {
   height: 1px;
   background-color: black;
-  margin-left: -30px;
+  margin-left: -24px;
 }
 .forgotPasswordDiv {
   text-align: center;
@@ -241,7 +241,7 @@ export default {
   font-size: 18px;
   line-height: 21px;
 }
-.DarlLoginButton {
+.DarkLoginButton {
   width: 154px;
   height: 40px;
   outline: solid 0.7px white;

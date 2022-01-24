@@ -14,9 +14,8 @@
       <div
         class="titleText"
         :class="
-          isDarkTheme == true ? 'titleTextDarkTheme' : 'titleTextLightTheme'
-        "
-      >
+          isDarkTheme == true ? 'titleTextDarkTheme' : 'titleTextLightTheme' "
+      >  
         {{ displayTitleBeforeKey(video.title) }}
         <p class="keyword">{{ displayKeyWord(video.title) }}</p>
         {{ displayTitleAfterKey(video.title) }}
@@ -166,6 +165,12 @@ p {
   display: inline;
   font-size: small;
 }
+.titleTextLightTheme{
+    display: flex;
+  color: black;
+  display: inline;
+  font-size: small;
+}
 
 .emptyDiv{
   height: 0.5rem;
@@ -240,85 +245,75 @@ img {
 }
 
 @media screen and (max-width: 355px) {
-
-.titleText {
-margin-top:1px;
-font-size: medium;
-max-width: 140px;
-overflow: hidden;
-  
-}
-.uploaderName,
-.viewCount {
-  margin-left: 3vw;
-  align-self: center;
-  height: 2vh;
-    font-size: small;
-}
-.uploader,
-.view {
-  display: grid;
-  grid-template-columns: 14% auto; 
-}
-
-.textInfo {
-  height: 15vh;
-  margin-left: 1vw;
-  place-content: space-between;
-  width:160px;
- 
-}
-
-
-}
-
-@media screen and (max-width:520px) and (min-width: 356px) {
-
-.titleText {
-margin-top:1px;
-font-size: medium;
-max-width: 120px;
-overflow: hidden;
-  
-}
-.uploaderName,
-.viewCount {
-  margin-left: 3vw;
-  align-self: center;
-  height: 2vh;
-    font-size: small;
-}
-
-@media screen and (max-width: 400px) {
-  .videoCard {
-    grid-template-rows: 1fr auto;
+  .titleText {
+    margin-top: 1px;
+    font-size: medium;
+    max-width: 140px;
+    overflow: hidden;
   }
-
-  .thumbnail{
-    grid-row: 1;
-    grid-column: 1 / span 2;
-    margin: 0 0 1vh 0;
-  }
-
-  .textInfo{
-    grid-column: 1 / span 2;
-    height: unset;
-    margin: 0 0 0.2vh 0;
-  }
-
-  .otherInfo{
-    margin: 1vh 0 0.2vh 0;
-  }
-
   .uploaderName,
-  .viewCount{
-    height: unset;
+  .viewCount {
+    margin-left: 3vw;
+    align-self: center;
+    height: 2vh;
+    font-size: small;
+  }
+  .uploader,
+  .view {
+    display: grid;
+    grid-template-columns: 14% auto;
   }
 
-
-  
+  .textInfo {
+    height: 15vh;
+    margin-left: 1vw;
+    place-content: space-between;
+    width: 160px;
+  }
 }
-/*.uploader,
+
+@media screen and (max-width: 520px) and (min-width: 356px) {
+  .titleText {
+    margin-top: 1px;
+    font-size: medium;
+    max-width: 120px;
+    overflow: hidden;
+  }
+  .uploaderName,
+  .viewCount {
+    margin-left: 3vw;
+    align-self: center;
+    height: 2vh;
+    font-size: small;
+  }
+
+  @media screen and (max-width: 400px) {
+    .videoCard {
+      grid-template-rows: 1fr auto;
+    }
+
+    .thumbnail {
+      grid-row: 1;
+      grid-column: 1 / span 2;
+      margin: 0 0 1vh 0;
+    }
+
+    .textInfo {
+      grid-column: 1 / span 2;
+      height: unset;
+      margin: 0 0 0.2vh 0;
+    }
+
+    .otherInfo {
+      margin: 1vh 0 0.2vh 0;
+    }
+
+    .uploaderName,
+    .viewCount {
+      height: unset;
+    }
+  }
+  /*.uploader,
 .view {
   display: grid;
   grid-template-columns: 14% auto; 
@@ -451,5 +446,4 @@ overflow: hidden;
   width:53vw;
 }*/
 }
-
 </style>

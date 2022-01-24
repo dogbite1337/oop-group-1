@@ -11,6 +11,7 @@
       class="videoBox"
       ref="videoBox"
     />
+    <div class="videoBox" />
   </div>
   <div v-if="!darkTheme" class="LightCardsContainer CardsContainer">
     <VideoCard
@@ -20,6 +21,7 @@
       class="videoBox"
       ref="videoBox"
     />
+    <div class="videoBox" />
   </div>
 
   <Footer class="footerDiv" />
@@ -121,11 +123,11 @@ export default {
         ? this.$store.getters.getSearchResults
         : [],
       lastVideoObserver: null,
-      darkTheme: this.$store.getters.getIsDarkTheme,
+      // darkTheme: this.$store.getters.getIsDarkTheme,
+      darkTheme: (localStorage.isDarkTheme == "true" ? true : false),
       showPadder: window.outerWidth > 418 ? false : true,
     };
   },
-
   async mounted() {
     // this.$store.subscribe(async (mutation, state) => {
     //   if (mutation.type == 'setDarkTheme') {
@@ -317,13 +319,13 @@ export default {
   display: grid;
   grid-template-columns: 17px 39px 19px 165px 1px auto;
 }
-.usernameP{
-  color: #E75858;
-  margin-left:5px;
+.usernameP {
+  color: #e75858;
+  margin-left: 5px;
 }
 .subscribersP {
   color: #939393;
-  margin-left:5px;
+  margin-left: 5px;
 }
 .DarkNoLineDiv {
   height: 32px;
@@ -657,12 +659,12 @@ export default {
 }
 
 @media screen and (min-width: 401px) {
-.CardsContainer {
-  width: max-content;
-  margin-left: auto;
-  margin-right: auto;
-  padding-bottom: 65px;
-}
+  .CardsContainer {
+    width: max-content;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 65px;
+  }
 }
 
 @media screen and (min-width: 550px) {
@@ -728,55 +730,51 @@ export default {
     z-index: 3;
     position: absolute;
   }
-      .topVideosGrid{
-  transform: scale(1.1, 1.1);
-  margin-bottom:10px;
-   margin-top:15px;
-  }
-
-  .CardBox{
+  .topVideosGrid {
     transform: scale(1.1, 1.1);
-  margin-bottom:10px;
-   margin-top:10px;
+    margin-bottom: 10px;
+    margin-top: 15px;
   }
 
-  
-.userResultsDiv{
-transform: scale(1.3, 1.3);
-  margin-bottom:20px;
-   margin-top:20px;
-  margin-left:40px;
+  .CardBox {
+    transform: scale(1.1, 1.1);
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+
+  .userResultsDiv {
+    transform: scale(1.3, 1.3);
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-left: 40px;
     position: sticky;
-}
-
-.SubscribeButton{
-  height: 18px;
-  width: 80px;
-  font-size: 12px;
-  line-height: 12px;
-  margin-bottom: 20px;
-  top: -30px;
-}
-  
-    .topVideosGrid{
-  transform: scale(1.1, 1.1);
-  margin-bottom:10px;
-   margin-top:20px;
   }
-    .checkAllVideosLink{
-  font-size: 12px;
 
-}
+  .SubscribeButton {
+    height: 18px;
+    width: 80px;
+    font-size: 12px;
+    line-height: 12px;
+    margin-bottom: 20px;
+    top: -30px;
+  }
 
-  .CardBox{
+  .topVideosGrid {
     transform: scale(1.1, 1.1);
-  margin-bottom:20px;
-   margin-top:20px;
-   margin-left:30px;
+    margin-bottom: 10px;
+    margin-top: 20px;
+  }
+  .checkAllVideosLink {
+    font-size: 12px;
+  }
 
+  .CardBox {
+    transform: scale(1.1, 1.1);
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-left: 30px;
   }
 }
-  
 
 @media screen and (min-width: 700px) {
   .CardsContainer {
@@ -844,39 +842,37 @@ transform: scale(1.3, 1.3);
     position: absolute;
   }
 
-.userResultsDiv{
-transform: scale(1.3, 1.3);
-  margin-bottom:40px;
-   margin-top:40px;
-  margin-left:65px;
-    position: sticky;
-}
-
-.SubscribeButton{
-  height: 20px;
-  width: 80px;
-  font-size: 13px;
-  line-height: 12px;
-  margin-bottom: 20px;
-  top: -30px;
-}
-  
-    .topVideosGrid{
-  transform: scale(1.3, 1.3);
-  margin-bottom:20px;
-   margin-top:40px;
-  }
-    .checkAllVideosLink{
-  font-size: 13px;
-
-}
-
-  .CardBox{
+  .userResultsDiv {
     transform: scale(1.3, 1.3);
-  margin-bottom:20px;
-   margin-top:30px;
-   margin-left:110px;
+    margin-bottom: 40px;
+    margin-top: 40px;
+    margin-left: 65px;
+    position: sticky;
+  }
 
+  .SubscribeButton {
+    height: 20px;
+    width: 80px;
+    font-size: 13px;
+    line-height: 12px;
+    margin-bottom: 20px;
+    top: -30px;
+  }
+
+  .topVideosGrid {
+    transform: scale(1.3, 1.3);
+    margin-bottom: 20px;
+    margin-top: 40px;
+  }
+  .checkAllVideosLink {
+    font-size: 13px;
+  }
+
+  .CardBox {
+    transform: scale(1.3, 1.3);
+    margin-bottom: 20px;
+    margin-top: 30px;
+    margin-left: 110px;
   }
 }
 
@@ -946,47 +942,44 @@ transform: scale(1.3, 1.3);
     z-index: 3;
     position: absolute;
   }
-.userResultsDiv{
-transform: scale(1.5, 1.5);
-  margin-bottom:40px;
-   margin-top:60px;
-  margin-left:85px;
+  .userResultsDiv {
+    transform: scale(1.5, 1.5);
+    margin-bottom: 40px;
+    margin-top: 60px;
+    margin-left: 85px;
     position: sticky;
-}
-
-.SubscribeButton{
-  height: 24px;
-  width: 100px;
-  font-size: 14px;
-  line-height: 12px;
-  margin-bottom: 20px;
-  top: -30px;
-     position:relative;
-}
-  
-  .topVideosGrid{
-  transform: scale(1.5, 1.5);
-  margin-bottom:40px;
-   margin-top:60px;
   }
-  .checkAllVideosLink{
-  font-size: 15px;
 
-}
+  .SubscribeButton {
+    height: 24px;
+    width: 100px;
+    font-size: 14px;
+    line-height: 12px;
+    margin-bottom: 20px;
+    top: -30px;
+    position: relative;
+  }
 
-  .CardBox{
- transform: scale(1.5, 1.5);
-  margin-bottom:40px;
-   margin-top:60px;
-       margin-left:110px;
-       position:fixed;
+  .topVideosGrid {
+    transform: scale(1.5, 1.5);
+    margin-bottom: 40px;
+    margin-top: 60px;
+  }
+  .checkAllVideosLink {
+    font-size: 15px;
+  }
+
+  .CardBox {
+    transform: scale(1.5, 1.5);
+    margin-bottom: 40px;
+    margin-top: 60px;
+    margin-left: 110px;
+    position: fixed;
   }
 }
 @media screen and (max-width: 400px) {
   .videoBox {
     width: 98vw;
-    
   }
-  
 }
 </style>

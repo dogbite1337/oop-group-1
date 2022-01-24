@@ -94,15 +94,13 @@ export default {
   height: inherit;
   overflow: scroll;
   /* max-width:100vw; */
-
 }
 
 .BackDrop {
   height: 0;
-
 }
-.footerDiv {
-  /* position: relative; */
-  /* top: 100vh; */
-}
+/* .footerDiv {
+  position: relative;
+  top: 100vh;
+} */
 </style>
