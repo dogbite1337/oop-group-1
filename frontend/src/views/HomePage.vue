@@ -50,6 +50,8 @@ export default {
     await this.loadMoreVideos();
     let allVideos = this.relevantVideos;
 
+
+
     // this.$store.dispatch('cacheFirstEightVideos', allVideos);
     localStorage.setItem('relatedVideos', JSON.stringify(allVideos));
     this.relevantVideos = [];
@@ -119,21 +121,35 @@ export default {
         ? this.$store.getters.getSearchResults
         : [],
       lastVideoObserver: null,
-      darkTheme: false,
+      darkTheme: this.$store.getters.getIsDarkTheme,
       showPadder: window.outerWidth > 418 ? false : true,
     };
   },
 
   async mounted() {
-    this.$store.subscribe(async (mutation, state) => {
-      if (mutation.type == 'setDarkTheme') {
-        if (mutation.payload) {
-          this.darkTheme = true;
-        } else {
-          this.darkTheme = false;
-        }
+    // this.$store.subscribe(async (mutation, state) => {
+    //   if (mutation.type == 'setDarkTheme') {
+    //     if (mutation.payload) {
+    //       this.darkTheme = true;
+    //     } else {
+    //       this.darkTheme = false;
+    //     }
+    //   }
+    // });
+
+    this.darkTheme = await this.$store.getters.getIsDarkTheme;
+
+    if (this.darkTheme == null) {
+      this.darkTheme = true;
+    }
+
+    this.$store.watch(
+      (state) => state.darkTheme,
+      (newVal) => {
+        this.darkTheme = newVal;
       }
-    });
+    );
+
     document.getElementsByClassName('CardsContainer')[0].style =
       'grid-template-columns: ' + this.getGridDimensions() + ';';
     window.addEventListener('resize', this.recalculateGrid);

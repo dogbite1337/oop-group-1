@@ -257,13 +257,13 @@ export default {
 }
 
 .IconDiv {
-  position: absolute;
+  /* position: absolute; */
   width: -webkit-fill-available;
 }
 
 .searchPage {
   color: white;
-  height: 75.3vh;
+  height: 100vh;
 }
 
 .searchPageButtonsContainer {

@@ -1,6 +1,7 @@
 <template>
-  <div class="IconDiv">
-    <div class="SpaceDiv" />
+  <div class="IconDiv" :style="{'background-image': darkTheme == true ? 'url(' + '/src/projectImages/panther.png' + ')' 
+  : 'url(' + 'src/projectImages/smile.png' + ')',}">
+    <!-- <div class="SpaceDiv" /> -->
     <div class="firstBox">
       <router-link :to="{ path: '/' }">
         <div v-if="darkTheme" class="DarkHomeDiv">
@@ -17,8 +18,8 @@
         </div>
       </router-link>
     </div>
-    <div class="SpaceDiv" />
-    <div class="PantherDiv">
+    <!-- <div class="SpaceDiv" /> -->
+    <!-- <div class="PantherDiv">
       <img
         v-if="darkTheme"
         class="PantherImage"
@@ -29,8 +30,8 @@
         class="SmileImage"
         src="../projectImages/smile.png"
       />
-    </div>
-    <div class="SpaceDiv" />
+    </div> -->
+    <!-- <div class="SpaceDiv" /> -->
     <div class="SecondBox">
       <div @click="goToProfilePage" v-if="darkTheme" class="DarkProfileDiv">
         <img class="HomeIcon" src="../projectImages/Dark_User.png" />
@@ -41,7 +42,7 @@
         <div class="LightHomeText">Profile</div>
       </div>
     </div>
-    <div class="SpaceDiv" />
+    <!-- <div class="SpaceDiv" /> -->
   </div>
 </template>
 <script>
@@ -93,7 +94,7 @@ export default {
 
 .IconDiv {
   display: grid;
-  grid-template-columns: 5px 165px 30px auto 25px 165px 5px;
+  grid-template-columns: repeat(5, 1fr);
   height: 60px;
   text-align: center;
   background-color: black;
@@ -106,11 +107,13 @@ export default {
 }
 
 .firstBox {
-  width: 120px;
+  /* width: 120px; */
+  grid-column: 1;
 }
 
 .SecondBox {
-  width: 120px;
+  /* width: 120px; */
+  grid-column: 5;
 }
 .PantherDiv {
   height: 50px;
@@ -130,6 +133,7 @@ export default {
   width: 35px;
   background: transparent;
   border-radius: 30px;
+  align-self: center;
 }
 
 .ProfileIcon {
@@ -150,7 +154,7 @@ export default {
   height: 240px;
   top: -100px;
   left: -200px;
-  position: relative;
+  /* position: relative; */
   overflow-y: clip;
 }
 .HomeText,
@@ -163,20 +167,20 @@ export default {
   font-family: 'Roboto', sans-serif;
   line-height: 14.06px;
   font-size: 12px;
-  position: relative;
+  /* position: relative; */
   left: -35px;
   top: 13px;
 }
 .DarkHomeText {
   width: max-content;
   background-color: transparent;
-  display: inline-block;
+  /* display: inline-block; */
   color: white;
   font-weight: 400;
   font-family: 'Roboto', sans-serif;
   line-height: 14.06px;
   font-size: 12px;
-  position: relative;
+  /* position: relative; */
   left: 0px;
   top: -8px;
 }
@@ -184,45 +188,48 @@ export default {
 .LightHomeText {
   width: max-content;
   background-color: transparent;
-  display: inline-block;
+  /* display: inline-block; */
   color: black;
   font-weight: 400;
   font-family: 'Roboto', sans-serif;
   line-height: 14.06px;
   font-size: 12px;
-  position: relative;
+  /* position: relative; */
   left: 0px;
   top: -8px;
 }
 .DarkHomeDiv,
 .LightHomeDiv {
   padding-top: 7px;
+  display: flex;
+  flex-direction: column;
 }
 .DarkProfileDiv,
 .LightProfileDiv {
-  padding-top: 10px;
-  margin-left: 40px;
+  padding-top: 7px;
+  /* margin-left: 40px; */
   border-radius: 30px;
+  text-align: -webkit-center;
 }
 .LightHomeDiv {
   width: 35px;
   height: 60px;
   background-color: transparent;
-  position: absolute;
+  /* position: absolute; */
   z-index: 5;
   left: 20px;
 }
 .LightProfileDiv,
 .DarkProfileDiv {
-  width: 35px;
-  height: 60px;
+  /* width: 35px;
+  height: 60px; */
   background-color: transparent;
   color: black;
-  position: absolute;
+  /* position: absolute; */
   z-index: 5;
   right: 25px;
-  padding-top: 7px;
-  padding-right: 10px;
+  /* padding-top: 7px;
+  padding-right: 10px; */
 }
 
 .LightProfileText {
@@ -234,7 +241,12 @@ export default {
 }
 .IconDiv {
   max-height: max-content;
-  overflow-y: clip;
+  /* overflow-y: clip; */
+  background-image: url(/src/projectImages/panther.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100vw 30rem;
+  background-position-x: 1rem;
 }
 @media screen and (max-width: 380px) {
   .IconDiv {
