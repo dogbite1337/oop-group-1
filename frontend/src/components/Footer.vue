@@ -99,7 +99,6 @@ export default {
 }
 
 .firstBox {
-
   grid-column: 1;
 }
 

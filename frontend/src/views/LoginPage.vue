@@ -167,6 +167,7 @@ export default {
         let currentUser = new User();
         user = Object.assign(currentUser, response);
         this.$store.dispatch('login', user);
+        localStorage.setItem('activeUser', JSON.stringify(user));
         document.getElementsByClassName('HomeLink')[0].click();
         this.$router.push('/');
       }

@@ -80,23 +80,14 @@
         </div>
         <div class="SpaceDiv" />
       </div>
-      <div v-if="!showWatchNowInstead && !darkTheme" class="LightUploaderDiv">
+      <div v-if="!showWatchNowInstead && darkTheme" class="DarkUploaderDiv">
         <div class="SpaceDiv" />
         <div v-if="darkTheme" class="square1 DarkSquare">
           <img class="uploaderProfileDiv" :src="Uploader.profileURL" />
         </div>
-        <div v-if="!darkTheme" class="square1 LightSquare">
-          <img class="uploaderProfileDiv" :src="Uploader.profileURL" />
-        </div>
         <div class="SpaceDiv" />
         <div v-if="darkTheme" class="square2 DarkSquare">
-          <div class="usernameDiv">
-            {{ Uploader.username }}
-          </div>
-          <div class="subsDiv">Subscribers: {{ spacedSubs }}</div>
-        </div>
-        <div v-if="!darkTheme" class="square2 LightSquare">
-          <div class="usernameDiv">
+          <div class="darkUsernameDiv">
             {{ Uploader.username }}
           </div>
           <div class="subsDiv">Subscribers: {{ spacedSubs }}</div>
@@ -105,12 +96,9 @@
         <div v-if="darkTheme" class="square3 DarkSquare">
           <div class="videosDiv">Videos: {{ spacedVideos }}</div>
         </div>
-        <div v-if="!darkTheme" class="square3 LightSquare">
-          <div class="videosDiv">Videos: {{ spacedVideos }}</div>
-        </div>
         <div class="SpaceDiv" />
-        <div v-if="loggedInUser && darkTheme" class="square4 DarkSquare">
-          <div v-if="loggedInUser.userId != video.userId" class="subButtonDiv">
+        <div v-if="activeUserId != 0 && darkTheme" class="square4 DarkSquare">
+          <div v-if="activeUserId != video.userId" class="subButtonDiv">
             <button
               v-if="!subscribedAlready"
               @click="subscribe"
@@ -129,8 +117,50 @@
             </button>
           </div>
         </div>
-        <div v-if="loggedInUser && !darkTheme" class="square4 LightSquare">
-          <div v-if="loggedInUser.userId != video.userId" class="subButtonDiv">
+        <div class="SpaceDiv" />
+      </div>
+      <div v-if="!showWatchNowInstead && !darkTheme" class="LightUploaderDiv">
+        <div class="SpaceDiv" />
+        <div v-if="!darkTheme" class="square1 LightSquare">
+          <img class="LightUploaderProfileDiv" :src="Uploader.profileURL" />
+        </div>
+        <div class="SpaceDiv" />
+        <div v-if="!darkTheme" class="square2 LightSquare">
+          <div class="lightUsernameDiv">
+            {{ Uploader.username }}
+          </div>
+          <div class="subsDiv">Subscribers: {{ spacedSubs }}</div>
+        </div>
+        <div class="SpaceDiv" />
+        <div v-if="darkTheme" class="square3 DarkSquare">
+          <div class="videosDiv">Videos: {{ spacedVideos }}</div>
+        </div>
+        <div v-if="!darkTheme" class="square3 LightSquare">
+          <div class="videosDiv">Videos: {{ spacedVideos }}</div>
+        </div>
+        <div class="SpaceDiv" />
+        <div v-if="activeUserId != 0 && darkTheme" class="square4 DarkSquare">
+          <div v-if="activeUserId != video.userId" class="subButtonDiv">
+            <button
+              v-if="!subscribedAlready"
+              @click="subscribe"
+              class="subButton"
+              value="Subscribe"
+            >
+              + Subscribe
+            </button>
+            <button
+              v-if="subscribedAlready"
+              @click="unsubscribe"
+              class="subButton"
+              value="Unsubscribe"
+            >
+              - Unsubscribe
+            </button>
+          </div>
+        </div>
+        <div v-if="activeUserId != 0 && !darkTheme" class="square4 LightSquare">
+          <div v-if="activeUserId != video.userId" class="subButtonDiv">
             <button
               v-if="!subscribedAlready"
               @click="subscribe"
@@ -439,7 +469,9 @@ export default {
     return {
       amountOfComments: 0,
       relatedVideos: [],
-      loggedInUser: this.$store.getters.getCurrentUser,
+      activeUserId: 0,
+      loggedInUser: '',
+      isLoggedIn: false,
       video: '',
       activeId: 0,
       spacedViews: 0,
@@ -461,7 +493,7 @@ export default {
       likedVideoAlready: false,
       dislikedVideoAlready: false,
       subscribedAlready: false,
-      darkTheme: this.$store.getters.getIsDarkTheme,
+      darkTheme: localStorage.isDarkTheme == 'true' ? true : false,
     };
   },
 
@@ -475,6 +507,12 @@ export default {
 
   async mounted() {
     this.loadRelevantInformation();
+    if (localStorage.loggedInUser) {
+      this.loggedInUser = JSON.parse(localStorage.loggedInUser);
+      this.activeUserId = this.loggedInUser.userId;
+      this.isLoggedIn = true;
+    }
+
     this.actOnResize();
     this.isOnVideosPage = true;
     window.scrollTo(0, 0);
@@ -504,12 +542,12 @@ export default {
         })
     );
     let likesResponse = await likesRes.json();
-    for (let i = 0; i < likesResponse.length; i++) {
-      if (this.$store.getters.getCurrentUser) {
-        if (
-          likesResponse[i].likedByUserId ==
-          this.$store.getters.getCurrentUser.userId
-        ) {
+
+    if (localStorage.loggedInUser) {
+      let relevantId = JSON.parse(localStorage.loggedInUser).userId;
+
+      for (let i = 0; i < likesResponse.length; i++) {
+        if (likesResponse[i].likedByUserId == relevantId) {
           this.likedVideoAlready = true;
         }
       }
@@ -522,12 +560,10 @@ export default {
         })
     );
     let dislikesResponse = await dislikesRes.json();
-    for (let i = 0; i < dislikesResponse.length; i++) {
-      if (this.$store.getters.getCurrentUser) {
-        if (
-          dislikesResponse[i].dislikedByUserId ==
-          this.$store.getters.getCurrentUser.userId
-        ) {
+    if (localStorage.loggedInUser) {
+      let relevantId = JSON.parse(localStorage.loggedInUser).userId;
+      for (let i = 0; i < dislikesResponse.length; i++) {
+        if (dislikesResponse[i].dislikedByUserId == relevantId) {
           this.dislikedVideoAlready = true;
         }
       }
@@ -540,11 +576,11 @@ export default {
         })
     );
 
-    if (this.loggedInUser) {
+    if (localStorage.loggedInUser) {
       let subsRes = await fetch(
         '/rest/getSubscribersForId?' +
           new URLSearchParams({
-            userId: this.loggedInUser.userId,
+            userId: JSON.parse(localStorage.loggedInUser).userId,
           })
       );
       let subsResponse = await subsRes.json();
@@ -798,14 +834,16 @@ export default {
       return newDate;
     },
     async unsubscribe() {
-      let myUser = this.$store.getters.getCurrentUser;
       let uploader = this.video.userId;
-      if (myUser && uploader) {
+
+      let activeUserId = JSON.parse(localStorage.activeUser).userId;
+
+      if (this.activeUserId != 0) {
         let unsubscribeRes = await fetch(
           '/api/unsubscribe?' +
             new URLSearchParams({
-              targetId: this.video.userId,
-              userId: myUser.userId,
+              targetId: uploader,
+              userId: activeUserId,
             }),
           {
             method: 'DELETE',
@@ -821,11 +859,12 @@ export default {
       let uploader = this.Uploader;
 
       if (uploader) {
+        let currentUser = JSON.parse(localStorage.activeUser);
         let res = await fetch(
           '/api/subscribe?' +
             new URLSearchParams({
-              targetId: uploader.userId,
-              userId: this.loggedInUser.userId,
+              targetId: this.Uploader.userId,
+              userId: currentUser.userId,
             }),
           {
             method: 'POST',
@@ -839,12 +878,12 @@ export default {
     },
     async likeVideo() {
       if (
-        this.$store.getters.getCurrentUser &&
+        this.loggedInUser &&
         !this.likedVideoAlready &&
         !this.dislikedVideoAlready
       ) {
         let relevantInfo = {
-          userId: this.$store.getters.getCurrentUser.userId,
+          userId: JSON.parse(localStorage.activeUser).userId,
           videoId: this.video.videoId,
           likes: this.video.likes,
         };
@@ -856,7 +895,7 @@ export default {
 
         let likeObject = {
           relatesToVideoId: this.$route.params.id,
-          userId: this.$store.getters.getCurrentUser.userId,
+          userId: JSON.parse(localStorage.activeUser).userId,
           videoId: this.video.videoId,
           commentId: -1,
         };
@@ -909,7 +948,7 @@ export default {
       } else if (this.likedVideoAlready) {
         alert('You already liked this video.');
       } else {
-        alert('You have to log in to like Videos!');
+        alert('You have to log in to dislike Videos!');
       }
     },
     async actOnResize() {
@@ -971,6 +1010,7 @@ export default {
           })
       );
       let uploaderResponse = await uploaderRes.json();
+
       let emptyUser = new User(0, '', '', '', 0, 0);
       this.Uploader = Object.assign(emptyUser, uploaderResponse);
       this.spacedSubs = this.renderSpacedNumbers(
@@ -1115,6 +1155,15 @@ export default {
   overflow: hidden;
 }
 
+.LightUploaderProfileDiv {
+  height: 40px;
+  width: 40px;
+  border-radius: 30px;
+  margin-top: 9.5px;
+  overflow: hidden;
+  border: solid 1px black;
+}
+
 .LightUploaderDiv {
   display: grid;
   grid-template-columns: 17px 40px 19px 82px 19px 20px auto max-content 19px;
@@ -1132,7 +1181,7 @@ export default {
 }
 .videosDiv {
   font-size: 9px;
-  margin-top: 17px;
+  margin-top: 22px;
   color: #939393;
 }
 .likeAndDislikeIconDiv {
@@ -1173,7 +1222,7 @@ export default {
   background-color: white;
   height: max-content;
   outline: none;
-  color: white;
+  color: #e75858;
 }
 
 .DarkSquare {
@@ -1336,11 +1385,19 @@ export default {
   color: #939393;
   padding-bottom: 2px;
 }
-.usernameDiv {
+.lightUsernameDiv {
   margin-top: 10px;
   font-size: 12px;
   margin-top: 14.5px;
   color: #e75858;
+  height: 20px;
+}
+.darkUsernameDiv {
+  margin-top: 10px;
+  font-size: 12px;
+  margin-top: 14.5px;
+  color: #e75858;
+  height: 20px;
 }
 .playButton {
   margin-left: -10px;

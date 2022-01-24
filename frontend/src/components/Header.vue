@@ -65,11 +65,11 @@
       <div class="SpaceDiv" />
     </div>
     <div class="SpaceDiv" />
-    <router-link v-if="!$store.getters.getCurrentUser" :to="{ path: '/Login' }">
+    <router-link v-if="!isLoggedIn" :to="{ path: '/Login' }">
       <input class="LoginButton" type="button" value="Login" />
     </router-link>
     <img
-      v-else
+      v-if="isLoggedIn"
       class="profilePic"
       @click="toggleProfileDropdown"
       :src="profilePic"
@@ -78,10 +78,8 @@
     <div class="SpaceDiv" />
     <div class="SpaceDiv" />
     <div v-if="profileDropdown && !isDarkTheme" class="profile-dropdown">
-      <ul v-if="$store.getters.getCurrentUser" class="LightUlMenu">
-        <router-link
-          :to="{ path: '/Profile/' + $store.getters.getCurrentUser.username }"
-        >
+      <ul class="LightUlMenu">
+        <router-link :to="{ path: '/Profile/' + currentName }">
           <li class="LightProfileLink" v-if="!isDarkTheme">My Profile</li>
         </router-link>
         <li v-if="!isDarkTheme" @click="uploadNavigation">Upload Video</li>
@@ -118,7 +116,7 @@
       <div class="SpaceDiv" />
     </div>
     <div class="SpaceDiv" />
-    <router-link v-if="!$store.getters.getCurrentUser" :to="{ path: '/Login' }">
+    <router-link v-if="!isLoggedIn" :to="{ path: '/Login' }">
       <input class="LoginButton" type="button" value="Login" />
     </router-link>
     <img
@@ -131,10 +129,8 @@
     <div class="SpaceDiv" />
     <div class="SpaceDiv" />
     <div v-if="profileDropdown" class="profile-dropdown">
-      <ul v-if="$store.getters.getCurrentUser" class="DarkUlMenu">
-        <router-link
-          :to="{ path: '/Profile/' + $store.getters.getCurrentUser.username }"
-        >
+      <ul class="DarkUlMenu">
+        <router-link :to="{ path: '/Profile/' + currentName }">
           <li class="DarkProfileLink" v-if="isDarkTheme">My Profile</li>
         </router-link>
         <li v-if="isDarkTheme" @click="uploadNavigation">Upload Video</li>
@@ -146,18 +142,18 @@
 </template>
 <script>
 import store from '../store';
+import User from '../jsClasses/general/User';
 export default {
   name: 'Header',
   emits: ['update'],
   data() {
     return {
-      isLoggedIn: false,
       searchParam: '',
-      profilePic: this.$store.getters.getCurrentUser
-        ? this.$store.getters.getCurrentUser.getProfileURL()
-        : '',
+      profilePic: localStorage.activeUser != undefined ? '' : '',
       profileDropdown: false,
       isDarkTheme: localStorage.isDarkTheme == 'true' ? true : false,
+      isLoggedIn: false,
+      currentName: JSON.parse(localStorage.activeUser).username,
     };
   },
   created() {
@@ -169,10 +165,17 @@ export default {
 
   async mounted() {
     await this.$store.dispatch('whoAmI');
-
-    if (this.$store.getters.getCurrentUser) {
-      this.profilePic = this.$store.getters.getCurrentUser.getProfileURL();
+    if (localStorage.activeUser != 'null') {
+      let myUser = new User();
+      let newUser = Object.assign(myUser, JSON.parse(localStorage.activeUser));
+      this.isLoggedIn = true;
+      this.profilePic = newUser.getProfileURL();
     }
+    if (localStorage.activeUser == 'null') {
+      this.isLoggedIn = false;
+      this.profilePic = '';
+    }
+
     if (localStorage.isDarkTheme == 'true') {
       this.isDarkTheme = true;
     } else {
@@ -220,6 +223,8 @@ export default {
       await this.$store.dispatch('logout');
       await this.$store.dispatch('setDarkTheme', this.isDarkTheme);
       localStorage.setItem('isDarkTheme', JSON.stringify(this.isDarkTheme));
+      localStorage.setItem('activeUser', null);
+      this.isLoggedIn = false;
       this.toggleProfileDropdown();
       this.$router.push('/');
     },
@@ -246,7 +251,7 @@ export default {
 }
 
 .sun {
-  margin-left: -13px;
+  margin-left: -9px;
 }
 .searchDiv {
   display: grid;
@@ -354,7 +359,8 @@ export default {
   overflow-y: hidden;
 }
 .moon {
-  margin-left: 3px;
+  position: relative;
+  left: 5px;
 }
 .LightSearchAndLoginDiv {
   display: grid; /* Margin, Cat, Margin, search icon, margin, Search Field, margin, Login Button, Margin */
@@ -518,6 +524,10 @@ export default {
   box-sizing: border-box;
 }
 
+.switchLightTheme {
+  width: 49px;
+}
+
 @media screen and (max-width: 300px) {
   .SearchAndLoginDiv {
     grid-template-columns: 5px 15px 10px 199px 1px 50px 1px 1px 1px 1px 10px;
@@ -550,7 +560,31 @@ export default {
     right: 20px;
   }
 }
-@media screen and (min-width: 400px) {
+
+@media screen and (max-width: 300px) {
+  .switchItemLightTheme {
+    position: relative;
+    left: 3px;
+    top: -5px;
+  }
+  .sun {
+    position: relative;
+    top: 5px;
+  }
+}
+
+@media screen and (min-width: 301px) {
+  .switchItemLightTheme {
+    margin-left: 8px;
+  }
+}
+
+@media screen and (min-width: 380px) {
+  .switchItemLightTheme {
+    margin-left: 2px;
+  }
+}
+@media screen and (min-width: 420px) {
   .switchItemLightTheme {
     margin-left: -2px;
   }
@@ -562,7 +596,12 @@ export default {
 }
 @media screen and (min-width: 600px) {
   .switchItemLightTheme {
-    margin-left: -12px;
+    margin-left: -14px;
+  }
+}
+@media screen and (min-width: 700px) {
+  .switchItemLightTheme {
+    margin-left: -20px;
   }
 }
 </style>
