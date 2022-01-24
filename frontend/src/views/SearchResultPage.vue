@@ -2,17 +2,13 @@
   <Header />
   <div class="mainContainer">
     <HasResult
-      v-if="showResult==true"
+      v-if="showResult == true"
       :matchedVideoList="matchedVideoList"
       :matchedUserList="matchedUserList"
     />
-    <NoResult
-      v-if="showResult==false"
-    />
+    <NoResult v-if="showResult == false" />
   </div>
-  <!-- <div class="footerDiv"> -->
-    <Footer />
-  <!-- </div> -->
+  <Footer />
 </template>
 
 <script>
@@ -69,10 +65,9 @@ export default {
 
     this.$store.dispatch('setKeyWord', '');
 
-    if(this.matchedVideoList.length > 0 || this.matchedUserList.length > 0){
+    if (this.matchedVideoList.length > 0 || this.matchedUserList.length > 0) {
       this.showResult = true;
-    }
-    else{
+    } else {
       this.showResult = false;
     }
   },
@@ -93,14 +88,9 @@ export default {
 .mainContainer {
   height: inherit;
   overflow: scroll;
-  /* max-width:100vw; */
 }
 
 .BackDrop {
   height: 0;
 }
-/* .footerDiv {
-  position: relative;
-  top: 100vh;
-} */
 </style>
