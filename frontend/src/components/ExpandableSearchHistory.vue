@@ -116,14 +116,6 @@ export default {
         return;
       }
 
-      // if (
-      //   mutation.type == 'setMySearchHistoryList' &&
-      //   mutation.payload.length == 0
-      // ) {
-      //   this.mySearchHistoryList = [];
-      //   return;
-      // }
-
       if (
         mutation.type == 'setUser' &&
         !boolean &&
@@ -220,10 +212,6 @@ button {
   .searchHistoryContainer {
     grid-template-columns: auto 1fr;
   }
-
-  /* button{
-    width: unset;
-  } */
 
   .historyItem {
     grid-column: 2;

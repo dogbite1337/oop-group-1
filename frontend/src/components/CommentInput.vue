@@ -63,14 +63,14 @@
   </div>
 </template>
 <script>
-import Comment from "../jsClasses/general/Comment";
-import store from "../store";
+import Comment from '../jsClasses/general/Comment';
+import store from '../store';
 export default {
-  props: ["videoId"],
-  name: "CommentInput",
+  props: ['videoId'],
+  name: 'CommentInput',
   mounted() {
     this.$store.subscribe(async (mutation, state) => {
-      if (mutation.type == "setDarkTheme") {
+      if (mutation.type == 'setDarkTheme') {
         if (mutation.payload) {
           this.darkTheme = true;
         } else {
@@ -85,10 +85,10 @@ export default {
       currentUser: this.$store.getters.getCurrentUser
         ? this.$store.getters.getCurrentUser
         : null,
-      wantedComment: "",
+      wantedComment: '',
       myImageUrl: this.$store.getters.getCurrentUser
         ? this.$store.getters.getCurrentUser.profileURL
-        : "",
+        : '',
     };
   },
   methods: {
@@ -103,20 +103,20 @@ export default {
         -1,
         Date.now()
       );
-      let res = await fetch("/api/postComment", {
-        method: "POST",
+      let res = await fetch('/api/postComment', {
+        method: 'POST',
         body: JSON.stringify(comment),
       });
 
       let response = await res.json();
-      this.$emit("postedComment", response);
+      this.$emit('postedComment', response);
     },
   },
 };
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Revalia&family=Roboto&display=swap');
 
 .disabledPostButton {
   width: 38px;
@@ -125,7 +125,7 @@ export default {
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   color: rgba(255, 255, 255, 0.45);
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 14px;
   line-height: 16px;
   margin-top: 7px;
@@ -136,7 +136,7 @@ export default {
   height: 35px;
   background: #2d2c2c;
   color: white;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 14px;
   line-height: 16px;
   margin-top: 2px;

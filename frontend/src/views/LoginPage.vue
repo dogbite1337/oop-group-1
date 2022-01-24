@@ -119,7 +119,7 @@ export default {
       hideEyes: '',
       wantedUserName: '',
       wantedPassword: '',
-      darkTheme: (localStorage.isDarkTheme == "true" ? true : false),
+      darkTheme: localStorage.isDarkTheme == 'true' ? true : false,
     };
   },
   mounted() {

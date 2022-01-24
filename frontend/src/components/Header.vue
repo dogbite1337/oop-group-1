@@ -447,6 +447,10 @@ export default {
 .switchDarkTheme {
   max-width: 48px;
 }
+.switchItemDarkTheme {
+  margin-left: 2px;
+}
+
 .switchItemLightTheme,
 .switchItemDarkTheme {
   max-width: 19px;
@@ -544,6 +548,21 @@ export default {
   .profilePic {
     position: relative;
     right: 20px;
+  }
+}
+@media screen and (min-width: 400px) {
+  .switchItemLightTheme {
+    margin-left: -2px;
+  }
+}
+@media screen and (min-width: 500px) {
+  .switchItemLightTheme {
+    margin-left: -10px;
+  }
+}
+@media screen and (min-width: 600px) {
+  .switchItemLightTheme {
+    margin-left: -12px;
   }
 }
 </style>
