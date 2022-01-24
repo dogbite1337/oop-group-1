@@ -208,7 +208,7 @@ export default {
 .LineDiv {
   height: 1px;
   background-color: black;
-  margin-left: -30px;
+  margin-left: -24px;
 }
 .forgotPasswordDiv {
   text-align: center;
