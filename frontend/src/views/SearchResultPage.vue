@@ -83,7 +83,7 @@ export default {
 
 <style scoped>
 .mainContainer {
-  height: inherit;
+  /* height: 100vh; */
   overflow: scroll;
   max-width:100vw;
 
