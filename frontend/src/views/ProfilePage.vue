@@ -905,7 +905,6 @@ export default {
         let assignedVideo = Object.assign(newVideo, videoResponse[i]);
         this.myVideos.push(assignedVideo);
       }
-
     },
     switchToMySubscribers() {
       this.chosenProfileInfo = false;
@@ -1425,99 +1424,94 @@ export default {
   font-family: 'Roboto', sans-serif;
 }
 
-@media screen and (max-width: 800px){
+@media screen and (max-width: 800px) {
   .LightSubscribersGrid,
   .LightVideosGrid,
   .VideosGrid,
-  .SubscribersGrid{
+  .SubscribersGrid {
     /* grid-template-columns: repeat(10, 10%); */
     display: flex;
     margin-left: 10%;
   }
 
   .VideosText,
-  .VideosNumber{
+  .VideosNumber {
     width: unset;
     position: unset;
     left: unset;
   }
 
   .VideosText,
-  .SubscribersText{
+  .SubscribersText {
     width: 7rem;
   }
 
   .SubscribersNumber,
-  .VideosNumber{
+  .VideosNumber {
     margin-left: 1rem;
   }
-  
-  .SpaceBlock1
-  {
+
+  .SpaceBlock1 {
     display: none;
   }
 
-  .SubscribersText{
-    grid-column: 2 /span 2;
+  .SubscribersText {
+    grid-column: 2 / span 2;
   }
 }
 
 @media screen and (max-width: 420px) {
+  .SectionGrid,
+  .lightSectionGrid {
+    grid-template-columns: 15% auto 15%;
+    justify-content: center;
+    grid-row-gap: 0.5rem;
+  }
 
-.SectionGrid,
-.lightSectionGrid {
-  grid-template-columns: 15% auto 15%;
-  justify-content: center;
-  grid-row-gap: 0.5rem;
-}
+  .ProfileTextDiv {
+    grid-column: 2;
+  }
 
-.ProfileTextDiv{
-  grid-column: 2;
-}
+  .myVideosTextDiv {
+    grid-column: 2;
+  }
+  .mySubscribersDiv {
+    grid-column: 2;
+  }
 
-.myVideosTextDiv{
-  grid-column: 2;
-}
-.mySubscribersDiv{
-  grid-column: 2;
-}
+  .imageInput {
+    width: max-content;
+  }
 
-.imageInput{
-  width: max-content;
-}
+  .UsernameGrid,
+  .PasswordGrid,
+  .DescriptionGrid {
+    grid-template-columns: 10px 80% 10%;
+  }
 
-.UsernameGrid,
-.PasswordGrid,
-.DescriptionGrid{
-  grid-template-columns: 10px 80% 10%;
-}
+  .UsernameInput,
+  .NewPasswordInput,
+  .descriptionInput,
+  .UsernameValue,
+  .PasswordValue,
+  .DescriptionValue {
+    grid-column: 2 / span 2;
+    grid-row: 2;
+    margin-left: unset;
+  }
 
-.UsernameInput,
-.NewPasswordInput,
-.descriptionInput,
-.UsernameValue,
-.PasswordValue,
-.DescriptionValue
-{
-  grid-column: 2/span 2;
-  grid-row: 2;
-  margin-left: unset;
-}
+  .descriptionInput {
+    width: unset;
+  }
 
-.descriptionInput{
-  width: unset;
-}
-
-.cancelInfoButton,
-.saveInfoButton{
-  position: unset;
-  left: unset;
-  margin-left: unset;
-  width: 138px;
-  justify-self: start;
-  margin-right: unset;
-}
-
-
+  .cancelInfoButton,
+  .saveInfoButton {
+    position: unset;
+    left: unset;
+    margin-left: unset;
+    width: 138px;
+    justify-self: start;
+    margin-right: unset;
+  }
 }
 </style>

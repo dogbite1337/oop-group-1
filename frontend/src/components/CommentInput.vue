@@ -79,8 +79,8 @@ export default {
       }
     });
 
-    if(this.currentUser==null && localStorage.loggedInUser){
-      this.currentName = JSON.parse(localStorage.loggedInUser)
+    if (this.currentUser == null && localStorage.loggedInUser) {
+      this.currentName = JSON.parse(localStorage.loggedInUser);
     }
   },
   data() {
@@ -191,35 +191,33 @@ export default {
 }
 
 @media screen and (max-width: 305px) {
-	.LightCommentGrid {
-		display: grid;
-		grid-template-columns: max-content max-content auto max-content;
-		padding-top: 30px;
-		background-color: white;
-		margin-top: 5px;
-		padding-bottom: 5px;
-		max-width: 800px;
-		margin-right: 10px;
-	}
+  .LightCommentGrid {
+    display: grid;
+    grid-template-columns: max-content max-content auto max-content;
+    padding-top: 30px;
+    background-color: white;
+    margin-top: 5px;
+    padding-bottom: 5px;
+    max-width: 800px;
+    margin-right: 10px;
+  }
 
-	.DarkCommentGrid {
-		display: grid;
-		grid-template-columns: max-content max-content auto max-content;
-		padding-top: 30px;
-		background-color: black;
-		margin-top: 5px;
-		padding-bottom: 5px;
-		max-width: 800px;
-		margin-right: 10px;
-	}
-	.commentInput {
-		padding-bottom: 3px;
-		padding-left: 5px;
-		padding-top: 3px;
-		width: 190px;
-		outline: none;
-	}
+  .DarkCommentGrid {
+    display: grid;
+    grid-template-columns: max-content max-content auto max-content;
+    padding-top: 30px;
+    background-color: black;
+    margin-top: 5px;
+    padding-bottom: 5px;
+    max-width: 800px;
+    margin-right: 10px;
+  }
+  .commentInput {
+    padding-bottom: 3px;
+    padding-left: 5px;
+    padding-top: 3px;
+    width: 190px;
+    outline: none;
+  }
 }
 </style>
-
-

@@ -331,68 +331,68 @@ export default {
 }
 
 @media screen and (max-width: 420px) {
-  .SpaceBlock{
+  .SpaceBlock {
     display: none;
   }
 
-  .relatedVideoBox{
+  .relatedVideoBox {
     grid-template-columns: 10% auto 10%;
     border-bottom: none;
   }
 
   .linkBox,
-  .textDiv{
+  .textDiv {
     grid-column: 2;
   }
 
   .videoImage,
-  .linkBox{
+  .linkBox {
     width: -webkit-fill-available;
     height: unset;
   }
 
-  .textDiv{
+  .textDiv {
     display: flex;
     flex-direction: column;
   }
 
-  .UploaderDiv{
+  .UploaderDiv {
     margin-top: 30px;
   }
 
-  .ViewsDiv{
+  .ViewsDiv {
     margin-bottom: 10px;
   }
 
   .UploaderDiv,
-  .ViewsDiv{
+  .ViewsDiv {
     display: flex;
   }
 
-  .PlayerDiv{
+  .PlayerDiv {
     height: 21.09px;
     width: 21.09px;
   }
 
-  .UpDiv{
+  .UpDiv {
     height: max-content;
     width: max-content;
     padding: 4.5px;
   }
 
   .UploaderTextDiv,
-  .ViewsNumberDiv{
+  .ViewsNumberDiv {
     margin-left: 1rem;
     align-self: center;
   }
 
-  .PlayerImage{
+  .PlayerImage {
     width: 21.09px;
     height: 21.09px;
     margin: unset;
   }
 
-  .trashGrid{
+  .trashGrid {
     position: unset;
     /* grid-column: 2; */
     display: grid;
@@ -402,24 +402,24 @@ export default {
     justify-items: flex-end;
     margin-bottom: 10px;
   }
- 
-  .trashGrid img{
+
+  .trashGrid img {
     position: unset;
   }
-  
-  .Pen{
+
+  .Pen {
     grid-column: 2;
     height: 1.5rem;
     width: 1.5rem;
   }
 
-  .DarkTrash{
+  .DarkTrash {
     grid-column: 3;
     height: 2rem;
     width: 2rem;
   }
 
-  .BoxDiv{
+  .BoxDiv {
     border-bottom: 1px solid #939393;
   }
 }

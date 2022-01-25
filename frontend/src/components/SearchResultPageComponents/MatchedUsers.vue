@@ -11,14 +11,24 @@
           </div>
           <div class="subAndVideo">
             <div class="subContainer">
-              <p class="time" :class="
-            isDarkTheme == true ? 'pTagDarkTheme' : 'pTagLightTheme'
-          ">{{ 'Subscribers: ' + user.subscribers }}</p>
+              <p
+                class="time"
+                :class="
+                  isDarkTheme == true ? 'pTagDarkTheme' : 'pTagLightTheme'
+                "
+              >
+                {{ 'Subscribers: ' + user.subscribers }}
+              </p>
             </div>
             <div class="videoCountContainer">
-              <p class="time" :class="
-            isDarkTheme == true ? 'pTagDarkTheme' : 'pTagLightTheme'"
-            >{{ 'Videos: ' + user.userVideos.length }}</p>
+              <p
+                class="time"
+                :class="
+                  isDarkTheme == true ? 'pTagDarkTheme' : 'pTagLightTheme'
+                "
+              >
+                {{ 'Videos: ' + user.userVideos.length }}
+              </p>
             </div>
             <button
               :class="'subBtn ' + user.userId"
@@ -70,9 +80,12 @@
           >
             {{ video.title }}
           </p>
-          <p class="time" :class="
-            isDarkTheme == true ? 'pTagDarkTheme' : 'pTagLightTheme'
-          ">{{ uploadTime(video.uploadDate) }}</p>
+          <p
+            class="time"
+            :class="isDarkTheme == true ? 'pTagDarkTheme' : 'pTagLightTheme'"
+          >
+            {{ uploadTime(video.uploadDate) }}
+          </p>
         </div>
         <div class="textContainer" v-if="user.userVideos.length > 2">
           <p>{{ 'check all ' + user.userVideos.length + ' videos >' }}</p>
@@ -341,7 +354,7 @@ p {
   text-align: center;
 }
 
-.pTagLightTheme{
+.pTagLightTheme {
   color: black !important;
 }
 
