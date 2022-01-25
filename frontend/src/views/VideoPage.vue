@@ -1027,6 +1027,7 @@ export default {
 .square3 {
 	position: relative;
 	top: 13px;
+	margin-left: -8px;
 }
 .postingCommentDiv {
 	margin-bottom: 20px;
@@ -1412,7 +1413,7 @@ export default {
 	.middleDiv {
 		display: grid;
 		grid-template-columns: max-content 28px max-content;
-    margin-left:-30px;
+		margin-left: -30px;
 	}
 
 	.notChosenDescriptionDiv,
@@ -1431,5 +1432,22 @@ export default {
 		padding-bottom: 3px;
 		border-bottom: 0.5px solid #bfbfbf;
 	}
+	.square3 {
+		position: relative;
+		top: 13px;
+		margin-left: -8px;
+	}
+	.subButtonDiv {
+		margin-left: -8px;
+		width: 230px;
+	}
+	.subButton {
+		margin-left: 8px;
+	}
+
+	.commentBox{
+		margin-left:-33px;
+	}
+
 }
 </style>
