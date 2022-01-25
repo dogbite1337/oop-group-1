@@ -981,11 +981,79 @@ export default {
 		width: 180px;
 	}
 	.usernameDiv {
-		margin-top: 2px;
+		margin-top: 16px;
 	}
 	.timeOfPostingDiv {
-		margin-top: 22px;
+		margin-top: 16px;
 		margin-left: -40px;
 	}
+}
+
+@media screen and (max-width: 355px){
+  .timeOfPostingDiv{
+    width: 170px;
+    margin-top: 10px;
+  }
+  .ReplyDiv{
+    position: relative;
+    left: -40px;
+  }
+  .DarkDislikesDiv, .DarkLikesDiv, .LightDislikesDiv, .LightLikesDiv{
+    position: relative;
+    left: -20px;
+  }
+}
+
+@media screen and (max-width: 330px){
+  .timeOfPostingDiv{
+    width: 110px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .ReplyDiv{
+    position: relative;
+    left: -70px;
+  }
+  .commentGrid{
+    margin-top: -10px;
+  }
+  .PostReplyDiv{
+    position: relative;
+    left: -55px;
+  }
+  .trashCanIcon{
+    position: relative;
+    top: -3px;
+  }
+  .DarkLikesDiv, .LightLikesDiv{
+    position: relative;
+    left: -10px;
+  }
+  .LightDislikesDiv, .DarkDislikesDiv{
+    position: relative;
+    left: -40px;
+    top: 2px;
+  }
+}
+
+@media screen and (min-width: 300px){
+  .ReplyDiv{
+    position: relative;
+    left: -55px;
+  }
+}
+
+@media screen and (min-width: 330px){
+  .ReplyDiv{
+    position: relative;
+    left: -35px;
+  }
+}
+
+@media screen and (min-width: 355px){
+  .ReplyDiv{
+    position: relative;
+    left: -15px;
+  }
 }
 </style>

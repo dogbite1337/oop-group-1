@@ -242,9 +242,11 @@ export default {
   grid-template-rows: 1px max-content auto max-content 1px max-content 3px;
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 385px) {
 	.textDiv {
 		margin-left: 1vh;
+    width: max-content;
+    margin-left: 29vw;
 		grid-column: 1 / span 2;
 		margin-bottom: 1px;
 	}
