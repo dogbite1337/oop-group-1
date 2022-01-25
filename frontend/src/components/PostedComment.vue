@@ -971,14 +971,21 @@ export default {
 }
 
 @media screen and (max-width: 450px) {
-  .replyOpenGrid {
-    width: max-content;
-    padding-right: 20px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .replyInput {
-    width: 180px;
-  }
+	.replyOpenGrid {
+		width: max-content;
+		padding-right: 20px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.replyInput {
+		width: 180px;
+	}
+	.usernameDiv {
+		margin-top: 2px;
+	}
+	.timeOfPostingDiv {
+		margin-top: 22px;
+		margin-left: -40px;
+	}
 }
 </style>
