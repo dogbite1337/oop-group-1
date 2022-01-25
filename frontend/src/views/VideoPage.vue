@@ -602,7 +602,6 @@ export default {
       }
     }
 
-    console.log(this.isOwnerOfVideo);
     // full width on mobile view on cards
     let commentsResponse = await commentsRes.json();
     this.amountOfComments = commentsResponse.length;
@@ -1234,13 +1233,13 @@ export default {
 }
 
 .square3 {
-    position: relative;
-    left: -101px;
-    height: max-content;
-    background-color: transparent;
-    top: 50px;
-    color: black;
-  }
+  position: relative;
+  left: -101px;
+  height: max-content;
+  background-color: transparent;
+  top: 50px;
+  color: black;
+}
 .DarkSquare {
   margin-top: 1px;
   width: max-content;
@@ -1548,6 +1547,5 @@ export default {
     position: relative;
     z-index: 5;
   }
-  
 }
 </style>

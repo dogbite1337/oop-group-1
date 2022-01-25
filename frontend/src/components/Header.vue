@@ -162,8 +162,8 @@ export default {
       this.searchParam = this.$store.getters.getKeyWord;
     }
 
-    if(this.currentName==null && localStorage.loggedInUser){
-      this.currentName = JSON.parse(localStorage.loggedInUser).username
+    if (this.currentName == null && localStorage.loggedInUser) {
+      this.currentName = JSON.parse(localStorage.loggedInUser).username;
     }
   },
 
@@ -171,7 +171,10 @@ export default {
     await this.$store.dispatch('whoAmI');
     if (localStorage.loggedInUser) {
       let myUser = new User();
-      let newUser = Object.assign(myUser, JSON.parse(localStorage.loggedInUser));
+      let newUser = Object.assign(
+        myUser,
+        JSON.parse(localStorage.loggedInUser)
+      );
       this.isLoggedIn = true;
       this.profilePic = newUser.getProfileURL();
     }
