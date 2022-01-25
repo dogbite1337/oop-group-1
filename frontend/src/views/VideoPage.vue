@@ -594,9 +594,6 @@ export default {
       }
     }
 
-    console.log(JSON.parse(localStorage.loggedInUser).userId);
-    console.log(this.video.userId);
-    console.log(this.isOwnerOfVideo);
     if (localStorage.loggedInUser) {
       if (this.video.userId === JSON.parse(localStorage.loggedInUser).userId) {
         this.isOwnerOfVideo = true;

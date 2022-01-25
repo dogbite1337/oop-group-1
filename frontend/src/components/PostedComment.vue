@@ -356,7 +356,7 @@ export default {
       isANumberInput: isNaN(this.comment.timeOfPosting),
       showComments: false,
       isActive: this.activeId == this.comment.commentId,
-      activeUser: this.$store.getters.getCurrentUser,
+      activeUser: (localStorage.loggedInUser ? JSON.parse(localStorage.loggedInUser) : false),
       dislikedCommentAlready: false,
       likedCommentAlready: false,
       darkTheme: this.$store.getters.getIsDarkTheme,
