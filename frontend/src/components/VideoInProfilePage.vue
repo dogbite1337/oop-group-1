@@ -329,4 +329,97 @@ export default {
   display: grid;
   grid-template-rows: 1px max-content auto max-content 1px max-content 3px;
 }
+
+@media screen and (max-width: 420px) {
+  .SpaceBlock{
+    display: none;
+  }
+
+  .relatedVideoBox{
+    grid-template-columns: 10% auto 10%;
+    border-bottom: none;
+  }
+
+  .linkBox,
+  .textDiv{
+    grid-column: 2;
+  }
+
+  .videoImage,
+  .linkBox{
+    width: -webkit-fill-available;
+    height: unset;
+  }
+
+  .textDiv{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .UploaderDiv{
+    margin-top: 30px;
+  }
+
+  .ViewsDiv{
+    margin-bottom: 10px;
+  }
+
+  .UploaderDiv,
+  .ViewsDiv{
+    display: flex;
+  }
+
+  .PlayerDiv{
+    height: 21.09px;
+    width: 21.09px;
+  }
+
+  .UpDiv{
+    height: 17px;
+    width: 17px;
+  }
+
+  .UploaderTextDiv,
+  .ViewsNumberDiv{
+    margin-left: 1rem;
+    align-self: center;
+  }
+
+  .PlayerImage{
+    width: 21.09px;
+    height: 21.09px;
+    margin: unset;
+  }
+
+  .trashGrid{
+    position: unset;
+    /* grid-column: 2; */
+    display: grid;
+    grid-template-columns: auto 10% 10% 10%;
+    align-items: center;
+    width: unset;
+    justify-items: flex-end;
+    margin-bottom: 10px;
+  }
+ 
+  .trashGrid img{
+    position: unset;
+  }
+  
+  .Pen{
+    grid-column: 2;
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+
+  .DarkTrash{
+    grid-column: 3;
+    height: 2rem;
+    width: 2rem;
+  }
+
+  .BoxDiv{
+    border-bottom: 1px solid #939393;
+  }
+}
 </style>
