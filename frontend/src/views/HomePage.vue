@@ -52,8 +52,6 @@ export default {
     await this.loadMoreVideos();
     let allVideos = this.relevantVideos;
 
-
-
     // this.$store.dispatch('cacheFirstEightVideos', allVideos);
     localStorage.setItem('relatedVideos', JSON.stringify(allVideos));
     this.relevantVideos = [];
@@ -123,22 +121,11 @@ export default {
         ? this.$store.getters.getSearchResults
         : [],
       lastVideoObserver: null,
-      // darkTheme: this.$store.getters.getIsDarkTheme,
-      darkTheme: (localStorage.isDarkTheme == "true" ? true : false),
+      darkTheme: localStorage.isDarkTheme == 'true' ? true : false,
       showPadder: window.outerWidth > 418 ? false : true,
     };
   },
   async mounted() {
-    // this.$store.subscribe(async (mutation, state) => {
-    //   if (mutation.type == 'setDarkTheme') {
-    //     if (mutation.payload) {
-    //       this.darkTheme = true;
-    //     } else {
-    //       this.darkTheme = false;
-    //     }
-    //   }
-    // });
-
     this.darkTheme = await this.$store.getters.getIsDarkTheme;
 
     if (this.darkTheme == null) {
@@ -151,10 +138,6 @@ export default {
         this.darkTheme = newVal;
       }
     );
-
-    // document.getElementsByClassName('CardsContainer')[0].style =
-    //   'grid-template-columns: ' + this.getGridDimensions() + ';';
-    // window.addEventListener('resize', this.recalculateGrid);
   },
   updated() {
     // here i am trying to only observer the last element of that class
@@ -179,7 +162,9 @@ export default {
     );
   },
   unmounted() {
-    this.lastVideoObserver.disconnect();
+    if (this.lastVideoObserver) {
+      this.lastVideoObserver.disconnect();
+    }
     window.removeEventListener('resize', this.recalculateGrid);
   },
 
@@ -426,71 +411,6 @@ export default {
   position: relative;
   top: -1.5px;
 }
-/* .footerDiv {
-  display: grid;
-  grid-template-rows: 5vh auto;
-  background-color: black;
-  position: sticky;
-} */
-
-/* .footerDiv {
-  position: fixed;
-  top: calc(100vh - 65px);
-  width: 100vw;
-} */
-
-/* .clearHistoryButton{
-  width: 97px;
-  height: 20px;
-  background-color: white;
-  color: black;
-  border-radius: 3px;
-}
-.trendsDiv {
-  height: 193px;
-  outline: 1px solid white;
-  margin-left: 19px;
-  margin-right: 19px;
-  background-color: black;
-  width: 372px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-bottom: 9px;
-}
-.searchHistoryText {
-  font-family: 'Roboto', sans-serif;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 18px;
-  line-height: 21px;
-}
-.SorryKitty {
-  display: block;
-  width: 200px;
-  height: 224px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.SearchHistoryDiv {
-  background-color: #131313;
-  display: grid;
-  grid-template-columns: 1px auto auto 72px 1px;
-  margin-right: 19px;
-  margin-left: 19px;
-  margin-top: 39px;
-  margin-bottom: 10px;
-  width: 376px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.topTrendingDiv {
-  display: grid;
-  grid-template-columns: 19px 168px auto;
-  margin-bottom: 4px;
-  width: 372px;
-  margin-left: auto;
-  margin-right: auto;
-} */
 
 .expandButton,
 .closeButton {

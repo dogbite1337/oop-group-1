@@ -101,8 +101,16 @@ public class subscriberRepository {
 
             unsub.executeUpdate();
 
-            PreparedStatement updateSubs = con.prepareStatement("UPDATE users SET subscribers = (subscribers - 1) WHERE userId = ?");
-            updateSubs.setInt(1, targetId);
+            PreparedStatement getSubsBefore = con.prepareStatement("SELECT subscribers FROM users WHERE userId = ?");
+            getSubsBefore.setInt(1, targetId);
+            ResultSet newSubsCountBefore = getSubsBefore.executeQuery();
+
+
+            PreparedStatement updateSubs = con.prepareStatement("UPDATE users SET subscribers = ? WHERE userId = ?");
+            while(newSubsCountBefore.next()){
+                updateSubs.setInt(1, (newSubsCountBefore.getInt(1) - 1));
+                updateSubs.setInt(2, targetId);
+            }
             updateSubs.executeUpdate();
 
             PreparedStatement getSubs = con.prepareStatement("SELECT subscribers FROM users WHERE userId = ?");

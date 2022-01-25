@@ -14,8 +14,9 @@
       <div
         class="titleText"
         :class="
-          isDarkTheme == true ? 'titleTextDarkTheme' : 'titleTextLightTheme' "
-      >  
+          isDarkTheme == true ? 'titleTextDarkTheme' : 'titleTextLightTheme'
+        "
+      >
         {{ displayTitleBeforeKey(video.title) }}
         <p class="keyword">{{ displayKeyWord(video.title) }}</p>
         {{ displayTitleAfterKey(video.title) }}
@@ -77,7 +78,7 @@ export default {
       this.lastVideoObserverSearchResult = new IntersectionObserver(
         (entries) => {
           let lastVideo = entries[0];
-          // console.log(lastVideo)
+
           if (!lastVideo.isIntersecting) {
             return;
           }
@@ -156,7 +157,7 @@ p {
   color: rgb(255, 99, 99);
   font-size: inherit;
   display: inline;
-  margin: 0 -5px;
+  margin: 0 -3.5px;
 }
 
 .titleText {
@@ -164,15 +165,16 @@ p {
   color: white;
   display: inline;
   font-size: small;
+  padding-left: 4px;
 }
-.titleTextLightTheme{
-    display: flex;
+.titleTextLightTheme {
+  display: flex;
   color: black;
   display: inline;
   font-size: small;
 }
 
-.emptyDiv{
+.emptyDiv {
   height: 0.5rem;
   width: 1rem;
 }
@@ -287,33 +289,33 @@ img {
     font-size: small;
   } */
 
-  @media screen and (max-width: 400px) {
-    .videoCard {
-      grid-template-rows: 1fr auto;
-    }
-
-    .thumbnail {
-      grid-row: 1;
-      grid-column: 1 / span 2;
-      margin: 0 0 1vh 0;
-    }
-
-    .textInfo {
-      grid-column: 1 / span 2;
-      height: unset;
-      margin: 0 0 0.2vh 0;
-    }
-
-    .otherInfo {
-      margin: 1vh 0 0.2vh 0;
-    }
-
-    .uploaderName,
-    .viewCount {
-      height: unset;
-    }
+@media screen and (max-width: 400px) {
+  .videoCard {
+    grid-template-rows: 1fr auto;
   }
-  /*.uploader,
+
+  .thumbnail {
+    grid-row: 1;
+    grid-column: 1 / span 2;
+    margin: 0 0 1vh 0;
+  }
+
+  .textInfo {
+    grid-column: 1 / span 2;
+    height: unset;
+    margin: 0 0 0.2vh 0;
+  }
+
+  .otherInfo {
+    margin: 1vh 0 0.2vh 0;
+  }
+
+  .uploaderName,
+  .viewCount {
+    height: unset;
+  }
+}
+/*.uploader,
 .view {
   display: grid;
   grid-template-columns: 14% auto; 
@@ -445,5 +447,4 @@ overflow: hidden;
   height: 20vh;
   width:53vw;
 }*/
-
 </style>

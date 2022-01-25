@@ -1,9 +1,15 @@
 <template>
-  <div class="IconDiv" :style="{'background-image': darkTheme == true ? 'url(' + '/src/projectImages/panther.png' + ')' 
-  : 'url(' + 'src/projectImages/smile.png' + ')',
-  'background-position-x': darkTheme == true ? '1rem' : 'unset',
-  'background-size': darkTheme == true ? '100vw 30rem' : '100vw 15rem'}">
-    <!-- <div class="SpaceDiv" /> -->
+  <div
+    class="IconDiv"
+    :style="{
+      'background-image':
+        darkTheme == true
+          ? 'url(' + '/src/projectImages/panther.png' + ')'
+          : 'url(' + 'src/projectImages/smile.png' + ')',
+      'background-position-x': darkTheme == true ? '1rem' : 'unset',
+      'background-size': darkTheme == true ? '100vw 30rem' : '100vw 15rem',
+    }"
+  >
     <div class="firstBox">
       <router-link :to="{ path: '/' }">
         <div v-if="darkTheme" class="DarkHomeDiv" @click="goToHome">
@@ -16,20 +22,6 @@
         </div>
       </router-link>
     </div>
-    <!-- <div class="SpaceDiv" /> -->
-    <!-- <div class="PantherDiv">
-      <img
-        v-if="darkTheme"
-        class="PantherImage"
-        src="../projectImages/panther.png"
-      />
-      <img
-        v-if="!darkTheme"
-        class="SmileImage"
-        src="../projectImages/smile.png"
-      />
-    </div> -->
-    <!-- <div class="SpaceDiv" /> -->
     <div class="SecondBox">
       <div @click="goToProfilePage" v-if="darkTheme" class="DarkProfileDiv">
         <img class="HomeIcon" src="../projectImages/Dark_User.png" />
@@ -40,7 +32,6 @@
         <div class="LightHomeText">Profile</div>
       </div>
     </div>
-    <!-- <div class="SpaceDiv" /> -->
   </div>
 </template>
 <script>
@@ -74,7 +65,7 @@ export default {
     this.darkTheme = this.$store.getters.getIsDarkTheme;
   },
   methods: {
-    goToHome(){
+    goToHome() {
       this.$router.push('/');
     },
 
@@ -100,8 +91,7 @@ export default {
   height: 60px;
   text-align: center;
   background-color: black;
-  /* top: 100vh;
-  width: 100vw; */
+
   position: sticky;
   bottom: 0;
   padding-top: 2px;
@@ -109,12 +99,10 @@ export default {
 }
 
 .firstBox {
-  /* width: 120px; */
   grid-column: 1;
 }
 
 .SecondBox {
-  /* width: 120px; */
   grid-column: 5;
 }
 .PantherDiv {
@@ -211,34 +199,19 @@ export default {
 .DarkProfileDiv,
 .LightProfileDiv {
   padding-top: 7px;
-  /* margin-left: 40px; */
   border-radius: 30px;
   text-align: -webkit-center;
   display: flex;
-    flex-direction: column;
-    align-items: center;
+  flex-direction: column;
+  align-items: center;
 }
-
-/* .LightHomeDiv {
-  width: 35px;
-  height: 60px;
-  background-color: transparent;
-  position: absolute; COMMENT OUT
-  z-index: 5;
-  left: 20px;
-} */
 
 .LightProfileDiv,
 .DarkProfileDiv {
-  /* width: 35px;
-  height: 60px; */
   background-color: transparent;
   color: black;
-  /* position: absolute; */
   z-index: 5;
   right: 25px;
-  /* padding-top: 7px;
-  padding-right: 10px; */
 }
 
 .LightProfileText {
@@ -250,21 +223,10 @@ export default {
 }
 .IconDiv {
   max-height: max-content;
-  /* overflow-y: clip; COMMENT OUT */
   background-image: url(/src/projectImages/panther.png);
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100vw 30rem;
   background-position-x: 1rem;
 }
-
-/* @media screen and (max-width: 380px) {
-  .IconDiv {
-    grid-template-columns: 5px auto 0px auto 0px 165px 5px;
-  }
-  .SmileImage {
-    position: relative;
-    left: -125px;
-  }
-} */
 </style>

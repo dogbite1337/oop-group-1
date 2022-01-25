@@ -119,7 +119,7 @@ export default {
       hideEyes: '',
       wantedUserName: '',
       wantedPassword: '',
-      darkTheme: (localStorage.isDarkTheme == "true" ? true : false),
+      darkTheme: localStorage.isDarkTheme == 'true' ? true : false,
     };
   },
   mounted() {
@@ -167,6 +167,7 @@ export default {
         let currentUser = new User();
         user = Object.assign(currentUser, response);
         this.$store.dispatch('login', user);
+        localStorage.setItem('loggedInUser', JSON.stringify(user));
         document.getElementsByClassName('HomeLink')[0].click();
         this.$router.push('/');
       }

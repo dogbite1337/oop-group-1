@@ -895,7 +895,7 @@ export default {
       let videoRes = await fetch(
         '/rest/getAllVideosByUsername?' +
           new URLSearchParams({
-            providedUsername: 'xQc',
+            providedUsername: this.currentUser.username,
           })
       );
       this.myVideos = [];
@@ -905,6 +905,7 @@ export default {
         let assignedVideo = Object.assign(newVideo, videoResponse[i]);
         this.myVideos.push(assignedVideo);
       }
+
     },
     switchToMySubscribers() {
       this.chosenProfileInfo = false;
