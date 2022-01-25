@@ -153,7 +153,7 @@ export default {
       profileDropdown: false,
       isDarkTheme: localStorage.isDarkTheme == 'true' ? true : false,
       isLoggedIn: false,
-      currentName: this.$store.getters.getCurrentUser,
+      currentName: null,
     };
   },
   created() {
@@ -162,7 +162,7 @@ export default {
       this.searchParam = this.$store.getters.getKeyWord;
     }
 
-    if(this.currentName!=null && localStorage.loggedInUser){
+    if(this.currentName==null && localStorage.loggedInUser){
       this.currentName = JSON.parse(localStorage.loggedInUser).username
     }
   },
