@@ -241,4 +241,27 @@ export default {
   display: grid;
   grid-template-rows: 1px max-content auto max-content 1px max-content 3px;
 }
+
+@media screen and (max-width: 320px) {
+  
+  .textDiv{   
+margin-left:2vh;   
+ grid-column: 1  / span 2;   
+ 
+  } 
+  .DarkTitleDiv{
+    width:110px;
+    margin-bottom:5px;
+  }
+  
+.linkBox,
+.videoImage {
+  width: 230px;
+  height: 100px;
+
+}
+
+
+}
+
 </style>
