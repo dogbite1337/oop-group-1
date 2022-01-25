@@ -602,7 +602,6 @@ export default {
       }
     }
 
-    console.log(this.isOwnerOfVideo);
     // full width on mobile view on cards
     let commentsResponse = await commentsRes.json();
     this.amountOfComments = commentsResponse.length;
