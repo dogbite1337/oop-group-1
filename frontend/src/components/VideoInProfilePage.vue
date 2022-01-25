@@ -375,8 +375,9 @@ export default {
   }
 
   .UpDiv{
-    height: 17px;
-    width: 17px;
+    height: max-content;
+    width: max-content;
+    padding: 4.5px;
   }
 
   .UploaderTextDiv,
