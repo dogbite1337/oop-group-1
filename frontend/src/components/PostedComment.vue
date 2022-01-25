@@ -498,10 +498,15 @@ export default {
       this.$emit('postedAReply', this.replies);
     },
     toggleReplyInput() {
-      if (this.expandedReply) {
-        this.expandedReply = false;
-      } else {
-        this.expandedReply = true;
+      if (localStorage.loggedInUser != undefined) {
+        if (this.expandedReply) {
+          this.expandedReply = false;
+        } else {
+          this.expandedReply = true;
+        }
+      }
+      else{
+        alert("You need to be logged in to post a reply!");
       }
     },
     async like() {
