@@ -1509,7 +1509,7 @@ export default {
 		width: 230px;
 	}
 	.subButton {
-		margin-left: 8px;
+		margin-left: 6px;
 	}
 
 	.commentBox{
