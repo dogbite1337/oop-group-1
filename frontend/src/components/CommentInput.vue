@@ -202,7 +202,7 @@ export default {
 		display: grid;
 		grid-template-columns: max-content max-content auto max-content;
 		padding-top: 30px;
-		background-color: white;
+		background-color: black;
 		margin-top: 5px;
 		padding-bottom: 5px;
 		max-width: 800px;
