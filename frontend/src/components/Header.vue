@@ -371,7 +371,7 @@ export default {
   grid-template-columns: auto 43px auto max-content auto auto;
   background-color: white;
   padding-top: 16px;
-  border-bottom: solid 1px #bfbfbf;
+  border-bottom: solid 2px #bfbfbf;
   max-width: 100vw;
   margin-left: auto;
   margin-right: auto;
@@ -382,7 +382,7 @@ export default {
   grid-template-columns: auto 43px auto max-content auto auto;
   background-color: black;
   padding-top: 16px;
-  border-bottom: solid 1px #bfbfbf;
+  border-bottom: solid 2px #bfbfbf;
   max-width: 100vw;
   margin-left: auto;
   margin-right: auto;
@@ -479,7 +479,7 @@ export default {
 }
 .profile-dropdown {
   height: max-content;
-  padding-bottom: 60px;
+  padding-bottom: 80px;
 }
 
 .switchContainer {

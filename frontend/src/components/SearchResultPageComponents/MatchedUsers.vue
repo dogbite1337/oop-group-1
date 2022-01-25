@@ -11,10 +11,14 @@
           </div>
           <div class="subAndVideo">
             <div class="subContainer">
-              <p class="time">{{ 'Subscribers: ' + user.subscribers }}</p>
+              <p class="time" :class="
+            isDarkTheme == true ? 'pTagDarkTheme' : 'pTagLightTheme'
+          ">{{ 'Subscribers: ' + user.subscribers }}</p>
             </div>
             <div class="videoCountContainer">
-              <p class="time">{{ 'Videos: ' + user.userVideos.length }}</p>
+              <p class="time" :class="
+            isDarkTheme == true ? 'pTagDarkTheme' : 'pTagLightTheme'"
+            >{{ 'Videos: ' + user.userVideos.length }}</p>
             </div>
             <button
               :class="'subBtn ' + user.userId"
@@ -66,7 +70,9 @@
           >
             {{ video.title }}
           </p>
-          <p class="time">{{ uploadTime(video.uploadDate) }}</p>
+          <p class="time" :class="
+            isDarkTheme == true ? 'pTagDarkTheme' : 'pTagLightTheme'
+          ">{{ uploadTime(video.uploadDate) }}</p>
         </div>
         <div class="textContainer" v-if="user.userVideos.length > 2">
           <p>{{ 'check all ' + user.userVideos.length + ' videos >' }}</p>
@@ -335,6 +341,10 @@ p {
   text-align: center;
 }
 
+.pTagLightTheme{
+  color: black !important;
+}
+
 @media screen and (max-width: 470px) {
   .otherInfoContainer {
     display: grid;
@@ -358,7 +368,7 @@ p {
     grid-template-columns: 8% auto 8% auto 8%;
   }
 
-  .videosContianer {
+  .videosContainer {
     grid-template-columns: 1fr 1fr;
   }
 
