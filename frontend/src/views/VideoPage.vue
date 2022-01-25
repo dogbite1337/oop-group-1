@@ -92,7 +92,7 @@
           </div>
           <div class="subsDiv">Subscribers: {{ spacedSubs }}</div>
         </div>
-        <div class="SpaceDiv" />
+        <div class="SpaceDiv SpecificDiv" />
         <div v-if="darkTheme" class="square3 DarkSquare">
           <div class="videosDiv">Videos: {{ spacedVideos }}</div>
         </div>
@@ -131,7 +131,7 @@
           </div>
           <div class="subsDiv">Subscribers: {{ spacedSubs }}</div>
         </div>
-        <div class="SpaceDiv" />
+        <div class="SpaceDiv SpecificDiv" />
         <div v-if="darkTheme" class="square3 DarkSquare">
           <div class="videosDiv">Videos: {{ spacedVideos }}</div>
         </div>
@@ -1075,17 +1075,15 @@ export default {
   font-family: 'Roboto', sans-serif;
   overflow-x: hidden;
 }
-.square3 {
-  position: relative;
-  top: 13px;
-}
+
 .postingCommentDiv {
   margin-bottom: 20px;
 }
 .backHomeDiv {
-  position: absolute;
-  margin-top: 40px;
+  position: relative;
+  top: 40px;
   overflow-y: hidden;
+  z-index: 5;
 }
 .LightPostedCommentsDiv {
   background-color: white;
@@ -1192,7 +1190,6 @@ export default {
 }
 .videosDiv {
   font-size: 9px;
-  margin-top: 22px;
   color: #939393;
 }
 .likeAndDislikeIconDiv {
@@ -1236,6 +1233,14 @@ export default {
   color: #e75858;
 }
 
+.square3 {
+    position: relative;
+    left: -101px;
+    height: max-content;
+    background-color: transparent;
+    top: 50px;
+    color: black;
+  }
 .DarkSquare {
   margin-top: 1px;
   width: max-content;
@@ -1348,6 +1353,9 @@ export default {
 .FrameGrid {
   display: grid;
   grid-template-columns: 0px auto 0px;
+  position: relative;
+  top: -40px;
+  z-index: 1;
   max-width: 820px;
   margin-left: auto;
   margin-right: auto;
@@ -1431,6 +1439,23 @@ export default {
   margin-top: 1px;
   color: #939393;
 }
+
+.subButtonDiv {
+  margin-left: -8px;
+  width: 230px;
+  position: relative;
+  height: max-content;
+  right: -35px;
+  border-bottom: 1px solid black;
+  width: 97px;
+}
+.subButton {
+  margin-left: 6px;
+  margin-top: 26px;
+  height: max-content;
+  position: relative;
+  left: -5px;
+}
 .videoArea {
   margin-top: -57px;
   height: 268px;
@@ -1469,12 +1494,10 @@ export default {
 }
 
 @media screen and (max-width: 305px) {
-
-
   .middleDiv {
     display: grid;
     grid-template-columns: max-content 28px max-content;
-    margin-left: -30px;
+    margin-left: -7px;
   }
 
   .notChosenDescriptionDiv,
@@ -1493,20 +1516,26 @@ export default {
     padding-bottom: 3px;
     border-bottom: 0.5px solid #bfbfbf;
   }
-  .square3 {
-    position: relative;
-    top: 13px;
-    margin-left: -8px;
+  .SpaceDiv {
+    background-color: transparent;
+    z-index: -1;
+    display: inline;
   }
+
   .subButtonDiv {
-    margin-left: -8px;
-    width: 230px;
     position: relative;
-    right: -35px;
+    height: 15px;
+    border: 1px solid black;
+    width: 68px;
+    left: 7px;
+    margin-top: 20px;
   }
   .subButton {
-    margin-left: 6px;
-    margin-top: 32px;
+    width: max-content;
+    height: max-content;
+    position: relative;
+
+    top: -26px;
   }
   .DarkUploaderDiv {
     display: grid;
@@ -1518,14 +1547,7 @@ export default {
   .square2 {
     position: relative;
     z-index: 5;
-    padding-left: 20px;
   }
-
-
-
-  .videosDiv {
-    margin-left: 20px;
-    margin-top: 23px;
-  }
+  
 }
 </style>
