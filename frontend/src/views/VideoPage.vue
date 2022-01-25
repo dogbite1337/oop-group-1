@@ -100,7 +100,7 @@
         <div v-if="activeUserId != 0 && darkTheme" class="square4 DarkSquare">
           <div v-if="activeUserId != video.userId" class="subButtonDiv">
             <button
-              v-if="!subscribedAlready"
+              v-if="!subscribedAlready && !isOwnerOfVideo"
               @click="subscribe"
               class="subButton"
               value="Subscribe"
@@ -108,7 +108,7 @@
               + Subscribe
             </button>
             <button
-              v-if="subscribedAlready"
+              v-if="subscribedAlready && !isOwnerOfVideo"
               @click="unsubscribe"
               class="subButton"
               value="Unsubscribe"
@@ -142,7 +142,7 @@
         <div v-if="activeUserId != 0 && darkTheme" class="square4 DarkSquare">
           <div v-if="activeUserId != video.userId" class="subButtonDiv">
             <button
-              v-if="!subscribedAlready"
+              v-if="!subscribedAlready && !isOwnerOfVideo"
               @click="subscribe"
               class="subButton"
               value="Subscribe"
@@ -150,7 +150,7 @@
               + Subscribe
             </button>
             <button
-              v-if="subscribedAlready"
+              v-if="subscribedAlready && !isOwnerOfVideo"
               @click="unsubscribe"
               class="subButton"
               value="Unsubscribe"
@@ -162,7 +162,7 @@
         <div v-if="activeUserId != 0 && !darkTheme" class="square4 LightSquare">
           <div v-if="activeUserId != video.userId" class="subButtonDiv">
             <button
-              v-if="!subscribedAlready"
+              v-if="!subscribedAlready && !isOwnerOfVideo"
               @click="subscribe"
               class="subButton"
               value="Subscribe"
@@ -170,7 +170,7 @@
               + Subscribe
             </button>
             <button
-              v-if="subscribedAlready"
+              v-if="subscribedAlready && !isOwnerOfVideo"
               @click="unsubscribe"
               class="subButton"
               value="Unsubscribe"
@@ -494,6 +494,7 @@ export default {
       dislikedVideoAlready: false,
       subscribedAlready: false,
       darkTheme: localStorage.isDarkTheme == 'true' ? true : false,
+      isOwnerOfVideo: false,
     };
   },
 
@@ -507,6 +508,7 @@ export default {
 
   async mounted() {
     this.loadRelevantInformation();
+
     if (localStorage.loggedInUser) {
       this.loggedInUser = JSON.parse(localStorage.loggedInUser);
       this.activeUserId = this.loggedInUser.userId;
@@ -592,6 +594,18 @@ export default {
       }
     }
 
+    console.log(JSON.parse(localStorage.loggedInUser).userId);
+    console.log(this.video.userId);
+    console.log(this.isOwnerOfVideo);
+    if (localStorage.loggedInUser) {
+      if (this.video.userId === JSON.parse(localStorage.loggedInUser).userId) {
+        this.isOwnerOfVideo = true;
+      } else {
+        this.isOwnerOfVideo = false;
+      }
+    }
+
+    console.log(this.isOwnerOfVideo);
     // full width on mobile view on cards
     let commentsResponse = await commentsRes.json();
     this.amountOfComments = commentsResponse.length;
