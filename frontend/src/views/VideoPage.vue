@@ -1469,34 +1469,53 @@ export default {
 }
 
 @media screen and (max-width: 305px) {
-  .DarkUploaderDiv {
-    display: grid;
-    grid-template-columns: auto 40px auto max-content auto auto 3px auto auto;
-    background-color: black;
-    height: max-content;
-    padding-bottom: 16px;
-  }
+	.DarkUploaderDiv {
+		display: grid;
+		grid-template-columns: auto 40px auto max-content auto auto 3px auto auto;
+		background-color: black;
+		height: max-content;
+		padding-bottom: 16px;
+	}
 
-  .middleDiv {
-    display: grid;
-    grid-template-columns: max-content 45px max-content;
-  }
+	.middleDiv {
+		display: grid;
+		grid-template-columns: max-content 28px max-content;
+		margin-left: -30px;
+	}
 
-  .notChosenDescriptionDiv,
-  .ChosenDescriptionDiv {
-    margin-left: 13px;
-  }
+	.notChosenDescriptionDiv,
+	.ChosenDescriptionDiv {
+		margin-left: 13px;
+	}
 
-  .descriptionAndCommentsDiv {
-    display: grid;
-    grid-template-columns: 10px max-content auto max-content 10px;
-    font-family: 'Roboto', sans-serif;
-    background-color: black;
-    color: white;
-    padding-top: 14px;
-    margin-top: -5px;
-    padding-bottom: 3px;
-    border-bottom: 0.5px solid #bfbfbf;
-  }
+	.descriptionAndCommentsDiv {
+		display: grid;
+		grid-template-columns: 10px max-content auto max-content 10px;
+		font-family: "Roboto", sans-serif;
+		background-color: black;
+		color: white;
+		padding-top: 14px;
+		margin-top: -5px;
+		padding-bottom: 3px;
+		border-bottom: 0.5px solid #bfbfbf;
+	}
+	.square3 {
+		position: relative;
+		top: 13px;
+		margin-left: -8px;
+	}
+	.subButtonDiv {
+		margin-left: -8px;
+		width: 230px;
+	}
+	.subButton {
+		margin-left: 8px;
+	}
+
+	.commentBox{
+		margin-left:-33px;
+	}
+
 }
 </style>
+
