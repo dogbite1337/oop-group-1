@@ -905,6 +905,7 @@ export default {
         let assignedVideo = Object.assign(newVideo, videoResponse[i]);
         this.myVideos.push(assignedVideo);
       }
+
     },
     switchToMySubscribers() {
       this.chosenProfileInfo = false;

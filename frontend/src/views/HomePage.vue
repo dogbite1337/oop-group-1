@@ -138,7 +138,6 @@ export default {
         this.darkTheme = newVal;
       }
     );
-
   },
   updated() {
     // here i am trying to only observer the last element of that class
@@ -163,7 +162,7 @@ export default {
     );
   },
   unmounted() {
-    if(this.lastVideoObserver){
+    if (this.lastVideoObserver) {
       this.lastVideoObserver.disconnect();
     }
     window.removeEventListener('resize', this.recalculateGrid);

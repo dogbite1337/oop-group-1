@@ -78,7 +78,7 @@ export default {
       this.lastVideoObserverSearchResult = new IntersectionObserver(
         (entries) => {
           let lastVideo = entries[0];
-          // console.log(lastVideo)
+
           if (!lastVideo.isIntersecting) {
             return;
           }
@@ -165,7 +165,7 @@ p {
   color: white;
   display: inline;
   font-size: small;
-  padding-left:4px;
+  padding-left: 4px;
 }
 .titleTextLightTheme {
   display: flex;

@@ -78,6 +78,10 @@ export default {
         }
       }
     });
+
+    if(this.currentUser==null && localStorage.loggedInUser){
+      this.currentName = JSON.parse(localStorage.loggedInUser)
+    }
   },
   data() {
     return {
